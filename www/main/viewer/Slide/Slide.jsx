@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useStoreState } from 'easy-peasy';
+import { useSelector } from 'react-redux';
 import { CSSTransition } from 'react-transition-group';
 
 import SlideTeeka from './SlideTeeka';
@@ -28,9 +28,9 @@ const Slide = React.memo(({ verseObj, nextLineObj, isMiscSlide, updateVerseRef }
     content3Visibility,
     akhandpatt,
     slideTransitions,
-  } = useStoreState((state) => state.userSettings);
+  } = useSelector((state) => state.userSettings);
 
-  const { activeVerseId } = useStoreState((state) => state.navigator);
+  const { activeVerseId } = useSelector((state) => state.navigator);
   const [showVerse, setShowVerse] = useState(true);
   const [orderMarkup, setOrderMarkup] = useState(null);
 

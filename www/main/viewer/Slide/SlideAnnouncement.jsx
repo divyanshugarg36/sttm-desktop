@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useStoreState } from 'easy-peasy';
+import { useSelector } from 'react-redux';
 import ReactHtmlParser from 'html-react-parser';
 
 const SlideAnnouncement = ({ getFontSize }) => {
-  const { announcementsFontSize, leftAlign } = useStoreState((state) => state.userSettings);
-  const { isMiscSlideGurmukhi, miscSlideText, isAnnouncement } = useStoreState(
+  const { announcementsFontSize, leftAlign } = useSelector((state) => state.userSettings);
+  const { isMiscSlideGurmukhi, miscSlideText, isAnnouncement } = useSelector(
     (state) => state.navigator,
   );
   let gurmukhi = true;

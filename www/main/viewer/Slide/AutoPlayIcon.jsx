@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useStoreState } from 'easy-peasy';
+import { useSelector } from 'react-redux';
 
 const SIZE = 40;
 const STROKE = 4;
@@ -46,7 +46,7 @@ PauseIcon.propTypes = {
 };
 
 const AutoPlayIcon = () => {
-  const { autoplayToggle, autoplayDelay } = useStoreState((state) => state.userSettings);
+  const { autoplayToggle, autoplayDelay } = useSelector((state) => state.userSettings);
 
   const toggleAutoplay = () => {
     const globalObj = {

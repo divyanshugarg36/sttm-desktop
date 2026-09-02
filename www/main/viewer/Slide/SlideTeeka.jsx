@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { useStoreState } from 'easy-peasy';
+import { useSelector } from 'react-redux';
 
 const SlideTeeka = ({ getFontSize, teekaObj, position }) => {
-  const { content1FontSize, content2FontSize, content3FontSize, teekaSource } = useStoreState(
+  const { content1FontSize, content2FontSize, content3FontSize, teekaSource } = useSelector(
     (state) => state.userSettings,
   );
   const [teekaString, setTeekaString] = useState(null);

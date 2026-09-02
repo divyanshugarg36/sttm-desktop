@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { useStoreActions, useStoreState } from 'easy-peasy';
+import { useSelector, useDispatch } from 'react-redux';
 import { convertToCamelCase } from '../../common/utils';
+import { setPaddingToolsOpen } from '../../common/store/redux/viewerSettingsSlice';
 
 const icons = [
   {
@@ -18,8 +19,8 @@ const PADDING_MAX = 48;
 const PADDING_MIN = 0;
 
 const PaddingTools = ({ isMiscSlide }) => {
-  const viewerSettingsStore = useStoreState((state) => state.viewerSettings);
-  const { setPaddingToolsOpen } = useStoreActions((state) => state.viewerSettings);
+  const viewerSettingsStore = useSelector((state) => state.viewerSettings);
+  const dispatch = useDispatch();
 
   const createViewerSettingObject = ({ name, variant }) => {
     const payload = { type: variant };
@@ -76,7 +77,7 @@ const PaddingTools = ({ isMiscSlide }) => {
     <div className={`slide-paddingtools`}>
       <div
         className="quicktool-header"
-        onClick={() => setPaddingToolsOpen(!viewerSettingsStore.paddingToolsOpen)}
+        onClick={() => dispatch(setPaddingToolsOpen(!viewerSettingsStore.paddingToolsOpen))}
       >
         Padding Tools
         <i className={`fa fa-caret-${viewerSettingsStore.paddingToolsOpen ? 'up' : 'down'}`}></i>
