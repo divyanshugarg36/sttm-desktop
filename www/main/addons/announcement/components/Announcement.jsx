@@ -1,10 +1,16 @@
 import React, { useRef, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { ipcRenderer } from 'electron';
-import { useStoreState, useStoreActions } from 'easy-peasy';
+import { useSelector, useDispatch } from 'react-redux';
 import { classNames } from '../../../common/utils';
 import { IconButton } from '../../../common/sttm-ui';
 import { GurmukhiKeyboard } from '../../../navigator/search/components/GurmukhiKeyboard';
+import {
+  setIsMiscSlide,
+  setMiscSlideText,
+  setIsAnnouncement,
+  setIsMiscSlideGurmukhi,
+} from '../../../common/store/redux/navigatorSlice';
 
 const remote = require('@electron/remote');
 
@@ -12,11 +18,10 @@ const { i18n } = remote.require('./app');
 const analytics = remote.getGlobal('analytics');
 
 const Announcement = ({ isGurmukhi }) => {
-  const { isMiscSlide, isMiscSlideGurmukhi, miscSlideText, isAnnouncement } = useStoreState(
+  const { isMiscSlide, isMiscSlideGurmukhi, miscSlideText, isAnnouncement } = useSelector(
     (state) => state.navigator,
   );
-  const { setIsMiscSlide, setMiscSlideText, setIsAnnouncement, setIsMiscSlideGurmukhi } =
-    useStoreActions((state) => state.navigator);
+  const dispatch = useDispatch();
 
   const [announcementVal, setAnnouncementVal] = useState('');
   const inputRef = useRef(null);
@@ -37,20 +42,20 @@ const Announcement = ({ isGurmukhi }) => {
 
   const addMiscSlide = (givenText) => {
     if (!isMiscSlide) {
-      setIsMiscSlide(true);
+      dispatch(setIsMiscSlide(true));
     }
     if (miscSlideText !== givenText) {
-      setMiscSlideText(givenText);
+      dispatch(setMiscSlideText(givenText));
     }
   };
 
   const addAnnouncement = () => {
     addMiscSlide(inputRef.current.value);
     if (isGurmukhi !== isMiscSlideGurmukhi) {
-      setIsMiscSlideGurmukhi(isGurmukhi);
+      dispatch(setIsMiscSlideGurmukhi(isGurmukhi));
     }
     if (!isAnnouncement) {
-      setIsAnnouncement(true);
+      dispatch(setIsAnnouncement(true));
     }
     analytics.trackEvent(
       'display',

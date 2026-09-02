@@ -1,12 +1,12 @@
 import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
-import { useStoreActions } from 'easy-peasy';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { uploadImage } from '../../../settings/utils/theme-bg-uploader';
 import { classNames } from '../../../common/utils';
 import { setOverlayScreen } from '../../../common/store/redux/appSlice';
 import { setShortcutTray } from '../../../common/store/redux/userSettingsSlice';
+import { setVerseHistory } from '../../../common/store/redux/navigatorSlice';
 
 const remote = require('@electron/remote');
 
@@ -16,13 +16,12 @@ const analytics = remote.getGlobal('analytics');
 export const MiscFooter = ({ waheguruSlide, moolMantraSlide, blankSlide, anandSahibBhog }) => {
   const overlayScreen = useSelector((state) => state.app.overlayScreen);
   const dispatch = useDispatch();
-  const { setVerseHistory } = useStoreActions((actions) => actions.navigator);
   const { shortcutTray } = useSelector((state) => state.userSettings);
   const drawerRef = useRef(null);
 
   // Event Handlers
   const clearHistory = () => {
-    setVerseHistory([]);
+    dispatch(setVerseHistory([]));
   };
 
   const setTab = (tabName) => {

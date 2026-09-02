@@ -1,13 +1,15 @@
 import React from 'react';
-import { useStoreState, useStoreActions } from 'easy-peasy';
+import { useSelector, useDispatch } from 'react-redux';
 import ShabadHeader from '../shabad/ShabadHeader';
+import {
+  setMinimizedBySingleDisplay,
+  setHistoryOrder,
+} from '../../common/store/redux/navigatorSlice';
 
 export const singleDisplayHeader = () => {
   const { singleDisplayActiveTab, minimizedBySingleDisplay, historyOrder, verseHistory } =
-    useStoreState((state) => state.navigator);
-  const { setMinimizedBySingleDisplay, setHistoryOrder } = useStoreActions(
-    (state) => state.navigator,
-  );
+    useSelector((state) => state.navigator);
+  const dispatch = useDispatch();
 
   const getActiveTab = (tabName) => {
     let component;
@@ -50,9 +52,9 @@ export const singleDisplayHeader = () => {
 
   const toggleDisplayUI = () => {
     if (minimizedBySingleDisplay) {
-      setMinimizedBySingleDisplay(false);
+      dispatch(setMinimizedBySingleDisplay(false));
     } else {
-      setMinimizedBySingleDisplay(true);
+      dispatch(setMinimizedBySingleDisplay(true));
     }
   };
 
@@ -66,7 +68,7 @@ export const singleDisplayHeader = () => {
             <select
               value={historyOrder}
               onChange={(e) => {
-                setHistoryOrder(e.target.value);
+                dispatch(setHistoryOrder(e.target.value));
               }}
             >
               <option value="newest">Newest First</option>

@@ -1,10 +1,21 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useStoreActions, useStoreState } from 'easy-peasy';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Virtuoso } from 'react-virtuoso';
 import { ipcRenderer } from 'electron';
 import PropTypes from 'prop-types';
 
+import {
+  setActiveVerseId,
+  setIsMiscSlide,
+  setActiveShabadId,
+  setVerseHistory,
+  setActivePaneId,
+  setShortcuts,
+  setSundarGutkaBaniId,
+  setCeremonyId,
+  setIsCeremonyBani,
+  setIsSundarGutkaBani,
+} from '../../common/store/redux/navigatorSlice';
 import { loadShabad, loadBani, loadCeremony } from '../utils';
 import { ShabadVerse } from '../../common/sttm-ui';
 import {
@@ -58,56 +69,45 @@ export const ShabadText = ({
     shortcuts,
     lineNumber,
     savedCrossPlatformId,
-  } = useStoreState((state) => state.navigator);
+  } = useSelector((state) => state.navigator);
 
   const { baniLength, liveFeed, autoplayDelay, autoplayToggle, intelligentSpacebar, akhandpatt } =
     useSelector((state) => state.userSettings);
 
-  const {
-    setActiveVerseId,
-    setIsMiscSlide,
-    setActiveShabadId,
-    setVerseHistory,
-    setActivePaneId,
-    setShortcuts,
-    setSundarGutkaBaniId,
-    setCeremonyId,
-    setIsCeremonyBani,
-    setIsSundarGutkaBani,
-  } = useStoreActions((actions) => actions.navigator);
+  const dispatch = useDispatch();
 
   const updateTraversedVerse = (newTraversedVerse, verseIndex, crossPlatformId = null) => {
     if (isMiscSlide) {
-      setIsMiscSlide(false);
+      dispatch(setIsMiscSlide(false));
     }
     // Ignoring flower verse to avoid unwanted scroll during asa di vaar
     if (newTraversedVerse === FLOWER_VERSE_ID) {
       return;
     }
     if (activePaneId !== currentPane) {
-      setActivePaneId(currentPane);
+      dispatch(setActivePaneId(currentPane));
     }
     changeVerse(newTraversedVerse, verseIndex, shabadId, {
       activeVerseId,
-      setActiveVerseId,
+      setActiveVerseId: (verseId) => dispatch(setActiveVerseId(verseId)),
       setActiveVerse,
       activeShabadId,
-      setActiveShabadId,
+      setActiveShabadId: (id) => dispatch(setActiveShabadId(id)),
       setPreviousIndex,
       baniType,
       sundarGutkaBaniId,
-      setSundarGutkaBaniId,
+      setSundarGutkaBaniId: (id) => dispatch(setSundarGutkaBaniId(id)),
       ceremonyId,
-      setCeremonyId,
+      setCeremonyId: (id) => dispatch(setCeremonyId(id)),
       isSundarGutkaBani,
-      setIsSundarGutkaBani,
+      setIsSundarGutkaBani: (v) => dispatch(setIsSundarGutkaBani(v)),
       isCeremonyBani,
-      setIsCeremonyBani,
+      setIsCeremonyBani: (v) => dispatch(setIsCeremonyBani(v)),
     });
     udpateHistory(shabadId, newTraversedVerse, {
       verseHistory,
-      setVerseHistory,
-      setPaneAttributes,
+      setVerseHistory: (history) => dispatch(setVerseHistory(history)),
+      setPaneAttributes: (attrs) => dispatch(setPaneAttributes(attrs)),
       paneAttributes,
     });
     sendToBaniController(crossPlatformId, filteredItems, newTraversedVerse, baniLength, {
@@ -121,7 +121,10 @@ export const ShabadText = ({
   };
 
   const updateHomeVerse = (verseIndex) => {
-    changeHomeVerse(verseIndex, { paneAttributes, setPaneAttributes });
+    changeHomeVerse(verseIndex, {
+      paneAttributes,
+      setPaneAttributes: (attrs) => dispatch(setPaneAttributes(attrs)),
+    });
   };
 
   const setVerseList = (verseList) => {
@@ -131,7 +134,11 @@ export const ShabadText = ({
         shabadId,
         verseList,
         baniType,
-        { verseHistory, setVerseHistory, baniLength },
+        {
+          verseHistory,
+          setVerseHistory: (history) => dispatch(setVerseHistory(history)),
+          baniLength,
+        },
         initialVerseId,
       );
       const filtered = filterRequiredVerseItems(verseList);
@@ -254,16 +261,20 @@ export const ShabadText = ({
           updateTraversedVerse(nextVerse.verseId, nextVerse.verseIndex);
           scrollToVerse(nextVerse.verseId, filteredItems, virtuosoRef);
         } else if (akhandpatt && !isSundarGutkaBani && !isCeremonyBani) {
+          dispatch(
+            setShortcuts({
+              ...shortcuts,
+              nextShabad: true,
+              nextVerse: false,
+            }),
+          );
+        }
+        dispatch(
           setShortcuts({
             ...shortcuts,
-            nextShabad: true,
             nextVerse: false,
-          });
-        }
-        setShortcuts({
-          ...shortcuts,
-          nextVerse: false,
-        });
+          }),
+        );
       }
       if (shortcuts.prevVerse) {
         const prevVerse = getVerse('prev');
@@ -271,10 +282,12 @@ export const ShabadText = ({
           updateTraversedVerse(prevVerse.verseId, prevVerse.verseIndex);
           scrollToVerse(prevVerse.verseId, filteredItems, virtuosoRef);
         }
-        setShortcuts({
-          ...shortcuts,
-          prevVerse: false,
-        });
+        dispatch(
+          setShortcuts({
+            ...shortcuts,
+            prevVerse: false,
+          }),
+        );
       }
       if (shortcuts.homeVerse) {
         const verse = intelligentNextVerse(filteredItems, {
@@ -290,17 +303,21 @@ export const ShabadText = ({
           updateTraversedVerse(verse.verseId, verse.verseIndex);
           scrollToVerse(verse.verseId, filteredItems, virtuosoRef);
         }
-        setShortcuts({
-          ...shortcuts,
-          homeVerse: false,
-        });
+        dispatch(
+          setShortcuts({
+            ...shortcuts,
+            homeVerse: false,
+          }),
+        );
       }
       if (shortcuts.copyToClipboard) {
         copyToClipboard(activeVerseRef);
-        setShortcuts({
-          ...shortcuts,
-          copyToClipboard: false,
-        });
+        dispatch(
+          setShortcuts({
+            ...shortcuts,
+            copyToClipboard: false,
+          }),
+        );
       }
     }
   }, [shortcuts]);
@@ -309,10 +326,12 @@ export const ShabadText = ({
     const milisecondsDelay = parseInt(autoplayDelay, 10) * 1000;
     const interval = setInterval(() => {
       if (autoplayToggle) {
-        setShortcuts({
-          ...shortcuts,
-          nextVerse: true,
-        });
+        dispatch(
+          setShortcuts({
+            ...shortcuts,
+            nextVerse: true,
+          }),
+        );
       }
     }, milisecondsDelay);
     return () => {

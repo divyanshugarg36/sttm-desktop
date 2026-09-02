@@ -1,4 +1,3 @@
-import { useStoreState, useStoreActions } from 'easy-peasy';
 import { useSelector, useDispatch } from 'react-redux';
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
@@ -25,6 +24,17 @@ import {
   setConnection,
 } from '../../../common/store/redux/baniControllerSlice';
 import { setOverlayScreen, setListeners } from '../../../common/store/redux/appSlice';
+import {
+  setIsSundarGutkaBani,
+  setSundarGutkaBaniId,
+  setIsCeremonyBani,
+  setCeremonyId,
+  setIsMiscSlide,
+  setMiscSlideText,
+  setIsMiscSlideGurmukhi,
+  setSavedCrossPlatformId,
+  setLineNumber,
+} from '../../../common/store/redux/navigatorSlice';
 
 const remote = require('@electron/remote');
 
@@ -66,19 +76,7 @@ const BaniController = ({ onScreenClose, className }) => {
     isMiscSlideGurmukhi,
     savedCrossPlatformId,
     lineNumber,
-  } = useStoreState((state) => state.navigator);
-
-  const {
-    setIsSundarGutkaBani,
-    setSundarGutkaBaniId,
-    setIsCeremonyBani,
-    setCeremonyId,
-    setIsMiscSlide,
-    setMiscSlideText,
-    setIsMiscSlideGurmukhi,
-    setSavedCrossPlatformId,
-    setLineNumber,
-  } = useStoreActions((state) => state.navigator);
+  } = useSelector((state) => state.navigator);
 
   const {
     gurbaniFontSize,
@@ -217,19 +215,19 @@ const BaniController = ({ onScreenClose, className }) => {
       isSundarGutkaBani,
       isCeremonyBani,
       savedCrossPlatformId,
-      setIsCeremonyBani,
-      setIsSundarGutkaBani,
-      setSundarGutkaBaniId,
-      setCeremonyId,
+      (v) => dispatch(setIsCeremonyBani(v)),
+      (v) => dispatch(setIsSundarGutkaBani(v)),
+      (v) => dispatch(setSundarGutkaBaniId(v)),
+      (v) => dispatch(setCeremonyId(v)),
       isMiscSlide,
       miscSlideText,
       isMiscSlideGurmukhi,
-      setIsMiscSlide,
-      setMiscSlideText,
-      setIsMiscSlideGurmukhi,
-      setSavedCrossPlatformId,
+      (v) => dispatch(setIsMiscSlide(v)),
+      (v) => dispatch(setMiscSlideText(v)),
+      (v) => dispatch(setIsMiscSlideGurmukhi(v)),
+      (v) => dispatch(setSavedCrossPlatformId(v)),
       lineNumber,
-      setLineNumber,
+      (v) => dispatch(setLineNumber(v)),
       updatePane,
     );
   }, [socketData]);

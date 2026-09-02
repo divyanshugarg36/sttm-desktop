@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { useStoreActions, useStoreState } from 'easy-peasy';
+import { useSelector, useDispatch } from 'react-redux';
 import { ipcRenderer } from 'electron';
 import { Virtuoso } from 'react-virtuoso';
 import isOnline from 'is-online';
@@ -20,6 +20,17 @@ import {
 } from '../../../common/sttm-ui';
 import { GurmukhiKeyboard } from './GurmukhiKeyboard';
 import { useNewShabad } from '../hooks/use-new-shabad';
+import {
+  setCurrentWriter,
+  setCurrentRaag,
+  setCurrentSource,
+  setSearchQuery,
+  setShortcuts,
+  setSearchShabadsCount,
+  setSearchData,
+  setCurrentSearchType,
+  setCurrentLanguage,
+} from '../../../common/store/redux/navigatorSlice';
 
 const remote = require('@electron/remote');
 const prodConfig = require('../../../../../config.prod.json');
@@ -40,18 +51,8 @@ const SearchContent = () => {
     currentSearchType,
     shortcuts,
     searchShabadsCount,
-  } = useStoreState((state) => state.navigator);
-  const {
-    setCurrentWriter,
-    setCurrentRaag,
-    setCurrentSource,
-    setSearchQuery,
-    setShortcuts,
-    setSearchShabadsCount,
-    setSearchData,
-    setCurrentSearchType,
-    setCurrentLanguage,
-  } = useStoreActions((state) => state.navigator);
+  } = useSelector((state) => state.navigator);
+  const dispatch = useDispatch();
 
   // Local State
   const [databaseProgress, setDatabaseProgress] = useState(1);
@@ -109,7 +110,7 @@ const SearchContent = () => {
               value: rows.length,
             });
           }
-          return query && rows.length && setSearchData(rows);
+          return query && rows.length && dispatch(setSearchData(rows));
         });
       }, 200);
     }
@@ -172,10 +173,12 @@ const SearchContent = () => {
   useEffect(() => {
     if (shortcuts.openFirstResult) {
       openFirstResult();
-      setShortcuts({
-        ...shortcuts,
-        openFirstResult: false,
-      });
+      dispatch(
+        setShortcuts({
+          ...shortcuts,
+          openFirstResult: false,
+        }),
+      );
     }
   }, [shortcuts]);
 
@@ -187,7 +190,7 @@ const SearchContent = () => {
 
   useEffect(() => {
     if (searchShabadsCount !== filteredShabads.length) {
-      setSearchShabadsCount(filteredShabads.length);
+      dispatch(setSearchShabadsCount(filteredShabads.length));
     }
   }, [filteredShabads]);
 
@@ -199,7 +202,7 @@ const SearchContent = () => {
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       if (query !== searchQuery) {
-        setSearchQuery(query);
+        dispatch(setSearchQuery(query));
         setSearchResultsCount(40);
       }
     }, 50);
@@ -366,10 +369,10 @@ const SearchContent = () => {
             if (data.status === 'success') {
               const decodedText = data.transcriptInitials.ascii;
               if (currentSearchType !== 1) {
-                setCurrentSearchType(1);
+                dispatch(setCurrentSearchType(1));
               }
               if (currentLanguage !== 'gr') {
-                setCurrentLanguage('gr');
+                dispatch(setCurrentLanguage('gr'));
               }
               setQuery(decodedText);
               analytics.trackEvent({
@@ -533,7 +536,7 @@ const SearchContent = () => {
             {currentWriter !== 'all' && (
               <FilterTag
                 close={() => {
-                  setCurrentWriter('all');
+                  dispatch(setCurrentWriter('all'));
                   analytics.trackEvent({
                     category: 'search',
                     action: 'remove-filter',
@@ -548,7 +551,7 @@ const SearchContent = () => {
             {currentRaag !== 'all' && (
               <FilterTag
                 close={() => {
-                  setCurrentRaag('all');
+                  dispatch(setCurrentRaag('all'));
                   analytics.trackEvent({
                     category: 'search',
                     action: 'remove-filter',
@@ -563,7 +566,7 @@ const SearchContent = () => {
             {currentSource !== 'all' && (
               <FilterTag
                 close={() => {
-                  setCurrentSource('all');
+                  dispatch(setCurrentSource('all'));
                   analytics.trackEvent({
                     category: 'search',
                     action: 'remove-filter',
@@ -582,7 +585,7 @@ const SearchContent = () => {
           <FilterDropdown
             title="Writer"
             onChange={(event) => {
-              setCurrentWriter(event.target.value);
+              dispatch(setCurrentWriter(event.target.value));
               analytics.trackEvent({
                 category: 'search',
                 action: 'set-filter',
@@ -596,7 +599,7 @@ const SearchContent = () => {
           <FilterDropdown
             title="Raag"
             onChange={(event) => {
-              setCurrentRaag(event.target.value);
+              dispatch(setCurrentRaag(event.target.value));
               analytics.trackEvent({
                 category: 'search',
                 action: 'set-filter',
@@ -610,7 +613,7 @@ const SearchContent = () => {
           <FilterDropdown
             title="Source"
             onChange={(event) => {
-              setCurrentSource(event.target.value);
+              dispatch(setCurrentSource(event.target.value));
               analytics.trackEvent({
                 category: 'search',
                 action: 'set-filter',

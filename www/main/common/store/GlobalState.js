@@ -1,8 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { createStore, action } from 'easy-peasy';
 
-import createNavigatorSettingsState from './navigator-settings/create-navigator-settings';
-
 import { userConfigPath } from './user-settings/get-saved-user-settings';
 import { savedOverlaySettings } from './user-settings/get-saved-overlay-settings';
 
@@ -11,19 +9,18 @@ import createOverlaySettingsState from './user-settings/create-overlay-settings-
 import store from './redux/store';
 import { setUserToken } from './redux/appSlice';
 import { userSettingsActions } from './redux/userSettingsSlice';
+import { navigatorActions } from './redux/navigatorSlice';
 
 const { sidebar, bottomBar } = require('../../../configs/overlay.json');
-const navigatorSettings = require('../../../configs/navigator-settings.json');
 
 global.platform = require('../../desktop_scripts');
 
 const GlobalState = createStore({
-  // NOTE: `baniController`, `app`, and `userSettings` have been migrated to
-  // Redux Toolkit (redux/*Slice.js). `userSettings` reducers are pure; its side
-  // effects live in redux/settingsSyncMiddleware.js, and the inbound
-  // `update-global-setting` IPC listener below routes userSettings to Redux.
+  // NOTE: `baniController`, `app`, `userSettings`, and `navigator` have been
+  // migrated to Redux Toolkit (redux/*Slice.js). Their side effects live in
+  // redux/settingsSyncMiddleware.js, and the inbound `update-global-setting` IPC
+  // listener below routes those branches to Redux.
   // See EASY-PEASY-TO-REDUX-MIGRATION.md.
-  navigator: createNavigatorSettingsState(navigatorSettings),
   viewerSettings: {
     containerPadding: {
       left: 48,
@@ -70,9 +67,12 @@ const GlobalState = createStore({
 
 global.platform.ipc.on('update-global-setting', (_event, setting) => {
   const { settingType, actionName, payload } = JSON.parse(setting);
-  // `userSettings` now lives in Redux; other branches remain in easy-peasy.
+  // `userSettings` + `navigator` now live in Redux; other branches (viewerSettings)
+  // remain in easy-peasy.
   if (settingType === 'userSettings') {
     store.dispatch(userSettingsActions[actionName](payload));
+  } else if (settingType === 'navigator') {
+    store.dispatch(navigatorActions[actionName](payload));
   } else {
     GlobalState.getActions()[settingType][actionName](payload);
   }

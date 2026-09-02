@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useStoreState } from 'easy-peasy';
 import { useSelector } from 'react-redux';
 
 import Pane from '../../common/sttm-ui/pane/Pane';
@@ -9,7 +8,7 @@ import MultiPaneHeader from './MultiPaneHeader';
 import MultiPaneContent from './MultiPaneContent';
 
 const ShabadPane = ({ className, multiPaneId = false }) => {
-  const { activePaneId } = useStoreState((state) => state.navigator);
+  const { activePaneId } = useSelector((state) => state.navigator);
   const { defaultPaneId } = useSelector((state) => state.userSettings);
   return (
     <div className={`pane-container shabad-pane ${className}`}>

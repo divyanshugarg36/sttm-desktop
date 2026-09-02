@@ -1,5 +1,4 @@
 import React from 'react';
-import { useStoreState } from 'easy-peasy';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateViewerScale } from '../../viewer/utils';
 import { setCurrentWorkspace } from '../../common/store/redux/userSettingsSlice';
@@ -13,7 +12,7 @@ const analytics = remote.getGlobal('analytics');
 
 const WorkspaceBar = () => {
   const { currentWorkspace } = useSelector((state) => state.userSettings);
-  const { minimizedBySingleDisplay } = useStoreState((state) => state.navigator);
+  const { minimizedBySingleDisplay } = useSelector((state) => state.navigator);
   const dispatch = useDispatch();
 
   const presenterIdentifier = i18n.t('WORKSPACES.PRESENTER');

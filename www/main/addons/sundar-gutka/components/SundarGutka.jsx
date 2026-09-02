@@ -1,14 +1,22 @@
 import React, { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import anvaad from 'anvaad-js';
-import { useStoreState, useStoreActions } from 'easy-peasy';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { Switch, Overlay, MultipaneDropdown } from '../../../common/sttm-ui';
 import ExtraBani from './ExtraBani';
 import { convertToHyphenCase } from '../../../common/utils';
 import { nitnemBaniIds, popularBaniIds } from '../../../common/constants';
 import useLoadBani from '../hooks/use-load-bani';
+import {
+  setIsSundarGutkaBani,
+  setSundarGutkaBaniId,
+  setIsCeremonyBani,
+  setSingleDisplayActiveTab,
+  setPane1,
+  setPane2,
+  setPane3,
+} from '../../../common/store/redux/navigatorSlice';
 
 const remote = require('@electron/remote');
 
@@ -24,19 +32,11 @@ const SundarGutka = ({ isShowTranslitSwitch = false, onScreenClose }) => {
     pane1,
     pane2,
     pane3,
-  } = useStoreState((state) => state.navigator);
+  } = useSelector((state) => state.navigator);
 
   const { currentWorkspace, defaultPaneId } = useSelector((state) => state.userSettings);
 
-  const {
-    setIsSundarGutkaBani,
-    setSundarGutkaBaniId,
-    setIsCeremonyBani,
-    setSingleDisplayActiveTab,
-    setPane1,
-    setPane2,
-    setPane3,
-  } = useStoreActions((state) => state.navigator);
+  const dispatch = useDispatch();
 
   const { isLoadingBanis, banis } = useLoadBani();
   const [isTranslit, setTranslitState] = useState(false);
@@ -81,46 +81,52 @@ const SundarGutka = ({ isShowTranslitSwitch = false, onScreenClose }) => {
 
   const loadBani = (baniId, paneId = null) => {
     if (isCeremonyBani) {
-      setIsCeremonyBani(false);
+      dispatch(setIsCeremonyBani(false));
     }
 
     if (!isSundarGutkaBani) {
-      setIsSundarGutkaBani(true);
+      dispatch(setIsSundarGutkaBani(true));
     }
 
     if (sundarGutkaBaniId !== baniId) {
-      setSundarGutkaBaniId(baniId);
+      dispatch(setSundarGutkaBaniId(baniId));
     }
 
     if (singleDisplayActiveTab !== 'shabad') {
-      setSingleDisplayActiveTab('shabad');
+      dispatch(setSingleDisplayActiveTab('shabad'));
     }
 
     if (paneId !== null) {
       switch (paneId) {
         case 1:
-          setPane1({
-            ...pane1,
-            content: i18n.t('MULTI_PANE.SHABAD'),
-            baniType: 'bani',
-            activeShabad: baniId,
-          });
+          dispatch(
+            setPane1({
+              ...pane1,
+              content: i18n.t('MULTI_PANE.SHABAD'),
+              baniType: 'bani',
+              activeShabad: baniId,
+            }),
+          );
           break;
         case 2:
-          setPane2({
-            ...pane2,
-            content: i18n.t('MULTI_PANE.SHABAD'),
-            baniType: 'bani',
-            activeShabad: baniId,
-          });
+          dispatch(
+            setPane2({
+              ...pane2,
+              content: i18n.t('MULTI_PANE.SHABAD'),
+              baniType: 'bani',
+              activeShabad: baniId,
+            }),
+          );
           break;
         case 3:
-          setPane3({
-            ...pane3,
-            content: i18n.t('MULTI_PANE.SHABAD'),
-            baniType: 'bani',
-            activeShabad: baniId,
-          });
+          dispatch(
+            setPane3({
+              ...pane3,
+              content: i18n.t('MULTI_PANE.SHABAD'),
+              baniType: 'bani',
+              activeShabad: baniId,
+            }),
+          );
           break;
         default:
           break;

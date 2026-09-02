@@ -1,10 +1,10 @@
 import React from 'react';
-import { useStoreState } from 'easy-peasy';
+import { useSelector } from 'react-redux';
 
 import ToolbarItem from './ToolbarItem';
 
 const Toolbar = () => {
-  const { minimizedBySingleDisplay } = useStoreState((state) => state.navigator);
+  const { minimizedBySingleDisplay } = useSelector((state) => state.navigator);
   const toolbarTop = ['sunder-gutka', 'ceremonies', 'announcement'];
   const toolbarBottom = ['sync-button', 'lock-screen', 'auth-dialog', 'settings'];
 

@@ -1,6 +1,13 @@
 import React from 'react';
 
-import { useStoreState, useStoreActions } from 'easy-peasy';
+import { useSelector, useDispatch } from 'react-redux';
+
+import {
+  setMiscSlideText,
+  setIsMiscSlide,
+  setIsMiscSlideGurmukhi,
+  setIsAnnouncement,
+} from '../../../common/store/redux/navigatorSlice';
 
 const remote = require('@electron/remote');
 
@@ -14,11 +21,10 @@ const getBaniControllerItems = ({
   setAdminPinVisibility,
   toggleLockScreen,
 }) => {
-  const { isMiscSlide, isMiscSlideGurmukhi, isAnnouncement } = useStoreState(
+  const { isMiscSlide, isMiscSlideGurmukhi, isAnnouncement } = useSelector(
     (state) => state.navigator,
   );
-  const { setMiscSlideText, setIsMiscSlide, setIsMiscSlideGurmukhi, setIsAnnouncement } =
-    useStoreActions((state) => state.navigator);
+  const dispatch = useDispatch();
   return [
     {
       title: i18n.t('TOOLBAR.SYNC_CONTROLLER.SANGAT_SYNC'),
@@ -34,13 +40,13 @@ const getBaniControllerItems = ({
           onClick={() => {
             if (code) {
               if (!isAnnouncement) {
-                setIsAnnouncement(true);
+                dispatch(setIsAnnouncement(true));
               }
               if (!isMiscSlide) {
-                setIsMiscSlide(true);
+                dispatch(setIsMiscSlide(true));
               }
               if (isMiscSlideGurmukhi) {
-                setIsMiscSlideGurmukhi(false);
+                dispatch(setIsMiscSlideGurmukhi(false));
               }
               // ToDo: Remove Math.random() and fix easy peasy state update issue
               const garbageValue = Math.random();
@@ -48,7 +54,7 @@ const getBaniControllerItems = ({
                 garbageValue,
                 code,
               });
-              setMiscSlideText(syncString);
+              dispatch(setMiscSlideText(syncString));
               analytics.trackEvent({
                 category: 'controller',
                 action: 'codePresented',

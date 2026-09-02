@@ -1,5 +1,4 @@
 import React from 'react';
-import { useStoreState } from 'easy-peasy';
 import { useSelector, useDispatch } from 'react-redux';
 import { setDefaultPaneId } from '../../../common/store/redux/userSettingsSlice';
 
@@ -8,7 +7,7 @@ const remote = require('@electron/remote');
 const { i18n } = remote.require('./app');
 
 const SearchFooter = () => {
-  const { searchShabadsCount, pane1, pane2, pane3 } = useStoreState((state) => state.navigator);
+  const { searchShabadsCount, pane1, pane2, pane3 } = useSelector((state) => state.navigator);
   const { currentWorkspace, defaultPaneId } = useSelector((state) => state.userSettings);
   const dispatch = useDispatch();
 

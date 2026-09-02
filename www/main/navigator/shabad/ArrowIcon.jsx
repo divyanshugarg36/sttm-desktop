@@ -1,8 +1,17 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { useStoreState, useStoreActions } from 'easy-peasy';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import banidb from '../../banidb';
+import {
+  setInitialVerseId,
+  setActiveVerseId,
+  setActivePaneId,
+  setActiveShabadId,
+  setPane1,
+  setPane2,
+  setPane3,
+  setShortcuts,
+} from '../../common/store/redux/navigatorSlice';
 
 const remote = require('@electron/remote');
 
@@ -20,20 +29,11 @@ const ArrowIcon = ({ paneId }) => {
     pane2,
     pane3,
     shortcuts,
-  } = useStoreState((state) => state.navigator);
+  } = useSelector((state) => state.navigator);
 
   const { currentWorkspace } = useSelector((state) => state.userSettings);
 
-  const {
-    setInitialVerseId,
-    setActiveVerseId,
-    setActivePaneId,
-    setActiveShabadId,
-    setPane1,
-    setPane2,
-    setPane3,
-    setShortcuts,
-  } = useStoreActions((state) => state.navigator);
+  const dispatch = useDispatch();
 
   const paneBani = {
     1: pane1.baniType,
@@ -47,19 +47,21 @@ const ArrowIcon = ({ paneId }) => {
       .then((verses) => {
         if (verses && verses.length > 0) {
           const firstVerseId = verses[0].ID;
-          if (initialVerseId !== firstVerseId) setInitialVerseId(firstVerseId);
-          if (activeVerseId !== firstVerseId) setActiveVerseId(firstVerseId);
+          if (initialVerseId !== firstVerseId) dispatch(setInitialVerseId(firstVerseId));
+          if (activeVerseId !== firstVerseId) dispatch(setActiveVerseId(firstVerseId));
 
           if (setPane && currentPane) {
-            setPane({
-              ...currentPane,
-              content: i18n.t('MULTI_PANE.SHABAD'),
-              activeShabad: shabadId,
-              baniType: 'shabad',
-              versesRead: [firstVerseId],
-              activeVerse: firstVerseId,
-            });
-            if (targetPaneId !== activePaneId) setActivePaneId(targetPaneId);
+            dispatch(
+              setPane({
+                ...currentPane,
+                content: i18n.t('MULTI_PANE.SHABAD'),
+                activeShabad: shabadId,
+                baniType: 'shabad',
+                versesRead: [firstVerseId],
+                activeVerse: firstVerseId,
+              }),
+            );
+            if (targetPaneId !== activePaneId) dispatch(setActivePaneId(targetPaneId));
           }
 
           return firstVerseId;
@@ -99,7 +101,7 @@ const ArrowIcon = ({ paneId }) => {
         break;
     }
     if (currentWorkspace !== i18n.t('WORKSPACES.MULTI_PANE') && activeShabadId !== currentShabad) {
-      setActiveShabadId(currentShabad);
+      dispatch(setActiveShabadId(currentShabad));
     }
   };
 
@@ -114,16 +116,20 @@ const ArrowIcon = ({ paneId }) => {
   useEffect(() => {
     if (shortcuts.nextShabad) {
       updatePaneShabad('right');
-      setShortcuts({
-        ...shortcuts,
-        nextShabad: false,
-      });
+      dispatch(
+        setShortcuts({
+          ...shortcuts,
+          nextShabad: false,
+        }),
+      );
     } else if (shortcuts.prevShabad) {
       updatePaneShabad('left');
-      setShortcuts({
-        ...shortcuts,
-        prevShabad: false,
-      });
+      dispatch(
+        setShortcuts({
+          ...shortcuts,
+          prevShabad: false,
+        }),
+      );
     }
   }, [shortcuts]);
 

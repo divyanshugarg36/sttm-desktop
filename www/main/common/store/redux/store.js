@@ -3,6 +3,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import appReducer from './appSlice';
 import baniControllerReducer from './baniControllerSlice';
 import userSettingsReducer from './userSettingsSlice';
+import navigatorReducer from './navigatorSlice';
 import settingsSyncMiddleware from './settingsSyncMiddleware';
 
 // Redux store for the main app window. During the easy-peasy → Redux migration
@@ -15,6 +16,7 @@ const store = configureStore({
     app: appReducer,
     baniController: baniControllerReducer,
     userSettings: userSettingsReducer,
+    navigator: navigatorReducer,
   },
   // The settings actions used to run their side effects (IPC/fs/DOM/socket)
   // inside the reducer; those now live in this middleware. Settings payloads can

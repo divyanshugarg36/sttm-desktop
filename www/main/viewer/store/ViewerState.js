@@ -1,6 +1,6 @@
 import { createStore, action } from 'easy-peasy';
-import GlobalState from '../../common/store/GlobalState';
 import { USER_SETTINGS_INITIAL_STATE } from '../../common/store/redux/userSettingsSlice';
+import { NAVIGATOR_INITIAL_STATE } from '../../common/store/redux/navigatorSlice';
 
 global.platform = require('../../desktop_scripts');
 
@@ -27,10 +27,11 @@ const ViewerState = createStore({
     ...USER_SETTINGS_INITIAL_STATE,
     ...createSettingsActions(USER_SETTINGS_INITIAL_STATE),
   },
-  // navigator is still an easy-peasy branch in GlobalState.
+  // Shadow of navigator — initial values from the Redux slice's shared export
+  // (navigator left GlobalState in Phase 4); kept in sync via `update-viewer-setting`.
   navigator: {
-    ...GlobalState.getState().navigator,
-    ...createSettingsActions(GlobalState.getState().navigator),
+    ...NAVIGATOR_INITIAL_STATE,
+    ...createSettingsActions(NAVIGATOR_INITIAL_STATE),
   },
   viewerSettings: {
     containerPadding: {

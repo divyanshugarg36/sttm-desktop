@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { useStoreState, useStoreActions } from 'easy-peasy';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import classNames from '../../common/utils/classnames';
 import { addToFav, fetchFavShabad, removeFromFav } from '../misc/utils';
+import { setFavShabad } from '../../common/store/redux/navigatorSlice';
 
 const remote = require('@electron/remote');
 
@@ -22,10 +22,10 @@ const FavShabadIcon = ({ paneId }) => {
     pane3,
     isSundarGutkaBani,
     isCeremonyBani,
-  } = useStoreState((state) => state.navigator);
+  } = useSelector((state) => state.navigator);
   const { currentWorkspace } = useSelector((state) => state.userSettings);
 
-  const { setFavShabad } = useStoreActions((state) => state.navigator);
+  const dispatch = useDispatch();
 
   const userToken = useSelector((state) => state.app.userToken);
 
@@ -72,14 +72,14 @@ const FavShabadIcon = ({ paneId }) => {
       addToFav(currentShabad, currentVerse, userToken)
         .then(() => fetchFavShabad(userToken))
         .then((data) => {
-          setFavShabad([...data]);
+          dispatch(setFavShabad([...data]));
           setLoading(false);
         });
     } else {
       removeFromFav(currentShabad, userToken)
         .then(() => fetchFavShabad(userToken))
         .then((data) => {
-          setFavShabad([...data]);
+          dispatch(setFavShabad([...data]));
           setLoading(false);
         });
     }

@@ -1,4 +1,5 @@
 import { USER_SETTINGS_SYNC } from './userSettingsSlice';
+import { NAVIGATOR_SYNC } from './navigatorSlice';
 
 // Redux middleware that runs the side effects the easy-peasy settings actions
 // used to embed inside their reducers (see the old create-user-settings-state).
@@ -16,6 +17,29 @@ import { USER_SETTINGS_SYNC } from './userSettingsSlice';
 const fs = require('fs');
 
 const settingsSyncMiddleware = (store) => (next) => (action) => {
+  // navigator: the only side effect is broadcasting the change to the viewer
+  // window's shadow store (no persistence / DOM / socket).
+  const navMeta = NAVIGATOR_SYNC.actionMetaByType[action.type];
+  if (navMeta) {
+    const { stateVarName } = navMeta;
+    const oldValue = store.getState().navigator[stateVarName];
+    const result = next(action);
+    const message = JSON.stringify({
+      stateName: stateVarName,
+      payload: action.payload,
+      oldValue,
+      actionName: action.type.split('/')[1],
+      settingType: 'navigator',
+    });
+    if (global.webview) {
+      global.webview.send('update-viewer-setting', message);
+    }
+    if (global.platform) {
+      global.platform.ipc.send('update-viewer-setting', message);
+    }
+    return result;
+  }
+
   const meta = USER_SETTINGS_SYNC.actionMetaByType[action.type];
   if (!meta) {
     return next(action);

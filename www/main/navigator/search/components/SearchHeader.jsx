@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { useStoreState, useStoreActions } from 'easy-peasy';
+import { useSelector, useDispatch } from 'react-redux';
 import banidb from '../../../common/constants/banidb';
+import {
+  setCurrentSearchType,
+  setCurrentLanguage,
+} from '../../../common/store/redux/navigatorSlice';
 
 const remote = require('@electron/remote');
 
@@ -27,18 +31,18 @@ function SearchHeader() {
   const englishSearchText = banidb.ENGLISH_SEARCH_TEXTS;
   const englishSearchTypes = Object.keys(englishSearchText);
 
-  const { currentLanguage, currentSearchType } = useStoreState((state) => state.navigator);
-  const { setCurrentSearchType, setCurrentLanguage } = useStoreActions((state) => state.navigator);
+  const { currentLanguage, currentSearchType } = useSelector((state) => state.navigator);
+  const dispatch = useDispatch();
 
   const handleLanguageChange = (event) => {
     if (event.target.value === 'en' && currentSearchType !== 3) {
-      setCurrentSearchType(3);
+      dispatch(setCurrentSearchType(3));
     }
     if (event.target.value !== 'en' && currentSearchType !== 0) {
-      setCurrentSearchType(0);
+      dispatch(setCurrentSearchType(0));
     }
     if (currentLanguage !== event.target.value) {
-      setCurrentLanguage(event.target.value);
+      dispatch(setCurrentLanguage(event.target.value));
     }
     analytics.trackEvent({
       category: 'search',
@@ -48,7 +52,7 @@ function SearchHeader() {
   };
   const handleSearchType = (event) => {
     if (currentSearchType !== parseInt(event.target.value, 10)) {
-      setCurrentSearchType(parseInt(event.target.value, 10));
+      dispatch(setCurrentSearchType(parseInt(event.target.value, 10)));
     }
     analytics.trackEvent({
       category: 'search',
@@ -59,7 +63,7 @@ function SearchHeader() {
 
   const handleSearchOption = (event) => {
     if (event.target.checked && currentSearchType !== parseInt(event.target.value, 10)) {
-      setCurrentSearchType(parseInt(event.target.value, 10));
+      dispatch(setCurrentSearchType(parseInt(event.target.value, 10)));
     }
     analytics.trackEvent({
       category: 'search',

@@ -1,12 +1,11 @@
 import React from 'react';
-import { useStoreState } from 'easy-peasy';
 import { useSelector } from 'react-redux';
 import { HistoryPane, OtherPane, FavoritePane } from '../misc/components';
 import SearchPane from '../search/components/SearchPane';
 import MultiPaneContent from '../shabad/MultiPaneContent';
 
 export const singleDisplayContent = () => {
-  const { singleDisplayActiveTab } = useStoreState((state) => state.navigator);
+  const { singleDisplayActiveTab } = useSelector((state) => state.navigator);
   const { defaultPaneId } = useSelector((state) => state.userSettings);
   const renderSingleTab = (tabName) => {
     const components = (

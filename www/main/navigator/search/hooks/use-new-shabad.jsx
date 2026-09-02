@@ -1,6 +1,16 @@
-import { useStoreActions, useStoreState } from 'easy-peasy';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import updateMultipane from '../utils/update-multipane';
+import {
+  setActiveShabadId,
+  setInitialVerseId,
+  setVersesRead,
+  setActiveVerseId,
+  setIsMiscSlide,
+  setIsSundarGutkaBani,
+  setIsCeremonyBani,
+  setSingleDisplayActiveTab,
+  setSearchVerse,
+} from '../../../common/store/redux/navigatorSlice';
 
 const remote = require('@electron/remote');
 
@@ -17,21 +27,11 @@ export const useNewShabad = () => {
     isMiscSlide,
     singleDisplayActiveTab,
     searchVerse,
-  } = useStoreState((state) => state.navigator);
+  } = useSelector((state) => state.navigator);
 
   const { currentWorkspace } = useSelector((state) => state.userSettings);
 
-  const {
-    setActiveShabadId,
-    setInitialVerseId,
-    setVersesRead,
-    setActiveVerseId,
-    setIsMiscSlide,
-    setIsSundarGutkaBani,
-    setIsCeremonyBani,
-    setSingleDisplayActiveTab,
-    setSearchVerse,
-  } = useStoreActions((actions) => actions.navigator);
+  const dispatch = useDispatch();
 
   const updatePane = updateMultipane();
 
@@ -39,25 +39,25 @@ export const useNewShabad = () => {
     updatePane('shabad', newSelectedShabad, newSelectedVerse, multiPaneId);
 
     if (singleDisplayActiveTab !== 'shabad') {
-      setSingleDisplayActiveTab('shabad');
+      dispatch(setSingleDisplayActiveTab('shabad'));
     }
 
     if (!versesRead.includes(newSelectedVerse)) {
-      setVersesRead([newSelectedVerse]);
+      dispatch(setVersesRead([newSelectedVerse]));
     }
     if (isMiscSlide) {
-      setIsMiscSlide(false);
+      dispatch(setIsMiscSlide(false));
     }
     if (isSundarGutkaBani) {
-      setIsSundarGutkaBani(false);
+      dispatch(setIsSundarGutkaBani(false));
     }
     if (isCeremonyBani) {
-      setIsCeremonyBani(false);
+      dispatch(setIsCeremonyBani(false));
     }
 
     if (activeShabadId !== newSelectedShabad) {
       if (currentWorkspace !== i18n.t('WORKSPACES.MULTI_PANE')) {
-        setActiveShabadId(newSelectedShabad);
+        dispatch(setActiveShabadId(newSelectedShabad));
         if (window.socket !== undefined && window.socket !== null) {
           window.socket.emit('data', {
             type: 'shabad',
@@ -74,16 +74,16 @@ export const useNewShabad = () => {
       // initialVerseId is the verse which is stored in history
       // It is the verse we searched for.
       if (initialVerseId !== newSelectedVerse) {
-        setInitialVerseId(newSelectedVerse);
+        dispatch(setInitialVerseId(newSelectedVerse));
       }
 
       if (searchVerse !== newSearchVerse) {
-        setSearchVerse(newSearchVerse);
+        dispatch(setSearchVerse(newSearchVerse));
       }
     }
 
     if (newSelectedVerse && activeVerseId !== newSelectedVerse) {
-      setActiveVerseId(newSelectedVerse);
+      dispatch(setActiveVerseId(newSelectedVerse));
     }
   };
 };

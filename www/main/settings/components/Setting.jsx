@@ -19,7 +19,7 @@ const Setting = ({ settingObj, stateVar, stateFunction }) => {
   const dispatch = useDispatch();
   const { containerPadding } = useStoreState((state) => state.viewerSettings);
 
-  const { disabledContent, filteredBaniOptions } = useStoreState((state) => state.navigator);
+  const { disabledContent, filteredBaniOptions } = useSelector((state) => state.navigator);
 
   const handleInputChange = (event) => {
     const value = event.target ? event.target.value : event;

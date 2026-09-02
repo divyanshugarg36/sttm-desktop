@@ -1,7 +1,8 @@
 import React from 'react';
-import { useStoreState, useStoreActions } from 'easy-peasy';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { classNames } from '../../../common/utils';
+import { setCurrentMiscPanel, setHistoryOrder } from '../../../common/store/redux/navigatorSlice';
 
 const remote = require('@electron/remote');
 
@@ -10,10 +11,8 @@ const { i18n } = remote.require('./app');
 const analytics = remote.getGlobal('analytics');
 
 export const MiscHeader = () => {
-  const { currentMiscPanel, historyOrder, verseHistory } = useStoreState(
-    (state) => state.navigator,
-  );
-  const { setCurrentMiscPanel, setHistoryOrder } = useStoreActions((state) => state.navigator);
+  const { currentMiscPanel, historyOrder, verseHistory } = useSelector((state) => state.navigator);
+  const dispatch = useDispatch();
 
   const isHistory = currentMiscPanel === 'History';
   const isOther = currentMiscPanel === 'Others';
@@ -21,7 +20,7 @@ export const MiscHeader = () => {
 
   const setTab = (tabName) => {
     if (tabName !== currentMiscPanel) {
-      setCurrentMiscPanel(tabName);
+      dispatch(setCurrentMiscPanel(tabName));
     }
     analytics.trackEvent({
       category: 'Misc',
@@ -72,7 +71,7 @@ export const MiscHeader = () => {
               <select
                 value={historyOrder}
                 onChange={(e) => {
-                  setHistoryOrder(e.target.value);
+                  dispatch(setHistoryOrder(e.target.value));
                 }}
               >
                 <option value="newest">Newest First</option>

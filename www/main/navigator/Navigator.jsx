@@ -1,5 +1,4 @@
 import React from 'react';
-import { useStoreState } from 'easy-peasy';
 import { useSelector } from 'react-redux';
 import SearchPane from './search/components/SearchPane';
 import ShabadPane from './shabad/ShabadPane';
@@ -16,7 +15,7 @@ const { i18n } = remote.require('./app');
 const Navigator = () => {
   const { currentWorkspace } = useSelector((state) => state.userSettings);
 
-  const { minimizedBySingleDisplay } = useStoreState((state) => state.navigator);
+  const { minimizedBySingleDisplay } = useSelector((state) => state.navigator);
 
   const {
     displayWaheguruSlide,
