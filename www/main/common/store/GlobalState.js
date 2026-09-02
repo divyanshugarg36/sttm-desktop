@@ -1,8 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { createStore, action } from 'easy-peasy';
 
-import { DEFAULT_OVERLAY } from '../constants';
-
 import createUserSettingsState from './user-settings/create-user-settings-state';
 import createNavigatorSettingsState from './navigator-settings/create-navigator-settings';
 
@@ -11,6 +9,9 @@ import { savedOverlaySettings } from './user-settings/get-saved-overlay-settings
 
 import createOverlaySettingsState from './user-settings/create-overlay-settings-state';
 
+import store from './redux/store';
+import { setUserToken } from './redux/appSlice';
+
 const { sidebar, bottomBar } = require('../../../configs/overlay.json');
 const { settings } = require('../../../configs/user-settings.json');
 const navigatorSettings = require('../../../configs/navigator-settings.json');
@@ -18,40 +19,10 @@ const navigatorSettings = require('../../../configs/navigator-settings.json');
 global.platform = require('../../desktop_scripts');
 
 const GlobalState = createStore({
-  app: {
-    overlayScreen: DEFAULT_OVERLAY,
-    isListeners: false,
-    userToken: '',
-    setOverlayScreen: action((state, payload) => {
-      state.overlayScreen = payload;
-      return state;
-    }),
-    setListeners: action((state, listenersState) => {
-      state.isListeners = listenersState;
-      return state;
-    }),
-    setUserToken: action((state, payload) => {
-      state.userToken = payload;
-      return state;
-    }),
-  },
-  baniController: {
-    adminPin: null,
-    code: null,
-    isConnected: false,
-    setAdminPin: action((state, adminPin) => {
-      state.adminPin = adminPin;
-      return state;
-    }),
-    setCode: action((state, code) => {
-      state.code = code;
-      return state;
-    }),
-    setConnection: action((state, connectionState) => {
-      state.isConnected = connectionState;
-      return state;
-    }),
-  },
+  // NOTE: `baniController` (redux/baniControllerSlice.js) and `app`
+  // (redux/appSlice.js) have been migrated to Redux Toolkit — the `app` branch
+  // now lives in Redux; its inbound `userToken` IPC listener below dispatches
+  // there. See EASY-PEASY-TO-REDUX-MIGRATION.md.
   navigator: createNavigatorSettingsState(navigatorSettings),
   viewerSettings: {
     containerPadding: {
@@ -109,9 +80,10 @@ global.platform.ipc.on('get-overlay-prefs', () => {
 });
 
 global.platform.ipc.on('userToken', (event, data) => {
-  const currentToken = GlobalState.getState().app.userToken;
+  // `app` now lives in Redux — dispatch there instead of easy-peasy.
+  const currentToken = store.getState().app.userToken;
   if (data !== currentToken) {
-    GlobalState.getActions().app.setUserToken(data);
+    store.dispatch(setUserToken(data));
   }
 });
 

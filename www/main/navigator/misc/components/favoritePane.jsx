@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import isOnline from 'is-online';
 import { useStoreActions, useStoreState } from 'easy-peasy';
+import { useSelector } from 'react-redux';
 
 import { shell } from 'electron';
 import { fetchFavShabad, removeFromFav } from '../utils';
@@ -37,7 +38,7 @@ export const FavoritePane = ({ className, paneId }) => {
   } = useStoreActions((state) => state.navigator);
   const { currentWorkspace, defaultPaneId } = useStoreState((state) => state.userSettings);
 
-  const { userToken } = useStoreState((state) => state.app);
+  const userToken = useSelector((state) => state.app.userToken);
   const [parsedFav, setParsedFav] = useState([]);
   const [isFetching, setFetching] = useState(false);
   const [errorMessage, setError] = useState('');

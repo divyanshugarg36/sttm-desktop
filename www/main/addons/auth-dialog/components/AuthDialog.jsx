@@ -1,4 +1,4 @@
-import { useStoreState } from 'easy-peasy';
+import { useSelector } from 'react-redux';
 import { ipcRenderer, shell } from 'electron';
 
 import React, { useEffect, useState } from 'react';
@@ -14,7 +14,7 @@ const analytics = remote.getGlobal('analytics');
 const { i18n } = remote.require('./app');
 
 const AuthDialog = ({ onScreenClose, className }) => {
-  const { userToken } = useStoreState((state) => state.app);
+  const userToken = useSelector((state) => state.app.userToken);
   const [userInfo, setUserInfo] = useState();
   const [connected, setConnected] = useState(false);
 

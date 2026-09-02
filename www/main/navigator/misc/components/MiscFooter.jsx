@@ -1,9 +1,11 @@
 import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useStoreActions, useStoreState } from 'easy-peasy';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { uploadImage } from '../../../settings/utils/theme-bg-uploader';
 import { classNames } from '../../../common/utils';
+import { setOverlayScreen } from '../../../common/store/redux/appSlice';
 
 const remote = require('@electron/remote');
 
@@ -11,8 +13,8 @@ const { i18n } = remote.require('./app');
 const analytics = remote.getGlobal('analytics');
 
 export const MiscFooter = ({ waheguruSlide, moolMantraSlide, blankSlide, anandSahibBhog }) => {
-  const { overlayScreen } = useStoreState((state) => state.app);
-  const { setOverlayScreen } = useStoreActions((actions) => actions.app);
+  const overlayScreen = useSelector((state) => state.app.overlayScreen);
+  const dispatch = useDispatch();
   const { setVerseHistory } = useStoreActions((actions) => actions.navigator);
   const { shortcutTray } = useStoreState((state) => state.userSettings);
   const { setShortcutTray } = useStoreActions((state) => state.userSettings);
@@ -25,7 +27,7 @@ export const MiscFooter = ({ waheguruSlide, moolMantraSlide, blankSlide, anandSa
 
   const setTab = (tabName) => {
     if (tabName !== overlayScreen) {
-      setOverlayScreen(tabName);
+      dispatch(setOverlayScreen(tabName));
     }
     analytics.trackEvent({
       category: 'Misc',

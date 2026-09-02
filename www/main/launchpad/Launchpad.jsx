@@ -1,5 +1,6 @@
 import React, { createContext, useRef } from 'react';
 import { useStoreState, useStoreActions } from 'easy-peasy';
+import { useSelector, useDispatch } from 'react-redux';
 
 import Toolbar from '../toolbar';
 import Navigator from '../navigator';
@@ -17,6 +18,7 @@ import {
 import { Settings } from '../settings/';
 
 import { DEFAULT_OVERLAY } from '../common/constants';
+import { setOverlayScreen } from '../common/store/redux/appSlice';
 
 const remote = require('@electron/remote');
 
@@ -26,10 +28,10 @@ const main = remote.require('./app');
 export const InputContext = createContext();
 
 const Launchpad = () => {
-  const { overlayScreen } = useStoreState((state) => state.app);
+  const overlayScreen = useSelector((state) => state.app.overlayScreen);
+  const dispatch = useDispatch();
   const { shortcuts } = useStoreState((state) => state.navigator);
   const { setShortcuts } = useStoreActions((state) => state.navigator);
-  const { setOverlayScreen } = useStoreActions((actions) => actions.app);
   const { currentWorkspace, defaultPaneId } = useStoreState((state) => state.userSettings);
 
   const {
@@ -50,15 +52,15 @@ const Launchpad = () => {
         // close only when clicked on empty space in backdrop.
         // Otherwiise keep the add-on screen opened up.
         if (isFromBackdrop && clickdOnEmptySpace) {
-          setOverlayScreen(DEFAULT_OVERLAY);
+          dispatch(setOverlayScreen(DEFAULT_OVERLAY));
         }
       }
       if (!isFromBackdrop) {
         document.body.classList.toggle(`overlay-${overlayScreen}-active`, false);
-        setOverlayScreen(DEFAULT_OVERLAY);
+        dispatch(setOverlayScreen(DEFAULT_OVERLAY));
       }
     },
-    [overlayScreen, setOverlayScreen, DEFAULT_OVERLAY],
+    [overlayScreen, dispatch, DEFAULT_OVERLAY],
   );
 
   /** ******************************* */

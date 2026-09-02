@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { useStoreState, useStoreActions } from 'easy-peasy';
+import { useSelector } from 'react-redux';
 import classNames from '../../common/utils/classnames';
 import { addToFav, fetchFavShabad, removeFromFav } from '../misc/utils';
 
@@ -26,7 +27,7 @@ const FavShabadIcon = ({ paneId }) => {
 
   const { setFavShabad } = useStoreActions((state) => state.navigator);
 
-  const { userToken } = useStoreState((state) => state.app);
+  const userToken = useSelector((state) => state.app.userToken);
 
   const [currentShabad, setCurrentShabad] = useState(activeShabadId);
   const [currentVerse, setCurrentVerse] = useState(activeVerseId);

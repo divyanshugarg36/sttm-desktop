@@ -1,16 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useStoreActions, useStoreState } from 'easy-peasy';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { DEFAULT_OVERLAY } from '../../common/constants';
+import { setOverlayScreen } from '../../common/store/redux/appSlice';
 
 const remote = require('@electron/remote');
 
 const { i18n } = remote.require('./app');
 
 const ToolbarItem = ({ itemName }) => {
-  const { overlayScreen, userToken } = useStoreState((state) => state.app);
-  const { setOverlayScreen } = useStoreActions((actions) => actions.app);
+  const overlayScreen = useSelector((state) => state.app.overlayScreen);
+  const userToken = useSelector((state) => state.app.userToken);
+  const dispatch = useDispatch();
   const isSelectedOverlay = overlayScreen === itemName;
   const isAuthItem = itemName === 'auth-dialog';
   const displayName = {
@@ -30,10 +32,10 @@ const ToolbarItem = ({ itemName }) => {
       onClick={() => {
         document.body.classList.toggle(`overlay-${itemName}-active`, !isSelectedOverlay);
         if (isSelectedOverlay) {
-          return setOverlayScreen(DEFAULT_OVERLAY);
+          return dispatch(setOverlayScreen(DEFAULT_OVERLAY));
         }
 
-        return setOverlayScreen(itemName);
+        return dispatch(setOverlayScreen(itemName));
       }}
     ></div>
   );

@@ -1,4 +1,5 @@
 import { useStoreState, useStoreActions } from 'easy-peasy';
+import { useSelector, useDispatch } from 'react-redux';
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 
@@ -18,6 +19,12 @@ import ConnectionSwitch from './ConnectionSwitch';
 import ZoomController from './ZoomController';
 import useSocketListeners from '../hooks/use-socket-listeners';
 import updateMultipane from '../../../navigator/search/utils/update-multipane';
+import {
+  setAdminPin,
+  setCode,
+  setConnection,
+} from '../../../common/store/redux/baniControllerSlice';
+import { setOverlayScreen, setListeners } from '../../../common/store/redux/appSlice';
 
 const remote = require('@electron/remote');
 
@@ -39,14 +46,11 @@ const BaniController = ({ onScreenClose, className }) => {
   const [isAdminPinVisible, setAdminPinVisibility] = useState(true);
   const [socketData, setSocketData] = useState(null);
 
-  // Store State
-  const { isListeners, overlayScreen } = useStoreState((state) => state.app);
-  const { setOverlayScreen, setListeners } = useStoreActions((actions) => actions.app);
-
-  const { adminPin, code, isConnected } = useStoreState((state) => state.baniController);
-  const { setAdminPin, setCode, setConnection } = useStoreActions(
-    (actions) => actions.baniController,
-  );
+  // Store State (Redux)
+  const isListeners = useSelector((state) => state.app.isListeners);
+  const overlayScreen = useSelector((state) => state.app.overlayScreen);
+  const { adminPin, code, isConnected } = useSelector((state) => state.baniController);
+  const dispatch = useDispatch();
 
   const {
     activeShabad,
@@ -95,10 +99,10 @@ const BaniController = ({ onScreenClose, className }) => {
   const showSyncError = (errorMessage) => {
     setCodeLabel(errorMessage);
     if (code !== null) {
-      setCode(null);
+      dispatch(setCode(null));
     }
     if (adminPin !== null) {
-      setAdminPin(null);
+      dispatch(setAdminPin(null));
     }
   };
 
@@ -113,13 +117,13 @@ const BaniController = ({ onScreenClose, className }) => {
       if (newCode) {
         const newAdminPin = Math.floor(1000 + Math.random() * 8999);
 
-        setCode(newCode);
-        setAdminPin(newAdminPin);
+        dispatch(setCode(newCode));
+        dispatch(setAdminPin(newAdminPin));
 
         generateQrCode(canvasRef.current, newCode);
 
-        setConnection(true);
-        setListeners(true);
+        dispatch(setConnection(true));
+        dispatch(setListeners(true));
         analytics.trackEvent({
           category: 'sync',
           action: 'syncStarted',
@@ -143,11 +147,11 @@ const BaniController = ({ onScreenClose, className }) => {
     if (isConnected && !forceConnect) {
       // TODO: Needs to remove this DOM interaction
       document.body.classList.remove('controller-on');
-      setListeners(false);
-      setConnection(false);
+      dispatch(setListeners(false));
+      dispatch(setConnection(false));
       onEnd(code);
-      setCode(null);
-      setAdminPin(null);
+      dispatch(setCode(null));
+      dispatch(setAdminPin(null));
       analytics.trackEvent({
         category: 'sync',
         action: 'syncStopped',
@@ -159,7 +163,7 @@ const BaniController = ({ onScreenClose, className }) => {
 
   const toggleLockScreen = () => {
     if (overlayScreen !== 'lock-screen') {
-      setOverlayScreen('lock-screen');
+      dispatch(setOverlayScreen('lock-screen'));
     }
     analytics.trackEvent({
       category: 'sync',
