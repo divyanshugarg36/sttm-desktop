@@ -1,5 +1,7 @@
 import { useStoreActions, useStoreState } from 'easy-peasy';
+import { useSelector, useDispatch } from 'react-redux';
 import insertSlide from '../constants/slidedb';
+import { setAkhandpatt, setAutoplayToggle } from '../store/redux/userSettingsSlice';
 
 const remote = require('@electron/remote');
 
@@ -8,10 +10,8 @@ const { i18n } = remote.require('./app');
 const analytics = remote.getGlobal('analytics');
 
 export const useSlides = () => {
-  const { akhandpatt, autoplayToggle, defaultPaneId } = useStoreState(
-    (state) => state.userSettings,
-  );
-  const { setAkhandpatt, setAutoplayToggle } = useStoreActions((state) => state.userSettings);
+  const { akhandpatt, autoplayToggle, defaultPaneId } = useSelector((state) => state.userSettings);
+  const dispatch = useDispatch();
   const {
     isMiscSlide,
     miscSlideText,
@@ -41,10 +41,10 @@ export const useSlides = () => {
     }
     if (!isMiscSlide) {
       if (akhandpatt) {
-        setAkhandpatt(false);
+        dispatch(setAkhandpatt(false));
       }
       if (autoplayToggle) {
-        setAutoplayToggle(false);
+        dispatch(setAutoplayToggle(false));
       }
       setIsMiscSlide(true);
     }

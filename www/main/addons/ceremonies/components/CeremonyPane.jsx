@@ -1,12 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useStoreActions, useStoreState } from 'easy-peasy';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { MultipaneDropdown, Switch, Tile } from '../../../common/sttm-ui';
 import { ceremoniesFilter } from '../../../common/constants';
 
 import { getUserPreferenceFor } from '../utils';
 import { applyTheme } from '../../../settings/utils';
+import {
+  setTheme as setThemeAction,
+  setThemeBg as setThemeBgAction,
+} from '../../../common/store/redux/userSettingsSlice';
 // import { loadCeremony } from '../../../navigator/utils';
 
 const remote = require('@electron/remote');
@@ -16,14 +21,16 @@ const analytics = remote.getGlobal('analytics');
 const { getTheme } = require('../../../theme_editor');
 
 const CeremonyPane = ({ token, name, id, onScreenClose }) => {
-  const { setTheme, setThemeBg } = useStoreActions((state) => state.userSettings);
+  const dispatch = useDispatch();
+  const setTheme = (value) => dispatch(setThemeAction(value));
+  const setThemeBg = (value) => dispatch(setThemeBgAction(value));
   const { setPane1, setPane2, setPane3 } = useStoreActions((state) => state.navigator);
   const { pane1, pane2, pane3 } = useStoreState((state) => state.navigator);
   const {
     theme: currentTheme,
     currentWorkspace,
     defaultPaneId,
-  } = useStoreState((state) => state.userSettings);
+  } = useSelector((state) => state.userSettings);
 
   const [paneSelectorActive, setPaneSelectorActive] = useState(false);
 

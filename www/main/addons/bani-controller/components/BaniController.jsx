@@ -87,7 +87,7 @@ const BaniController = ({ onScreenClose, className }) => {
     content3FontSize,
     baniLength,
     // mangalPosition,
-  } = useStoreState((state) => state.userSettings);
+  } = useSelector((state) => state.userSettings);
 
   const fontSizes = {
     gurbani: parseInt(gurbaniFontSize, 10),

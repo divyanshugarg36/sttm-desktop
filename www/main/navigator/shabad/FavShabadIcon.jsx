@@ -23,7 +23,7 @@ const FavShabadIcon = ({ paneId }) => {
     isSundarGutkaBani,
     isCeremonyBani,
   } = useStoreState((state) => state.navigator);
-  const { currentWorkspace } = useStoreState((state) => state.userSettings);
+  const { currentWorkspace } = useSelector((state) => state.userSettings);
 
   const { setFavShabad } = useStoreActions((state) => state.navigator);
 

@@ -1,28 +1,28 @@
 /* eslint-disable no-param-reassign */
 import { createStore, action } from 'easy-peasy';
 
-import createUserSettingsState from './user-settings/create-user-settings-state';
 import createNavigatorSettingsState from './navigator-settings/create-navigator-settings';
 
-import { savedSettings, userConfigPath } from './user-settings/get-saved-user-settings';
+import { userConfigPath } from './user-settings/get-saved-user-settings';
 import { savedOverlaySettings } from './user-settings/get-saved-overlay-settings';
 
 import createOverlaySettingsState from './user-settings/create-overlay-settings-state';
 
 import store from './redux/store';
 import { setUserToken } from './redux/appSlice';
+import { userSettingsActions } from './redux/userSettingsSlice';
 
 const { sidebar, bottomBar } = require('../../../configs/overlay.json');
-const { settings } = require('../../../configs/user-settings.json');
 const navigatorSettings = require('../../../configs/navigator-settings.json');
 
 global.platform = require('../../desktop_scripts');
 
 const GlobalState = createStore({
-  // NOTE: `baniController` (redux/baniControllerSlice.js) and `app`
-  // (redux/appSlice.js) have been migrated to Redux Toolkit — the `app` branch
-  // now lives in Redux; its inbound `userToken` IPC listener below dispatches
-  // there. See EASY-PEASY-TO-REDUX-MIGRATION.md.
+  // NOTE: `baniController`, `app`, and `userSettings` have been migrated to
+  // Redux Toolkit (redux/*Slice.js). `userSettings` reducers are pure; its side
+  // effects live in redux/settingsSyncMiddleware.js, and the inbound
+  // `update-global-setting` IPC listener below routes userSettings to Redux.
+  // See EASY-PEASY-TO-REDUX-MIGRATION.md.
   navigator: createNavigatorSettingsState(navigatorSettings),
   viewerSettings: {
     containerPadding: {
@@ -61,7 +61,6 @@ const GlobalState = createStore({
       return newState;
     }),
   },
-  userSettings: createUserSettingsState(settings, savedSettings, userConfigPath),
   baniOverlay: createOverlaySettingsState(
     { ...sidebar.settings, ...bottomBar.settings },
     savedOverlaySettings,
@@ -71,7 +70,12 @@ const GlobalState = createStore({
 
 global.platform.ipc.on('update-global-setting', (_event, setting) => {
   const { settingType, actionName, payload } = JSON.parse(setting);
-  GlobalState.getActions()[settingType][actionName](payload);
+  // `userSettings` now lives in Redux; other branches remain in easy-peasy.
+  if (settingType === 'userSettings') {
+    store.dispatch(userSettingsActions[actionName](payload));
+  } else {
+    GlobalState.getActions()[settingType][actionName](payload);
+  }
 });
 
 global.platform.ipc.on('get-overlay-prefs', () => {

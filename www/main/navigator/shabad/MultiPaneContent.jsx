@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useStoreActions, useStoreState } from 'easy-peasy';
+import { useSelector } from 'react-redux';
 
 import { ShabadText } from './ShabadText';
 import { FavoritePane, HistoryPane } from '../misc/components';
@@ -18,7 +19,7 @@ const MultiPaneContent = ({ data }) => {
   const setPaneAttributes = navigatorActions[`setPane${paneId}`];
   const { activePaneId, homeVerse, versesRead } = navigatorState;
   const { setHomeVerse, setVersesRead } = navigatorActions;
-  const { currentWorkspace } = useStoreState((state) => state.userSettings);
+  const { currentWorkspace } = useSelector((state) => state.userSettings);
 
   const {
     displayWaheguruSlide,

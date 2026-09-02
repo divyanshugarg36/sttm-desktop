@@ -1,4 +1,5 @@
 import { useStoreActions, useStoreState } from 'easy-peasy';
+import { useSelector } from 'react-redux';
 import updateMultipane from '../utils/update-multipane';
 
 const remote = require('@electron/remote');
@@ -18,7 +19,7 @@ export const useNewShabad = () => {
     searchVerse,
   } = useStoreState((state) => state.navigator);
 
-  const { currentWorkspace } = useStoreState((state) => state.userSettings);
+  const { currentWorkspace } = useSelector((state) => state.userSettings);
 
   const {
     setActiveShabadId,

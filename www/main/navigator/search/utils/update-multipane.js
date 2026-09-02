@@ -1,4 +1,5 @@
 import { useStoreActions, useStoreState } from 'easy-peasy';
+import { useSelector } from 'react-redux';
 
 const remote = require('@electron/remote');
 
@@ -7,7 +8,7 @@ const { i18n } = remote.require('./app');
 const updateMultipane = () => {
   const { pane1, pane2, pane3 } = useStoreState((state) => state.navigator);
   const { setPane1, setPane2, setPane3 } = useStoreActions((actions) => actions.navigator);
-  const { defaultPaneId } = useStoreState((state) => state.userSettings);
+  const { defaultPaneId } = useSelector((state) => state.userSettings);
 
   const paneMap = {
     1: { setPane: setPane1, pane: pane1 },

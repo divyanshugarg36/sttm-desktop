@@ -1,9 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useStoreActions, useStoreState } from 'easy-peasy';
+import { useSelector, useDispatch } from 'react-redux';
 
 import FavShabadIcon from './FavShabadIcon';
 import ArrowIcon from './ArrowIcon';
+import { setDefaultPaneId } from '../../common/store/redux/userSettingsSlice';
 
 const remote = require('@electron/remote');
 
@@ -16,8 +18,8 @@ const MultiPaneHeader = ({ data }) => {
   const paneAttributes = navigatorState[`pane${paneId}`];
   const setPaneAttributes = navigatorActions[`setPane${paneId}`];
 
-  const { defaultPaneId } = useStoreState((state) => state.userSettings);
-  const { setDefaultPaneId } = useStoreActions((actions) => actions.userSettings);
+  const { defaultPaneId } = useSelector((state) => state.userSettings);
+  const dispatch = useDispatch();
 
   const [disableLock, setDisableLock] = useState(false);
 
@@ -56,7 +58,7 @@ const MultiPaneHeader = ({ data }) => {
       if (defaultPaneId === paneId) {
         const newDefault = nextAvailablePane(paneId);
         if (defaultPaneId !== newDefault) {
-          setDefaultPaneId(newDefault);
+          dispatch(setDefaultPaneId(newDefault));
         }
       }
     }

@@ -32,7 +32,7 @@ const Launchpad = () => {
   const dispatch = useDispatch();
   const { shortcuts } = useStoreState((state) => state.navigator);
   const { setShortcuts } = useStoreActions((state) => state.navigator);
-  const { currentWorkspace, defaultPaneId } = useStoreState((state) => state.userSettings);
+  const { currentWorkspace, defaultPaneId } = useSelector((state) => state.userSettings);
 
   const {
     displayWaheguruSlide,

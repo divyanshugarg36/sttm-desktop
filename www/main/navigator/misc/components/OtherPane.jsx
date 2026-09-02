@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useStoreState, useStoreActions } from 'easy-peasy';
+import { useSelector } from 'react-redux';
 import { randomShabad } from '../../../banidb';
 import { dailyHukamnama } from '../../utils';
 
@@ -34,7 +35,7 @@ export const OtherPane = ({ className }) => {
     setPane3,
   } = useStoreActions((state) => state.navigator);
 
-  const { defaultPaneId } = useStoreState((state) => state.userSettings);
+  const { defaultPaneId } = useSelector((state) => state.userSettings);
 
   const setShabadId = (shabadId) => {
     if (!isRandomShabad) {

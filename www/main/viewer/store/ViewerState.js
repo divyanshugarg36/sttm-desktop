@@ -1,32 +1,36 @@
 import { createStore, action } from 'easy-peasy';
 import GlobalState from '../../common/store/GlobalState';
+import { USER_SETTINGS_INITIAL_STATE } from '../../common/store/redux/userSettingsSlice';
 
 global.platform = require('../../desktop_scripts');
 
-/* TODO: remove the settingsType argument */
-const createSettingsActions = (settingsType) => {
-  const userSettingsActions = {};
-  Object.keys(GlobalState.getState()[settingsType]).forEach((stateVarName) => {
+// Build the shadow set<Var> actions from a plain state object (key → value).
+const createSettingsActions = (stateObject) => {
+  const settingsActions = {};
+  Object.keys(stateObject).forEach((stateVarName) => {
     // convert state name ex- larivaar to action name ex- setLarivaar
     const stateActionName = `set${stateVarName.charAt(0).toUpperCase()}${stateVarName.slice(1)}`;
-    userSettingsActions[stateActionName] = action((state, payload) => {
+    settingsActions[stateActionName] = action((state, payload) => {
       // eslint-disable-next-line no-param-reassign
       state[stateVarName] = payload;
     });
   });
 
-  return userSettingsActions;
+  return settingsActions;
 };
 
 const ViewerState = createStore({
-  // Create shadow object of user settings from Global State
+  // Shadow of userSettings — its initial values now come from the Redux slice's
+  // shared initial-state export (userSettings left GlobalState in Phase 4); the
+  // main window keeps this shadow in sync via `update-viewer-setting`.
   userSettings: {
-    ...GlobalState.getState().userSettings,
-    ...createSettingsActions('userSettings'),
+    ...USER_SETTINGS_INITIAL_STATE,
+    ...createSettingsActions(USER_SETTINGS_INITIAL_STATE),
   },
+  // navigator is still an easy-peasy branch in GlobalState.
   navigator: {
     ...GlobalState.getState().navigator,
-    ...createSettingsActions('navigator'),
+    ...createSettingsActions(GlobalState.getState().navigator),
   },
   viewerSettings: {
     containerPadding: {

@@ -1,11 +1,12 @@
 import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
-import { useStoreActions, useStoreState } from 'easy-peasy';
+import { useStoreActions } from 'easy-peasy';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { uploadImage } from '../../../settings/utils/theme-bg-uploader';
 import { classNames } from '../../../common/utils';
 import { setOverlayScreen } from '../../../common/store/redux/appSlice';
+import { setShortcutTray } from '../../../common/store/redux/userSettingsSlice';
 
 const remote = require('@electron/remote');
 
@@ -16,8 +17,7 @@ export const MiscFooter = ({ waheguruSlide, moolMantraSlide, blankSlide, anandSa
   const overlayScreen = useSelector((state) => state.app.overlayScreen);
   const dispatch = useDispatch();
   const { setVerseHistory } = useStoreActions((actions) => actions.navigator);
-  const { shortcutTray } = useStoreState((state) => state.userSettings);
-  const { setShortcutTray } = useStoreActions((state) => state.userSettings);
+  const { shortcutTray } = useSelector((state) => state.userSettings);
   const drawerRef = useRef(null);
 
   // Event Handlers
@@ -38,7 +38,7 @@ export const MiscFooter = ({ waheguruSlide, moolMantraSlide, blankSlide, anandSa
   };
 
   const toggleTray = (toggleValue) => {
-    setShortcutTray(toggleValue);
+    dispatch(setShortcutTray(toggleValue));
     analytics.trackEvent({
       category: 'shortcutTray',
       action: 'toggleTray',

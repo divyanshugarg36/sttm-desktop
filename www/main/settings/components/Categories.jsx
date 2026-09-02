@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useStoreState } from 'easy-peasy';
+import { useSelector } from 'react-redux';
 
 import Setting from './Setting';
 import { convertToCamelCase } from '../../common/utils';
@@ -11,7 +11,7 @@ const { store, i18n } = remote.require('./app');
 
 const SettingsFactory = ({ subCategory }) => {
   const settingsDOM = [];
-  const userSettings = useStoreState((state) => state.userSettings);
+  const userSettings = useSelector((state) => state.userSettings);
 
   Object.keys(subCategory.settingObjs).forEach((settingKey, settingIndex) => {
     const { addonObj, addon, condition, conditionValue } = subCategory.settingObjs[settingKey];

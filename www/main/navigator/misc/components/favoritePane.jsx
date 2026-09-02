@@ -36,7 +36,7 @@ export const FavoritePane = ({ className, paneId }) => {
     setPane2,
     setPane3,
   } = useStoreActions((state) => state.navigator);
-  const { currentWorkspace, defaultPaneId } = useStoreState((state) => state.userSettings);
+  const { currentWorkspace, defaultPaneId } = useSelector((state) => state.userSettings);
 
   const userToken = useSelector((state) => state.app.userToken);
   const [parsedFav, setParsedFav] = useState([]);

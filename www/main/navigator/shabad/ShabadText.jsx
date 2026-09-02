@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useStoreActions, useStoreState } from 'easy-peasy';
+import { useSelector } from 'react-redux';
 import { Virtuoso } from 'react-virtuoso';
 import { ipcRenderer } from 'electron';
 import PropTypes from 'prop-types';
@@ -56,10 +57,11 @@ export const ShabadText = ({
     activePaneId,
     shortcuts,
     lineNumber,
+    savedCrossPlatformId,
   } = useStoreState((state) => state.navigator);
 
   const { baniLength, liveFeed, autoplayDelay, autoplayToggle, intelligentSpacebar, akhandpatt } =
-    useStoreState((state) => state.userSettings);
+    useSelector((state) => state.userSettings);
 
   const {
     setActiveVerseId,
@@ -72,7 +74,6 @@ export const ShabadText = ({
     setCeremonyId,
     setIsCeremonyBani,
     setIsSundarGutkaBani,
-    savedCrossPlatformId,
   } = useStoreActions((actions) => actions.navigator);
 
   const updateTraversedVerse = (newTraversedVerse, verseIndex, crossPlatformId = null) => {
@@ -184,7 +185,11 @@ export const ShabadText = ({
       (obj) => obj.crossPlatformId === savedCrossPlatformId,
     );
     if (baniVerseIndex >= 0) {
-      updateTraversedVerse(filteredItems[baniVerseIndex].ID, baniVerseIndex);
+      // Pass the verse's real verseId (not `.ID`, which is just the array
+      // index) — it becomes activeVerseId and is matched by verseId downstream
+      // (e.g. sendToBaniController), so an index here highlights the wrong verse
+      // and crashes the desktop→controller echo.
+      updateTraversedVerse(filteredItems[baniVerseIndex].verseId, baniVerseIndex);
     }
   }, [savedCrossPlatformId]);
 

@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useStoreState, useStoreActions } from 'easy-peasy';
+import { useSelector } from 'react-redux';
 import banidb from '../../banidb';
 
 const remote = require('@electron/remote');
@@ -21,7 +22,7 @@ const ArrowIcon = ({ paneId }) => {
     shortcuts,
   } = useStoreState((state) => state.navigator);
 
-  const { currentWorkspace } = useStoreState((state) => state.userSettings);
+  const { currentWorkspace } = useSelector((state) => state.userSettings);
 
   const {
     setInitialVerseId,

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useStoreState, useStoreActions } from 'easy-peasy';
+import { useSelector } from 'react-redux';
 
 const remote = require('@electron/remote');
 
@@ -41,7 +42,7 @@ export const HistoryPane = ({ className, paneId }) => {
     setVerseHistory,
   } = useStoreActions((state) => state.navigator);
 
-  const { currentWorkspace, defaultPaneId } = useStoreState((state) => state.userSettings);
+  const { currentWorkspace, defaultPaneId } = useSelector((state) => state.userSettings);
 
   const deleteFromHistory = (element, event) => {
     event.stopPropagation();

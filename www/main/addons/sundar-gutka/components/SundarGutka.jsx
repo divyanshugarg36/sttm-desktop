@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import anvaad from 'anvaad-js';
 import { useStoreState, useStoreActions } from 'easy-peasy';
+import { useSelector } from 'react-redux';
 
 import { Switch, Overlay, MultipaneDropdown } from '../../../common/sttm-ui';
 import ExtraBani from './ExtraBani';
@@ -25,7 +26,7 @@ const SundarGutka = ({ isShowTranslitSwitch = false, onScreenClose }) => {
     pane3,
   } = useStoreState((state) => state.navigator);
 
-  const { currentWorkspace, defaultPaneId } = useStoreState((state) => state.userSettings);
+  const { currentWorkspace, defaultPaneId } = useSelector((state) => state.userSettings);
 
   const {
     setIsSundarGutkaBani,

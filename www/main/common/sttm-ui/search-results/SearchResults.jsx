@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import anvaad from 'anvaad-js';
 import { useStoreState } from 'easy-peasy';
+import { useSelector } from 'react-redux';
 
 const remote = require('@electron/remote');
 
@@ -20,7 +21,7 @@ const SearchResults = ({
   writer,
   currentLanguage,
 }) => {
-  const { currentWorkspace, defaultPaneId } = useStoreState((state) => state.userSettings);
+  const { currentWorkspace, defaultPaneId } = useSelector((state) => state.userSettings);
   const { pane1, pane2, pane3 } = useStoreState((state) => state.navigator);
 
   const getClassForAng = (baniSource) => {
