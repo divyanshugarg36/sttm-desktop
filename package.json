@@ -86,7 +86,6 @@
     "axios": "^1.5.1",
     "copy-to-clipboard": "^3.3.3",
     "dotenv": "^16.3.1",
-    "easy-peasy": "^6.0.3",
     "electron-chromecast": "^1.1.0",
     "electron-log": "^4.4.8",
     "electron-updater": "^6.1.4",
