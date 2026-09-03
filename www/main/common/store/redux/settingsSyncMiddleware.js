@@ -1,5 +1,8 @@
 import { USER_SETTINGS_SYNC } from './userSettingsSlice';
 import { NAVIGATOR_SYNC } from './navigatorSlice';
+import { BANI_OVERLAY_SYNC } from './baniOverlaySlice';
+import { savedOverlaySettings } from '../user-settings/get-saved-overlay-settings';
+import { userConfigPath } from '../user-settings/get-saved-user-settings';
 
 // Redux middleware that runs the side effects the easy-peasy settings actions
 // used to embed inside their reducers (see the old create-user-settings-state).
@@ -17,6 +20,39 @@ import { NAVIGATOR_SYNC } from './navigatorSlice';
 const fs = require('fs');
 
 const settingsSyncMiddleware = (store) => (next) => (action) => {
+  // baniOverlay (main window): persist to the user config file and notify the
+  // main process via `save-overlay-settings` (was create-overlay-settings-state).
+  const overlayMeta = BANI_OVERLAY_SYNC.actionMetaByType[action.type];
+  if (overlayMeta) {
+    const result = next(action);
+    savedOverlaySettings.baniOverlay[overlayMeta.settingKey] = action.payload;
+    fs.writeFileSync(userConfigPath, JSON.stringify(savedOverlaySettings));
+    if (global.platform) {
+      global.platform.ipc.send(
+        'save-overlay-settings',
+        JSON.stringify(store.getState().baniOverlay),
+      );
+    }
+    return result;
+  }
+
+  // viewerSettings (main window): broadcast to the viewer window's shadow store.
+  if (action.type.startsWith('viewerSettings/')) {
+    const result = next(action);
+    const message = JSON.stringify({
+      payload: action.payload,
+      actionName: action.type.split('/')[1],
+      settingType: 'viewerSettings',
+    });
+    if (global.webview) {
+      global.webview.send('update-viewer-setting', message);
+    }
+    if (global.platform) {
+      global.platform.ipc.send('update-viewer-setting', message);
+    }
+    return result;
+  }
+
   // navigator: the only side effect is broadcasting the change to the viewer
   // window's shadow store (no persistence / DOM / socket).
   const navMeta = NAVIGATOR_SYNC.actionMetaByType[action.type];
@@ -69,8 +105,11 @@ const settingsSyncMiddleware = (store) => (next) => (action) => {
     global.platform.ipc.send('update-viewer-setting', message);
   }
 
-  // 2. Persist to the user config file + localStorage.
-  const { savedSettings, userConfigPath } = USER_SETTINGS_SYNC;
+  // 2. Persist to the user config file + localStorage. `userConfigPath` is the
+  // module-level import (same value USER_SETTINGS_SYNC re-exports); destructuring
+  // it here would shadow that import and put the baniOverlay branch's use above in
+  // the temporal dead zone.
+  const { savedSettings } = USER_SETTINGS_SYNC;
   savedSettings[settingKey] = payload;
   fs.writeFileSync(userConfigPath, JSON.stringify(savedSettings));
   if (typeof localStorage === 'object') {

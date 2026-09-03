@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useStoreState } from 'easy-peasy';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { Switch, Checkbox } from '../../common/sttm-ui';
@@ -17,7 +16,7 @@ const Setting = ({ settingObj, stateVar, stateFunction }) => {
   const { title, type, min, max, step, options } = settingObj;
   const userSettings = useSelector((state) => state.userSettings);
   const dispatch = useDispatch();
-  const { containerPadding } = useStoreState((state) => state.viewerSettings);
+  const { containerPadding } = useSelector((state) => state.viewerSettings);
 
   const { disabledContent, filteredBaniOptions } = useSelector((state) => state.navigator);
 

@@ -39,10 +39,6 @@ const viewerSettingsSlice = createSlice({
 });
 
 export const viewerSettingsActions = viewerSettingsSlice.actions;
-export const {
-  setQuickToolsOpen,
-  setPaddingToolsOpen,
-  setPadding,
-} = viewerSettingsSlice.actions;
+export const { setQuickToolsOpen, setPaddingToolsOpen, setPadding } = viewerSettingsSlice.actions;
 
 export default viewerSettingsSlice.reducer;

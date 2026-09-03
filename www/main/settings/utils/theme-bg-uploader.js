@@ -1,4 +1,5 @@
-import GlobalState from '../../common/store/GlobalState';
+import mainStore from '../../common/store/redux/store';
+import { setThemeBg } from '../../common/store/redux/userSettingsSlice';
 
 const remote = require('@electron/remote');
 const fs = require('fs');
@@ -78,7 +79,7 @@ export const uploadImage = async (evt) => {
               };
 
               store.setUserPref('app.themebg', customThemeObj);
-              GlobalState.getActions().userSettings.setThemeBg(customThemeObj);
+              mainStore.dispatch(setThemeBg(customThemeObj));
               global.core.platformMethod('updateSettings');
               resolve();
             }
