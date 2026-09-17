@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useStoreState, useStoreActions } from 'easy-peasy';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { Switch, Checkbox } from '../../common/sttm-ui';
 import { convertToCamelCase } from '../../common/utils';
 import { settings } from '../../../configs/user-settings.json';
+import { userSettingsActions } from '../../common/store/redux/userSettingsSlice';
 
 const remote = require('@electron/remote');
 
@@ -13,19 +14,19 @@ const analytics = remote.getGlobal('analytics');
 
 const Setting = ({ settingObj, stateVar, stateFunction }) => {
   const { title, type, min, max, step, options } = settingObj;
-  const userSettings = useStoreState((state) => state.userSettings);
-  const userSettingsActions = useStoreActions((state) => state.userSettings);
-  const { containerPadding } = useStoreState((state) => state.viewerSettings);
+  const userSettings = useSelector((state) => state.userSettings);
+  const dispatch = useDispatch();
+  const { containerPadding } = useSelector((state) => state.viewerSettings);
 
-  const { disabledContent, filteredBaniOptions } = useStoreState((state) => state.navigator);
+  const { disabledContent, filteredBaniOptions } = useSelector((state) => state.navigator);
 
   const handleInputChange = (event) => {
     const value = event.target ? event.target.value : event;
     const { disableSetting } = settingObj;
-    userSettingsActions[stateFunction](value);
+    dispatch(userSettingsActions[stateFunction](value));
     if (value && disableSetting) {
       if (userSettings[convertToCamelCase(disableSetting)] !== false) {
-        userSettingsActions[`set${convertToCamelCase(disableSetting, true)}`](false);
+        dispatch(userSettingsActions[`set${convertToCamelCase(disableSetting, true)}`](false));
       }
     }
     analytics.trackEvent({
@@ -37,7 +38,7 @@ const Setting = ({ settingObj, stateVar, stateFunction }) => {
 
   const handleCheckboxChange = (event) => {
     const value = event.target.checked;
-    userSettingsActions[stateFunction](value);
+    dispatch(userSettingsActions[stateFunction](value));
     analytics.trackEvent({
       category: 'setting',
       action: userSettingsActions[stateFunction],
@@ -66,7 +67,7 @@ const Setting = ({ settingObj, stateVar, stateFunction }) => {
       resetSettings.forEach((settingKey) => {
         const value = settings[settingKey].initialValue;
         if (userSettings[convertToCamelCase(settingKey)] !== value) {
-          userSettingsActions[`set${convertToCamelCase(settingKey, true)}`](value);
+          dispatch(userSettingsActions[`set${convertToCamelCase(settingKey, true)}`](value));
         }
       });
     }

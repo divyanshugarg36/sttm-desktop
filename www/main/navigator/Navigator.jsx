@@ -1,5 +1,5 @@
 import React from 'react';
-import { useStoreState } from 'easy-peasy';
+import { useSelector } from 'react-redux';
 import SearchPane from './search/components/SearchPane';
 import ShabadPane from './shabad/ShabadPane';
 import { MiscPane } from './misc/components';
@@ -13,9 +13,9 @@ const remote = require('@electron/remote');
 const { i18n } = remote.require('./app');
 
 const Navigator = () => {
-  const { currentWorkspace } = useStoreState((state) => state.userSettings);
+  const { currentWorkspace } = useSelector((state) => state.userSettings);
 
-  const { minimizedBySingleDisplay } = useStoreState((state) => state.navigator);
+  const { minimizedBySingleDisplay } = useSelector((state) => state.navigator);
 
   const {
     displayWaheguruSlide,
@@ -72,13 +72,7 @@ const Navigator = () => {
 
   return (
     <>
-      <div
-        className={
-          isCurrentWorkSpaceSingleDisplay
-            ? 'single-display-viewer'
-            : 'navigator-row'
-        }
-      >
+      <div className={isCurrentWorkSpaceSingleDisplay ? 'single-display-viewer' : 'navigator-row'}>
         {!isCurrentWorkSpaceSingleDisplay && <SearchPane />}
         <ViewerPane />
       </div>

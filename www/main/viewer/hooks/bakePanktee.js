@@ -1,8 +1,8 @@
 import React from 'react';
-import { useStoreState } from 'easy-peasy';
+import { useSelector } from 'react-redux';
 
 const bakePanktee = () => {
-  const { displayVishraams, larivaarAssist, larivaar, gurbaniFontSize } = useStoreState(
+  const { displayVishraams, larivaarAssist, larivaar, gurbaniFontSize } = useSelector(
     (state) => state.userSettings,
   );
 

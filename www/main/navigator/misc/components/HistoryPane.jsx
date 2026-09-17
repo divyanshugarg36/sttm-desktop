@@ -1,6 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useStoreState, useStoreActions } from 'easy-peasy';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  setActiveShabadId,
+  setInitialVerseId,
+  setVersesRead,
+  setIsCeremonyBani,
+  setIsSundarGutkaBani,
+  setCeremonyId,
+  setSundarGutkaBaniId,
+  setHomeVerse,
+  setActiveVerseId,
+  setSingleDisplayActiveTab,
+  setPane1,
+  setPane2,
+  setPane3,
+  setVerseHistory,
+} from '../../../common/store/redux/navigatorSlice';
 
 const remote = require('@electron/remote');
 
@@ -23,122 +39,113 @@ export const HistoryPane = ({ className, paneId }) => {
     pane1,
     pane2,
     pane3,
-  } = useStoreState((state) => state.navigator);
-  const {
-    setActiveShabadId,
-    setInitialVerseId,
-    setVersesRead,
-    setIsCeremonyBani,
-    setIsSundarGutkaBani,
-    setCeremonyId,
-    setSundarGutkaBaniId,
-    setHomeVerse,
-    setActiveVerseId,
-    setSingleDisplayActiveTab,
-    setPane1,
-    setPane2,
-    setPane3,
-    setVerseHistory,
-  } = useStoreActions((state) => state.navigator);
+  } = useSelector((state) => state.navigator);
+  const dispatch = useDispatch();
 
-  const { currentWorkspace, defaultPaneId } = useStoreState((state) => state.userSettings);
+  const { currentWorkspace, defaultPaneId } = useSelector((state) => state.userSettings);
 
   const deleteFromHistory = (element, event) => {
     event.stopPropagation();
     const updatedHistory = verseHistory.filter(
       (historyItem) => historyItem.shabadId !== element.shabadId,
     );
-    setVerseHistory(updatedHistory);
+    dispatch(setVerseHistory(updatedHistory));
   };
 
   const openShabadFromHistory = (element) => {
     const currentPane = paneId || defaultPaneId;
     switch (currentPane) {
       case 1:
-        setPane1({
-          ...pane1,
-          content: i18n.t('MULTI_PANE.SHABAD'),
-          activeShabad: element.shabadId,
-          activeVerse: element.continueFrom,
-          baniType: element.type,
-          versesRead: element.versesRead,
-          homeVerse: element.homeVerse,
-        });
+        dispatch(
+          setPane1({
+            ...pane1,
+            content: i18n.t('MULTI_PANE.SHABAD'),
+            activeShabad: element.shabadId,
+            activeVerse: element.continueFrom,
+            baniType: element.type,
+            versesRead: element.versesRead,
+            homeVerse: element.homeVerse,
+          }),
+        );
         break;
       case 2:
-        setPane2({
-          ...pane2,
-          content: i18n.t('MULTI_PANE.SHABAD'),
-          activeShabad: element.shabadId,
-          activeVerse: element.continueFrom,
-          baniType: element.type,
-          versesRead: element.versesRead,
-          homeVerse: element.homeVerse,
-        });
+        dispatch(
+          setPane2({
+            ...pane2,
+            content: i18n.t('MULTI_PANE.SHABAD'),
+            activeShabad: element.shabadId,
+            activeVerse: element.continueFrom,
+            baniType: element.type,
+            versesRead: element.versesRead,
+            homeVerse: element.homeVerse,
+          }),
+        );
         break;
       case 3:
-        setPane3({
-          ...pane3,
-          content: i18n.t('MULTI_PANE.SHABAD'),
-          activeShabad: element.shabadId,
-          activeVerse: element.continueFrom,
-          baniType: element.type,
-          versesRead: element.versesRead,
-          homeVerse: element.homeVerse,
-        });
+        dispatch(
+          setPane3({
+            ...pane3,
+            content: i18n.t('MULTI_PANE.SHABAD'),
+            activeShabad: element.shabadId,
+            activeVerse: element.continueFrom,
+            baniType: element.type,
+            versesRead: element.versesRead,
+            homeVerse: element.homeVerse,
+          }),
+        );
         break;
       default:
         break;
     }
     if (currentWorkspace !== i18n.t('WORKSPACES.MULTI_PANE')) {
       if (singleDisplayActiveTab !== 'shabad') {
-        setSingleDisplayActiveTab('shabad');
+        dispatch(setSingleDisplayActiveTab('shabad'));
       }
       if (element.verseId !== initialVerseId) {
-        setInitialVerseId(element.verseId);
+        dispatch(setInitialVerseId(element.verseId));
       }
       if (element.homeVerse !== homeVerse) {
-        setHomeVerse(element.homeVerse);
+        dispatch(setHomeVerse(element.homeVerse));
       }
       if (element.versesRead !== versesRead) {
-        setVersesRead(element.versesRead);
+        dispatch(setVersesRead(element.versesRead));
       }
       if (element.type === 'shabad') {
         if (isSundarGutkaBani) {
-          setIsSundarGutkaBani(false);
+          dispatch(setIsSundarGutkaBani(false));
         }
         if (isCeremonyBani) {
-          setIsCeremonyBani(false);
+          dispatch(setIsCeremonyBani(false));
         }
         if (element.shabadId !== activeShabadId) {
-          setActiveShabadId(element.shabadId);
+          dispatch(setActiveShabadId(element.shabadId));
         }
       }
       if (element.type === 'ceremony') {
         if (isSundarGutkaBani) {
-          setIsSundarGutkaBani(false);
+          dispatch(setIsSundarGutkaBani(false));
         }
         if (!isCeremonyBani) {
-          setIsCeremonyBani(true);
+          dispatch(setIsCeremonyBani(true));
         }
         if (ceremonyId !== element.shabadId) {
-          setCeremonyId(element.shabadId);
+          dispatch(setCeremonyId(element.shabadId));
         }
       }
       if (element.type === 'bani') {
         if (isCeremonyBani) {
-          setIsCeremonyBani(false);
+          dispatch(setIsCeremonyBani(false));
         }
         if (!isSundarGutkaBani) {
-          setIsSundarGutkaBani(true);
+          dispatch(setIsSundarGutkaBani(true));
         }
 
         if (sundarGutkaBaniId !== element.shabadId) {
-          setSundarGutkaBaniId(element.shabadId);
+          dispatch(setSundarGutkaBaniId(element.shabadId));
         }
       }
       if (element.continueFrom !== activeVerseId) {
-        setActiveVerseId(element.continueFrom);
+        dispatch(setActiveVerseId(element.continueFrom));
       }
     }
   };

@@ -1,9 +1,9 @@
 import React from 'react';
-import { StoreProvider } from 'easy-peasy';
+import { Provider } from 'react-redux';
 import { ipcRenderer } from 'electron';
 
 import ShabadDeck from './ShabadDeck/ShabadDeck';
-import ViewerState from './store/ViewerState';
+import viewerStore from './store/viewer-store';
 import { castToReceiver, appendMessage, requestSession, stopApp, tingle } from './utils';
 
 const chromecast = require('electron-chromecast');
@@ -74,9 +74,9 @@ const ViewerApp = () => {
     castToReceiver();
   });
   return (
-    <StoreProvider store={ViewerState}>
+    <Provider store={viewerStore}>
       <ShabadDeck />
-    </StoreProvider>
+    </Provider>
   );
 };
 

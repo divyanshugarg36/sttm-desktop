@@ -1,18 +1,19 @@
 import React, { useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { useStoreActions, useStoreState } from 'easy-peasy';
+import { useSelector, useDispatch } from 'react-redux';
 import { searchShabads, loadAng } from '../../../navigator/utils';
 import { InputContext } from '../../../launchpad';
+import { setSearchData, setShortcuts } from '../../store/redux/navigatorSlice';
 
 const remote = require('@electron/remote');
 
 const analytics = remote.getGlobal('analytics');
 
 const InputBox = ({ placeholder, disabled, className, databaseProgress, query, setQuery }) => {
-  const { currentSearchType, currentSource, searchQuery, shortcuts } = useStoreState(
+  const { currentSearchType, currentSource, searchQuery, shortcuts } = useSelector(
     (state) => state.navigator,
   );
-  const { setSearchData, setShortcuts } = useStoreActions((state) => state.navigator);
+  const dispatch = useDispatch();
 
   const inputContextRef = useContext(InputContext);
   const handleChange = (event) => {
@@ -41,10 +42,12 @@ const InputBox = ({ placeholder, disabled, className, databaseProgress, query, s
   useEffect(() => {
     if (shortcuts.focusInput) {
       focusInputbox();
-      setShortcuts({
-        ...shortcuts,
-        focusInput: false,
-      });
+      dispatch(
+        setShortcuts({
+          ...shortcuts,
+          focusInput: false,
+        }),
+      );
     }
   }, [shortcuts]);
 
@@ -53,10 +56,10 @@ const InputBox = ({ placeholder, disabled, className, databaseProgress, query, s
     const isAng = !!searchTypeInt;
     if (databaseProgress >= 1 && searchQuery) {
       if (isAng) {
-        loadAng(searchTypeInt).then((rows) => setSearchData(rows));
+        loadAng(searchTypeInt).then((rows) => dispatch(setSearchData(rows)));
       } else {
         searchShabads(searchQuery, currentSearchType, currentSource).then((rows) =>
-          searchQuery ? setSearchData(rows) : setSearchData([]),
+          searchQuery ? dispatch(setSearchData(rows)) : dispatch(setSearchData([])),
         );
       }
     }

@@ -1,9 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useStoreActions, useStoreState } from 'easy-peasy';
+import { useSelector, useDispatch } from 'react-redux';
 
 import FavShabadIcon from './FavShabadIcon';
 import ArrowIcon from './ArrowIcon';
+import { setDefaultPaneId } from '../../common/store/redux/userSettingsSlice';
+import { navigatorActions } from '../../common/store/redux/navigatorSlice';
 
 const remote = require('@electron/remote');
 
@@ -11,13 +13,12 @@ const { i18n } = remote.require('./app');
 
 const MultiPaneHeader = ({ data }) => {
   const paneId = data.multiPaneId;
-  const navigatorState = useStoreState((state) => state.navigator);
-  const navigatorActions = useStoreActions((state) => state.navigator);
+  const navigatorState = useSelector((state) => state.navigator);
   const paneAttributes = navigatorState[`pane${paneId}`];
   const setPaneAttributes = navigatorActions[`setPane${paneId}`];
 
-  const { defaultPaneId } = useStoreState((state) => state.userSettings);
-  const { setDefaultPaneId } = useStoreActions((actions) => actions.userSettings);
+  const { defaultPaneId } = useSelector((state) => state.userSettings);
+  const dispatch = useDispatch();
 
   const [disableLock, setDisableLock] = useState(false);
 
@@ -56,12 +57,12 @@ const MultiPaneHeader = ({ data }) => {
       if (defaultPaneId === paneId) {
         const newDefault = nextAvailablePane(paneId);
         if (defaultPaneId !== newDefault) {
-          setDefaultPaneId(newDefault);
+          dispatch(setDefaultPaneId(newDefault));
         }
       }
     }
     if (paneAttributes !== updatedAttributes) {
-      setPaneAttributes(updatedAttributes);
+      dispatch(setPaneAttributes(updatedAttributes));
     }
   };
 
@@ -77,7 +78,7 @@ const MultiPaneHeader = ({ data }) => {
   }, [navigatorState.pane1, navigatorState.pane2, navigatorState.pane3]);
 
   const selectPaneOption = (event) => {
-    setPaneAttributes({ ...paneAttributes, content: event.target.value });
+    dispatch(setPaneAttributes({ ...paneAttributes, content: event.target.value }));
   };
 
   return (
@@ -97,7 +98,7 @@ const MultiPaneHeader = ({ data }) => {
         <FavShabadIcon paneId={paneId} />
         <ArrowIcon paneId={paneId} />
         {paneAttributes.activeShabad && (
-          <button onClick={() => setPaneAttributes(defaultPaneAttributes)}>Clear</button>
+          <button onClick={() => dispatch(setPaneAttributes(defaultPaneAttributes))}>Clear</button>
         )}
         <select
           onChange={selectPaneOption}

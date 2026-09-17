@@ -1,6 +1,7 @@
 import React from 'react';
-import { useStoreState, useStoreActions } from 'easy-peasy';
+import { useSelector, useDispatch } from 'react-redux';
 import { updateViewerScale } from '../../viewer/utils';
+import { setCurrentWorkspace } from '../../common/store/redux/userSettingsSlice';
 
 const remote = require('@electron/remote');
 
@@ -10,9 +11,9 @@ const analytics = remote.getGlobal('analytics');
 // const { store } = remote.require('./app');
 
 const WorkspaceBar = () => {
-  const { currentWorkspace } = useStoreState((state) => state.userSettings);
-  const { minimizedBySingleDisplay } = useStoreState((state) => state.navigator);
-  const { setCurrentWorkspace } = useStoreActions((state) => state.userSettings);
+  const { currentWorkspace } = useSelector((state) => state.userSettings);
+  const { minimizedBySingleDisplay } = useSelector((state) => state.navigator);
+  const dispatch = useDispatch();
 
   const presenterIdentifier = i18n.t('WORKSPACES.PRESENTER');
   const singleDisplayIdentifier = i18n.t('WORKSPACES.SINGLE_DISPLAY');
@@ -25,7 +26,7 @@ const WorkspaceBar = () => {
       global.controller['presenter-view']();
     }
     if (currentWorkspace !== workspace) {
-      setCurrentWorkspace(workspace);
+      dispatch(setCurrentWorkspace(workspace));
     }
     analytics.trackEvent({
       category: 'workspace',

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useStoreState } from 'easy-peasy';
+import { useSelector } from 'react-redux';
 
 import OverlaySetting from './OverlaySetting';
 import { convertToCamelCase } from '../../common/utils';
@@ -11,7 +11,7 @@ const { i18n } = remote.require('./app');
 
 const SettingsFactory = ({ subCategory }) => {
   const settingsDOM = [];
-  const baniOverlayState = useStoreState((state) => state.baniOverlay);
+  const baniOverlayState = useSelector((state) => state.baniOverlay);
   const showFitTextOptions = ['top', 'bottom'].includes(baniOverlayState.layout);
 
   Object.keys(subCategory.settingObjs).forEach((settingKey, settingIndex) => {

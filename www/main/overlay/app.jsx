@@ -1,14 +1,14 @@
 import React from 'react';
 
-import { StoreProvider } from 'easy-peasy';
+import { Provider } from 'react-redux';
 
 import OverlayLayout from './components/OverlayLayout';
-import OverlayState from './store/OverlayState';
+import overlayStore from './store/overlay-store';
 
 const App = () => (
-  <StoreProvider store={OverlayState}>
+  <Provider store={overlayStore}>
     <OverlayLayout />
-  </StoreProvider>
+  </Provider>
 );
 
 export default App;

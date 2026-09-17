@@ -1,5 +1,5 @@
 import React, { createContext, useRef } from 'react';
-import { useStoreState, useStoreActions } from 'easy-peasy';
+import { useSelector, useDispatch } from 'react-redux';
 
 import Toolbar from '../toolbar';
 import Navigator from '../navigator';
@@ -17,6 +17,8 @@ import {
 import { Settings } from '../settings/';
 
 import { DEFAULT_OVERLAY } from '../common/constants';
+import { setOverlayScreen } from '../common/store/redux/appSlice';
+import { setShortcuts } from '../common/store/redux/navigatorSlice';
 
 const remote = require('@electron/remote');
 
@@ -26,11 +28,10 @@ const main = remote.require('./app');
 export const InputContext = createContext();
 
 const Launchpad = () => {
-  const { overlayScreen } = useStoreState((state) => state.app);
-  const { shortcuts } = useStoreState((state) => state.navigator);
-  const { setShortcuts } = useStoreActions((state) => state.navigator);
-  const { setOverlayScreen } = useStoreActions((actions) => actions.app);
-  const { currentWorkspace, defaultPaneId } = useStoreState((state) => state.userSettings);
+  const overlayScreen = useSelector((state) => state.app.overlayScreen);
+  const dispatch = useDispatch();
+  const { shortcuts } = useSelector((state) => state.navigator);
+  const { currentWorkspace, defaultPaneId } = useSelector((state) => state.userSettings);
 
   const {
     displayWaheguruSlide,
@@ -50,15 +51,15 @@ const Launchpad = () => {
         // close only when clicked on empty space in backdrop.
         // Otherwiise keep the add-on screen opened up.
         if (isFromBackdrop && clickdOnEmptySpace) {
-          setOverlayScreen(DEFAULT_OVERLAY);
+          dispatch(setOverlayScreen(DEFAULT_OVERLAY));
         }
       }
       if (!isFromBackdrop) {
         document.body.classList.toggle(`overlay-${overlayScreen}-active`, false);
-        setOverlayScreen(DEFAULT_OVERLAY);
+        dispatch(setOverlayScreen(DEFAULT_OVERLAY));
       }
     },
-    [overlayScreen, setOverlayScreen, DEFAULT_OVERLAY],
+    [overlayScreen, dispatch, DEFAULT_OVERLAY],
   );
 
   /** ******************************* */
@@ -100,65 +101,79 @@ const Launchpad = () => {
   // focus on search shabad input shortcut
   const handleCtrlPlusSlash = () => {
     if (!shortcuts.focusInput) {
-      setShortcuts({
-        ...shortcuts,
-        focusInput: true,
-      });
+      dispatch(
+        setShortcuts({
+          ...shortcuts,
+          focusInput: true,
+        }),
+      );
     }
   };
 
   const handleDownAndRight = () => {
     if (!shortcuts.nextVerse && document.activeElement !== ref.current) {
-      setShortcuts({
-        ...shortcuts,
-        nextVerse: true,
-      });
+      dispatch(
+        setShortcuts({
+          ...shortcuts,
+          nextVerse: true,
+        }),
+      );
     }
   };
 
   const handleUpAndLeft = () => {
     if (!shortcuts.prevVerse && document.activeElement !== ref.current) {
-      setShortcuts({
-        ...shortcuts,
-        prevVerse: true,
-      });
+      dispatch(
+        setShortcuts({
+          ...shortcuts,
+          prevVerse: true,
+        }),
+      );
     }
   };
 
   const handleSpacebar = () => {
     if (!shortcuts.homeVerse && document.activeElement !== ref.current) {
-      setShortcuts({
-        ...shortcuts,
-        homeVerse: true,
-      });
+      dispatch(
+        setShortcuts({
+          ...shortcuts,
+          homeVerse: true,
+        }),
+      );
     }
   };
 
   const handleEnter = () => {
     if (!shortcuts.openFirstResult) {
       ref.current.blur();
-      setShortcuts({
-        ...shortcuts,
-        openFirstResult: true,
-      });
+      dispatch(
+        setShortcuts({
+          ...shortcuts,
+          openFirstResult: true,
+        }),
+      );
     }
   };
 
   const handleCtrlG = () => {
     if (!shortcuts.openDhanGuruSlide) {
-      setShortcuts({
-        ...shortcuts,
-        openDhanGuruSlide: true,
-      });
+      dispatch(
+        setShortcuts({
+          ...shortcuts,
+          openDhanGuruSlide: true,
+        }),
+      );
     }
   };
 
   const handleCtrlC = () => {
     if (!shortcuts.copyToClipboard) {
-      setShortcuts({
-        ...shortcuts,
-        copyToClipboard: true,
-      });
+      dispatch(
+        setShortcuts({
+          ...shortcuts,
+          copyToClipboard: true,
+        }),
+      );
     }
   };
 

@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { useStoreState } from 'easy-peasy';
+import { useSelector } from 'react-redux';
 
 import { useSlides } from '../../../common/hooks';
 import { MultipaneDropdown } from '../../../common/sttm-ui';
@@ -16,7 +16,7 @@ const MiscSlides = () => {
     displayAnandSahibBhog,
   } = useSlides();
 
-  const { currentWorkspace, defaultPaneId } = useStoreState((state) => state.userSettings);
+  const { currentWorkspace, defaultPaneId } = useSelector((state) => state.userSettings);
 
   const [paneSelectorActive, setPaneSelectorActive] = useState(false);
   const paneSelector = useRef(null);

@@ -1,10 +1,10 @@
 import React from 'react';
-import { useStoreState } from 'easy-peasy';
+import { useSelector } from 'react-redux';
 
 const themes = require('../../../configs/themes.json');
 
 const SettingViewer = () => {
-  const { themeBg } = useStoreState((state) => state.userSettings);
+  const { themeBg } = useSelector((state) => state.userSettings);
 
   const {
     gurbaniFontSize,
@@ -25,7 +25,7 @@ const SettingViewer = () => {
     larivaarAssistType,
     vishraamType,
     displayVishraams,
-  } = useStoreState((state) => state.userSettings);
+  } = useSelector((state) => state.userSettings);
 
   const verseSlideBg = () => {
     const currentTheme = themes.find((themeObj) => themeObj.key === theme);

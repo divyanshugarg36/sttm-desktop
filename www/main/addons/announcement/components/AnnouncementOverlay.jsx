@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useStoreState } from 'easy-peasy';
+import { useSelector } from 'react-redux';
 
 import { Overlay, Switch } from '../../../common/sttm-ui';
 import Announcement from './Announcement';
@@ -8,8 +8,7 @@ import { DhanGuru } from './DhanGuru';
 import MiscSlides from './MiscSlides';
 
 const AnnouncementPane = ({ onScreenClose, className }) => {
-  const { isMiscSlideGurmukhi } = useStoreState((state) => state.navigator);
-  // const { setIsMiscSlideGurmukhi } = useStoreActions((state) => state.navigator);
+  const { isMiscSlideGurmukhi } = useSelector((state) => state.navigator);
 
   const [isGurmukhi, setIsGurmukhi] = useState(isMiscSlideGurmukhi);
 

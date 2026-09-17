@@ -1,9 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { useStoreActions, useStoreState } from 'easy-peasy';
+import { useSelector, useDispatch } from 'react-redux';
 import { ipcRenderer } from 'electron';
 import insertSlide from '../../../common/constants/slidedb';
 import tingle from '../../../../assets/js/vendor/tingle';
+import {
+  setIsMiscSlide,
+  setMiscSlideText,
+  setIsAnnouncement,
+  setShortcuts,
+  setIsMiscSlideGurmukhi,
+} from '../../../common/store/redux/navigatorSlice';
 
 const remote = require('@electron/remote');
 
@@ -14,29 +21,23 @@ const { gurus } = insertSlide.dropdownStrings;
 
 export const DhanGuru = ({ isGurmukhi }) => {
   const { isMiscSlide, miscSlideText, isAnnouncement, isMiscSlideGurmukhi, shortcuts } =
-    useStoreState((state) => state.navigator);
-  const {
-    setIsMiscSlide,
-    setMiscSlideText,
-    setIsAnnouncement,
-    setShortcuts,
-    setIsMiscSlideGurmukhi,
-  } = useStoreActions((state) => state.navigator);
+    useSelector((state) => state.navigator);
+  const dispatch = useDispatch();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentDhanGuruIndex, setCurrentDhanGuruIndex] = useState(null);
 
   const addMiscSlide = (givenText) => {
     if (!isMiscSlide) {
-      setIsMiscSlide(true);
+      dispatch(setIsMiscSlide(true));
     }
     if (miscSlideText !== givenText) {
-      setMiscSlideText(givenText);
+      dispatch(setMiscSlideText(givenText));
     }
   };
 
   const addDhanGuruSlide = (e) => {
     if (!isAnnouncement) {
-      setIsAnnouncement(true);
+      dispatch(setIsAnnouncement(true));
     }
     if (typeof e === 'object') {
       addMiscSlide(e.target.value);
@@ -118,7 +119,7 @@ export const DhanGuru = ({ isGurmukhi }) => {
     const { english, gurmukhi } = insertSlide.slideStrings.dhanguruStrings[index];
     setCurrentDhanGuruIndex(index);
     if (isGurmukhi !== isMiscSlideGurmukhi) {
-      setIsMiscSlideGurmukhi(isGurmukhi);
+      dispatch(setIsMiscSlideGurmukhi(isGurmukhi));
     }
     if (isGurmukhi) {
       addDhanGuruSlide(gurmukhi);
@@ -130,10 +131,12 @@ export const DhanGuru = ({ isGurmukhi }) => {
   useEffect(() => {
     if (shortcuts.openDhanGuruSlide) {
       showDhanGuruModal();
-      setShortcuts({
-        ...shortcuts,
-        openDhanGuruSlide: false,
-      });
+      dispatch(
+        setShortcuts({
+          ...shortcuts,
+          openDhanGuruSlide: false,
+        }),
+      );
     }
   }, [shortcuts]);
 

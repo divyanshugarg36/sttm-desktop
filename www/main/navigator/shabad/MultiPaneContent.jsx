@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { useStoreActions, useStoreState } from 'easy-peasy';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { ShabadText } from './ShabadText';
 import { FavoritePane, HistoryPane } from '../misc/components';
 import { useSlides } from '../../common/hooks';
+import { navigatorActions } from '../../common/store/redux/navigatorSlice';
 
 const remote = require('@electron/remote');
 
@@ -12,13 +13,13 @@ const { i18n } = remote.require('./app');
 
 const MultiPaneContent = ({ data }) => {
   const paneId = data.multiPaneId;
-  const navigatorState = useStoreState((state) => state.navigator);
-  const navigatorActions = useStoreActions((state) => state.navigator);
+  const navigatorState = useSelector((state) => state.navigator);
   const paneAttributes = navigatorState[`pane${paneId}`];
   const setPaneAttributes = navigatorActions[`setPane${paneId}`];
   const { activePaneId, homeVerse, versesRead } = navigatorState;
   const { setHomeVerse, setVersesRead } = navigatorActions;
-  const { currentWorkspace } = useStoreState((state) => state.userSettings);
+  const { currentWorkspace } = useSelector((state) => state.userSettings);
+  const dispatch = useDispatch();
 
   const {
     displayWaheguruSlide,
@@ -29,13 +30,14 @@ const MultiPaneContent = ({ data }) => {
 
   useEffect(() => {
     if (activePaneId === paneId) {
-      if (homeVerse !== paneAttributes.homeVerse) setHomeVerse(paneAttributes.homeVerse);
-      if (versesRead !== paneAttributes.versesRead) setVersesRead(paneAttributes.versesRead);
+      if (homeVerse !== paneAttributes.homeVerse) dispatch(setHomeVerse(paneAttributes.homeVerse));
+      if (versesRead !== paneAttributes.versesRead)
+        dispatch(setVersesRead(paneAttributes.versesRead));
     }
   }, [activePaneId]);
 
   useEffect(() => {
-    setPaneAttributes({ ...paneAttributes, content: i18n.t('MULTI_PANE.SHABAD') });
+    dispatch(setPaneAttributes({ ...paneAttributes, content: i18n.t('MULTI_PANE.SHABAD') }));
   }, [currentWorkspace]);
 
   const goToShabadBtn = (
@@ -43,7 +45,7 @@ const MultiPaneContent = ({ data }) => {
       className="multipane-content-btn"
       style={paneAttributes.activeShabad ? {} : { display: 'none' }}
       onClick={() => {
-        setPaneAttributes({ ...paneAttributes, content: i18n.t('MULTI_PANE.SHABAD') });
+        dispatch(setPaneAttributes({ ...paneAttributes, content: i18n.t('MULTI_PANE.SHABAD') }));
       }}
       onMouseEnter={(e) => {
         e.currentTarget.children[0].classList.add('fa-beat');

@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useStoreActions, useStoreState } from 'easy-peasy';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { convertToCamelCase } from '../../common/utils';
+import { setQuickToolsOpen } from '../../common/store/redux/viewerSettingsSlice';
 
 const remote = require('@electron/remote');
 
@@ -11,10 +12,10 @@ const { i18n } = remote.require('./app');
 global.platform = require('../../desktop_scripts');
 
 const QuickTools = ({ isMiscSlide, baniOptions }) => {
-  const userSettings = useStoreState((state) => state.userSettings);
+  const userSettings = useSelector((state) => state.userSettings);
 
-  const { quickToolsOpen } = useStoreState((state) => state.viewerSettings);
-  const { setQuickToolsOpen } = useStoreActions((state) => state.viewerSettings);
+  const { quickToolsOpen } = useSelector((state) => state.viewerSettings);
+  const dispatch = useDispatch();
 
   const [prevOrder, setPrevOrder] = useState([]);
 
@@ -25,7 +26,7 @@ const QuickTools = ({ isMiscSlide, baniOptions }) => {
     userSettings.content3,
   ]);
 
-  const { disabledContent } = useStoreState((state) => state.navigator);
+  const { disabledContent } = useSelector((state) => state.navigator);
 
   const dropdownLabel = (option) => {
     if (option.includes('gurbani')) {
@@ -186,7 +187,10 @@ const QuickTools = ({ isMiscSlide, baniOptions }) => {
 
   return (
     <div className={`slide-quicktools ${!userSettings.quickTools ? 'hide-quicktools' : ''}`.trim()}>
-      <div className="quicktool-header" onClick={() => setQuickToolsOpen(!quickToolsOpen)}>
+      <div
+        className="quicktool-header"
+        onClick={() => dispatch(setQuickToolsOpen(!quickToolsOpen))}
+      >
         Quick Tools
         <i className={`fa fa-caret-${quickToolsOpen ? 'up' : 'down'}`}></i>
       </div>

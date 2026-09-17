@@ -1,13 +1,14 @@
-import { useStoreActions, useStoreState } from 'easy-peasy';
+import { useSelector, useDispatch } from 'react-redux';
+import { setPane1, setPane2, setPane3 } from '../../../common/store/redux/navigatorSlice';
 
 const remote = require('@electron/remote');
 
 const { i18n } = remote.require('./app');
 
 const updateMultipane = () => {
-  const { pane1, pane2, pane3 } = useStoreState((state) => state.navigator);
-  const { setPane1, setPane2, setPane3 } = useStoreActions((actions) => actions.navigator);
-  const { defaultPaneId } = useStoreState((state) => state.userSettings);
+  const { pane1, pane2, pane3 } = useSelector((state) => state.navigator);
+  const { defaultPaneId } = useSelector((state) => state.userSettings);
+  const dispatch = useDispatch();
 
   const paneMap = {
     1: { setPane: setPane1, pane: pane1 },
@@ -49,7 +50,7 @@ const updateMultipane = () => {
       };
     }
     if (pane !== newAttributes) {
-      setPane(newAttributes);
+      dispatch(setPane(newAttributes));
     }
   };
 };

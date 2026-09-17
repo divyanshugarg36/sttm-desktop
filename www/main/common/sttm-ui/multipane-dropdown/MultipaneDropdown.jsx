@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useStoreState } from 'easy-peasy';
+import { useSelector } from 'react-redux';
 
 const remote = require('@electron/remote');
 
@@ -12,7 +12,7 @@ const MultipaneDropdown = ({
   paneSelector,
   clickHandler,
 }) => {
-  const { pane1, pane2, pane3 } = useStoreState((state) => state.navigator);
+  const { pane1, pane2, pane3 } = useSelector((state) => state.navigator);
   const dropdownOptions = [pane1, pane2, pane3].map((item, index) => (
     <div
       key={`pane-option-${index + 1}`}

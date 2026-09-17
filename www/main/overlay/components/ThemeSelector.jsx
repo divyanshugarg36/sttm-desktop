@@ -1,7 +1,13 @@
 import React from 'react';
-import { useStoreActions, useStoreState } from 'easy-peasy';
+import { useSelector, useDispatch } from 'react-redux';
 
 import getThemeMarkup from '../utils/get-theme-markup';
+import {
+  setOverlayTheme,
+  setTextColor,
+  setBgColor,
+  setGurbaniTextColor,
+} from '../../common/store/redux/baniOverlaySlice';
 
 const remote = require('@electron/remote');
 
@@ -10,25 +16,23 @@ const { i18n } = remote.require('./app');
 const themeObjects = require('../../../configs/overlay_presets.json');
 
 export const ThemeSelector = () => {
-  const { setOverlayTheme, setTextColor, setBgColor, setGurbaniTextColor } = useStoreActions(
-    (state) => state.baniOverlay,
-  );
-  const { overlayTheme, gurbaniTextColor, textColor, bgColor } = useStoreState(
+  const dispatch = useDispatch();
+  const { overlayTheme, gurbaniTextColor, textColor, bgColor } = useSelector(
     (state) => state.baniOverlay,
   );
   const handleThemeChange = (e) => {
     const clickedTheme = e.currentTarget.dataset.themeName;
     const clickedThemeObj = themeObjects[clickedTheme];
     if (clickedTheme !== overlayTheme) {
-      setOverlayTheme(clickedTheme);
+      dispatch(setOverlayTheme(clickedTheme));
       if (clickedThemeObj.textColor !== textColor) {
-        setTextColor(clickedThemeObj.textColor);
+        dispatch(setTextColor(clickedThemeObj.textColor));
       }
       if (clickedThemeObj.gurbaniTextColor !== gurbaniTextColor) {
-        setGurbaniTextColor(clickedThemeObj.gurbaniTextColor);
+        dispatch(setGurbaniTextColor(clickedThemeObj.gurbaniTextColor));
       }
       if (clickedThemeObj.bgColor !== bgColor) {
-        setBgColor(clickedThemeObj.bgColor);
+        dispatch(setBgColor(clickedThemeObj.bgColor));
       }
     }
     analytics.trackEvent({

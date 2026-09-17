@@ -1,9 +1,12 @@
 import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
-import { useStoreActions, useStoreState } from 'easy-peasy';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { uploadImage } from '../../../settings/utils/theme-bg-uploader';
 import { classNames } from '../../../common/utils';
+import { setOverlayScreen } from '../../../common/store/redux/appSlice';
+import { setShortcutTray } from '../../../common/store/redux/userSettingsSlice';
+import { setVerseHistory } from '../../../common/store/redux/navigatorSlice';
 
 const remote = require('@electron/remote');
 
@@ -11,21 +14,19 @@ const { i18n } = remote.require('./app');
 const analytics = remote.getGlobal('analytics');
 
 export const MiscFooter = ({ waheguruSlide, moolMantraSlide, blankSlide, anandSahibBhog }) => {
-  const { overlayScreen } = useStoreState((state) => state.app);
-  const { setOverlayScreen } = useStoreActions((actions) => actions.app);
-  const { setVerseHistory } = useStoreActions((actions) => actions.navigator);
-  const { shortcutTray } = useStoreState((state) => state.userSettings);
-  const { setShortcutTray } = useStoreActions((state) => state.userSettings);
+  const overlayScreen = useSelector((state) => state.app.overlayScreen);
+  const dispatch = useDispatch();
+  const { shortcutTray } = useSelector((state) => state.userSettings);
   const drawerRef = useRef(null);
 
   // Event Handlers
   const clearHistory = () => {
-    setVerseHistory([]);
+    dispatch(setVerseHistory([]));
   };
 
   const setTab = (tabName) => {
     if (tabName !== overlayScreen) {
-      setOverlayScreen(tabName);
+      dispatch(setOverlayScreen(tabName));
     }
     analytics.trackEvent({
       category: 'Misc',
@@ -36,7 +37,7 @@ export const MiscFooter = ({ waheguruSlide, moolMantraSlide, blankSlide, anandSa
   };
 
   const toggleTray = (toggleValue) => {
-    setShortcutTray(toggleValue);
+    dispatch(setShortcutTray(toggleValue));
     analytics.trackEvent({
       category: 'shortcutTray',
       action: 'toggleTray',

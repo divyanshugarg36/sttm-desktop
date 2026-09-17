@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useStoreActions, useStoreState } from 'easy-peasy';
+import { useSelector, useDispatch } from 'react-redux';
 import { Tile, CustomBgTile, VideoWithOverlay } from '../../common/sttm-ui';
 
 import { themes } from '../../theme_editor';
@@ -10,6 +10,10 @@ import {
   upsertCustomBackgrounds,
   removeCustomBackgroundFile,
 } from '../utils';
+import {
+  setTheme as setThemeAction,
+  setThemeBg as setThemeBgAction,
+} from '../../common/store/redux/userSettingsSlice';
 
 const remote = require('@electron/remote');
 
@@ -24,8 +28,10 @@ const themeTypes = [
 
 const ThemeContainer = () => {
   const [customThemes, setCustomThemes] = useState([]);
-  const { setTheme, setThemeBg } = useStoreActions((state) => state.userSettings);
-  const { theme: currentTheme, themeBg } = useStoreState((state) => state.userSettings);
+  const dispatch = useDispatch();
+  const setTheme = (value) => dispatch(setThemeAction(value));
+  const setThemeBg = (value) => dispatch(setThemeBgAction(value));
+  const { theme: currentTheme, themeBg } = useSelector((state) => state.userSettings);
   const groupThemes = (themeType) => themes.filter(({ type }) => type.includes(themeType));
 
   useEffect(() => {

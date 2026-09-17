@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useStoreActions, useStoreState } from 'easy-peasy';
+import { useSelector, useDispatch } from 'react-redux';
 
 import Slide from '../Slide/Slide';
+import { setFilteredBaniOptions } from '../../common/store/redux/navigatorSlice';
 import QuickTools from '../Slide/QuickTools';
 
 import {
@@ -40,9 +41,9 @@ function ShabadDeck() {
     pane2,
     pane3,
     filteredBaniOptions,
-  } = useStoreState((state) => state.navigator);
+  } = useSelector((state) => state.navigator);
 
-  const { setFilteredBaniOptions } = useStoreActions((state) => state.navigator);
+  const dispatch = useDispatch();
 
   const {
     theme: currentTheme,
@@ -54,8 +55,8 @@ function ShabadDeck() {
     defaultPaneId,
     teekaSource,
     translationEnglishSource,
-  } = useStoreState((state) => state.userSettings);
-  const { containerPadding } = useStoreState((state) => state.viewerSettings);
+  } = useSelector((state) => state.userSettings);
+  const { containerPadding } = useSelector((state) => state.viewerSettings);
   const [activeVerse, setActiveVerse] = useState([]);
   const [nextVerse, setNextVerse] = useState({});
   const verseRefKeys = useRef([]);
@@ -271,7 +272,7 @@ function ShabadDeck() {
 
   useEffect(() => {
     const updatedOptions = getFilteredBaniOptions().filter((option) => option.options.length);
-    setFilteredBaniOptions(updatedOptions);
+    dispatch(setFilteredBaniOptions(updatedOptions));
     global.platform.ipc.send(
       'update-global-setting',
       JSON.stringify({

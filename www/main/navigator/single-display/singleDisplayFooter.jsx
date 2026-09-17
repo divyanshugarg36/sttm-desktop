@@ -1,34 +1,35 @@
 import React from 'react';
-import { useStoreState, useStoreActions } from 'easy-peasy';
+import { useSelector, useDispatch } from 'react-redux';
 import { classNames } from '../../common/utils';
+import { setSingleDisplayActiveTab } from '../../common/store/redux/navigatorSlice';
 
 export const singleDisplayFooter = () => {
-  const { singleDisplayActiveTab } = useStoreState((state) => state.navigator);
-  const { setSingleDisplayActiveTab } = useStoreActions((state) => state.navigator);
+  const { singleDisplayActiveTab } = useSelector((state) => state.navigator);
+  const dispatch = useDispatch();
   const openSearchPane = () => {
     if (singleDisplayActiveTab !== 'search') {
-      setSingleDisplayActiveTab('search');
+      dispatch(setSingleDisplayActiveTab('search'));
     }
   };
 
   const openShabadPane = () => {
     if (singleDisplayActiveTab !== 'shabad') {
-      setSingleDisplayActiveTab('shabad');
+      dispatch(setSingleDisplayActiveTab('shabad'));
     }
   };
   const openOtherPane = () => {
     if (singleDisplayActiveTab !== 'other') {
-      setSingleDisplayActiveTab('other');
+      dispatch(setSingleDisplayActiveTab('other'));
     }
   };
   const openHistoryPane = () => {
     if (singleDisplayActiveTab !== 'history') {
-      setSingleDisplayActiveTab('history');
+      dispatch(setSingleDisplayActiveTab('history'));
     }
   };
   const openFavoritePane = () => {
     if (singleDisplayActiveTab !== 'favorite') {
-      setSingleDisplayActiveTab('favorite');
+      dispatch(setSingleDisplayActiveTab('favorite'));
     }
   };
 

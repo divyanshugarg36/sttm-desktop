@@ -1,12 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import isOnline from 'is-online';
-import { useStoreActions, useStoreState } from 'easy-peasy';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { shell } from 'electron';
 import { fetchFavShabad, removeFromFav } from '../utils';
 import banidb from '../../../banidb';
 import { SP_API } from '../../../common/constants/api-urls';
+import {
+  setActiveShabadId,
+  setInitialVerseId,
+  setIsCeremonyBani,
+  setIsSundarGutkaBani,
+  setSingleDisplayActiveTab,
+  setFavShabad,
+  setPane1,
+  setPane2,
+  setPane3,
+} from '../../../common/store/redux/navigatorSlice';
 
 const remote = require('@electron/remote');
 
@@ -23,21 +34,11 @@ export const FavoritePane = ({ className, paneId }) => {
     pane1,
     pane2,
     pane3,
-  } = useStoreState((state) => state.navigator);
-  const {
-    setActiveShabadId,
-    setInitialVerseId,
-    setIsCeremonyBani,
-    setIsSundarGutkaBani,
-    setSingleDisplayActiveTab,
-    setFavShabad,
-    setPane1,
-    setPane2,
-    setPane3,
-  } = useStoreActions((state) => state.navigator);
-  const { currentWorkspace, defaultPaneId } = useStoreState((state) => state.userSettings);
+  } = useSelector((state) => state.navigator);
+  const dispatch = useDispatch();
+  const { currentWorkspace, defaultPaneId } = useSelector((state) => state.userSettings);
 
-  const { userToken } = useStoreState((state) => state.app);
+  const userToken = useSelector((state) => state.app.userToken);
   const [parsedFav, setParsedFav] = useState([]);
   const [isFetching, setFetching] = useState(false);
   const [errorMessage, setError] = useState('');
@@ -51,14 +52,14 @@ export const FavoritePane = ({ className, paneId }) => {
           setFetching(true);
           const data = await fetchFavShabad(userToken);
           setFetching(false);
-          setFavShabad([...data]);
+          dispatch(setFavShabad([...data]));
         } catch (err) {
-          setFavShabad([]);
+          dispatch(setFavShabad([]));
           setError(i18n.t('FAV_SHABAD.API_ERR'));
         }
       } else {
         setError(i18n.t('FAV_SHABAD.LOGGED_OUT'));
-        setFavShabad([]);
+        dispatch(setFavShabad([]));
       }
     } else {
       setError(i18n.t('FAV_SHABAD.INTERNET_ERR'));
@@ -77,7 +78,7 @@ export const FavoritePane = ({ className, paneId }) => {
 
     if (favShabadIndex >= 0) {
       favShabad.splice(favShabadIndex, 1);
-      setFavShabad([...favShabad]);
+      dispatch(setFavShabad([...favShabad]));
     }
   };
 
@@ -85,37 +86,43 @@ export const FavoritePane = ({ className, paneId }) => {
     const currentPane = paneId || defaultPaneId;
     switch (currentPane) {
       case 1:
-        setPane1({
-          ...pane1,
-          content: i18n.t('MULTI_PANE.SHABAD'),
-          activeShabad: shabadId,
-          activeVerse: verseId,
-          baniType: 'shabad',
-          versesRead: [verseId],
-          homeVerse: verseId,
-        });
+        dispatch(
+          setPane1({
+            ...pane1,
+            content: i18n.t('MULTI_PANE.SHABAD'),
+            activeShabad: shabadId,
+            activeVerse: verseId,
+            baniType: 'shabad',
+            versesRead: [verseId],
+            homeVerse: verseId,
+          }),
+        );
         break;
       case 2:
-        setPane2({
-          ...pane2,
-          content: i18n.t('MULTI_PANE.SHABAD'),
-          activeShabad: shabadId,
-          activeVerse: verseId,
-          baniType: 'shabad',
-          versesRead: [verseId],
-          homeVerse: verseId,
-        });
+        dispatch(
+          setPane2({
+            ...pane2,
+            content: i18n.t('MULTI_PANE.SHABAD'),
+            activeShabad: shabadId,
+            activeVerse: verseId,
+            baniType: 'shabad',
+            versesRead: [verseId],
+            homeVerse: verseId,
+          }),
+        );
         break;
       case 3:
-        setPane3({
-          ...pane3,
-          content: i18n.t('MULTI_PANE.SHABAD'),
-          activeShabad: shabadId,
-          activeVerse: verseId,
-          baniType: 'shabad',
-          versesRead: [verseId],
-          homeVerse: verseId,
-        });
+        dispatch(
+          setPane3({
+            ...pane3,
+            content: i18n.t('MULTI_PANE.SHABAD'),
+            activeShabad: shabadId,
+            activeVerse: verseId,
+            baniType: 'shabad',
+            versesRead: [verseId],
+            homeVerse: verseId,
+          }),
+        );
         break;
       default:
         break;
@@ -123,19 +130,19 @@ export const FavoritePane = ({ className, paneId }) => {
 
     if (currentWorkspace !== i18n.t('WORKSPACES.MULTI_PANE')) {
       if (singleDisplayActiveTab !== 'shabad') {
-        setSingleDisplayActiveTab('shabad');
+        dispatch(setSingleDisplayActiveTab('shabad'));
       }
       if (verseId !== initialVerseId) {
-        setInitialVerseId(verseId);
+        dispatch(setInitialVerseId(verseId));
       }
       if (isSundarGutkaBani) {
-        setIsSundarGutkaBani(false);
+        dispatch(setIsSundarGutkaBani(false));
       }
       if (isCeremonyBani) {
-        setIsCeremonyBani(false);
+        dispatch(setIsCeremonyBani(false));
       }
       if (shabadId !== activeShabadId) {
-        setActiveShabadId(shabadId);
+        dispatch(setActiveShabadId(shabadId));
       }
     }
   };

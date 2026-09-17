@@ -1,8 +1,18 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useStoreState, useStoreActions } from 'easy-peasy';
+import { useSelector, useDispatch } from 'react-redux';
 import { randomShabad } from '../../../banidb';
 import { dailyHukamnama } from '../../utils';
+import {
+  setActiveShabadId,
+  setIsRandomShabad,
+  setSingleDisplayActiveTab,
+  setIsSundarGutkaBani,
+  setIsCeremonyBani,
+  setPane1,
+  setPane2,
+  setPane3,
+} from '../../../common/store/redux/navigatorSlice';
 
 const remote = require('@electron/remote');
 
@@ -22,58 +32,55 @@ export const OtherPane = ({ className }) => {
     pane1,
     pane2,
     pane3,
-  } = useStoreState((state) => state.navigator);
-  const {
-    setActiveShabadId,
-    setIsRandomShabad,
-    setSingleDisplayActiveTab,
-    setIsSundarGutkaBani,
-    setIsCeremonyBani,
-    setPane1,
-    setPane2,
-    setPane3,
-  } = useStoreActions((state) => state.navigator);
+  } = useSelector((state) => state.navigator);
+  const dispatch = useDispatch();
 
-  const { defaultPaneId } = useStoreState((state) => state.userSettings);
+  const { defaultPaneId } = useSelector((state) => state.userSettings);
 
   const setShabadId = (shabadId) => {
     if (!isRandomShabad) {
-      setIsRandomShabad(true);
+      dispatch(setIsRandomShabad(true));
     }
     if (singleDisplayActiveTab !== 'shabad') {
-      setSingleDisplayActiveTab('shabad');
+      dispatch(setSingleDisplayActiveTab('shabad'));
     }
     if (activeShabadId !== shabadId) {
-      setActiveShabadId(shabadId);
+      dispatch(setActiveShabadId(shabadId));
     }
     if (isSundarGutkaBani) {
-      setIsSundarGutkaBani(false);
+      dispatch(setIsSundarGutkaBani(false));
     }
     if (isCeremonyBani) {
-      setIsCeremonyBani(false);
+      dispatch(setIsCeremonyBani(false));
     }
     const currentPane = activePaneId || defaultPaneId;
     if (currentPane === 1) {
-      setPane1({
-        ...pane1,
-        activeShabad: shabadId,
-        content: i18n.t('MULTI_PANE.SHABAD'),
-        baniType: 'shabad',
-      });
+      dispatch(
+        setPane1({
+          ...pane1,
+          activeShabad: shabadId,
+          content: i18n.t('MULTI_PANE.SHABAD'),
+          baniType: 'shabad',
+        }),
+      );
     } else if (currentPane === 2) {
-      setPane2({
-        ...pane2,
-        activeShabad: shabadId,
-        content: i18n.t('MULTI_PANE.SHABAD'),
-        baniType: 'shabad',
-      });
+      dispatch(
+        setPane2({
+          ...pane2,
+          activeShabad: shabadId,
+          content: i18n.t('MULTI_PANE.SHABAD'),
+          baniType: 'shabad',
+        }),
+      );
     } else if (currentPane === 3) {
-      setPane3({
-        ...pane3,
-        activeShabad: shabadId,
-        content: i18n.t('MULTI_PANE.SHABAD'),
-        baniType: 'shabad',
-      });
+      dispatch(
+        setPane3({
+          ...pane3,
+          activeShabad: shabadId,
+          content: i18n.t('MULTI_PANE.SHABAD'),
+          baniType: 'shabad',
+        }),
+      );
     }
   };
 

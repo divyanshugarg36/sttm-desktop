@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useStoreState, useStoreActions } from 'easy-peasy';
+import { useSelector, useDispatch } from 'react-redux';
 import LayoutSelector from './LayoutSelector';
 import { getDefaultSettings } from '../../common/store/user-settings/get-saved-overlay-settings';
 import { convertToCamelCase } from '../../common/utils';
+import { baniOverlayActions } from '../../common/store/redux/baniOverlaySlice';
 import { Switch } from '../../common/sttm-ui';
 
 const remote = require('@electron/remote');
@@ -12,12 +13,12 @@ const { i18n } = remote.require('./app');
 
 const OverlaySetting = ({ settingObj, stateVar, stateFunction }) => {
   const { title, type } = settingObj;
-  const baniOverlayState = useStoreState((state) => state.baniOverlay);
-  const baniOverlayActions = useStoreActions((state) => state.baniOverlay);
+  const baniOverlayState = useSelector((state) => state.baniOverlay);
+  const dispatch = useDispatch();
 
   const handleInputChange = (event) => {
     const value = event.target ? event.target.value : event;
-    baniOverlayActions[stateFunction](value);
+    dispatch(baniOverlayActions[stateFunction](value));
   };
 
   const handleSizeIcon = (event) => {
@@ -28,10 +29,10 @@ const OverlaySetting = ({ settingObj, stateVar, stateFunction }) => {
 
     if (value === 'plus' && currentValue < max) {
       updatedValue = currentValue + step;
-      baniOverlayActions[stateFunction](updatedValue);
+      dispatch(baniOverlayActions[stateFunction](updatedValue));
     } else if (value === 'minus' && currentValue > min) {
       updatedValue = baniOverlayState[stateVar] - step;
-      baniOverlayActions[stateFunction](updatedValue);
+      dispatch(baniOverlayActions[stateFunction](updatedValue));
     }
 
     if (settingObj?.disableOnChange?.length > 0) {
@@ -39,7 +40,7 @@ const OverlaySetting = ({ settingObj, stateVar, stateFunction }) => {
         const disabledSetting = convertToCamelCase(disableSetting);
         const setDisabledSetting = `set${convertToCamelCase(disableSetting, true)}`;
         if (baniOverlayState[disabledSetting] !== false) {
-          baniOverlayActions[setDisabledSetting](false);
+          dispatch(baniOverlayActions[setDisabledSetting](false));
         }
       });
     }
@@ -50,12 +51,12 @@ const OverlaySetting = ({ settingObj, stateVar, stateFunction }) => {
       const defaultSettings = getDefaultSettings();
       Object.keys(baniOverlayState).forEach((state) => {
         if (baniOverlayState[state] !== defaultSettings[state]) {
-          baniOverlayActions[`set${convertToCamelCase(state, true)}`](defaultSettings[state]);
+          dispatch(baniOverlayActions[`set${convertToCamelCase(state, true)}`](defaultSettings[state]));
         }
       });
     } else {
       const existingValue = baniOverlayState[stateVar];
-      baniOverlayActions[stateFunction](!existingValue);
+      dispatch(baniOverlayActions[stateFunction](!existingValue));
     }
   };
 
@@ -63,7 +64,7 @@ const OverlaySetting = ({ settingObj, stateVar, stateFunction }) => {
     const currentLayout = baniOverlayState[stateVar];
     const newLayout = event.currentTarget.dataset.layout;
     if (newLayout !== currentLayout) {
-      baniOverlayActions[stateFunction](newLayout);
+      dispatch(baniOverlayActions[stateFunction](newLayout));
     }
   };
 
@@ -71,7 +72,7 @@ const OverlaySetting = ({ settingObj, stateVar, stateFunction }) => {
     const clickedEvent = event.currentTarget ? event.currentTarget.dataset.value : event;
     const currentFormat = { ...baniOverlayState[stateVar] };
     currentFormat[clickedEvent] = !currentFormat[clickedEvent];
-    baniOverlayActions[stateFunction](currentFormat);
+    dispatch(baniOverlayActions[stateFunction](currentFormat));
   };
 
   const settingDOM = [];

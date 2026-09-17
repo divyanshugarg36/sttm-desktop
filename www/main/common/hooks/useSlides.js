@@ -1,5 +1,17 @@
-import { useStoreActions, useStoreState } from 'easy-peasy';
+import { useSelector, useDispatch } from 'react-redux';
 import insertSlide from '../constants/slidedb';
+import { setAkhandpatt, setAutoplayToggle } from '../store/redux/userSettingsSlice';
+import {
+  setIsMiscSlide,
+  setMiscSlideText,
+  setIsAnnouncement,
+  setIsSundarGutkaBani,
+  setIsCeremonyBani,
+  setCeremonyId,
+  setPane1,
+  setPane2,
+  setPane3,
+} from '../store/redux/navigatorSlice';
 
 const remote = require('@electron/remote');
 
@@ -8,10 +20,8 @@ const { i18n } = remote.require('./app');
 const analytics = remote.getGlobal('analytics');
 
 export const useSlides = () => {
-  const { akhandpatt, autoplayToggle, defaultPaneId } = useStoreState(
-    (state) => state.userSettings,
-  );
-  const { setAkhandpatt, setAutoplayToggle } = useStoreActions((state) => state.userSettings);
+  const { akhandpatt, autoplayToggle, defaultPaneId } = useSelector((state) => state.userSettings);
+  const dispatch = useDispatch();
   const {
     isMiscSlide,
     miscSlideText,
@@ -22,34 +32,23 @@ export const useSlides = () => {
     pane1,
     pane2,
     pane3,
-  } = useStoreState((state) => state.navigator);
-  const {
-    setIsMiscSlide,
-    setMiscSlideText,
-    setIsAnnouncement,
-    setIsSundarGutkaBani,
-    setIsCeremonyBani,
-    setCeremonyId,
-    setPane1,
-    setPane2,
-    setPane3,
-  } = useStoreActions((state) => state.navigator);
+  } = useSelector((state) => state.navigator);
 
   const addMiscSlide = (givenText) => {
     if (isAnnouncement) {
-      setIsAnnouncement(false);
+      dispatch(setIsAnnouncement(false));
     }
     if (!isMiscSlide) {
       if (akhandpatt) {
-        setAkhandpatt(false);
+        dispatch(setAkhandpatt(false));
       }
       if (autoplayToggle) {
-        setAutoplayToggle(false);
+        dispatch(setAutoplayToggle(false));
       }
-      setIsMiscSlide(true);
+      dispatch(setIsMiscSlide(true));
     }
     if (miscSlideText !== givenText) {
-      setMiscSlideText(givenText);
+      dispatch(setMiscSlideText(givenText));
     }
   };
 
@@ -82,39 +81,45 @@ export const useSlides = () => {
 
   const displayAnandSahibBhog = ({ openedFrom, paneId = null }) => {
     if (isSundarGutkaBani) {
-      setIsSundarGutkaBani(false);
+      dispatch(setIsSundarGutkaBani(false));
     }
     if (ceremonyId !== 3) {
-      setCeremonyId(3);
+      dispatch(setCeremonyId(3));
     }
     if (!isCeremonyBani) {
-      setIsCeremonyBani(true);
+      dispatch(setIsCeremonyBani(true));
     }
     const currentPane = paneId || defaultPaneId;
     switch (currentPane) {
       case 1:
-        setPane1({
-          ...pane1,
-          content: i18n.t('MULTI_PANE.SHABAD'),
-          baniType: 'ceremony',
-          activeShabad: 3,
-        });
+        dispatch(
+          setPane1({
+            ...pane1,
+            content: i18n.t('MULTI_PANE.SHABAD'),
+            baniType: 'ceremony',
+            activeShabad: 3,
+          }),
+        );
         break;
       case 2:
-        setPane2({
-          ...pane2,
-          content: i18n.t('MULTI_PANE.SHABAD'),
-          baniType: 'ceremony',
-          activeShabad: 3,
-        });
+        dispatch(
+          setPane2({
+            ...pane2,
+            content: i18n.t('MULTI_PANE.SHABAD'),
+            baniType: 'ceremony',
+            activeShabad: 3,
+          }),
+        );
         break;
       case 3:
-        setPane3({
-          ...pane3,
-          content: i18n.t('MULTI_PANE.SHABAD'),
-          baniType: 'ceremony',
-          activeShabad: 3,
-        });
+        dispatch(
+          setPane3({
+            ...pane3,
+            content: i18n.t('MULTI_PANE.SHABAD'),
+            baniType: 'ceremony',
+            activeShabad: 3,
+          }),
+        );
         break;
       default:
         break;

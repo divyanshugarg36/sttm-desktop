@@ -1,17 +1,19 @@
 import React from 'react';
-import { StoreProvider } from 'easy-peasy';
+import { Provider } from 'react-redux';
 
-import GlobalState from './common/store/GlobalState';
+import store from './common/store/redux/store';
 import Launchpad from './launchpad';
 import { globalInit } from './common/constants';
 
 // Initialize globals
 globalInit.socket();
 
+// easy-peasy has been fully removed — the main window runs on a single Redux
+// store. See EASY-PEASY-TO-REDUX-MIGRATION.md.
 const App = () => (
-  <StoreProvider store={GlobalState}>
+  <Provider store={store}>
     <Launchpad />
-  </StoreProvider>
+  </Provider>
 );
 
 export default App;

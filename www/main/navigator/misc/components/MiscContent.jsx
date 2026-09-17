@@ -1,12 +1,12 @@
 import React from 'react';
-import { useStoreState } from 'easy-peasy';
+import { useSelector } from 'react-redux';
 import { FavoritePane } from './favoritePane';
 import { HistoryPane } from './HistoryPane';
 import { OtherPane } from './OtherPane';
 import { classNames } from '../../../common/utils';
 
 export const MiscContent = () => {
-  const { currentMiscPanel } = useStoreState((state) => state.navigator);
+  const { currentMiscPanel } = useSelector((state) => state.navigator);
 
   return (
     <>

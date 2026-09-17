@@ -1,12 +1,24 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { useStoreActions, useStoreState } from 'easy-peasy';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { MultipaneDropdown, Switch, Tile } from '../../../common/sttm-ui';
 import { ceremoniesFilter } from '../../../common/constants';
 
 import { getUserPreferenceFor } from '../utils';
 import { applyTheme } from '../../../settings/utils';
+import {
+  setTheme as setThemeAction,
+  setThemeBg as setThemeBgAction,
+} from '../../../common/store/redux/userSettingsSlice';
+import {
+  setPane1,
+  setPane2,
+  setPane3,
+  setCeremonyId,
+  setIsCeremonyBani,
+  setIsSundarGutkaBani,
+} from '../../../common/store/redux/navigatorSlice';
 // import { loadCeremony } from '../../../navigator/utils';
 
 const remote = require('@electron/remote');
@@ -16,25 +28,21 @@ const analytics = remote.getGlobal('analytics');
 const { getTheme } = require('../../../theme_editor');
 
 const CeremonyPane = ({ token, name, id, onScreenClose }) => {
-  const { setTheme, setThemeBg } = useStoreActions((state) => state.userSettings);
-  const { setPane1, setPane2, setPane3 } = useStoreActions((state) => state.navigator);
-  const { pane1, pane2, pane3 } = useStoreState((state) => state.navigator);
+  const dispatch = useDispatch();
+  const setTheme = (value) => dispatch(setThemeAction(value));
+  const setThemeBg = (value) => dispatch(setThemeBgAction(value));
+  const { pane1, pane2, pane3 } = useSelector((state) => state.navigator);
   const {
     theme: currentTheme,
     currentWorkspace,
     defaultPaneId,
-  } = useStoreState((state) => state.userSettings);
+  } = useSelector((state) => state.userSettings);
 
   const [paneSelectorActive, setPaneSelectorActive] = useState(false);
 
   const paneSelector = useRef(null);
 
-  const { ceremonyId, isCeremonyBani, isSundarGutkaBani } = useStoreState(
-    (state) => state.navigator,
-  );
-  const { setCeremonyId, setIsCeremonyBani, setIsSundarGutkaBani } = useStoreActions(
-    (state) => state.navigator,
-  );
+  const { ceremonyId, isCeremonyBani, isSundarGutkaBani } = useSelector((state) => state.navigator);
 
   const paneId = token;
   const [currentCeremony, setCurrentCeremony] = useState(id);
@@ -63,14 +71,14 @@ const CeremonyPane = ({ token, name, id, onScreenClose }) => {
       parsedTheme = JSON.parse(theme);
     }
     if (isSundarGutkaBani) {
-      setIsSundarGutkaBani(false);
+      dispatch(setIsSundarGutkaBani(false));
     }
 
     if (ceremonyId !== currentCeremony) {
-      setCeremonyId(currentCeremony);
+      dispatch(setCeremonyId(currentCeremony));
     }
     if (!isCeremonyBani) {
-      setIsCeremonyBani(true);
+      dispatch(setIsCeremonyBani(true));
     }
     onScreenClose();
     if (currentTheme !== parsedTheme.key) {
@@ -79,28 +87,34 @@ const CeremonyPane = ({ token, name, id, onScreenClose }) => {
     if (multipaneId !== null) {
       switch (multipaneId) {
         case 1:
-          setPane1({
-            ...pane1,
-            content: i18n.t('MULTI_PANE.SHABAD'),
-            baniType: 'ceremony',
-            activeShabad: currentCeremony,
-          });
+          dispatch(
+            setPane1({
+              ...pane1,
+              content: i18n.t('MULTI_PANE.SHABAD'),
+              baniType: 'ceremony',
+              activeShabad: currentCeremony,
+            }),
+          );
           break;
         case 2:
-          setPane2({
-            ...pane2,
-            content: i18n.t('MULTI_PANE.SHABAD'),
-            baniType: 'ceremony',
-            activeShabad: currentCeremony,
-          });
+          dispatch(
+            setPane2({
+              ...pane2,
+              content: i18n.t('MULTI_PANE.SHABAD'),
+              baniType: 'ceremony',
+              activeShabad: currentCeremony,
+            }),
+          );
           break;
         case 3:
-          setPane3({
-            ...pane3,
-            content: i18n.t('MULTI_PANE.SHABAD'),
-            baniType: 'ceremony',
-            activeShabad: currentCeremony,
-          });
+          dispatch(
+            setPane3({
+              ...pane3,
+              content: i18n.t('MULTI_PANE.SHABAD'),
+              baniType: 'ceremony',
+              activeShabad: currentCeremony,
+            }),
+          );
           break;
         default:
           break;
