@@ -56,6 +56,7 @@ export const ShabadText = ({
     activePaneId,
     shortcuts,
     lineNumber,
+    savedCrossPlatformId,
   } = useStoreState((state) => state.navigator);
 
   const { baniLength, liveFeed, autoplayDelay, autoplayToggle, intelligentSpacebar, akhandpatt } =
@@ -72,7 +73,6 @@ export const ShabadText = ({
     setCeremonyId,
     setIsCeremonyBani,
     setIsSundarGutkaBani,
-    savedCrossPlatformId,
   } = useStoreActions((actions) => actions.navigator);
 
   const updateTraversedVerse = (newTraversedVerse, verseIndex, crossPlatformId = null) => {
@@ -125,6 +125,17 @@ export const ShabadText = ({
 
   const setVerseList = (verseList) => {
     if (verseList.length) {
+      // eslint-disable-next-line no-console
+      if (baniType === 'ceremony' && verseList[0]) {
+        try {
+          const raw = verseList[0].toJSON ? verseList[0].toJSON() : verseList[0];
+          // eslint-disable-next-line no-console
+          console.log('[CTRL-DIAG rawCeremony] keys=', Object.keys(raw), 'sample=', JSON.stringify(raw).slice(0, 600));
+        } catch (e) {
+          // eslint-disable-next-line no-console
+          console.log('[CTRL-DIAG rawCeremony] dump failed', e && e.message);
+        }
+      }
       setRawVerses(verseList);
       saveToHistory(
         shabadId,
@@ -180,13 +191,53 @@ export const ShabadText = ({
   }, [filteredItems]);
 
   useEffect(() => {
-    const baniVerseIndex = filteredItems.findIndex(
-      (obj) => obj.crossPlatformId === savedCrossPlatformId,
+    // Bani/ceremony verse sync from a controller. A native (mobile) controller
+    // sends the Realm crossPlatformId; the web controller has no crossPlatformId,
+    // so it sends the BaniDB-global verseId. Match either, so both drive the
+    // display to the right verse (without this, web-controller verse changes on
+    // banis/ceremonies never matched and were silently dropped).
+    if (savedCrossPlatformId == null) return;
+    let baniVerseIndex = filteredItems.findIndex(
+      (obj) =>
+        obj.crossPlatformId === savedCrossPlatformId ||
+        obj.verseId === savedCrossPlatformId,
     );
-    if (baniVerseIndex >= 0) {
-      updateTraversedVerse(filteredItems[baniVerseIndex].ID, baniVerseIndex);
+    // Ceremony fallback: ceremony verses carry Realm-local IDs with no
+    // crossPlatformID, so the web controller's global BaniDB verseId never
+    // matches by id (matchIdx stays -1). Both the web and desktop verse lists
+    // are ordered by the ceremony's Seq, so resolve the verse by the 1-based
+    // line position the web sends (recorded as lineNumber). Only when the id
+    // match fails, so bani/shabad — which do match by id — are untouched.
+    if (
+      baniVerseIndex < 0 &&
+      baniType === 'ceremony' &&
+      lineNumber != null &&
+      lineNumber - 1 >= 0 &&
+      lineNumber - 1 < filteredItems.length
+    ) {
+      baniVerseIndex = lineNumber - 1;
     }
-  }, [savedCrossPlatformId]);
+    // eslint-disable-next-line no-console
+    console.log('[CTRL-DIAG match] baniType=', baniType, 'savedCrossPlatformId=', savedCrossPlatformId, 'lineNumber=', lineNumber, 'resolvedIdx=', baniVerseIndex, 'sample=', JSON.stringify(filteredItems.slice(0, 4).map((o) => ({ verseId: o.verseId, cp: o.crossPlatformId, ID: o.ID }))));
+    if (baniVerseIndex >= 0) {
+      const matched = filteredItems[baniVerseIndex];
+      // Pass `verseId` (the verse's real id), NOT `ID` (the filtered array
+      // index). `activeVerseId` drives `filterOverlayVerseItems(rawVerses, …)`
+      // for the projected `show-line`, which matches `obj.ID === activeVerseId`
+      // — with the array index it matched nothing and projected an empty verse,
+      // so the display never moved for controller-driven bani/ceremony changes.
+      updateTraversedVerse(matched.verseId, baniVerseIndex);
+      // Highlighting alone doesn't move the virtualized list — scroll the
+      // presenter view to the matched verse so the display actually changes.
+      scrollToVerse(matched.verseId, filteredItems, virtuosoRef);
+    }
+    // `filteredItems` is a dep so a verse that arrives after the bani finishes
+    // loading (the transient `matchIdx = -1` case) is picked up on the next
+    // render. Safe because a new bani clears savedCrossPlatformId to null (guard
+    // above), so this never re-applies a stale verse to a freshly-loaded bani.
+    // `lineNumber` is a dep so a ceremony verse change that only moves the line
+    // position (same savedCrossPlatformId space) still re-resolves by position.
+  }, [savedCrossPlatformId, filteredItems, lineNumber]);
 
   useEffect(() => {
     const overlayVerse = filterOverlayVerseItems(rawVerses, activeVerseId);

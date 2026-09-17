@@ -2,6 +2,11 @@ const remote = require('@electron/remote');
 
 const analytics = remote.getGlobal('analytics');
 
+/* eslint-disable no-console */
+const _ts = () => new Date().toISOString().slice(11, 23);
+const dlog = (...a) => console.log('%c[CTRL-DESK]', 'color:#a0f;font-weight:bold', _ts(), ...a);
+/* eslint-enable no-console */
+
 const handleRequestControl = (
   isPinCorrect,
   fontSizes,
@@ -14,7 +19,9 @@ const handleRequestControl = (
   baniLength,
   // mangalPosition,
 ) => {
+  dlog('handleRequestControl: pinCorrect', isPinCorrect, '| current desktop state:', { activeShabadId, activeVerseId, homeVerse, ceremonyId, sundarGutkaBaniId });
   document.body.classList.toggle(`controller-on`, isPinCorrect);
+  dlog('EMIT → response-control success:', isPinCorrect);
   window.socket.emit('data', {
     host: 'sttm-desktop',
     type: 'response-control',
@@ -55,6 +62,7 @@ const handleRequestControl = (
         highlight = sundarGutkaBaniId;
       }
 
+      dlog('EMIT → initial state:', currentShabad.type, 'id', currentShabad.id, 'highlight', parseInt(highlight, 10), 'homeId', parseInt(homeId, 10));
       window.socket.emit('data', {
         type: currentShabad.type,
         host: 'sttm-desktop',
@@ -65,6 +73,8 @@ const handleRequestControl = (
         baniLength: currentShabad.baniLength,
         // mangalPosition: currentShabad.mangalPosition,
       });
+    } else {
+      dlog('no current shabad/bani/ceremony on desktop — nothing to emit');
     }
   }
   analytics.trackEvent({
