@@ -8,8 +8,6 @@ const loadShabad = (
   updateShabad,
   updateVerse,
 ) => {
-  /* eslint-disable-next-line no-console */
-  console.log('%c[CTRL-DESK]', 'color:#a0f;font-weight:bold', new Date().toISOString().slice(11, 23), 'loadShabad: shabadId', shabadId, 'verseId', verseId, '| active', activeShabadId, '/', activeVerseId);
   if (activeShabadId === shabadId) {
     if (activeVerseId !== verseId) {
       updateVerse(verseId);

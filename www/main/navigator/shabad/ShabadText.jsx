@@ -125,17 +125,6 @@ export const ShabadText = ({
 
   const setVerseList = (verseList) => {
     if (verseList.length) {
-      // eslint-disable-next-line no-console
-      if (baniType === 'ceremony' && verseList[0]) {
-        try {
-          const raw = verseList[0].toJSON ? verseList[0].toJSON() : verseList[0];
-          // eslint-disable-next-line no-console
-          console.log('[CTRL-DIAG rawCeremony] keys=', Object.keys(raw), 'sample=', JSON.stringify(raw).slice(0, 600));
-        } catch (e) {
-          // eslint-disable-next-line no-console
-          console.log('[CTRL-DIAG rawCeremony] dump failed', e && e.message);
-        }
-      }
       setRawVerses(verseList);
       saveToHistory(
         shabadId,
@@ -191,34 +180,34 @@ export const ShabadText = ({
   }, [filteredItems]);
 
   useEffect(() => {
-    // Bani/ceremony verse sync from a controller. A native (mobile) controller
-    // sends the Realm crossPlatformId; the web controller has no crossPlatformId,
-    // so it sends the BaniDB-global verseId. Match either, so both drive the
-    // display to the right verse (without this, web-controller verse changes on
-    // banis/ceremonies never matched and were silently dropped).
-    if (savedCrossPlatformId == null) return;
-    let baniVerseIndex = filteredItems.findIndex(
-      (obj) =>
-        obj.crossPlatformId === savedCrossPlatformId ||
-        obj.verseId === savedCrossPlatformId,
-    );
-    // Ceremony fallback: ceremony verses carry Realm-local IDs with no
-    // crossPlatformID, so the web controller's global BaniDB verseId never
-    // matches by id (matchIdx stays -1). Both the web and desktop verse lists
-    // are ordered by the ceremony's Seq, so resolve the verse by the 1-based
-    // line position the web sends (recorded as lineNumber). Only when the id
-    // match fails, so bani/shabad — which do match by id — are untouched.
-    if (
-      baniVerseIndex < 0 &&
-      baniType === 'ceremony' &&
-      lineNumber != null &&
-      lineNumber - 1 >= 0 &&
-      lineNumber - 1 < filteredItems.length
-    ) {
-      baniVerseIndex = lineNumber - 1;
+    // Bani/ceremony verse sync from a controller.
+    // Index-based sync for bani/ceremony. The web controller and desktop load
+    // the same bani/ceremony, so their verse lists share order and count — but
+    // the verse *ids* live in different spaces (ceremonies carry Realm-local
+    // IDs with no crossPlatformID; banis differ too), so id matching is
+    // unreliable. Select purely by the 1-based line position the controller
+    // sends (recorded as lineNumber).
+    //
+    // Deliberately NOT gated on savedCrossPlatformId: the web's verseId can
+    // collide with the loaded verse's id across the two id spaces (e.g. Gur
+    // Mantar: activeVerseId 2 == the clicked verse's web verseId 2), which
+    // stops the handler from ever setting savedCrossPlatformId on the first
+    // change — the display would then stay stuck on the opening verse. Position
+    // drives it regardless. id-match remains the fallback for shabad and native
+    // (mobile) controllers, which send a crossPlatformId but no line position.
+    const isPosition = baniType === 'bani' || baniType === 'ceremony';
+    const positionIndex = lineNumber != null ? lineNumber - 1 : -1;
+    const hasValidPosition =
+      isPosition && positionIndex >= 0 && positionIndex < filteredItems.length;
+    let baniVerseIndex = -1;
+    if (hasValidPosition) {
+      baniVerseIndex = positionIndex;
+    } else if (savedCrossPlatformId != null) {
+      baniVerseIndex = filteredItems.findIndex(
+        (obj) =>
+          obj.crossPlatformId === savedCrossPlatformId || obj.verseId === savedCrossPlatformId,
+      );
     }
-    // eslint-disable-next-line no-console
-    console.log('[CTRL-DIAG match] baniType=', baniType, 'savedCrossPlatformId=', savedCrossPlatformId, 'lineNumber=', lineNumber, 'resolvedIdx=', baniVerseIndex, 'sample=', JSON.stringify(filteredItems.slice(0, 4).map((o) => ({ verseId: o.verseId, cp: o.crossPlatformId, ID: o.ID }))));
     if (baniVerseIndex >= 0) {
       const matched = filteredItems[baniVerseIndex];
       // Pass `verseId` (the verse's real id), NOT `ID` (the filtered array
