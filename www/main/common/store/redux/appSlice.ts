@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 // Redux Toolkit uses Immer, so reducers mutate a draft `state` directly.
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
 import { DEFAULT_OVERLAY } from '../../constants';
 
@@ -8,7 +8,13 @@ import { DEFAULT_OVERLAY } from '../../constants';
 // that used to live in the easy-peasy GlobalState. Pure state only — the one
 // side effect (the inbound `userToken` IPC listener) stays in GlobalState.js but
 // now dispatches setUserToken here. See EASY-PEASY-TO-REDUX-MIGRATION.md.
-const initialState = {
+interface AppState {
+  overlayScreen: string;
+  isListeners: boolean;
+  userToken: string;
+}
+
+const initialState: AppState = {
   overlayScreen: DEFAULT_OVERLAY,
   isListeners: false,
   userToken: '',
@@ -18,13 +24,13 @@ const appSlice = createSlice({
   name: 'app',
   initialState,
   reducers: {
-    setOverlayScreen: (state, action) => {
+    setOverlayScreen: (state, action: PayloadAction<string>) => {
       state.overlayScreen = action.payload;
     },
-    setListeners: (state, action) => {
+    setListeners: (state, action: PayloadAction<boolean>) => {
       state.isListeners = action.payload;
     },
-    setUserToken: (state, action) => {
+    setUserToken: (state, action: PayloadAction<string>) => {
       state.userToken = action.payload;
     },
   },
