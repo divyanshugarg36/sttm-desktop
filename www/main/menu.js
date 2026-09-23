@@ -1,3 +1,9 @@
+import settings from './settings';
+import tingle from '../assets/js/vendor/tingle';
+import { savedSettings } from './common/store/user-settings/get-saved-user-settings';
+import { applyUserSettings } from './common/store/user-settings/apply-user-settings';
+import { API_ENDPOINT } from './api-config';
+
 const request = require('request');
 const moment = require('moment');
 const electron = require('electron');
@@ -5,10 +11,6 @@ const electron = require('electron');
 // const isOnline = require('is-online');
 
 const remote = require('@electron/remote');
-const settings = require('./settings');
-const tingle = require('../assets/js/vendor/tingle');
-const { savedSettings } = require('./common/store/user-settings/get-saved-user-settings');
-const { applyUserSettings } = require('./common/store/user-settings/apply-user-settings');
 
 const { i18n } = remote.require('./app');
 const analytics = remote.getGlobal('analytics');
@@ -19,8 +21,6 @@ const modal = new tingle.Modal({
   cssClass: ['notifications-modal'],
   closeMethods: ['overlay', 'button', 'escape'],
 });
-
-const { API_ENDPOINT } = require('./api-config');
 
 const closeBtn = 'Close';
 modal.addFooterBtn(closeBtn, 'tingle-btn tingle-btn--pull-right tingle-btn--default', () => {
@@ -106,13 +106,13 @@ document.body.addEventListener('click', (e) => {
   }
 });
 
-module.exports = {
+const menu = {
   settings,
 
   init() {
     const $preferencesOpen = document.querySelectorAll('.preferences-open');
     $preferencesOpen.forEach(($menuToggle) => {
-      $menuToggle.addEventListener('click', module.exports.showSettingsTab);
+      $menuToggle.addEventListener('click', menu.showSettingsTab);
     });
 
     applyUserSettings(savedSettings);
@@ -146,3 +146,5 @@ module.exports = {
     document.querySelector(pageSelector).classList.toggle('active');
   },
 };
+
+export default menu;

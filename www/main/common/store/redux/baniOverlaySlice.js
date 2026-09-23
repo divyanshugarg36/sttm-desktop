@@ -4,6 +4,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import { convertToCamelCase } from '../../utils';
 import { savedOverlaySettings } from '../user-settings/get-saved-overlay-settings';
+import overlayConfig from '../../../../configs/overlay.json';
 
 // Phase 6 of the easy-peasy → Redux migration: the `baniOverlay` branch (used by
 // the main window AND the overlay window). Replaces createOverlaySettingsState.
@@ -14,7 +15,7 @@ import { savedOverlaySettings } from '../user-settings/get-saved-overlay-setting
 //   - overlay window: broadcast `update-global-setting` to the main window
 //     (overlay-store's own middleware).
 // See EASY-PEASY-TO-REDUX-MIGRATION.md.
-const { sidebar, bottomBar } = require('../../../../configs/overlay.json');
+const { sidebar, bottomBar } = overlayConfig;
 
 const schema = { ...sidebar.settings, ...bottomBar.settings };
 const savedBaniOverlay = savedOverlaySettings.baniOverlay || {};

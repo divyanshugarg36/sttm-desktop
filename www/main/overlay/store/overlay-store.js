@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 
 import baniOverlayReducer from '../../common/store/redux/baniOverlaySlice';
+import platform from '../../desktop_scripts';
 
 // Redux store for the overlay window (replaces the easy-peasy OverlayState). It
 // reuses the shared baniOverlay slice — its initial state (BANI_OVERLAY_INITIAL_STATE)
@@ -10,7 +11,7 @@ import baniOverlayReducer from '../../common/store/redux/baniOverlaySlice';
 // broadcast is the only side effect, so it lives in this store's own middleware
 // (the slice reducers stay pure). See EASY-PEASY-TO-REDUX-MIGRATION.md.
 
-global.platform = require('../../desktop_scripts');
+global.platform = platform;
 
 // On any baniOverlay/set* action, tell the main window to apply + persist it.
 const broadcastToMain = () => (next) => (action) => {

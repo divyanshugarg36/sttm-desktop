@@ -4,7 +4,6 @@ const { themes } = remote.require('./app');
 
 const getTheme = (themeKey) => themes.find((theme) => theme.key === themeKey);
 
-module.exports = {
-  themes,
-  getTheme,
-};
+export { themes, getTheme };
+
+export default { themes, getTheme };

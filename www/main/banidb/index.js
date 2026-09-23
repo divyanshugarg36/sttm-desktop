@@ -1,6 +1,6 @@
-const CONSTS = require('./constants');
+import * as CONSTS from './constants';
 
-const search = require('./realm-search');
+import * as search from './realm-search';
 
 const {
   query,
@@ -18,7 +18,7 @@ const {
 } = search;
 
 // Re-export CONSTS for use in other areas
-module.exports = {
+export {
   CONSTS,
   query,
   loadShabad,

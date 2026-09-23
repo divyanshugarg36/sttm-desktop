@@ -7,16 +7,14 @@ import navigatorReducer, { navigatorActions } from './navigatorSlice';
 import viewerSettingsReducer, { viewerSettingsActions } from './viewerSettingsSlice';
 import baniOverlayReducer, { baniOverlayActions } from './baniOverlaySlice';
 import settingsSyncMiddleware from './settingsSyncMiddleware';
+import platform from '../../../desktop_scripts';
 
 // Main-window Redux store — the single source of truth after the easy-peasy
 // removal. It also owns the main-window globals + inbound IPC listeners that
 // used to live in the easy-peasy GlobalState. Only the main window imports this
 // module (the viewer/overlay windows have their own stores), so these listeners
 // register once, in the right process. See EASY-PEASY-TO-REDUX-MIGRATION.md.
-// Loaded with require (not import) so it runs here, after the slices, exactly
-// as before the TypeScript conversion.
-// eslint-disable-next-line @typescript-eslint/no-require-imports, global-require
-global.platform = require('../../../desktop_scripts');
+global.platform = platform;
 
 const store = configureStore({
   reducer: {

@@ -80,7 +80,7 @@ const BASE_BANI_OPTIONS = [
   },
 ];
 
-module.exports = {
+export {
   SEARCH_TYPES,
   GURMUKHI_SEARCH_TEXTS,
   ENGLISH_SEARCH_TEXTS,

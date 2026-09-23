@@ -31,9 +31,9 @@ import {
   setCurrentSearchType,
   setCurrentLanguage,
 } from '../../../common/store/redux/navigatorSlice';
+import prodConfig from '../../../../../config.prod.json';
 
 const remote = require('@electron/remote');
-const prodConfig = require('../../../../../config.prod.json');
 
 const { i18n } = remote.require('./app');
 const analytics = remote.getGlobal('analytics');

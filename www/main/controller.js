@@ -1,12 +1,13 @@
+import { updateViewerScale } from './viewer/utils';
+import { changeFontSize, changeVisibility } from './quick-tools-utils';
+
 const electron = require('electron');
 const remote = require('@electron/remote');
-const { updateViewerScale } = require('./viewer/utils');
 
 const { app, dialog, Menu } = remote;
 const main = remote.require('./app');
 const { store, appstore, i18n, isUnsupportedWindow } = main;
 const analytics = remote.getGlobal('analytics');
-const { changeFontSize, changeVisibility } = require('./quick-tools-utils');
 
 const appName = i18n.t('APPNAME');
 
@@ -473,7 +474,7 @@ global.platform.ipc.on('set-user-setting', (event, settingChanger) => {
   }
 });
 
-module.exports = {
+const controller = {
   'presenter-view': function presenterView() {
     checkPresenterView();
     updateViewerScale();
@@ -493,3 +494,5 @@ module.exports = {
     }
   },
 };
+
+export default controller;

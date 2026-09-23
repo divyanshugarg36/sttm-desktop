@@ -9,6 +9,7 @@ import navigatorReducer, {
 import viewerSettingsReducer, {
   viewerSettingsActions,
 } from '../../common/store/redux/viewerSettingsSlice';
+import platform from '../../desktop_scripts';
 
 // Redux store for the viewer window (replaces the easy-peasy ViewerState). It
 // reuses the userSettings + navigator slices (their initial state comes from the
@@ -20,7 +21,7 @@ import viewerSettingsReducer, {
 // it initiates go to the main window via `update-global-setting` (unchanged).
 // See EASY-PEASY-TO-REDUX-MIGRATION.md.
 
-global.platform = require('../../desktop_scripts');
+global.platform = platform;
 
 const viewerStore = configureStore({
   reducer: {

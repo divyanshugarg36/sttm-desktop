@@ -4,12 +4,13 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { convertToCamelCase } from '../../common/utils';
 import { setQuickToolsOpen } from '../../common/store/redux/viewerSettingsSlice';
+import platform from '../../desktop_scripts';
 
 const remote = require('@electron/remote');
 
 const { i18n } = remote.require('./app');
 
-global.platform = require('../../desktop_scripts');
+global.platform = platform;
 
 const QuickTools = ({ isMiscSlide, baniOptions }) => {
   const userSettings = useSelector((state) => state.userSettings);

@@ -1,9 +1,9 @@
 /* eslint-disable import/no-dynamic-require, global-require */
+import * as CONSTS from './constants';
+
 const electron = require('electron');
 const path = require('path');
 const Realm = require('realm');
-
-const CONSTS = require('./constants');
 
 let userDataPath;
 
@@ -502,7 +502,7 @@ const getFilterOption = (type, idArray) =>
   });
 
 // Re-export CONSTS for use in other areas
-module.exports = {
+export {
   CONSTS,
   query,
   loadShabad,

@@ -8,8 +8,9 @@ import SlideGurbani from './SlideGurbani';
 import SlideTranslation from './SlideTranslation';
 import SlideTransliteration from './SlideTransliteration';
 import SlideAnnouncement from './SlideAnnouncement';
+import platform from '../../desktop_scripts';
 
-global.platform = require('../../desktop_scripts');
+global.platform = platform;
 
 const Slide = React.memo(({ verseObj, nextLineObj, isMiscSlide, updateVerseRef }) => {
   const {

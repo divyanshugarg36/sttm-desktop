@@ -8,12 +8,12 @@ import {
   setBgColor,
   setGurbaniTextColor,
 } from '../../common/store/redux/baniOverlaySlice';
+import themeObjects from '../../../configs/overlay_presets.json';
 
 const remote = require('@electron/remote');
 
 const analytics = remote.getGlobal('analytics');
 const { i18n } = remote.require('./app');
-const themeObjects = require('../../../configs/overlay_presets.json');
 
 export const ThemeSelector = () => {
   const dispatch = useDispatch();
