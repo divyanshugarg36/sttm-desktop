@@ -1,0 +1,23 @@
+{
+  // Type-checking only: Babel compiles www/main (JS and TS) to www/js, so tsc
+  // never emits. Existing JS is allowed but not type-checked (checkJs: false),
+  // so files can move to TypeScript one at a time.
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "jsx": "react",
+    "allowJs": true,
+    "checkJs": false,
+    "noEmit": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "types": ["node", "react", "react-dom"]
+  },
+  "include": ["www/main/**/*", "types/**/*.d.ts"]
+}

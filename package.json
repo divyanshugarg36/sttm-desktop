@@ -10,7 +10,8 @@
     "test": "run-p test:*",
     "test:lint": "run-p test:lint:*",
     "test:lint:html": "htmlhint --config .htmlhintrc www",
-    "test:lint:js": "eslint app.js packaging www/main",
+    "test:lint:js": "eslint app.js packaging www/main types",
+    "typecheck": "tsc --noEmit",
     "start": "npm run build:local && concurrently --kill-others \"npm run watch-css\" \"npm run watch-js\" \"cross-env NODE_ENV=development electron .\"",
     "build": "npm run build-css & npm run build-js",
     "build:local": "npm run build-css & npm run build-js:sm",
@@ -27,9 +28,9 @@
     "build-css": "run-p build-css:*",
     "build-css:main": "node-sass --output-style compressed --include-path www/src/scss www/src/scss/styles.scss www/assets/css/bundle.css",
     "build-css:obs": "node-sass --output-style compressed --include-path www/src/scss/obs www/src/scss/obs/styles.scss www/obs/bundle.css",
-    "build-js": "rm -rf www/js & babel ./www/main -d ./www/js",
-    "build-js:sm": "rm -rf www/js & babel ./www/main -d ./www/js --source-maps",
-    "watch-js": "babel ./www/main --watch -d ./www/js --source-maps",
+    "build-js": "rm -rf www/js & babel ./www/main -d ./www/js --extensions .js,.jsx,.ts,.tsx",
+    "build-js:sm": "rm -rf www/js & babel ./www/main -d ./www/js --source-maps --extensions .js,.jsx,.ts,.tsx",
+    "watch-js": "babel ./www/main --watch -d ./www/js --source-maps --extensions .js,.jsx,.ts,.tsx",
     "watch-css": "nodemon --watch www -e scss -x \"npm run build-css\"",
     "rebuild-realm": "$(npm bin)/electron-rebuild -f -w realm",
     "postinstall": "patch-package && electron-builder install-app-deps"
@@ -46,7 +47,13 @@
     "@babel/plugin-transform-runtime": "^7.22.15",
     "@babel/preset-env": "^7.22.20",
     "@babel/preset-react": "^7.22.15",
+    "@babel/preset-typescript": "^7.27.1",
     "@electron/notarize": "^2.3.0",
+    "@types/node": "^24.13.6",
+    "@types/react": "^18.3.31",
+    "@types/react-dom": "^18.3.7",
+    "@typescript-eslint/eslint-plugin": "^8.70.1",
+    "@typescript-eslint/parser": "^8.70.1",
     "concurrently": "^8.2.1",
     "cross-env": "^7.0.3",
     "electron": "^44.4.5",
@@ -72,7 +79,8 @@
     "stylelint": "^14.9.1",
     "stylelint-config-prettier": "^9.0.3",
     "stylelint-config-standard": "^26.0.0",
-    "stylelint-order": "^5.0.0"
+    "stylelint-order": "^5.0.0",
+    "typescript": "~6.0.3"
   },
   "dependencies": {
     "@aptabase/electron": "^0.3.1",
@@ -150,7 +158,9 @@
       "!www/package.json",
       "!**/{.eslintignore,.eslintrc,.gitmodules,.htmlhintrc,.stylelintrc,.travis.yml,appveyor.yml,data.db,id_rsa.enc,README,STTM.provisionprofile}",
       "!**/*.map",
-      "!www/main/**/*.{js,jsx}"
+      "!www/main/**/*.{js,jsx,ts,tsx}",
+      "!types${/*}",
+      "!tsconfig.json"
     ],
     "extraResources": [
       "data.db"

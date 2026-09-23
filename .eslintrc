@@ -17,14 +17,45 @@
     "import/no-cycle": "off",
     "no-plusplus": "off",
     "class-methods-use-this": "off",
-    "no-restricted-exports": "off"
+    "no-restricted-exports": "off",
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "js": "never",
+        "jsx": "never",
+        "ts": "never",
+        "tsx": "never"
+      }
+    ]
   },
   "settings": {
     "import/core-modules": "electron",
     "import/resolver": {
       "node": {
-        "extensions": [".js",".jsx"]
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
       }
     }
-  }
+  },
+  "overrides": [
+    {
+      "files": ["**/*.ts", "**/*.tsx"],
+      "parser": "@typescript-eslint/parser",
+      "plugins": ["@typescript-eslint"],
+      "extends": ["plugin:@typescript-eslint/recommended"],
+      "rules": {
+        "no-undef": "off",
+        "no-unused-vars": "off",
+        "@typescript-eslint/no-unused-vars": [
+          "error",
+          {
+            "argsIgnorePattern": "^_"
+          }
+        ],
+        "no-shadow": "off",
+        "@typescript-eslint/no-shadow": "error",
+        "react/prop-types": "off"
+      }
+    }
+  ]
 }
