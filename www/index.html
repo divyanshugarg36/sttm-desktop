@@ -58,14 +58,11 @@
   <div id="app-frame">
     <div id="navigator" class="noselect"></div>
   </div>
-  <script>
-    const app = require('./js/app.js').default;
-    const { createRoot } = require('react-dom/client');
-    const root = createRoot(document.getElementById('navigator'));
-    root.render(app());
+  <!-- Dev server (http): Vite serves the source entry. Packaged app (file): the built bundle. -->
+  <script type="module">
+    const entry = window.location.protocol === 'file:' ? './dist/main.js' : '/main/entries/main.jsx';
+    import(/* @vite-ignore */ entry);
   </script>
-  <script src="js/desktop_index.js"></script>
-  <script type="text/javascript" src="assets/js/vendor/tingle.js"></script>
   <script>
     const remote = require("@electron/remote");
     const { i18n } = remote.require('./app');

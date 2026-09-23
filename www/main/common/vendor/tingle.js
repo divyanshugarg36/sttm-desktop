@@ -5,15 +5,10 @@
  * @version 0.13.2
  * @url
  */
-(function(root, factory) {
-  if (typeof define === 'function' && define.amd) {
-    define(factory);
-  } else if (typeof exports === 'object') {
-    module.exports = factory();
-  } else {
-    root.tingle = factory();
-  }
-})(this, function() {
+// Local fork of tingle.js 0.13.2, kept as an ES module: footer buttons use
+// textContent instead of innerHTML, and it adds Modal.prototype.addCastBtn
+// (the Chromecast receiver picker). Only the UMD wrapper was replaced.
+const tingle = (function () {
   /* ----------------------------------------------------------- */
   /* == modal */
   /* ----------------------------------------------------------- */
@@ -465,4 +460,6 @@
   return {
     Modal: Modal,
   };
-});
+})();
+
+export default tingle;

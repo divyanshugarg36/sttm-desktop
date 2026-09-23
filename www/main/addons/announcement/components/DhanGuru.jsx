@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
 import { ipcRenderer } from 'electron';
 import insertSlide from '../../../common/constants/slidedb';
-import tingle from '../../../../assets/js/vendor/tingle';
+import tingle from '../../../common/vendor/tingle';
 import {
   setIsMiscSlide,
   setMiscSlideText,

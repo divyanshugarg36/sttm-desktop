@@ -1,6 +1,6 @@
 import type { IpcRenderer } from 'electron';
 
-// Globals the main window sets up at startup (desktop_index.js and the Redux
+// Globals the main window sets up at startup (the main window entry and the Redux
 // store) and that TypeScript files read. Only what TS files use so far is
 // typed; widen these as more files move to TypeScript.
 declare global {

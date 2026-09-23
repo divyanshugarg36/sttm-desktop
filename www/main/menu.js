@@ -1,5 +1,5 @@
 import settings from './settings';
-import tingle from '../assets/js/vendor/tingle';
+import tingle from './common/vendor/tingle';
 import { savedSettings } from './common/store/user-settings/get-saved-user-settings';
 import { applyUserSettings } from './common/store/user-settings/apply-user-settings';
 import { API_ENDPOINT } from './api-config';

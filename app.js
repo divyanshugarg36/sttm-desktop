@@ -130,6 +130,12 @@ if (process.argv.length >= 2) {
   app.setAsDefaultProtocolClient('sttm-desktop', process.execPath, [path.resolve(process.argv[1])]);
 }
 
+// Windows built by Vite (main, viewer, overlay) load from the Vite dev server
+// when VITE_DEV_SERVER_URL is set (`npm run dev`), and from www/ otherwise.
+const rendererDevServer = process.env.VITE_DEV_SERVER_URL;
+const rendererUrl = (page) =>
+  rendererDevServer ? `${rendererDevServer}/${page}` : `file://${__dirname}/www/${page}`;
+
 const secondaryWindows = {
   changelogWindow: {
     obj: false,
@@ -156,7 +162,7 @@ const secondaryWindows = {
   },
   overlayWindow: {
     obj: false,
-    url: `file://${__dirname}/www/overlay.html`,
+    url: rendererUrl('overlay.html'),
   },
   shortcutLegend: {
     obj: false,
@@ -387,7 +393,7 @@ function createViewer(ipcData) {
         media: true,
       },
     });
-    viewerWindow.loadURL(`file://${__dirname}/www/viewer.html`);
+    viewerWindow.loadURL(rendererUrl('viewer.html'));
     remote.enable(viewerWindow.webContents);
     viewerWindow.webContents.on('did-finish-load', () => {
       viewerWindow.webContents.insertCSS(styles);
@@ -688,7 +694,7 @@ app.on('ready', () => {
       createViewer();
     }
   });
-  mainWindow.loadURL(`file://${__dirname}/www/index.html`);
+  mainWindow.loadURL(rendererUrl('index.html'));
 
   if (!store.get('user-agent')) {
     store.set('user-agent', mainWindow.webContents.getUserAgent());

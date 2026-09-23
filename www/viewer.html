@@ -11,19 +11,10 @@
   </head>
   <body class="viewer">
     <div id="viewer-container"></div>
-    <script>
-        const { ipcRenderer } = require('electron');
-        let root = null;
-
-        ipcRenderer.on('wc-webview-enabled', () => {
-          const app = require('./js/viewer/viewerApp.js').default;
-          const { createRoot } = require('react-dom/client');
-
-          if (!root) {
-            root = createRoot(document.getElementById('viewer-container'));
-          }
-          root.render(app());
-        });
+    <!-- Dev server (http): Vite serves the source entry. Packaged app (file): the built bundle. -->
+    <script type="module">
+      const entry = window.location.protocol === 'file:' ? './dist/viewer.js' : '/main/entries/viewer.jsx';
+      import(/* @vite-ignore */ entry);
     </script>
   </body>
 </html>
