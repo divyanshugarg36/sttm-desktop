@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
+import themes from '../../../configs/themes.json';
 
-const themes = require('../../../configs/themes.json');
 
 const SettingViewer = () => {
   const { themeBg } = useSelector((state) => state.userSettings);

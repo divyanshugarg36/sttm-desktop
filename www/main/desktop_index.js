@@ -2,10 +2,13 @@
 // Importing the Redux store sets up global.getUserSettings/setUserSettings and
 // registers the main-window IPC listeners (previously done by GlobalState).
 import './js/common/store/redux/store';
+import platform from './js/desktop_scripts';
+import controller from './js/controller';
+import core from './js/index';
 
-global.platform = require('./js/desktop_scripts');
-global.controller = require('./js/controller');
-global.core = require('./js/index');
+global.platform = platform;
+global.controller = controller;
+global.core = core;
 
 // Pull in navigator from core
 global.core.menu.init();

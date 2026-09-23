@@ -102,7 +102,7 @@ const RAAG_TEXTS = {
   [RAAG_TYPES.OTHERS]: 'OTHERS',
 };
 
-module.exports = {
+export default {
   LANGUAGE_TYPES,
   LANGUAGE_TEXTS,
   SEARCH_TYPES,

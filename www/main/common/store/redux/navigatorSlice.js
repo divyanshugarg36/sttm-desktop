@@ -3,6 +3,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import { convertToCamelCase } from '../../utils';
+import navigatorSettings from '../../../../configs/navigator-settings.json';
 
 // Phase 4 of the easy-peasy → Redux migration: the `navigator` branch.
 //
@@ -11,7 +12,6 @@ import { convertToCamelCase } from '../../utils';
 // The old easy-peasy action's one side effect — broadcasting the change to the
 // viewer window over `update-viewer-setting` — moves to settingsSyncMiddleware.
 // See EASY-PEASY-TO-REDUX-MIGRATION.md.
-const navigatorSettings = require('../../../../configs/navigator-settings.json');
 
 const initialState = {};
 const reducers = {};

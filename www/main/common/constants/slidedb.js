@@ -82,7 +82,7 @@ const allowedAnnouncementTags = [
   'li',
   'ol',
 ];
-module.exports = {
+export default {
   slideStrings,
   dropdownStrings,
   announcemenetPlaceholder,

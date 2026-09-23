@@ -1,10 +1,11 @@
 import convertObjToCamelCase from '../../utils/convert-object-to-camel-case';
+import userSettingsConfig from '../../../../configs/user-settings.json';
 
 const electron = require('electron');
 const fs = require('fs');
 const path = require('path');
 
-const { settings } = require('../../../../configs/user-settings.json');
+const { settings } = userSettingsConfig;
 
 let userDataPath;
 

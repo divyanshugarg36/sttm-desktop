@@ -1,8 +1,9 @@
 import convertObjToCamelCase from '../../utils/convert-object-to-camel-case';
 
 import { savedSettings } from './get-saved-user-settings';
+import overlayConfig from '../../../../configs/overlay.json';
 
-const { sidebar, bottomBar } = require('../../../../configs/overlay.json');
+const { sidebar, bottomBar } = overlayConfig;
 
 const settings = { ...sidebar.settings, ...bottomBar.settings };
 

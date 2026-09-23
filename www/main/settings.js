@@ -1,10 +1,10 @@
-const remote = require('@electron/remote');
+import settings from '../configs/settings.json';
 
-const settings = require('../configs/settings.json');
+const remote = require('@electron/remote');
 
 const { store } = remote.require('./app');
 
-module.exports = {
+const settingsPage = {
   init() {
     this.applySettings();
   },
@@ -72,3 +72,5 @@ module.exports = {
     });
   },
 };
+
+export default settingsPage;

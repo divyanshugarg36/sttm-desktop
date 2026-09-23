@@ -1,3 +1,5 @@
+import tingle from '../assets/js/vendor/tingle';
+
 const { ipcRenderer } = require('electron');
 const electron = require('electron');
 const extract = require('extract-zip');
@@ -8,7 +10,6 @@ const request = require('request');
 const progress = require('request-progress');
 const remote = require('@electron/remote');
 const moment = require('moment');
-const tingle = require('../assets/js/vendor/tingle');
 
 const { i18n, isUnsupportedWindow } = remote.require('./app');
 const ipc = electron.ipcRenderer;
@@ -81,7 +82,7 @@ function checkForNotifcations() {
   }, POLLING_INTERVAL);
 }
 
-module.exports = {
+const platform = {
   ipc,
   store,
 
@@ -169,7 +170,7 @@ module.exports = {
                         if (dbPlatform === 'realm') {
                           fs.renameSync(newDBSchema, dbSchema);
                         }
-                        module.exports.initDB();
+                        platform.initDB();
                         // Delete old DBs
                         // TODO: Update to check if directory and use fs.rmdir
                         // TODO: Add sttmdesktop.realm.management
@@ -221,6 +222,8 @@ module.exports = {
     store.setUserPref('notification-timestamp', time);
   },
 };
+
+export default platform;
 
 const $titleButtons = document.querySelectorAll('#titlebar .controls a');
 Array.from($titleButtons).forEach((el) => {

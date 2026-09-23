@@ -1,6 +1,6 @@
-const menu = require('./menu');
-const themeEditor = require('./theme_editor');
-const settings = require('./settings');
+import menu from './menu';
+import themeEditor from './theme_editor';
+import settings from './settings';
 
 /**
  * Check if the platform has a method and call if it is does
@@ -21,7 +21,7 @@ function platformMethod(method, args) {
 global.platform.ipc.on('sync-settings', () => {
   settings.init();
 });
-module.exports = {
+const core = {
   menu,
   platformMethod,
   themeEditor,
@@ -29,3 +29,5 @@ module.exports = {
     themeEditor.init();
   },
 };
+
+export default core;

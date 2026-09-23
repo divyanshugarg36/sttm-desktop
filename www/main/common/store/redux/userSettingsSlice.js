@@ -4,6 +4,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import { convertToCamelCase } from '../../utils';
 import { savedSettings, userConfigPath } from '../user-settings/get-saved-user-settings';
+import userSettingsConfig from '../../../../configs/user-settings.json';
 
 // Phase 4 of the easy-peasy → Redux migration: the `userSettings` branch.
 //
@@ -14,7 +15,7 @@ import { savedSettings, userConfigPath } from '../user-settings/get-saved-user-s
 // inline (IPC broadcast, fs/localStorage write, DOM class, global mutation,
 // controller callback, socket emit) moves to settingsSyncMiddleware.
 // See EASY-PEASY-TO-REDUX-MIGRATION.md.
-const { settings } = require('../../../../configs/user-settings.json');
+const { settings } = userSettingsConfig;
 
 const initialState = {};
 const reducers = {};

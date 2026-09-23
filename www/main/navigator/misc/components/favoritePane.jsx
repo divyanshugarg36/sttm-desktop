@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { shell } from 'electron';
 import { fetchFavShabad, removeFromFav } from '../utils';
-import banidb from '../../../banidb';
+import * as banidb from '../../../banidb';
 import { SP_API } from '../../../common/constants/api-urls';
 import {
   setActiveShabadId,

@@ -1,5 +1,5 @@
 import Noty from 'noty';
-import banidb from '../../banidb';
+import * as banidb from '../../banidb';
 
 const remote = require('@electron/remote');
 

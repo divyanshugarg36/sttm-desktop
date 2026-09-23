@@ -1,10 +1,10 @@
 /* global chrome */
 import { ipcRenderer } from 'electron';
+import tingle from '../../../assets/js/vendor/tingle';
 
 const remote = require('@electron/remote');
 
 /* eslint-disable-next-line global-require */
-export const tingle = require('../../../assets/js/vendor/tingle');
 
 const { i18n } = remote.require('./app');
 const analytics = remote.getGlobal('analytics');
@@ -232,3 +232,5 @@ export const stopApp = () => {
   ipcRenderer.send('cast-session-stopped');
   session.stop(onStopAppSuccess, onError);
 };
+
+export { tingle };
