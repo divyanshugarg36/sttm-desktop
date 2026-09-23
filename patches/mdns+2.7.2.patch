@@ -1,0 +1,37 @@
+diff --git a/node_modules/mdns/src/dns_service_ref.cpp b/node_modules/mdns/src/dns_service_ref.cpp
+index 5c5cb04..2c983ae 100644
+--- a/node_modules/mdns/src/dns_service_ref.cpp
++++ b/node_modules/mdns/src/dns_service_ref.cpp
+@@ -101,7 +101,7 @@ ServiceRef::SetSocketFlags() {
+ #endif
+ }
+ 
+-NAN_PROPERTY_GETTER(ServiceRef::fd_getter) {
++NAN_GETTER(ServiceRef::fd_getter) {
+     ServiceRef * service_ref = Nan::ObjectWrap::Unwrap<ServiceRef>(info.This());
+     int fd = -1;
+     if (service_ref->ref_) {
+@@ -114,7 +114,7 @@ NAN_PROPERTY_GETTER(ServiceRef::fd_getter) {
+     info.GetReturnValue().Set(v);
+ }
+ 
+-NAN_PROPERTY_GETTER(ServiceRef::initialized_getter) {
++NAN_GETTER(ServiceRef::initialized_getter) {
+     ServiceRef * service_ref = Nan::ObjectWrap::Unwrap<ServiceRef>(info.This());
+     info.GetReturnValue().Set(Nan::New<Boolean>(service_ref->IsInitialized()));
+ }
+diff --git a/node_modules/mdns/src/dns_service_ref.hpp b/node_modules/mdns/src/dns_service_ref.hpp
+index 36b30de..0477877 100644
+--- a/node_modules/mdns/src/dns_service_ref.hpp
++++ b/node_modules/mdns/src/dns_service_ref.hpp
+@@ -33,8 +33,8 @@ class ServiceRef : public Nan::ObjectWrap {
+         bool SetSocketFlags();
+ 
+     private:
+-        static NAN_PROPERTY_GETTER(fd_getter);
+-        static NAN_PROPERTY_GETTER(initialized_getter);
++        static NAN_GETTER(fd_getter);
++        static NAN_GETTER(initialized_getter);
+ 
+         DNSServiceRef ref_;
+         Nan::Persistent<v8::Function> callback_;

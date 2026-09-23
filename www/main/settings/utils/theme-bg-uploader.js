@@ -2,6 +2,7 @@ import mainStore from '../../common/store/redux/store';
 import { setThemeBg } from '../../common/store/redux/userSettingsSlice';
 
 const remote = require('@electron/remote');
+const { webUtils } = require('electron');
 const fs = require('fs');
 const path = require('path');
 const util = require('util');
@@ -57,7 +58,8 @@ export const uploadImage = async (evt) => {
   }
   return new Promise((resolve, reject) => {
     try {
-      const filePath = evt.target.files[0].path;
+      // File.path was removed in Electron 32; webUtils resolves the real path.
+      const filePath = webUtils.getPathForFile(evt.target.files[0]);
       const newPath = path.resolve(
         userBackgroundsPath,
         evt.target.files[0].name.replaceAll(' ', '_'),
