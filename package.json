@@ -32,7 +32,7 @@
     "watch-js": "babel ./www/main --watch -d ./www/js --source-maps",
     "watch-css": "nodemon --watch www -e scss -x \"npm run build-css\"",
     "rebuild-realm": "$(npm bin)/electron-rebuild -f -w realm",
-    "postinstall": "electron-builder install-app-deps"
+    "postinstall": "patch-package && electron-builder install-app-deps"
   },
   "repository": {
     "type": "git",
@@ -49,7 +49,7 @@
     "@electron/notarize": "^2.3.0",
     "concurrently": "^8.2.1",
     "cross-env": "^7.0.3",
-    "electron": "^26.2.4",
+    "electron": "^44.4.5",
     "electron-builder": "^24.13.3",
     "electron-publisher-s3": "^20.17.2",
     "electron-react-devtools": "^0.5.3",
@@ -65,6 +65,7 @@
     "node-sass": "^9.0.0",
     "nodemon": "^3.0.1",
     "npm-run-all": "^4.1.5",
+    "patch-package": "^8.0.1",
     "prettier": "^3.0.3",
     "pretty-quick": "^4.2.2",
     "semver": "^7.5.4",
@@ -240,5 +241,8 @@
     "NSAppTransportSecurity": {
       "NSAllowsArbitraryLoads": true
     }
+  },
+  "overrides": {
+    "nan": "^2.29.0"
   }
 }
