@@ -45,6 +45,7 @@
   "license": "OSL-3.0",
   "devDependencies": {
     "@electron/notarize": "^2.3.0",
+    "@khalisfoundation/banidb": "0.2.0",
     "@khalisfoundation/sikhi-ui": "1.36.1",
     "@mynaui/icons-react": "^0.4.11",
     "@types/node": "^24.13.6",
