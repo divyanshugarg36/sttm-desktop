@@ -5,7 +5,7 @@ import LayoutSelector from './LayoutSelector';
 import { getDefaultSettings } from '../../common/store/user-settings/get-saved-overlay-settings';
 import { convertToCamelCase } from '../../common/utils';
 import { baniOverlayActions } from '../../common/store/redux/baniOverlaySlice';
-import { Switch } from '../../common/sttm-ui';
+import { Icon, Switch } from '../../common/sttm-ui';
 
 const remote = require('@electron/remote');
 
@@ -107,10 +107,10 @@ const OverlaySetting = ({ settingObj, stateVar, stateFunction }) => {
       settingDOM.push(
         <span className={`size-icon-container`}>
           <div className="size-icon icon-left" data-value="plus" onClick={handleSizeIcon}>
-            <i className="fa fa-plus"></i>
+            <Icon name="plus" />
           </div>
           <div className="size-icon icon-right" data-value="minus" onClick={handleSizeIcon}>
-            <i className="fa fa-minus"></i>
+            <Icon name="minus" />
           </div>
         </span>,
       );
@@ -123,14 +123,14 @@ const OverlaySetting = ({ settingObj, stateVar, stateFunction }) => {
             data-value="bold"
             onClick={handleFormatIcon}
           >
-            <i className="fa fa-bold"></i>
+            <Icon name="bold" />
           </div>
           <div
             className={`text-icon icon-italic ${baniOverlayState[stateVar].italic && 'active'}`}
             data-value="italic"
             onClick={handleFormatIcon}
           >
-            <i className="fa fa-italic"></i>
+            <Icon name="italic" />
           </div>
         </span>,
       );

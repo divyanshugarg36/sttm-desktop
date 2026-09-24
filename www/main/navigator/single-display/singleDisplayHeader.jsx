@@ -5,6 +5,7 @@ import {
   setMinimizedBySingleDisplay,
   setHistoryOrder,
 } from '../../common/store/redux/navigatorSlice';
+import { Icon } from '../../common/sttm-ui';
 
 export const singleDisplayHeader = () => {
   const { singleDisplayActiveTab, minimizedBySingleDisplay, historyOrder, verseHistory } =
@@ -79,7 +80,7 @@ export const singleDisplayHeader = () => {
       )}
       {singleDisplayActiveTab === 'shabad' && <ShabadHeader />}
       <span onClick={toggleDisplayUI}>
-        <i className={`fa fa-window-${minimizedBySingleDisplay ? 'maximize' : 'minimize'}`}></i>
+        <Icon name={minimizedBySingleDisplay ? 'maximize' : 'minimize'} />
       </span>
     </div>
   );

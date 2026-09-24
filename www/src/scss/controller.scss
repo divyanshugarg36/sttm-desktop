@@ -511,7 +511,7 @@ ul {
 /* ***** SHABAD CONTROLLER ***** */
 #shabad {
   a:hover {
-    i.fa-home {
+    i.home-icon {
       color: #ccc;
 
       &:hover {
@@ -525,7 +525,7 @@ ul {
     color: #fff;
 
     &:hover {
-      i.fa-home {
+      i.home-icon {
         color: #999;
 
         &:hover {
@@ -535,20 +535,20 @@ ul {
     }
   }
 
-  i.fa-home,
-  i.fa-check {
+  i.home-icon,
+  i.check-icon {
     color: transparent;
   }
 
-  i.fa-check {
+  i.check-icon {
     font-size: 10px;
   }
 
-  a.seen_check i.fa-check {
+  a.seen_check i.check-icon {
     color: #999;
   }
 
-  a.panktee.main i.fa-home {
+  a.panktee.main i.home-icon {
     color: inherit !important;
   }
 }

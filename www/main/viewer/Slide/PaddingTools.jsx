@@ -3,6 +3,7 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { convertToCamelCase } from '../../common/utils';
 import { setPaddingToolsOpen } from '../../common/store/redux/viewerSettingsSlice';
+import Icon from '../../common/sttm-ui/icon';
 
 const icons = [
   {
@@ -46,8 +47,9 @@ const PaddingTools = ({ isMiscSlide }) => {
       ? currentPadding === PADDING_MIN
       : currentPadding === PADDING_MAX;
     return (
-      <i
-        className={`${isMinusIcon ? 'fa fa-minus-circle' : 'fa fa-plus-circle'} ${isIconDisabled ? 'disabled' : ''}`}
+      <Icon
+        name={isMinusIcon ? 'minus-circle' : 'plus-circle'}
+        className={isIconDisabled ? 'disabled' : ''}
         onClick={() => {
           if (!isIconDisabled) {
             const viewerSettingObj = createViewerSettingObject({ name, variant });
@@ -80,7 +82,7 @@ const PaddingTools = ({ isMiscSlide }) => {
         onClick={() => dispatch(setPaddingToolsOpen(!viewerSettingsStore.paddingToolsOpen))}
       >
         Padding Tools
-        <i className={`fa fa-caret-${viewerSettingsStore.paddingToolsOpen ? 'up' : 'down'}`}></i>
+        <Icon name={viewerSettingsStore.paddingToolsOpen ? 'chevron-up' : 'chevron-down'} />
       </div>
       {viewerSettingsStore.paddingToolsOpen && (
         <div className={`paddingtool-body paddingtool-${isMiscSlide ? 'announcement' : 'gurbani'}`}>

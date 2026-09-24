@@ -220,25 +220,8 @@ input[type='color'] {
   }
 
   .cast-toggle {
-    .fa-toggle-off {
-      color: #ee5253;
-      cursor: pointer;
-    }
-
     .setting-label {
       color: #666;
-    }
-  }
-
-  .logo-toggle,
-  .announcement-toggle,
-  .larivaar-assist-toggle,
-  .green-screen-toggle {
-    .fa-toggle-off,
-    .fa-toggle-on {
-      cursor: not-allowed;
-      opacity: 0.3;
-      pointer-events: none;
     }
   }
 }
@@ -252,14 +235,6 @@ input[type='color'] {
   .cp-icon {
     font-size: 34px;
     text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.1);
-  }
-
-  .fa-toggle-on {
-    color: #10ac84;
-  }
-
-  .fa-toggle-off {
-    color: #ee5253;
   }
 }
 

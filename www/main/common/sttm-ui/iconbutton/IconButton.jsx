@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Icon from '../icon';
 
 const IconButton = ({ icon, onClick, className }) => (
   <button className={`icon-button ${className}`} onClick={onClick}>
-    <i className={icon} />
+    <Icon name={icon} />
   </button>
 );
 

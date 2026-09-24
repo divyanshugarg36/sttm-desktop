@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Icon from '../icon';
 
 const CustomBgTile = ({ customBg, onApply, onRemove }) => {
   const getCustomBgImageForTile = (tile) => ({
@@ -15,7 +16,7 @@ const CustomBgTile = ({ customBg, onApply, onRemove }) => {
         style={getCustomBgImageForTile(customBg)}
       />
       <button key={customBg.backgroundImage} className="delete-button" onClick={onRemove}>
-        <i className="fa fa-trash-o" />
+        <Icon name="trash" />
       </button>
     </>
   );

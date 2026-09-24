@@ -18,6 +18,7 @@ import {
   setPane2,
   setPane3,
 } from '../../../common/store/redux/navigatorSlice';
+import { Icon } from '../../../common/sttm-ui';
 
 const remote = require('@electron/remote');
 
@@ -231,7 +232,7 @@ export const FavoritePane = ({ className, paneId }) => {
                   deleteFromFav(element);
                 }}
               >
-                <i className="fa-solid fa-xmark"></i>
+                <Icon name="x" />
               </button>
             </div>
           </div>

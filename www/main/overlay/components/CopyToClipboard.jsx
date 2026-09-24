@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Icon } from '../../common/sttm-ui';
 
 const remote = require('@electron/remote');
 const copy = require('copy-to-clipboard');
@@ -32,7 +33,7 @@ export const CopyToClipboard = ({ url }) => {
           onClick={handleCopy}
           onMouseLeave={() => setCopied(false)}
         >
-          <i className="fa fa-files-o cp-icon"></i>
+          <Icon name="copy" className="cp-icon" />
         </span>
         <span className="tooltip">
           {copied ? i18n.t('BANI_OVERLAY.COPIED_URL') : i18n.t('BANI_OVERLAY.COPY_URL')}
