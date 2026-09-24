@@ -13,6 +13,10 @@
   $highlight-bg: $dull-blue;
   $highlight-text: $transparent-blue;
   color: $text-base;
+  // sikhi-ui Box (the main-screen panes) on dark themes.
+  --sui-atom-box-solid-background: #{$bg-main};
+  --sui-atom-box-solid-border: #{$border};
+  --sui-atom-box-gradient-shadow: 0 12px 36px rgba(0, 0, 0, 0.4);
   $button-bg: $princeton-orange;
   $tray-bg: $philippine-gray;
 

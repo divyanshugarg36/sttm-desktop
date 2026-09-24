@@ -1,15 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Box } from '@khalisfoundation/sikhi-ui';
 import PaneContent from './PaneContent';
 import PaneFooter from './PaneFooter';
 import PaneHeader from './PaneHeader';
 
-const Pane = ({ content, header, footer, className, data }) => (
-  <div className={`pane ${className}`.trim()}>
+const noData = {};
+
+const Pane = ({ content = null, header = null, footer = null, className = '', data = noData }) => (
+  <Box variant="solid" className={`pane ${className}`.trim()}>
     {header ? <PaneHeader Header={header} data={data} /> : ''}
     {content ? <PaneContent Content={content} data={data} /> : ''}
     {footer ? <PaneFooter Footer={footer} data={data} /> : ''}
-  </div>
+  </Box>
 );
 
 Pane.propTypes = {
@@ -18,14 +21,6 @@ Pane.propTypes = {
   footer: PropTypes.any,
   className: PropTypes.string,
   data: PropTypes.any,
-};
-
-Pane.defaultProps = {
-  content: null,
-  header: null,
-  footer: null,
-  className: '',
-  data: {},
 };
 
 export default Pane;

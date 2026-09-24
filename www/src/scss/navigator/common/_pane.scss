@@ -16,6 +16,12 @@
   .multipane-grid & {
     min-width: 300px;
   }
+  // Panes are sikhi-ui Boxes (solid variant): rounded card with a soft shadow.
+  // overflow: hidden above clips the header and footer to the corners.
+  &.sui-box {
+    border-radius: 12px;
+    box-shadow: var(--sui-atom-box-gradient-shadow);
+  }
   i {
     cursor: pointer;
   }
