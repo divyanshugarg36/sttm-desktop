@@ -420,85 +420,18 @@ button {
   padding-top: 10px;
   z-index: 1300;
 
+  // sikhi-ui icon PrimaryButtons (common/sttm-ui/icon inside).
   .toolbar-item {
-    background-position: center center;
-    background-size: contain;
-    border-radius: 5px;
-    cursor: pointer;
-    height: 36px;
     margin-bottom: 12px;
-    transition: 0.5s all ease;
-    width: 36px;
 
-    &:hover {
-      box-shadow: 0 2px 2px rgba(0, 0, 0, 0.4);
-      transform: translateY(-2px);
+    svg {
+      height: 22px;
+      width: 22px;
     }
-
-    &:active {
-      transform: translateY(1px);
-    }
-  }
-
-  #tool-auth-dialog {
-    background-image: url('../../assets/img/icons/user.png');
-    background-repeat: no-repeat;
-
-    &.auth-logged-in {
-      background-image: url('../../assets/img/icons/user-logout.png');
-    }
-
-    &:hover {
-      box-shadow: none;
-    }
-  }
-
-  #tool-sunder-gutka {
-    background-image: url('../../assets/img/icons/sundar_gutka.png');
   }
 
   #tool-lock-screen {
     display: none;
-  }
-
-  #tool-sync-button {
-    background-image: url('../../assets/img/icons/liveicon.png');
-    background-position: center center;
-    background-repeat: no-repeat;
-
-    &:hover {
-      box-shadow: none;
-    }
-  }
-
-  #tool-ceremonies {
-    background-color: rebeccapurple;
-    background-image: url('../../assets/img/icons/ceremonies.svg');
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: auto 75%;
-  }
-
-  #tool-settings {
-    background-image: url('../../assets/img/icons/settings.png');
-    background-position: center center;
-    background-repeat: no-repeat;
-
-    &:hover {
-      box-shadow: none;
-    }
-  }
-
-  #tool-announcement {
-    background-image: url('../../assets/img/icons/megaphone.png');
-    background-position: center center;
-    background-repeat: no-repeat;
-  }
-
-  #tool-sync-button,
-  #tool-auth-dialog,
-  #tool-settings {
-    background-size: auto 80%;
   }
 }
 

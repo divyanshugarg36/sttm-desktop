@@ -29,6 +29,9 @@
   --sui-atom-button-amber-text: #{$text-bright};
   --sui-atom-button-ghost-text: #{$text-base};
   --sui-atom-button-ghost-background-hover: rgba(255, 255, 255, 0.1);
+  --sui-atom-select-bordered-background: rgba(255, 255, 255, 0.06);
+  --sui-atom-select-bordered-border: #{$border};
+  --sui-atom-select-bordered-text: #{$text-base};
   $button-bg: $princeton-orange;
   $tray-bg: $philippine-gray;
 
@@ -173,10 +176,6 @@
     }
 
     .select-bani {
-      &-dd-group:hover {
-        background-color: $transparent-light-white;
-      }
-
       option {
         color: $text-base;
       }
@@ -234,12 +233,6 @@
   #toolbar,
   #toolbar-nav {
     background: $bg-alt;
-
-    #tool-sync-button,
-    #tool-auth-dialog,
-    #tool-settings {
-      filter: invert(1);
-    }
   }
 
   .pane,
