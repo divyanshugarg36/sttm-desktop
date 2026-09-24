@@ -14,6 +14,17 @@
     }
   }
 
+  // The sikhi-ui SearchBar under evaluation sits above the existing search
+  // input and keeps its full height when its keyboard opens.
+  .library-search-bar {
+    flex-shrink: 0;
+
+    // The placeholder is English even when the query is Gurbani Akhar.
+    .sui-search-bar__input.gurmukhi::placeholder {
+      font-family: var(--sui-typography-fonts-primary);
+    }
+  }
+
   // Language and search-type pickers: sikhi-ui pilled FatehTabs, compacted to
   // fit the 40px pane header side by side.
   .language-selector,
@@ -163,10 +174,11 @@
       }
     }
 
+    // Stack (the results list scrolls) rather than wrap into a second column.
     &-container {
       display: flex;
       flex-direction: column;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
       height: 100%;
       overflow: hidden;
     }

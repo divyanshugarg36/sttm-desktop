@@ -19,6 +19,7 @@ import {
   VoiceWave,
 } from '../../../common/sttm-ui';
 import { GurmukhiKeyboard } from './GurmukhiKeyboard';
+import { LibrarySearchBar } from './LibrarySearchBar';
 import { useNewShabad } from '../hooks/use-new-shabad';
 import {
   setCurrentWriter,
@@ -462,6 +463,17 @@ const SearchContent = () => {
 
   return (
     <div className="search-content-container">
+      <LibrarySearchBar
+        query={query}
+        setQuery={setQuery}
+        placeholder={getPlaceholder()}
+        disabled={databaseProgress < 1}
+        writerArray={writerArray}
+        raagArray={raagArray}
+        sourceArray={sourceArray}
+        onMicClick={isConnected ? handleMicClick : undefined}
+        isRecording={isRecording}
+      />
       <div className="search-content">
         {(() => {
           if (isRecording && audioStream) {

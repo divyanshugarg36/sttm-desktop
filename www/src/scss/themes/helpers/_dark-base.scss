@@ -32,6 +32,16 @@
   --sui-atom-select-bordered-background: rgba(255, 255, 255, 0.06);
   --sui-atom-select-bordered-border: #{$border};
   --sui-atom-select-bordered-text: #{$text-base};
+  --sui-atom-select-background: rgba(255, 255, 255, 0.08);
+  --sui-atom-select-text: #{$text-base};
+  --sui-atom-select-icon: #{$text-base};
+  --sui-atom-search-bar-input-background: rgba(255, 255, 255, 0.06);
+  --sui-atom-search-bar-input-border: #{$border};
+  --sui-atom-search-bar-icon: #{$text-dim};
+  --sui-semantic-background-page: #{$bg-alt};
+  --sui-semantic-foreground-default: #{$text-base};
+  --sui-semantic-foreground-muted: #{$text-dim};
+  --sui-semantic-foreground-subtle: #{$text-dim};
   $button-bg: $princeton-orange;
   $tray-bg: $philippine-gray;
 
