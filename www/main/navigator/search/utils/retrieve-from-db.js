@@ -1,4 +1,4 @@
-import { getFilterOption } from '../../../banidb/realm-search';
+import { getFilterOption } from '../../../banidb';
 
 const remote = require('@electron/remote');
 

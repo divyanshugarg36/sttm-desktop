@@ -1,26 +1,128 @@
 diff --git a/node_modules/vite-plugin-electron-renderer/dist/index.cjs b/node_modules/vite-plugin-electron-renderer/dist/index.cjs
-index 2a381b4..c274e1a 100644
+index 2a381b4..97c2da1 100644
 --- a/node_modules/vite-plugin-electron-renderer/dist/index.cjs
 +++ b/node_modules/vite-plugin-electron-renderer/dist/index.cjs
-@@ -502,6 +502,8 @@ function rewriteStaticImports(code, program, externalModules) {
+@@ -473,7 +473,8 @@ export * from ${JSON.stringify(source)};
+ 			filter: { id: resolvedModulesRegex },
+ 			async handler(source) {
+ 				if (isBuild && bundledModuleSet.has(source)) return bundleDependency(source);
+-				const cacheKey = source.startsWith("node:") ? source.slice(5) : source;
++				// Keep the prefix for prefix-only built-ins (node:sqlite, node:test, node:sea).
++				const cacheKey = source.startsWith("node:") && NODE_BUILTINS.includes(source.slice(5)) ? source.slice(5) : source;
+ 				const cached = moduleCache.get(cacheKey);
+ 				if (cached) return cached;
+ 				const resolved = writeGeneratedModule(cacheDir, cacheKey, await buildSnippet(cacheKey));
+@@ -500,15 +501,33 @@ export * from ${JSON.stringify(source)};
+ }
+ function rewriteStaticImports(code, program, externalModules) {
  	const rewrites = [];
++	// Leading imports become requires in place. An import further down (bundlers
++	// can leave a dependency's import mid-file) is moved to the top instead, as
++	// ES imports are hoisted and may be used anywhere in the module.
++	let leading = true;
++	let prologueEnd = 0;
++	const hoisted = [];
++	let importCount = 0;
  	for (const node of program.body) {
- 		if (node.type === "ExpressionStatement" && node.directive && rewrites.length === 0) continue;
+-		if (node.type === "ExpressionStatement" && node.directive && rewrites.length === 0) continue;
+-		if (node.type !== "ImportDeclaration") break;
+-		if (externalModules.has(node.source.value)) rewrites.push({
+-			start: node.start,
+-			end: node.end,
+-			replacement: buildRequireImport(node, rewrites.length)
+-		});
++		if (node.type === "ExpressionStatement" && node.directive && leading && importCount === 0) {
++			prologueEnd = node.end;
++			continue;
++		}
 +		// Re-exports (`export { x } from "y"`) run no code, so imports after them are still leading imports.
 +		if ((node.type === "ExportNamedDeclaration" || node.type === "ExportAllDeclaration") && node.source) continue;
- 		if (node.type !== "ImportDeclaration") break;
- 		if (externalModules.has(node.source.value)) rewrites.push({
- 			start: node.start,
++		if (node.type !== "ImportDeclaration") {
++			leading = false;
++			continue;
++		}
++		if (!externalModules.has(node.source.value)) continue;
++		const replacement = buildRequireImport(node, importCount++);
++		if (leading) rewrites.push({ start: node.start, end: node.end, replacement });
++		else {
++			hoisted.push(replacement);
++			rewrites.push({ start: node.start, end: node.end, replacement: "" });
++		}
+ 	}
++	if (hoisted.length > 0) rewrites.push({ start: prologueEnd, end: prologueEnd, replacement: `\n${hoisted.join("\n")}\n` });
+ 	const dynamicImports = collectDynamicImportExpressions(program);
+ 	for (const dynamicImport of dynamicImports) {
+ 		if (!isStringLiteral(dynamicImport.source)) continue;
+@@ -520,7 +539,7 @@ function rewriteStaticImports(code, program, externalModules) {
+ 		});
+ 	}
+ 	if (rewrites.length === 0) return null;
+-	rewrites.sort((a, b) => a.start - b.start);
++	rewrites.sort((a, b) => a.start - b.start || a.end - b.end);
+ 	let lastIndex = 0;
+ 	let output = "";
+ 	for (const { start, end, replacement } of rewrites) {
 diff --git a/node_modules/vite-plugin-electron-renderer/dist/index.mjs b/node_modules/vite-plugin-electron-renderer/dist/index.mjs
-index 13fcf6d..217e27a 100644
+index 13fcf6d..316a0cb 100644
 --- a/node_modules/vite-plugin-electron-renderer/dist/index.mjs
 +++ b/node_modules/vite-plugin-electron-renderer/dist/index.mjs
-@@ -474,6 +474,8 @@ function rewriteStaticImports(code, program, externalModules) {
+@@ -445,7 +445,8 @@ export * from ${JSON.stringify(source)};
+ 			filter: { id: resolvedModulesRegex },
+ 			async handler(source) {
+ 				if (isBuild && bundledModuleSet.has(source)) return bundleDependency(source);
+-				const cacheKey = source.startsWith("node:") ? source.slice(5) : source;
++				// Keep the prefix for prefix-only built-ins (node:sqlite, node:test, node:sea).
++				const cacheKey = source.startsWith("node:") && NODE_BUILTINS.includes(source.slice(5)) ? source.slice(5) : source;
+ 				const cached = moduleCache.get(cacheKey);
+ 				if (cached) return cached;
+ 				const resolved = writeGeneratedModule(cacheDir, cacheKey, await buildSnippet(cacheKey));
+@@ -472,15 +473,33 @@ export * from ${JSON.stringify(source)};
+ }
+ function rewriteStaticImports(code, program, externalModules) {
  	const rewrites = [];
++	// Leading imports become requires in place. An import further down (bundlers
++	// can leave a dependency's import mid-file) is moved to the top instead, as
++	// ES imports are hoisted and may be used anywhere in the module.
++	let leading = true;
++	let prologueEnd = 0;
++	const hoisted = [];
++	let importCount = 0;
  	for (const node of program.body) {
- 		if (node.type === "ExpressionStatement" && node.directive && rewrites.length === 0) continue;
+-		if (node.type === "ExpressionStatement" && node.directive && rewrites.length === 0) continue;
+-		if (node.type !== "ImportDeclaration") break;
+-		if (externalModules.has(node.source.value)) rewrites.push({
+-			start: node.start,
+-			end: node.end,
+-			replacement: buildRequireImport(node, rewrites.length)
+-		});
++		if (node.type === "ExpressionStatement" && node.directive && leading && importCount === 0) {
++			prologueEnd = node.end;
++			continue;
++		}
 +		// Re-exports (`export { x } from "y"`) run no code, so imports after them are still leading imports.
 +		if ((node.type === "ExportNamedDeclaration" || node.type === "ExportAllDeclaration") && node.source) continue;
- 		if (node.type !== "ImportDeclaration") break;
- 		if (externalModules.has(node.source.value)) rewrites.push({
- 			start: node.start,
++		if (node.type !== "ImportDeclaration") {
++			leading = false;
++			continue;
++		}
++		if (!externalModules.has(node.source.value)) continue;
++		const replacement = buildRequireImport(node, importCount++);
++		if (leading) rewrites.push({ start: node.start, end: node.end, replacement });
++		else {
++			hoisted.push(replacement);
++			rewrites.push({ start: node.start, end: node.end, replacement: "" });
++		}
+ 	}
++	if (hoisted.length > 0) rewrites.push({ start: prologueEnd, end: prologueEnd, replacement: `\n${hoisted.join("\n")}\n` });
+ 	const dynamicImports = collectDynamicImportExpressions(program);
+ 	for (const dynamicImport of dynamicImports) {
+ 		if (!isStringLiteral(dynamicImport.source)) continue;
+@@ -492,7 +511,7 @@ function rewriteStaticImports(code, program, externalModules) {
+ 		});
+ 	}
+ 	if (rewrites.length === 0) return null;
+-	rewrites.sort((a, b) => a.start - b.start);
++	rewrites.sort((a, b) => a.start - b.start || a.end - b.end);
+ 	let lastIndex = 0;
+ 	let output = "";
+ 	for (const { start, end, replacement } of rewrites) {

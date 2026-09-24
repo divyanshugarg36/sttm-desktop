@@ -23,8 +23,9 @@ const { dependencies } = JSON.parse(readFileSync(resolve(projectRoot, 'package.j
 
 // Deep imports the renderer uses, which need their own shim. sikhi-ui is a
 // devDependency, so it is bundled; its react/jsx-runtime import must still load
-// the app's React, not a second copy.
-const subpathImports = ['react-dom/client', 'react/jsx-runtime'];
+// the app's React, not a second copy. node:sqlite (the SQLite BaniDB) is a Node
+// built-in the plugin doesn't list, so Vite would stub it out for the browser.
+const subpathImports = ['react-dom/client', 'react/jsx-runtime', 'node:sqlite'];
 
 const nodeLoaded = Object.fromEntries(
   [...Object.keys(dependencies), ...subpathImports].map((name) => [name, { type: 'cjs' as const }]),
@@ -54,6 +55,8 @@ export default defineConfig({
   // the build mode in.
   define: {
     'process.env.NODE_ENV': 'process.env.NODE_ENV',
+    // A local SQLite BaniDB to use in development (see banidb/sqlite-search.js).
+    'process.env.STTM_BANIDB_SQLITE': 'process.env.STTM_BANIDB_SQLITE',
   },
   plugins: [
     // Match the Babel setup: classic runtime, every JSX file imports React.
