@@ -11,8 +11,8 @@ import { SilenceDetector, createAudioAnalyser } from './silence';
 
 import { classNames } from '../../../common/utils';
 import {
-  // IconButton, InputBox and VoiceWave: old search bar (commented out below).
-  FilterDropdown,
+  // FilterDropdown, IconButton, InputBox and VoiceWave: old search bar and
+  // filters (commented out below).
   SearchResults,
   FilterTag,
 } from '../../../common/sttm-ui';
@@ -599,6 +599,7 @@ const SearchContent = () => {
             )}
           </div>
         )}
+        {/* Old filter dropdowns; LibrarySearchBar shows source, writer and raag.
         <div className="filters">
           <span className="filters-label">Filter by </span>
           <FilterDropdown
@@ -644,6 +645,7 @@ const SearchContent = () => {
             currentValue={currentSource}
           />
         </div>
+        */}
       </div>
       <div className={classNames('search-results', isShowFiltersTag && 'filter-applied')}>
         <div className="verse-block">

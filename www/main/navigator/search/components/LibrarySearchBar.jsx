@@ -137,6 +137,8 @@ export const LibrarySearchBar = ({
         // mousetrap: the app's keyboard shortcuts still fire while typing here.
         className: `sui-search-bar__input mousetrap ${isGurmukhi ? 'gurmukhi' : 'english'}`,
         disabled,
+        // Gurbani Akhar queries aren't English words.
+        spellCheck: false,
         onKeyDown: handleKeyDown,
         onBlur: () =>
           analytics.trackEvent({
