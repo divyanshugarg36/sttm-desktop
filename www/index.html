@@ -58,11 +58,8 @@
   <div id="app-frame">
     <div id="navigator" class="noselect"></div>
   </div>
-  <!-- Dev server (http): Vite serves the source entry. Packaged app (file): the built bundle. -->
-  <script type="module">
-    const entry = window.location.protocol === 'file:' ? './dist/main.js' : '/main/entries/main.jsx';
-    import(/* @vite-ignore */ entry);
-  </script>
+  <!-- Built by Vite; the dev server swaps in the source entry (see vite.config.mts). -->
+  <script type="module" src="./dist/main.js"></script>
   <script>
     const remote = require("@electron/remote");
     const { i18n } = remote.require('./app');

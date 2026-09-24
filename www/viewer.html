@@ -11,10 +11,7 @@
   </head>
   <body class="viewer">
     <div id="viewer-container"></div>
-    <!-- Dev server (http): Vite serves the source entry. Packaged app (file): the built bundle. -->
-    <script type="module">
-      const entry = window.location.protocol === 'file:' ? './dist/viewer.js' : '/main/entries/viewer.jsx';
-      import(/* @vite-ignore */ entry);
-    </script>
+    <!-- Built by Vite; the dev server swaps in the source entry (see vite.config.mts). -->
+    <script type="module" src="./dist/viewer.js"></script>
   </body>
 </html>

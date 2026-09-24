@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { defineConfig } from 'vite';
+import { defineConfig, type Plugin } from 'vite';
 import react from '@vitejs/plugin-react';
 import renderer from 'vite-plugin-electron-renderer';
 
@@ -28,6 +28,21 @@ const nodeLoaded = Object.fromEntries(
   [...Object.keys(dependencies), ...subpathImports].map((name) => [name, { type: 'cjs' as const }]),
 );
 
+// The HTML files load the built bundles (dist/<entry>.js) with static module
+// scripts, which run before the page's load event, like the inline scripts
+// they replaced: the main process messages the windows on did-finish-load, so
+// their IPC listeners must be registered by then. When the dev server serves
+// the HTML, point those tags at the source entries instead.
+const devSourceEntries: Plugin = {
+  name: 'sttm-dev-source-entries',
+  apply: 'serve',
+  transformIndexHtml: {
+    // Before Vite's own HTML processing, which rewrites the relative src.
+    order: 'pre',
+    handler: (html) => html.replace(/\.\/dist\/(main|viewer|overlay)\.js/g, '/main/entries/$1.jsx'),
+  },
+};
+
 export default defineConfig({
   root: resolve(projectRoot, 'www'),
   base: './',
@@ -42,6 +57,7 @@ export default defineConfig({
     // Match the Babel setup: classic runtime, every JSX file imports React.
     react({ jsxRuntime: 'classic' }),
     renderer({ resolve: nodeLoaded }),
+    devSourceEntries,
   ],
   build: {
     outDir: resolve(projectRoot, 'www/dist'),

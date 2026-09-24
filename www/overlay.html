@@ -10,10 +10,7 @@
   <body>
     <div id="overlay-container"></div>
 
-    <!-- Dev server (http): Vite serves the source entry. Packaged app (file): the built bundle. -->
-    <script type="module">
-      const entry = window.location.protocol === 'file:' ? './dist/overlay.js' : '/main/entries/overlay.jsx';
-      import(/* @vite-ignore */ entry);
-    </script>
+    <!-- Built by Vite; the dev server swaps in the source entry (see vite.config.mts). -->
+    <script type="module" src="./dist/overlay.js"></script>
   </body>
 </html>
