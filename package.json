@@ -171,6 +171,9 @@
       "!tsconfig.json",
       "!vite.config.mts"
     ],
+    "asarUnpack": [
+      "**/node_modules/sharp/**/*"
+    ],
     "extraResources": [
       "data.db"
     ],
