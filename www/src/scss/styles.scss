@@ -43,6 +43,9 @@ $tag-popular-color: #ce744e;
   width: calc(#{$presenter-panes-container} - calc(#{$presenter-pane-gap} * 1.5));
 }
 
+// sikhi-ui component styles first, so the app's own rules still win on ties.
+@import '@khalisfoundation/sikhi-ui/dist/styles';
+
 @import 'controller.scss', 'markdown', 'themes/themes', 'update', 'viewer', 'window', 'addon', 'akhandpaatt',
   'overlay', 'animations', 'noty', 'ui-library', 'workspace-bar', 'navigator/common/pane',
   'navigator/common/verse-block', 'navigator/search/searchNew', 'navigator/shabad/shabad', 'navigator/shabad/multipane',

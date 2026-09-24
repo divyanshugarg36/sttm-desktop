@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
+import { Range, SimpleSelect, Toggle } from '@khalisfoundation/sikhi-ui';
 
-import { Switch, Checkbox } from '../../common/sttm-ui';
+import { Checkbox } from '../../common/sttm-ui';
 import { convertToCamelCase } from '../../common/utils';
 import { settings } from '../../../configs/user-settings.json';
 import { userSettingsActions } from '../../common/store/redux/userSettingsSlice';
@@ -113,37 +114,41 @@ const Setting = ({ settingObj, stateVar, stateFunction }) => {
       settingDOM = (
         <>
           <p className="range-value">{userSettings[stateVar]}</p>
-          <input
-            type="range"
-            data-value={userSettings[stateVar]}
-            value={userSettings[stateVar]}
+          <Range
+            className="setting-range"
+            value={Number(userSettings[stateVar])}
             min={min}
             max={max}
             step={step}
+            showTicks={false}
             onChange={handleInputChange}
-          ></input>
+            inputProps={{ 'aria-label': i18n.t(`SETTINGS.${title}`) }}
+          />
         </>
       );
       break;
     case 'dropdown':
       settingDOM = (
-        <select value={userSettings[stateVar]} onChange={handleInputChange}>
-          {Object.keys(options).map((op, opIndex) => (
-            <option key={`control-dropdown-options-${opIndex}`} value={op}>
-              {i18n.t(`SETTINGS.${options[op]}`)}
-            </option>
-          ))}
-        </select>
+        <SimpleSelect
+          variant="bordered"
+          value={userSettings[stateVar]}
+          onChange={handleInputChange}
+          options={Object.keys(options).map((op) => ({
+            value: op,
+            label: i18n.t(`SETTINGS.${options[op]}`),
+          }))}
+        />
       );
       break;
     case 'switch':
       settingDOM = (
-        <Switch
-          controlId={`${title}-switch`}
-          className={`control-item-switch-${title}`}
-          value={userSettings[stateVar]}
-          onToggle={handleInputChange}
-          disabled={userSettings[convertToCamelCase(settingObj.disableWhen)]}
+        <Toggle
+          id={`${title}-switch`}
+          wrapperClassName={`control-item-switch-${title}`}
+          size="lg"
+          checked={!!userSettings[stateVar]}
+          onChange={(event) => handleInputChange(event.target.checked)}
+          disabled={!!userSettings[convertToCamelCase(settingObj.disableWhen)]}
         />
       );
       break;
