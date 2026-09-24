@@ -36,10 +36,9 @@ const appstore = false;
 const maxChangeLogSeenCount = 5;
 
 /* eslint-disable import/no-unresolved, import/extensions */
-const Store = require('./www/js/store');
-const {
-  savedSettingsCamelCase,
-} = require('./www/js/common/store/user-settings/get-saved-user-settings');
+// Built from www/main by `npm run build-main` (vite.main.config.mts).
+const Store = require('./dist/main/store');
+const { savedSettingsCamelCase } = require('./dist/main/get-saved-user-settings');
 const { styles } = require('./resetViewerStyles');
 /* eslint-enable */
 
