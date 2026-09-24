@@ -73,8 +73,8 @@ const Navigator = () => {
   return (
     <>
       <div className={isCurrentWorkSpaceSingleDisplay ? 'single-display-viewer' : 'navigator-row'}>
-        {!isCurrentWorkSpaceSingleDisplay && <SearchPane />}
         <ViewerPane />
+        {!isCurrentWorkSpaceSingleDisplay && <SearchPane />}
       </div>
       {controllerMarkup}
     </>
