@@ -2,7 +2,6 @@ const electron = require('electron');
 const fs = require('fs');
 const ldDefaultsDeep = require('lodash.defaultsdeep');
 const ldGet = require('lodash.get');
-const ldSet = require('lodash.set');
 const path = require('path');
 
 /* eslint-disable global-require */
@@ -13,6 +12,26 @@ if (electron.app) {
   remote = require('@electron/remote');
 }
 /* eslint-enable */
+
+// Set a value at a dot-separated path such as 'userPrefs.app.theme', creating
+// objects along the way (what lodash.set did for these keys). Refuses keys that
+// would reach Object.prototype.
+const UNSAFE_KEYS = ['__proto__', 'constructor', 'prototype'];
+function setByPath(target, keyPath, value) {
+  const keys = String(keyPath).split('.');
+  if (keys.some((key) => UNSAFE_KEYS.includes(key))) {
+    return;
+  }
+  const lastKey = keys.pop();
+  let node = target;
+  keys.forEach((key) => {
+    if (node[key] === null || typeof node[key] !== 'object') {
+      node[key] = {};
+    }
+    node = node[key];
+  });
+  node[lastKey] = value;
+}
 
 function parseDataFile(filePath, defaults) {
   // We'll try/catch it in case the file doesn't exist yet,
@@ -64,7 +83,7 @@ class Store {
 
   // ...and this will set it
   set(key, val) {
-    ldSet(this.data, key, val);
+    setByPath(this.data, key, val);
     this.combined = ldDefaultsDeep(this.data, this.defaults);
 
     // Wait, I thought using the node.js' synchronous APIs was bad form?
