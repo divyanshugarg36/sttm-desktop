@@ -72,6 +72,8 @@ export default defineConfig({
         main: resolve(projectRoot, 'www/main/entries/main.jsx'),
         viewer: resolve(projectRoot, 'www/main/entries/viewer.jsx'),
         overlay: resolve(projectRoot, 'www/main/entries/overlay.jsx'),
+        // Help, legend and changelog windows.
+        markdown: resolve(projectRoot, 'www/main/markdownToHTML.js'),
       },
       output: {
         entryFileNames: '[name].js',

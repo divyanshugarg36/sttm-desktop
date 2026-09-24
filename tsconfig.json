@@ -1,7 +1,8 @@
 {
-  // Type-checking only: Babel compiles www/main (JS and TS) to www/js, so tsc
-  // never emits. Existing JS is allowed but not type-checked (checkJs: false),
-  // so files can move to TypeScript one at a time.
+  // Type-checking only: Vite compiles www/main (vite.config.mts for the
+  // windows, vite.main.config.mts for the main process), so tsc never emits.
+  // Existing JS is allowed but not type-checked (checkJs: false), so files can
+  // move to TypeScript one at a time.
   "compilerOptions": {
     "target": "ES2022",
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
@@ -19,5 +20,5 @@
     "skipLibCheck": true,
     "types": ["node", "react", "react-dom"]
   },
-  "include": ["www/main/**/*", "types/**/*.d.ts", "vite.config.mts"]
+  "include": ["www/main/**/*", "types/**/*.d.ts", "vite.config.mts", "vite.main.config.mts"]
 }
