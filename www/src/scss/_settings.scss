@@ -3,7 +3,7 @@
 .settings-wrapper {
   display: flex;
   height: 95vh;
-  left: 60px;
+  left: $toolbar-offset + 12px;
   margin-top: 24px;
   overflow: auto;
   position: relative;

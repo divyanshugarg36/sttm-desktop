@@ -144,7 +144,7 @@ button {
   display: flex;
   height: 100vh;
   justify-content: flex-start;
-  left: 60px;
+  left: $toolbar-offset + 12px;
   position: fixed;
   top: 0;
   width: calc(100% - 100px);
@@ -157,7 +157,7 @@ button {
 .sync-wrapper, .auth-wrapper {
   bottom: 0;
   height: 100vh;
-  left: 60px;
+  left: $toolbar-offset + 12px;
   max-height: 780px;
   max-width: 850px;
   overflow: auto;
@@ -420,18 +420,39 @@ button {
   padding-top: 10px;
   z-index: 1300;
 
-  // sikhi-ui icon PrimaryButtons (common/sttm-ui/icon inside).
-  .toolbar-item {
-    margin-bottom: 12px;
+  // Top and bottom groups: sikhi-ui SideNavs, icons only.
+  .sui-side-nav {
+    background: transparent;
+    border-right: none;
+    gap: 12px;
+    padding: 0 4px 12px;
+    width: 100%;
 
-    svg {
-      height: 22px;
-      width: 22px;
+    &__item {
+      color: rgba(255, 255, 255, 0.75);
+      gap: 0;
+      padding: 6px 0;
+
+      &:hover:not(.sui-side-nav__item--active) {
+        background: rgba(255, 255, 255, 0.12);
+        color: #fff;
+      }
     }
-  }
 
-  #tool-lock-screen {
-    display: none;
+    &__item--active {
+      background: rgba(255, 255, 255, 0.22);
+      color: #fff;
+    }
+
+    // Visually hidden; still names the button for screen readers.
+    &__label {
+      clip-path: inset(50%);
+      height: 1px;
+      overflow: hidden;
+      position: absolute;
+      white-space: nowrap;
+      width: 1px;
+    }
   }
 }
 
@@ -441,7 +462,7 @@ button {
   font-size: 42px;
   height: 100vh;
   justify-content: center;
-  left: 40px;
+  left: $toolbar-offset;
   position: fixed;
   top: 0;
   width: 100vw;
@@ -685,7 +706,7 @@ button {
   flex-direction: column;
   height: 100vh;
   justify-content: flex-end;
-  left: 100px;
+  left: $toolbar-offset + 52px;
   position: fixed;
   top: 0;
   width: calc(100% - 100px);
@@ -723,11 +744,6 @@ button {
 
   padding-top: $presenter-pane-gap;
   width: $toolbar-offset;
-
-  .toolbar-item {
-    height: 36px;
-    width: 36px;
-  }
 
   .bani-list,
   .ceremonies-list {

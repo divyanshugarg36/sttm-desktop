@@ -230,9 +230,14 @@
     color: $text-base;
   }
 
-  #toolbar,
-  #toolbar-nav {
+  #toolbar {
     background: $bg-alt;
+  }
+
+  // Side nav: the dark theme's accent is near-white, so use the design
+  // system's dark navy to keep the white icons readable.
+  #toolbar-nav {
+    background: #203c6a;
   }
 
   .pane,

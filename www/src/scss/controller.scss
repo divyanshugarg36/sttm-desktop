@@ -96,7 +96,8 @@ ul {
   flex-wrap: wrap;
   height: 100%;
   overflow-x: auto;
-  padding: 10px 10px 40px 50px;
+  // Clear the side nav (#toolbar-nav), plus a 2px gap.
+  padding: 10px 10px 40px ($toolbar-offset + 2px);
   width: 100%;
 
   &.single-display {

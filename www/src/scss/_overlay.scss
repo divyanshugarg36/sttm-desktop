@@ -13,7 +13,7 @@ $toolbar-width: 40px;
 }
 
 .sundar-gutka {
-  left: 100px;
+  left: $toolbar-offset + 52px;
   max-width: calc(100% - #{$toolbar-width});
   position: fixed;
 }

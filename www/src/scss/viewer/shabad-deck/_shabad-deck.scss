@@ -13,7 +13,8 @@
 
   &.single-display-mode {
     border: none;
-    padding-left: 48px;
+    // Clear the controller's side nav, drawn over the single-display viewer.
+    padding-left: $toolbar-offset;
     padding-top: 30px;
 
     &.win32 {
@@ -21,7 +22,7 @@
     }
 
     + .viewer-logo {
-      left: 80px;
+      left: $toolbar-offset + 32px;
     }
   }
 
