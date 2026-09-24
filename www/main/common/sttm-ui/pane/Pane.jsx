@@ -8,7 +8,7 @@ import PaneHeader from './PaneHeader';
 const noData = {};
 
 const Pane = ({ content = null, header = null, footer = null, className = '', data = noData }) => (
-  <Box variant="solid" className={`pane ${className}`.trim()}>
+  <Box variant="cool" className={`pane ${className}`.trim()}>
     {header ? <PaneHeader Header={header} data={data} /> : ''}
     {content ? <PaneContent Content={content} data={data} /> : ''}
     {footer ? <PaneFooter Footer={footer} data={data} /> : ''}

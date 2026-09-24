@@ -16,11 +16,18 @@
   .multipane-grid & {
     min-width: 300px;
   }
-  // Panes are sikhi-ui Boxes (solid variant): rounded card with a soft shadow.
-  // overflow: hidden above clips the header and footer to the corners.
-  &.sui-box {
+  // Panes are sikhi-ui Boxes (cool variant): a rounded gradient card with a
+  // soft shadow. overflow: hidden above clips the bars to the corners.
+  &.sui-box--cool {
+    // Beats the themes' flat `.pane` background (they load earlier).
+    background: var(--sui-atom-box-cool-background);
     border-radius: 12px;
     box-shadow: var(--sui-atom-box-gradient-shadow);
+
+    // See-through content area, so the gradient shows behind the results.
+    > .pane-content {
+      background-color: transparent;
+    }
   }
   i {
     cursor: pointer;
