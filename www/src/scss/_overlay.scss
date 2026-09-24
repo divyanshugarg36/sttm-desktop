@@ -588,8 +588,8 @@ input[type='color'] {
         text-align: center;
       }
 
-      &:first-child(),
-      &:last-child() {
+      &:first-child,
+      &:last-child {
         margin: 0;
       }
       &.control-switch {

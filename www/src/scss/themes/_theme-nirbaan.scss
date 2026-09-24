@@ -11,9 +11,9 @@ $themeNirbaan: (
 );
 
 .theme-nirbaan {
-  @include generateTheme($themeNirbaan...);
-
   background-position: center center;
+
+  @include generateTheme($themeNirbaan...);
 
   .shabad-pane .shabad-pane-active {
     background: $dull-blue;

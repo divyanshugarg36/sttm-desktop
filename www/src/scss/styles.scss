@@ -10,7 +10,7 @@ $tag-nitnem-color: #5488d6;
 $tag-popular-color: #ce744e;
 
 @mixin calculateTop($row-num, $is-windows: 0, $keyboard-offset: 0) {
-  $screen-offset: 50 * $row-num;
+  $screen-offset: 50% * $row-num;
   $pane-gap-ratio: 1;
 
   @if $row-num == 1 {
@@ -19,14 +19,14 @@ $tag-popular-color: #ce744e;
 
   @if $is-windows == 0 {
     top: calc(
-      #{$screen-offset}% +
+      #{$screen-offset} +
         #{($presenter-pane-gap * $pane-gap-ratio) +
         $keyboard-offset +
         $ws-offset}
     );
   } @else if $is-windows == 1 {
     top: calc(
-      #{$screen-offset}% +
+      #{$screen-offset} +
         #{$presenter-pane-gap +
         $title-bar-offset +
         $keyboard-offset +
@@ -1113,7 +1113,7 @@ body.show-overlay {
   margin: 10px;
   padding: 10px;
   text-align: center;
-  text-shadow: 1px 1px 1px rgba(1px, 1px, 1px, 0.5);
+  text-shadow: 1px 1px 1px rgba(1, 1, 1, 0.5);
   text-transform: capitalize;
   transition: 0.1s all ease;
   width: 115px;

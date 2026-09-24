@@ -73,14 +73,16 @@
   $visraam,
   $yamki
 ) {
+  // Declarations before nested rules: Dart Sass emits declarations that
+  // follow nested rules in place (after them), where LibSass moved them first.
+  background-color: $background-color;
+  background-image: $background-image;
+
   @if $type == 'light' {
     @include light-base();
   } @else {
     @include dark-base();
   }
-
-  background-color: $background-color;
-  background-image: $background-image;
 
   .slide-gurbani {
     color: $gurbani;

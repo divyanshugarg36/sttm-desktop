@@ -475,10 +475,10 @@
     .search-li,
     .shabad-li {
       &:hover {
+        background-color: $transparent-light-white;
         &:has(.flower-verse) {
           background-color: transparent;
         }
-        background-color: $transparent-light-white;
       }
     }
   }
