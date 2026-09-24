@@ -429,8 +429,19 @@ button {
     width: 100%;
 
     &__item {
+      color: rgba(255, 255, 255, 0.75);
       gap: 0;
       padding: 6px 0;
+
+      &:hover:not(.sui-side-nav__item--active) {
+        background: rgba(255, 255, 255, 0.12);
+        color: #fff;
+      }
+    }
+
+    &__item--active {
+      background: rgba(255, 255, 255, 0.22);
+      color: #fff;
     }
 
     // Visually hidden; still names the button for screen readers.

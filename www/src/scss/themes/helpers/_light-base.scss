@@ -202,9 +202,13 @@
   }
 
   #toolbar,
-  #toolbar-nav,
   .tingle-modal-box__footer {
     background-color: $nav-bg;
+  }
+
+  // Side nav: the design system's accent colour, with white icons.
+  #toolbar-nav {
+    background-color: var(--sui-semantic-accent-default);
   }
 
   .tingle-modal-box {
