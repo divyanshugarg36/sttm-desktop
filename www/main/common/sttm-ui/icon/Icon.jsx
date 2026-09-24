@@ -8,6 +8,7 @@ import {
   ClockCircle,
   Dots,
   EyeOff,
+  Flower,
   Heart,
   Lock,
   LockOpen,
@@ -18,6 +19,7 @@ import {
   Trash,
   TypeBold,
   TypeItalic,
+  VolumeHigh,
   X,
 } from '@mynaui/icons-react';
 
@@ -30,6 +32,7 @@ const extraIcons = {
   clock: ClockCircle,
   dots: Dots,
   'eye-off': EyeOff,
+  flower: Flower,
   heart: Heart,
   italic: TypeItalic,
   lock: Lock,
@@ -39,6 +42,7 @@ const extraIcons = {
   'minus-circle': MinusCircle,
   target: Target,
   trash: Trash,
+  'volume-high': VolumeHigh,
   x: X,
 };
 

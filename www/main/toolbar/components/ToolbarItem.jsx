@@ -1,9 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
+import { PrimaryButton } from '@khalisfoundation/sikhi-ui';
 
 import { DEFAULT_OVERLAY } from '../../common/constants';
 import { setOverlayScreen } from '../../common/store/redux/appSlice';
+import { Icon } from '../../common/sttm-ui';
 
 const remote = require('@electron/remote');
 
@@ -23,12 +25,26 @@ const ToolbarItem = ({ itemName }) => {
     ceremonies: i18n.t('TOOLBAR.CEREMONIES'),
     announcement: i18n.t('QUICK_TOOLS.ANNOUNCEMENTS'),
   };
+  const iconName = {
+    'sunder-gutka': 'sundar-gutka',
+    ceremonies: 'flower',
+    announcement: 'volume-high',
+    'sync-button': 'bani-controller',
+    'lock-screen': 'lock',
+    'auth-dialog': userToken ? 'logout' : 'user',
+    settings: 'cog',
+  };
 
   return (
-    <div
+    <PrimaryButton
       id={`tool-${itemName}`}
       className={`toolbar-item ${isAuthItem && userToken ? 'auth-logged-in' : ''}`}
+      mode="icon"
+      size="sm"
+      shape="rounded-md"
+      variant={isSelectedOverlay ? 'default' : 'muted'}
       title={displayName[itemName]}
+      aria-label={displayName[itemName]}
       onClick={() => {
         document.body.classList.toggle(`overlay-${itemName}-active`, !isSelectedOverlay);
         if (isSelectedOverlay) {
@@ -37,7 +53,9 @@ const ToolbarItem = ({ itemName }) => {
 
         return dispatch(setOverlayScreen(itemName));
       }}
-    ></div>
+    >
+      <Icon name={iconName[itemName]} />
+    </PrimaryButton>
   );
 };
 

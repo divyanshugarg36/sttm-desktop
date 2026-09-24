@@ -160,10 +160,6 @@
     }
 
     .select-bani {
-      &-dd-group:hover {
-        background-color: $transparent-light-black;
-      }
-
       option {
         color: $base-text;
       }
