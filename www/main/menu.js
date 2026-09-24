@@ -4,7 +4,7 @@ import { savedSettings } from './common/store/user-settings/get-saved-user-setti
 import { applyUserSettings } from './common/store/user-settings/apply-user-settings';
 import { API_ENDPOINT } from './api-config';
 
-const request = require('request');
+const fetch = require('node-fetch');
 const moment = require('moment');
 const electron = require('electron');
 
@@ -79,21 +79,21 @@ const showNotificationsModal = (message) => {
 };
 
 const getNotifications = (timeStamp, callback) => {
-  request(
-    `${API_ENDPOINT}/messages/desktop/${typeof timeStamp === 'string' ? timeStamp : ''}`,
-    (error, response) => {
+  fetch(`${API_ENDPOINT}/messages/desktop/${typeof timeStamp === 'string' ? timeStamp : ''}`)
+    .then((response) => response.text())
+    .then((body) => {
       let message;
-      if (response) {
-        try {
-          message = JSON.parse(response.body);
-        } catch (e) {
-          // eslint-disable-next-line no-console
-          console.error(e);
-        }
+      try {
+        message = JSON.parse(body);
+      } catch (e) {
+        // eslint-disable-next-line no-console
+        console.error(e);
       }
-      callback.apply(this, [message]);
-    },
-  );
+      return message;
+    })
+    // No response at all (offline, network error): no message, as before.
+    .catch(() => undefined)
+    .then((message) => callback.apply(this, [message]));
 };
 
 // On href clicks, open the link in actual browser

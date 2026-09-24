@@ -1,4 +1,5 @@
 import tingle from './common/vendor/tingle';
+import { downloadFile } from './common/utils/download-file';
 
 const { ipcRenderer } = require('electron');
 const electron = require('electron');
@@ -6,8 +7,7 @@ const extract = require('extract-zip');
 const fs = require('fs');
 const isOnline = require('is-online');
 const path = require('path');
-const request = require('request');
-const progress = require('request-progress');
+const fetch = require('node-fetch');
 const remote = require('@electron/remote');
 const moment = require('moment');
 
@@ -136,72 +136,73 @@ const platform = {
     }
     isOnline().then((online) => {
       if (online) {
-        request(
-          `https://banidb.blob.core.windows.net/database/${database[dbPlatform].md5}`,
-          (error, response, newestDBHash) => {
-            if (!error && response.statusCode === 200) {
-              const curDBHash = store.get('curDBHash');
-              if (force || curDBHash !== newestDBHash) {
-                const dbCompressed = path.resolve(
-                  userDataPath,
-                  database[dbPlatform].dbCompressedName,
-                );
-                progress(
-                  request(
-                    `https://banidb.blob.core.windows.net/database/${database[dbPlatform].dbCompressedName}`,
-                  ),
-                )
-                  .on('progress', (state) => {
-                    const win = remote.getCurrentWindow();
-                    win.setProgressBar(state.percent);
-                    ipcRenderer.emit('database-progress', JSON.stringify(state));
-                  })
-                  .on('end', () => {
-                    ipcRenderer.emit('database-progress', JSON.stringify({ percent: 1 }));
-                    try {
-                      extract(dbCompressed, { dir: newDBFolder }).then(() => {
-                        fs.chmodSync(newDBPath, '755');
-                        // Save the hash for comparison next time
-                        store.set('curDBHash', newestDBHash);
-                        // Delete compressed database
-                        fs.unlinkSync(dbCompressed);
-                        // Replace current DB file with new version
-                        fs.renameSync(newDBPath, dbPath);
-                        if (dbPlatform === 'realm') {
-                          fs.renameSync(newDBSchema, dbSchema);
-                        }
-                        platform.initDB();
-                        // Delete old DBs
-                        // TODO: Update to check if directory and use fs.rmdir
-                        // TODO: Add sttmdesktop.realm.management
-                        const oldDBs = ['data.db', 'sttmdesktop.realm', 'sttmdesktop.realm.lock'];
-                        oldDBs.forEach((oldDB) => {
-                          const oldDBPath = path.resolve(userDataPath, oldDB);
-                          fs.access(oldDBPath, (err) => {
-                            if (!err) {
-                              fs.unlink(oldDBPath, (err1) => {
-                                if (err1) {
-                                  // eslint-disable-next-line no-console
-                                  console.log(`Could not delete old database ${oldDB}: ${err1}`);
-                                }
-                              });
+        fetch(`https://banidb.blob.core.windows.net/database/${database[dbPlatform].md5}`)
+          .then((response) => (response.status === 200 ? response.text() : null))
+          .then((newestDBHash) => {
+            if (newestDBHash === null) return null;
+            const curDBHash = store.get('curDBHash');
+            if (force || curDBHash !== newestDBHash) {
+              const dbCompressed = path.resolve(
+                userDataPath,
+                database[dbPlatform].dbCompressedName,
+              );
+              return downloadFile(
+                `https://banidb.blob.core.windows.net/database/${database[dbPlatform].dbCompressedName}`,
+                dbCompressed,
+                (state) => {
+                  const win = remote.getCurrentWindow();
+                  win.setProgressBar(state.percent);
+                  ipcRenderer.emit('database-progress', JSON.stringify(state));
+                },
+              ).then(() => {
+                ipcRenderer.emit('database-progress', JSON.stringify({ percent: 1 }));
+                try {
+                  extract(dbCompressed, { dir: newDBFolder }).then(() => {
+                    fs.chmodSync(newDBPath, '755');
+                    // Save the hash for comparison next time
+                    store.set('curDBHash', newestDBHash);
+                    // Delete compressed database
+                    fs.unlinkSync(dbCompressed);
+                    // Replace current DB file with new version
+                    fs.renameSync(newDBPath, dbPath);
+                    if (dbPlatform === 'realm') {
+                      fs.renameSync(newDBSchema, dbSchema);
+                    }
+                    platform.initDB();
+                    // Delete old DBs
+                    // TODO: Update to check if directory and use fs.rmdir
+                    // TODO: Add sttmdesktop.realm.management
+                    const oldDBs = ['data.db', 'sttmdesktop.realm', 'sttmdesktop.realm.lock'];
+                    oldDBs.forEach((oldDB) => {
+                      const oldDBPath = path.resolve(userDataPath, oldDB);
+                      fs.access(oldDBPath, (err) => {
+                        if (!err) {
+                          fs.unlink(oldDBPath, (err1) => {
+                            if (err1) {
+                              // eslint-disable-next-line no-console
+                              console.log(`Could not delete old database ${oldDB}: ${err1}`);
                             }
                           });
-                        });
-                        const win = remote.getCurrentWindow();
-                        win.setProgressBar(-1);
+                        }
                       });
-                    } catch (err) {
-                      // handle any errors
-                      /* eslint-disable-next-line no-console */
-                      console.log(err);
-                    }
-                  })
-                  .pipe(fs.createWriteStream(dbCompressed));
-              }
+                    });
+                    const win = remote.getCurrentWindow();
+                    win.setProgressBar(-1);
+                  });
+                } catch (err) {
+                  // handle any errors
+                  /* eslint-disable-next-line no-console */
+                  console.log(err);
+                }
+              });
             }
-          },
-        );
+            return null;
+          })
+          .catch((error) => {
+            // eslint-disable-next-line no-console
+            console.log(`Could not update the database: ${error}`);
+            remote.getCurrentWindow().setProgressBar(-1);
+          });
       } else if (force) {
         global.core.search.offline(10);
       }
