@@ -26,16 +26,9 @@
     }
   }
 
-  div {
-    cursor: pointer;
-    height: 100%;
+  // sikhi-ui FatehTabs (underline): one tab per workspace.
+  .workspace-name {
     min-width: 200px;
-    text-align: center;
-
-    &.active {
-      border-bottom: 1px solid #f00;
-      font-weight: bold;
-    }
   }
 }
 

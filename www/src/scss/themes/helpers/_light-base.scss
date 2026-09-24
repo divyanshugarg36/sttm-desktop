@@ -67,10 +67,6 @@
 
   .workspace-bar {
     background-color: $dialog-bg;
-
-    div:hover {
-      background-color: $nav-bg;
-    }
   }
 
   .viewer-controls {
@@ -145,8 +141,9 @@
         }
       }
 
+      // Transparent, so the pane's gradient sits behind the amber buttons.
       .shortcut-drawer {
-        background: $tray-bg;
+        background: transparent;
       }
     }
   }
@@ -181,14 +178,6 @@
 
   .pane-footer {
     background: $statusbar-bg;
-  }
-
-  .tray-item-icon {
-    background: $button-bg;
-  }
-
-  .tray-item-icon {
-    color: $white;
   }
 
   &.shortcut-tray-true .shortcut-toggle {

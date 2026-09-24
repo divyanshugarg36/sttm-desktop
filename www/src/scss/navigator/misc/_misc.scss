@@ -16,19 +16,11 @@ $misc-footer-active: 70px;
     .misc-header-nav {
       display: inline-flex;
     }
-    a {
-      padding: 0 10px;
-      span {
-        padding: 0 5px;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
-          Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-        font-size: 16px;
-        font-weight: normal;
-      }
-    }
-
+    // sikhi-ui underline FatehTabs, one per panel: icon beside its label.
     .misc-button {
-      @include flex($jc-value: center, $width: fit-content);
+      align-items: center;
+      display: inline-flex;
+      gap: 6px;
     }
 
     .turban {
@@ -84,13 +76,9 @@ $misc-footer-active: 70px;
       .footer-toggler-inactive {
         padding: 12px;
       }
+      // sikhi-ui ghost PrimaryButton.
       .clear-history {
-        cursor: pointer;
-        display: block;
-        padding: 10px;
-        span {
-          margin-left: 6px;
-        }
+        margin-right: 12px;
       }
     }
     &.shortcut-tray-active {
@@ -99,20 +87,9 @@ $misc-footer-active: 70px;
     .shortcut-drawer.shortcut-drawer-active {
       @include flex($jc-value: space-evenly);
       height: 70px;
+      // sikhi-ui amber PrimaryButtons.
       .tray-item-icon {
-        cursor: pointer;
-        font-size: 14px;
-        height: 54px;
-        line-height: 1.15em;
-        padding: 10px;
-        transition: 0.3s all ease;
-
         @include flex($jc-value: center, $width: fit-content);
-
-        &:hover {
-          height: 60px;
-          padding: 14px;
-        }
       }
     }
     .shortcut-drawer {

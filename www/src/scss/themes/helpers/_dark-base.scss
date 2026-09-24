@@ -17,6 +17,18 @@
   // sand-to-blue gradient, tinted into the theme's own surface colour.
   --sui-atom-box-cool-background: linear-gradient(90deg, #{mix(#f6e9d7, $bg-alt, 14%)} 0%, #{mix(#e3e7ed, $bg-alt, 14%)} 100%);
   --sui-atom-box-gradient-shadow: 0 12px 36px rgba(0, 0, 0, 0.4);
+  // sikhi-ui tabs and buttons on dark themes: accents and buttons from the
+  // design system's dark theme, text from this theme's palette.
+  --sui-semantic-accent-default: #d2e2f6;
+  --sui-semantic-border-default: #{$border};
+  --sui-semantic-border-muted: #{$bg-bright};
+  --sui-atom-fateh-tabs-text: #{$text-dim};
+  --sui-atom-button-default-background: #203c6a;
+  --sui-atom-button-default-background-hover: #2a4d7f;
+  --sui-atom-button-default-background-active: #1a3258;
+  --sui-atom-button-amber-text: #{$text-bright};
+  --sui-atom-button-ghost-text: #{$text-base};
+  --sui-atom-button-ghost-background-hover: rgba(255, 255, 255, 0.1);
   $button-bg: $princeton-orange;
   $tray-bg: $philippine-gray;
 
@@ -169,24 +181,6 @@
         color: $text-base;
       }
     }
-
-    .search-type {
-      &-label {
-        &::before {
-          border: 1px solid $light-grey;
-        }
-      }
-
-      &-checkbox {
-        &:checked {
-          + {
-            .search-type-checkmark {
-              filter: brightness(0) invert(0.9);
-            }
-          }
-        }
-      }
-    }
   }
 
   .pane-footer {
@@ -207,16 +201,9 @@
     }
   }
 
+  // Transparent, so the pane's gradient sits behind the amber buttons.
   .shortcut-drawer {
-    background: $tray-bg;
-  }
-
-  .tray-item-icon {
-    background: $button-bg;
-  }
-
-  .tray-item-icon {
-    color: $white;
+    background: transparent;
   }
 
   &.shortcut-tray-true .shortcut-toggle {
@@ -463,11 +450,6 @@
 
   .workspace-bar {
     background-color: $bg-main;
-
-    div:hover {
-      color: $text-base;
-      background-color: $bg-bright;
-    }
   }
 
   ::-webkit-scrollbar-thumb {

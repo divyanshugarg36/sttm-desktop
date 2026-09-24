@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { FatehTab, FatehTabList, FatehTabs, SimpleSelect } from '@khalisfoundation/sikhi-ui';
 import banidb from '../../../common/constants/banidb';
 import {
   setCurrentSearchType,
@@ -34,145 +35,85 @@ function SearchHeader() {
   const { currentLanguage, currentSearchType } = useSelector((state) => state.navigator);
   const dispatch = useDispatch();
 
-  const handleLanguageChange = (event) => {
-    if (event.target.value === 'en' && currentSearchType !== 3) {
+  const languages = [
+    { value: 'gr', label: 'ਗੁਰਮੁਖੀ' },
+    { value: 'en', label: 'English' },
+  ];
+  const searchText = currentLanguage === 'gr' ? gurmukhiSearchText : englishSearchText;
+  const searchTypes = currentLanguage === 'gr' ? gurmukhiSearchTypes : englishSearchTypes;
+
+  const handleLanguageChange = (language) => {
+    if (language === 'en' && currentSearchType !== 3) {
       dispatch(setCurrentSearchType(3));
     }
-    if (event.target.value !== 'en' && currentSearchType !== 0) {
+    if (language !== 'en' && currentSearchType !== 0) {
       dispatch(setCurrentSearchType(0));
     }
-    if (currentLanguage !== event.target.value) {
-      dispatch(setCurrentLanguage(event.target.value));
+    if (currentLanguage !== language) {
+      dispatch(setCurrentLanguage(language));
     }
     analytics.trackEvent({
       category: 'search',
       action: 'language',
-      label: event.target.value,
-    });
-  };
-  const handleSearchType = (event) => {
-    if (currentSearchType !== parseInt(event.target.value, 10)) {
-      dispatch(setCurrentSearchType(parseInt(event.target.value, 10)));
-    }
-    analytics.trackEvent({
-      category: 'search',
-      action: 'search-type',
-      label: event.target.value,
+      label: language,
     });
   };
 
-  const handleSearchOption = (event) => {
-    if (event.target.checked && currentSearchType !== parseInt(event.target.value, 10)) {
-      dispatch(setCurrentSearchType(parseInt(event.target.value, 10)));
+  // `action` keeps the analytics labels of the tabs (search-option) and the
+  // narrow-window dropdown (search-type) apart, as before.
+  const handleSearchType = (value, action) => {
+    if (currentSearchType !== parseInt(value, 10)) {
+      dispatch(setCurrentSearchType(parseInt(value, 10)));
     }
     analytics.trackEvent({
       category: 'search',
-      action: 'search-option',
-      label: event.target.value,
+      action,
+      label: value,
     });
   };
 
   return (
     <>
       <div className="left-pane">
-        <div className="language-selector">
-          <label className="gurmukhi language-btn-label">
-            <span className="label-text">gurmuKI</span>
-            <input
-              type="radio"
-              className="language-radio-btn"
-              value="gr"
-              id="gurmukhi-language"
-              checked={currentLanguage === 'gr'}
-              onChange={handleLanguageChange}
-            />
-            <span className="checkmark"></span>
-          </label>
-          <label className="english language-btn-label">
-            <span className="label-text">English</span>
-            <input
-              type="radio"
-              className="language-radio-btn"
-              value="en"
-              id="english-language"
-              onChange={handleLanguageChange}
-              checked={currentLanguage === 'en'}
-            />
-            <span className="checkmark"></span>
-          </label>
-        </div>
+        <FatehTabs
+          className="language-selector"
+          index={languages.findIndex(({ value }) => value === currentLanguage)}
+          onChange={(index) => handleLanguageChange(languages[index].value)}
+        >
+          <FatehTabList variant="pilled">
+            {languages.map(({ value, label, className }) => (
+              <FatehTab key={value} className={className}>
+                {label}
+              </FatehTab>
+            ))}
+          </FatehTabList>
+        </FatehTabs>
       </div>
-      <>
-        {currentLanguage === 'gr' ? (
-          <>
-            {width < breakpoint ? (
-              <div className="search-select">
-                <select onChangeCapture={handleSearchType}>
-                  {gurmukhiSearchTypes.map((value) => (
-                    <option key={value} value={value}>
-                      {i18n.t(`SEARCH.${gurmukhiSearchText[value]}`)}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            ) : (
-              <div className="search-type">
-                {gurmukhiSearchTypes.map((value) => (
-                  <React.Fragment key={value}>
-                    <input
-                      className="search-type-checkbox"
-                      id={value}
-                      type="radio"
-                      value={value}
-                      onChange={handleSearchOption}
-                      name="search-input"
-                      checked={parseInt(value, 10) === currentSearchType}
-                    />
-                    <span className="search-type-checkmark"></span>
-                    <label htmlFor={value} className="search-type-label">
-                      {i18n.t(`SEARCH.${gurmukhiSearchText[value]}`)}
-                    </label>
-                  </React.Fragment>
-                ))}
-              </div>
-            )}{' '}
-          </>
-        ) : (
-          <>
-            {width < breakpoint ? (
-              <div className="search-select">
-                <select onChangeCapture={handleSearchType}>
-                  {englishSearchTypes.map((value) => (
-                    <option key={value} value={value}>
-                      {i18n.t(`SEARCH.${englishSearchText[value]}`)}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            ) : (
-              <div className="search-type">
-                {englishSearchTypes.map((value) => (
-                  <React.Fragment key={value}>
-                    <input
-                      id={value}
-                      type="radio"
-                      value={value}
-                      name="search-input"
-                      className="search-type-checkbox"
-                      onChange={handleSearchOption}
-                      checked={parseInt(value, 10) === currentSearchType}
-                    />
-                    <span className="search-type-checkmark"></span>
-                    <label htmlFor={value} className="search-type-label">
-                      {i18n.t(`SEARCH.${englishSearchText[value]}`)}
-                    </label>
-                  </React.Fragment>
-                ))}
-              </div>
-            )}
-          </>
-        )}
-      </>
+      {width < breakpoint ? (
+        <SimpleSelect
+          className="search-select"
+          variant="bordered"
+          selectSize="sm"
+          value={String(currentSearchType)}
+          onChange={(event) => handleSearchType(event.target.value, 'search-type')}
+          options={searchTypes.map((value) => ({
+            value,
+            label: i18n.t(`SEARCH.${searchText[value]}`),
+          }))}
+        />
+      ) : (
+        <FatehTabs
+          className="search-type"
+          index={searchTypes.findIndex((value) => parseInt(value, 10) === currentSearchType)}
+          onChange={(index) => handleSearchType(searchTypes[index], 'search-option')}
+        >
+          <FatehTabList variant="pilled">
+            {searchTypes.map((value) => (
+              <FatehTab key={value}>{i18n.t(`SEARCH.${searchText[value]}`)}</FatehTab>
+            ))}
+          </FatehTabList>
+        </FatehTabs>
+      )}
     </>
   );
 }
