@@ -1,5 +1,6 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { FatehTab, FatehTabList, FatehTabs } from '@khalisfoundation/sikhi-ui';
 import { updateViewerScale } from '../../viewer/utils';
 import { setCurrentWorkspace } from '../../common/store/redux/userSettingsSlice';
 
@@ -43,17 +44,18 @@ const WorkspaceBar = () => {
       className={`workspace-bar 
       ${minimizedBySingleDisplay ? 'single-display-hide-top' : 'single-display-show-top'}`}
     >
-      {workspaces.map((workspace, index) => (
-        <div
-          key={index}
-          className={currentWorkspace === workspace ? 'active' : 'inactive'}
-          onClick={() => {
-            handleWorkspaceChange(workspace);
-          }}
-        >
-          <span className="workspace-name"> {workspace} </span>
-        </div>
-      ))}
+      <FatehTabs
+        index={workspaces.indexOf(currentWorkspace)}
+        onChange={(index) => handleWorkspaceChange(workspaces[index])}
+      >
+        <FatehTabList variant="underline">
+          {workspaces.map((workspace) => (
+            <FatehTab key={workspace} className="workspace-name">
+              {workspace}
+            </FatehTab>
+          ))}
+        </FatehTabList>
+      </FatehTabs>
     </div>
   );
 };

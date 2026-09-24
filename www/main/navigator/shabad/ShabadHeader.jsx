@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { PrimaryButton } from '@khalisfoundation/sikhi-ui';
 
 import classNames from '../../common/utils/classnames';
+import { Icon } from '../../common/sttm-ui';
 import FavShabadIcon from './FavShabadIcon';
 import ArrowIcon from './ArrowIcon';
 
@@ -23,23 +25,17 @@ const ShabadHeader = () => {
   return (
     <div className="shabad-pane-header">
       <FavShabadIcon />
-      <button
-        className={classNames('button toggle-viewer-btn', !showViewer && 'btn-danger')}
+      <PrimaryButton
+        className={classNames('toggle-viewer-btn', !showViewer && 'btn-danger')}
+        variant={showViewer ? 'default' : 'destructive'}
+        size="sm"
+        shape="rounded-md"
+        leftIcon={<Icon name={showViewer ? 'eye-off' : 'eye'} />}
         onClick={() => setShowViewer(!showViewer)}
         title={showViewer ? i18n.t('SHABAD_PANE.HIDE_BUTTON_TOOLTIP') : ''}
       >
-        {showViewer ? (
-          <>
-            <img src="assets/img/icons/monitor-slash.png" />
-            <p>{i18n.t('SHABAD_PANE.HIDE_SCREEN')}</p>
-          </>
-        ) : (
-          <>
-            <img src="assets/img/icons/monitor.png" />
-            <p>{i18n.t('SHABAD_PANE.SHOW_DISPLAY')}</p>
-          </>
-        )}
-      </button>
+        {showViewer ? i18n.t('SHABAD_PANE.HIDE_SCREEN') : i18n.t('SHABAD_PANE.SHOW_DISPLAY')}
+      </PrimaryButton>
       <ArrowIcon paneId={defaultPaneId} />
     </div>
   );

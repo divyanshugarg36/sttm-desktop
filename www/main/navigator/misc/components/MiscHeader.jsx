@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { FatehTab, FatehTabList, FatehTabs, SimpleSelect } from '@khalisfoundation/sikhi-ui';
 
-import { classNames } from '../../../common/utils';
 import { setCurrentMiscPanel, setHistoryOrder } from '../../../common/store/redux/navigatorSlice';
 import { Icon } from '../../../common/sttm-ui';
 
@@ -16,8 +16,11 @@ export const MiscHeader = () => {
   const dispatch = useDispatch();
 
   const isHistory = currentMiscPanel === 'History';
-  const isOther = currentMiscPanel === 'Others';
-  const isFav = currentMiscPanel === 'Favorite';
+  const tabs = [
+    { panel: 'History', icon: 'clock', label: 'TOOLBAR.HISTORY' },
+    { panel: 'Favorite', icon: 'heart', label: 'TOOLBAR.FAVORITE' },
+    { panel: 'Others', icon: 'dots', label: 'TOOLBAR.OTHERS' },
+  ];
 
   const setTab = (tabName) => {
     if (tabName !== currentMiscPanel) {
@@ -32,52 +35,37 @@ export const MiscHeader = () => {
 
   return (
     <div className="misc-header">
-      <div className="misc-header-nav">
-        <a
-          className={classNames('misc-button', isHistory && 'misc-active')}
-          onClick={() => setTab('History')}
-        >
-          <Icon name="clock">
-            <span className="Icon-label" key="History">
-              {i18n.t('TOOLBAR.HISTORY')}
-            </span>
-          </Icon>
-        </a>
-        <a
-          className={classNames('misc-button', isFav && 'misc-active')}
-          onClick={() => setTab('Favorite')}
-        >
-          <Icon name="heart">
-            <span className="Icon-label" key="Favorite">
-              {i18n.t('TOOLBAR.FAVORITE')}
-            </span>
-          </Icon>
-        </a>
-        <a
-          className={classNames('misc-button', isOther && 'misc-active')}
-          onClick={() => setTab('Others')}
-        >
-          <Icon name="dots">
-            <span className="Icon-label" key="Others">
-              {i18n.t('TOOLBAR.OTHERS')}
-            </span>
-          </Icon>
-        </a>
-      </div>
+      <FatehTabs
+        className="misc-header-nav"
+        index={tabs.findIndex(({ panel }) => panel === currentMiscPanel)}
+        onChange={(index) => setTab(tabs[index].panel)}
+      >
+        <FatehTabList variant="underline">
+          {tabs.map(({ panel, icon, label }) => (
+            <FatehTab key={panel} className="misc-button">
+              <Icon name={icon} />
+              <span className="Icon-label">{i18n.t(label)}</span>
+            </FatehTab>
+          ))}
+        </FatehTabList>
+      </FatehTabs>
       <div className="misc-header-sort">
         {isHistory && verseHistory.length > 1 && (
           <div className="history-order">
             <div className="history-order-select">
               <label>Sort by: </label>
-              <select
+              <SimpleSelect
+                variant="bordered"
+                selectSize="sm"
                 value={historyOrder}
                 onChange={(e) => {
                   dispatch(setHistoryOrder(e.target.value));
                 }}
-              >
-                <option value="newest">Newest First</option>
-                <option value="oldest">Oldest First</option>
-              </select>
+                options={[
+                  { value: 'newest', label: 'Newest First' },
+                  { value: 'oldest', label: 'Oldest First' },
+                ]}
+              />
             </div>
           </div>
         )}

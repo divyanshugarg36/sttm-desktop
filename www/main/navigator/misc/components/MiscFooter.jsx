@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
+import { PrimaryButton } from '@khalisfoundation/sikhi-ui';
 
 import { uploadImage } from '../../../settings/utils/theme-bg-uploader';
 import { classNames } from '../../../common/utils';
@@ -19,6 +20,7 @@ export const MiscFooter = ({ waheguruSlide, moolMantraSlide, blankSlide, anandSa
   const dispatch = useDispatch();
   const { shortcutTray } = useSelector((state) => state.userSettings);
   const drawerRef = useRef(null);
+  const customImageInput = useRef(null);
 
   // Event Handlers
   const clearHistory = () => {
@@ -46,6 +48,40 @@ export const MiscFooter = ({ waheguruSlide, moolMantraSlide, blankSlide, anandSa
     });
   };
 
+  const trayItems = [
+    {
+      key: 'anand-sahib',
+      label: i18n.t(`SHORTCUT_TRAY.ANAND_SAHIB`),
+      onClick: () => anandSahibBhog({ openedFrom: 'shortcut-tray' }),
+    },
+    {
+      key: 'mool-mantra',
+      label: i18n.t(`SHORTCUT_TRAY.MOOL_MANTRA`),
+      onClick: () => moolMantraSlide({ openedFrom: 'shortcut-tray' }),
+    },
+    {
+      key: 'waheguru',
+      label: 'vwihgurU',
+      className: 'gurmukhi',
+      onClick: () => waheguruSlide({ openedFrom: 'shortcut-tray' }),
+    },
+    {
+      key: 'blank',
+      label: i18n.t(`SHORTCUT_TRAY.BLANK`),
+      onClick: () => blankSlide({ openedFrom: 'shortcut-tray' }),
+    },
+    {
+      key: 'custom-image',
+      label: i18n.t('SHORTCUT_TRAY.CUSTOM_IMAGE'),
+      onClick: () => customImageInput.current.click(),
+    },
+    {
+      key: 'announcement',
+      label: i18n.t(`SHORTCUT_TRAY.ANNOUNCEMENT`),
+      onClick: () => setTab('announcement'),
+    },
+  ];
+
   return (
     <div
       className={classNames(
@@ -64,55 +100,43 @@ export const MiscFooter = ({ waheguruSlide, moolMantraSlide, blankSlide, anandSa
           <Icon name={shortcutTray ? 'chevron-down' : 'chevron-up'} />
           <span>{i18n.t(`SHORTCUT_TRAY.QUICK_INSERT`)}</span>
         </div>
-        <a className="clear-history" onClick={clearHistory}>
-          <Icon name="clock" />
-          <span>{i18n.t(`SHORTCUT_TRAY.CLEAR_HISTORY`)}</span>
-        </a>
+        <PrimaryButton
+          className="clear-history"
+          variant="ghost"
+          size="sm"
+          leftIcon={<Icon name="clock" />}
+          onClick={clearHistory}
+        >
+          {i18n.t(`SHORTCUT_TRAY.CLEAR_HISTORY`)}
+        </PrimaryButton>
       </div>
       <div
         className={`shortcut-drawer ${
           shortcutTray ? 'shortcut-drawer-active' : 'shortcut-drawer-inactive'
         }`}
       >
-        <button
-          className="tray-item-icon"
-          onClick={() => anandSahibBhog({ openedFrom: 'shortcut-tray' })}
-        >
-          {i18n.t(`SHORTCUT_TRAY.ANAND_SAHIB`)}
-        </button>
-        <button
-          className="tray-item-icon"
-          onClick={() => moolMantraSlide({ openedFrom: 'shortcut-tray' })}
-        >
-          {i18n.t(`SHORTCUT_TRAY.MOOL_MANTRA`)}
-        </button>
-        <button
-          className="gurmukhi tray-item-icon"
-          onClick={() => waheguruSlide({ openedFrom: 'shortcut-tray' })}
-        >
-          vwihgurU
-        </button>
-        <button
-          className="tray-item-icon"
-          onClick={() => blankSlide({ openedFrom: 'shortcut-tray' })}
-        >
-          {i18n.t(`SHORTCUT_TRAY.BLANK`)}
-        </button>
-        <label className="tray-item-icon" htmlFor="themebg-upload">
-          {i18n.t('SHORTCUT_TRAY.CUSTOM_IMAGE')}
-          <input
-            className="file-input"
-            onChange={async (e) => {
-              await uploadImage(e);
-            }}
-            id="themebg-upload"
-            type="file"
-            accept="image/png, image/jpeg"
-          />
-        </label>
-        <button className="tray-item-icon" onClick={() => setTab('announcement')}>
-          {i18n.t(`SHORTCUT_TRAY.ANNOUNCEMENT`)}
-        </button>
+        {trayItems.map(({ key, label, className, onClick }) => (
+          <PrimaryButton
+            key={key}
+            className={classNames('tray-item-icon', className)}
+            variant="amber"
+            size="sm"
+            shape="rounded-md"
+            onClick={onClick}
+          >
+            {label}
+          </PrimaryButton>
+        ))}
+        <input
+          ref={customImageInput}
+          className="file-input"
+          onChange={async (e) => {
+            await uploadImage(e);
+          }}
+          id="themebg-upload"
+          type="file"
+          accept="image/png, image/jpeg"
+        />
       </div>
     </div>
   );
