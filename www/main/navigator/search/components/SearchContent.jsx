@@ -11,16 +11,15 @@ import { SilenceDetector, createAudioAnalyser } from './silence';
 
 import { classNames } from '../../../common/utils';
 import {
-  IconButton,
-  InputBox,
-  FilterDropdown,
+  // FilterDropdown, IconButton, InputBox and VoiceWave: old search bar and
+  // filters (commented out below).
   SearchResults,
   FilterTag,
-  VoiceWave,
 } from '../../../common/sttm-ui';
-import { GurmukhiKeyboard } from './GurmukhiKeyboard';
+// import { GurmukhiKeyboard } from './GurmukhiKeyboard'; // old search bar's keyboard
 import { LibrarySearchBar } from './LibrarySearchBar';
 import { useNewShabad } from '../hooks/use-new-shabad';
+import { useRunSearch } from '../hooks/use-run-search';
 import {
   setCurrentWriter,
   setCurrentRaag,
@@ -57,6 +56,7 @@ const SearchContent = () => {
 
   // Local State
   const [databaseProgress, setDatabaseProgress] = useState(1);
+  useRunSearch(databaseProgress);
   const [query, setQuery] = useState('');
   const [writerArray, setWriterArray] = useState([]);
   const [raagArray, setRaagArray] = useState([]);
@@ -83,16 +83,16 @@ const SearchContent = () => {
 
   const isShowFiltersTag =
     currentWriter !== 'all' || currentRaag !== 'all' || currentSource !== 'all';
-  // Gurmukhi Keyboard
-  const [keyboardOpenStatus, setKeyboardOpenStatus] = useState(false);
-  const HandleKeyboardToggle = () => {
-    setKeyboardOpenStatus(!keyboardOpenStatus);
-    analytics.trackEvent({
-      category: 'search',
-      action: 'gurmukhi-keyboard-open',
-      value: keyboardOpenStatus ? 'open' : 'close',
-    });
-  };
+  // Gurmukhi Keyboard of the old search bar (commented out below).
+  // const [keyboardOpenStatus, setKeyboardOpenStatus] = useState(false);
+  // const HandleKeyboardToggle = () => {
+  //   setKeyboardOpenStatus(!keyboardOpenStatus);
+  //   analytics.trackEvent({
+  //     category: 'search',
+  //     action: 'gurmukhi-keyboard-open',
+  //     value: keyboardOpenStatus ? 'open' : 'close',
+  //   });
+  // };
 
   const loadMoreSearchResults = useCallback(() => {
     if (searchPending) {
@@ -473,7 +473,11 @@ const SearchContent = () => {
         sourceArray={sourceArray}
         onMicClick={isConnected ? handleMicClick : undefined}
         isRecording={isRecording}
+        isProcessing={isTranscriptLoading}
+        stream={audioStream}
+        isMicDenied={microphonePermissionStatus === 'denied'}
       />
+      {/* Old search bar, replaced by LibrarySearchBar above; kept for comparison.
       <div className="search-content">
         {(() => {
           if (isRecording && audioStream) {
@@ -530,6 +534,7 @@ const SearchContent = () => {
           )}
         </div>
       </div>
+      */}
       <div id="search-bg">
         <div
           id="db-download-progress"
@@ -539,9 +544,11 @@ const SearchContent = () => {
           }}
         ></div>
       </div>
+      {/* The old search bar's keyboard (LibrarySearchBar has its own).
       {keyboardOpenStatus && currentLanguage !== 'en' && (
         <GurmukhiKeyboard searchType={currentSearchType} query={query} setQuery={setQuery} />
       )}
+      */}
       <div className="search-result-controls">
         {isShowFiltersTag && (
           <div className="filter-tag--container">
@@ -592,6 +599,7 @@ const SearchContent = () => {
             )}
           </div>
         )}
+        {/* Old filter dropdowns; LibrarySearchBar shows source, writer and raag.
         <div className="filters">
           <span className="filters-label">Filter by </span>
           <FilterDropdown
@@ -637,6 +645,7 @@ const SearchContent = () => {
             currentValue={currentSource}
           />
         </div>
+        */}
       </div>
       <div className={classNames('search-results', isShowFiltersTag && 'filter-applied')}>
         <div className="verse-block">

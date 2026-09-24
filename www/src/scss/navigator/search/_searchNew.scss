@@ -14,10 +14,15 @@
     }
   }
 
-  // The sikhi-ui SearchBar under evaluation sits above the existing search
-  // input and keeps its full height when its keyboard opens.
+  // The sikhi-ui SearchBar keeps its full height when its keyboard opens.
   .library-search-bar {
     flex-shrink: 0;
+
+    // Microphone access denied: dim the mic, as the old search bar did.
+    &.mic-denied .sui-search-bar__mic-btn {
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
 
     // The placeholder is English even when the query is Gurbani Akhar.
     .sui-search-bar__input.gurmukhi::placeholder {

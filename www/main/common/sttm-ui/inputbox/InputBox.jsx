@@ -1,16 +1,15 @@
 import React, { useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
-import { searchShabads, loadAng } from '../../../navigator/utils';
 import { InputContext } from '../../../launchpad';
-import { setSearchData, setShortcuts } from '../../store/redux/navigatorSlice';
+import { setShortcuts } from '../../store/redux/navigatorSlice';
 
 const remote = require('@electron/remote');
 
 const analytics = remote.getGlobal('analytics');
 
-const InputBox = ({ placeholder, disabled, className, databaseProgress, query, setQuery }) => {
-  const { currentSearchType, currentSource, searchQuery, shortcuts } = useSelector(
+const InputBox = ({ placeholder, disabled, className, query, setQuery }) => {
+  const { currentSearchType, searchQuery, shortcuts } = useSelector(
     (state) => state.navigator,
   );
   const dispatch = useDispatch();
@@ -51,19 +50,7 @@ const InputBox = ({ placeholder, disabled, className, databaseProgress, query, s
     }
   }, [shortcuts]);
 
-  useEffect(() => {
-    const searchTypeInt = parseInt(searchQuery, 10);
-    const isAng = !!searchTypeInt;
-    if (databaseProgress >= 1 && searchQuery) {
-      if (isAng) {
-        loadAng(searchTypeInt).then((rows) => dispatch(setSearchData(rows)));
-      } else {
-        searchShabads(searchQuery, currentSearchType, currentSource).then((rows) =>
-          searchQuery ? dispatch(setSearchData(rows)) : dispatch(setSearchData([])),
-        );
-      }
-    }
-  }, [searchQuery, currentSearchType, currentSource]);
+  // The search itself runs in SearchContent (useRunSearch), whichever input is shown.
 
   return (
     <>
@@ -86,7 +73,6 @@ InputBox.propTypes = {
   placeholder: PropTypes.string,
   disabled: PropTypes.bool,
   className: PropTypes.string,
-  databaseProgress: PropTypes.number,
   query: PropTypes.string,
   setQuery: PropTypes.func,
 };
