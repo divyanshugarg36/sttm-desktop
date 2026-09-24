@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
 import { SearchBar } from '@khalisfoundation/sikhi-ui';
 
+import { InputContext } from '../../../launchpad';
 import {
   setCurrentWriter,
   setCurrentRaag,
   setCurrentSource,
+  setShortcuts,
 } from '../../../common/store/redux/navigatorSlice';
 
 const remote = require('@electron/remote');
@@ -22,11 +24,11 @@ const filterActions = {
 const toOptions = (optionsArray) =>
   optionsArray.map((option) => ({ value: option.value, label: option.text }));
 
-// sikhi-ui SearchBar, rendered above the existing search input while it is
-// being evaluated. It shares SearchContent's query (so both inputs stay in
-// sync and the same search runs) and the navigator's source/writer/raag
-// filters. Gurmukhi queries stay in Gurbani Akhar, shown with the app's
-// gurmukhi font like the existing input.
+// sikhi-ui SearchBar for the search pane. It edits SearchContent's query and
+// the navigator's source/writer/raag filters; the search itself runs in
+// SearchContent. Gurmukhi queries stay in Gurbani Akhar, shown with the app's
+// gurmukhi font. Its input is the launchpad's search input (InputContext):
+// Ctrl+/ focuses it, and verse shortcuts are skipped while it has focus.
 export const LibrarySearchBar = ({
   query,
   setQuery,
@@ -37,11 +39,37 @@ export const LibrarySearchBar = ({
   sourceArray,
   onMicClick,
   isRecording,
+  isProcessing,
+  stream,
+  isMicDenied,
 }) => {
-  const { currentLanguage, currentSearchType, currentWriter, currentRaag, currentSource } =
-    useSelector((state) => state.navigator);
+  const {
+    currentLanguage,
+    currentSearchType,
+    currentWriter,
+    currentRaag,
+    currentSource,
+    searchQuery,
+    shortcuts,
+  } = useSelector((state) => state.navigator);
   const dispatch = useDispatch();
+  const inputRef = useContext(InputContext);
   const isGurmukhi = currentLanguage !== 'en';
+
+  // Ctrl+/ (launchpad shortcut) focuses the search input.
+  useEffect(() => {
+    if (shortcuts.focusInput) {
+      inputRef.current?.focus();
+      dispatch(setShortcuts({ ...shortcuts, focusInput: false }));
+    }
+  }, [shortcuts]);
+
+  // Space is the next-verse shortcut, so word searches add it themselves.
+  const handleKeyDown = (event) => {
+    if (event.keyCode === 32 && [2, 3].includes(currentSearchType)) {
+      setQuery(`${query} `);
+    }
+  };
 
   const values = {
     query,
@@ -69,7 +97,7 @@ export const LibrarySearchBar = ({
 
   return (
     <SearchBar
-      className="library-search-bar"
+      className={`library-search-bar ${isMicDenied ? 'mic-denied' : ''}`.trim()}
       wrapperVariant="default"
       placeholder={placeholder}
       values={values}
@@ -102,9 +130,20 @@ export const LibrarySearchBar = ({
       showMatras={currentSearchType === 2}
       onMicClick={onMicClick}
       isRecording={isRecording}
+      isProcessing={isProcessing}
+      stream={stream}
       inputProps={{
-        className: `sui-search-bar__input ${isGurmukhi ? 'gurmukhi' : ''}`.trim(),
+        ref: inputRef,
+        // mousetrap: the app's keyboard shortcuts still fire while typing here.
+        className: `sui-search-bar__input mousetrap ${isGurmukhi ? 'gurmukhi' : 'english'}`,
         disabled,
+        onKeyDown: handleKeyDown,
+        onBlur: () =>
+          analytics.trackEvent({
+            category: 'search',
+            action: 'physical keyboard search',
+            value: searchQuery,
+          }),
       }}
     />
   );
@@ -120,4 +159,7 @@ LibrarySearchBar.propTypes = {
   sourceArray: PropTypes.array,
   onMicClick: PropTypes.func,
   isRecording: PropTypes.bool,
+  isProcessing: PropTypes.bool,
+  stream: PropTypes.object,
+  isMicDenied: PropTypes.bool,
 };
