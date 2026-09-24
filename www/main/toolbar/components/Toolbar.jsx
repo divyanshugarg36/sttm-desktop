@@ -16,7 +16,13 @@ const Toolbar = () => {
   const userToken = useSelector((state) => state.app.userToken);
   const dispatch = useDispatch();
 
-  const item = (key, label, icon) => ({ key, label, icon: <Icon name={icon} /> });
+  // Icon-only rail: the label stays for screen readers (hidden in CSS) and
+  // shows as the icon's tooltip.
+  const item = (key, label, icon) => ({
+    key,
+    label,
+    icon: <Icon name={icon} title={label} />,
+  });
   const toolbarTop = [
     item('sunder-gutka', i18n.t('TOOLBAR.SUNDAR_GUTKA'), 'sundar-gutka'),
     item('ceremonies', i18n.t('TOOLBAR.CEREMONIES'), 'flower'),

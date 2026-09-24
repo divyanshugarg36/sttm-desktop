@@ -2,7 +2,7 @@ $presenter-pane-gap: 25px;
 $title-bar-offset: 10px;
 $ws-offset: 40px;
 $keyboard-height: 128px;
-$toolbar-offset: 80px;
+$toolbar-offset: 48px;
 $toolbar-small-offset: 50px;
 $toolbar-width-offset: $toolbar-offset/2;
 $bani-list-width: 300px;
@@ -420,7 +420,7 @@ button {
   padding-top: 10px;
   z-index: 1300;
 
-  // Top and bottom groups: sikhi-ui SideNavs (icon above a short label).
+  // Top and bottom groups: sikhi-ui SideNavs, icons only.
   .sui-side-nav {
     background: transparent;
     border-right: none;
@@ -429,11 +429,18 @@ button {
     width: 100%;
 
     &__item {
+      gap: 0;
       padding: 6px 0;
     }
 
+    // Visually hidden; still names the button for screen readers.
     &__label {
-      font-size: 11px;
+      clip-path: inset(50%);
+      height: 1px;
+      overflow: hidden;
+      position: absolute;
+      white-space: nowrap;
+      width: 1px;
     }
   }
 }
