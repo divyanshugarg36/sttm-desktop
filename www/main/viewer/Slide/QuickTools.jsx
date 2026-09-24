@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { convertToCamelCase } from '../../common/utils';
 import { setQuickToolsOpen } from '../../common/store/redux/viewerSettingsSlice';
 import platform from '../../desktop_scripts';
+import Icon from '../../common/sttm-ui/icon';
 
 const remote = require('@electron/remote');
 
@@ -97,12 +98,12 @@ const QuickTools = ({ isMiscSlide, baniOptions }) => {
     };
   };
 
-  const getIconClassName = (name, index, action) => {
+  const getIconName = (name, index, action) => {
     if (index > 0 && name === 'visibility')
-      return userSettings[`content${index}${action}`] ? 'fa fa-eye' : 'fa fa-eye-slash';
-    if (name === 'minus') return 'fa fa-minus-circle';
-    if (name === 'plus') return 'fa fa-plus-circle';
-    return '';
+      return userSettings[`content${index}${action}`] ? 'eye' : 'eye-off';
+    if (name === 'minus') return 'minus-circle';
+    if (name === 'plus') return 'plus-circle';
+    return null;
   };
 
   const hide = (name, toolName) =>
@@ -113,15 +114,17 @@ const QuickTools = ({ isMiscSlide, baniOptions }) => {
   const bakeIcons = (toolName, index, icons) =>
     icons.map(({ name, actionName }) => (
       <div key={name} className={`quicktool-icons ${hide(name, toolName)}`}>
-        <i
-          className={getIconClassName(name, index, actionName)}
-          onClick={() => {
-            const globalObj = createGlobalPlatformObj(name, toolName, index, actionName);
-            if (globalObj) {
-              global.platform.ipc.send('update-global-setting', JSON.stringify(globalObj));
-            }
-          }}
-        />
+        {getIconName(name, index, actionName) && (
+          <Icon
+            name={getIconName(name, index, actionName)}
+            onClick={() => {
+              const globalObj = createGlobalPlatformObj(name, toolName, index, actionName);
+              if (globalObj) {
+                global.platform.ipc.send('update-global-setting', JSON.stringify(globalObj));
+              }
+            }}
+          />
+        )}
       </div>
     ));
 
@@ -193,7 +196,7 @@ const QuickTools = ({ isMiscSlide, baniOptions }) => {
         onClick={() => dispatch(setQuickToolsOpen(!quickToolsOpen))}
       >
         Quick Tools
-        <i className={`fa fa-caret-${quickToolsOpen ? 'up' : 'down'}`}></i>
+        <Icon name={quickToolsOpen ? 'chevron-up' : 'chevron-down'} />
       </div>
       {quickToolsOpen && (
         <div className={`quicktool-body quicktool-${isMiscSlide ? 'announcement' : 'gurbani'}`}>

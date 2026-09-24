@@ -12,6 +12,7 @@ import {
   setPane3,
   setShortcuts,
 } from '../../common/store/redux/navigatorSlice';
+import { Icon } from '../../common/sttm-ui';
 
 const remote = require('@electron/remote');
 
@@ -137,16 +138,16 @@ const ArrowIcon = ({ paneId }) => {
     if (paneBani[paneId] === 'shabad') {
       return (
         <div className="arrow-icons">
-          <i className="fa fa-arrow-circle-o-left" onClick={navigateVerseLeft}></i>
-          <i className="fa fa-arrow-circle-o-right" onClick={navigateVerseRight}></i>
+          <Icon name="arrow-left-circle" onClick={navigateVerseLeft} />
+          <Icon name="arrow-right-circle" onClick={navigateVerseRight} />
         </div>
       );
     }
   } else if (activeShabadId && !isSundarGutkaBani && !isCeremonyBani) {
     return (
       <>
-        <i className="fa fa-arrow-circle-o-left" onClick={navigateVerseLeft}></i>
-        <i className="fa fa-arrow-circle-o-right" onClick={navigateVerseRight}></i>
+        <Icon name="arrow-left-circle" onClick={navigateVerseLeft} />
+        <Icon name="arrow-right-circle" onClick={navigateVerseRight} />
       </>
     );
   }

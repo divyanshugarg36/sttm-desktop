@@ -505,7 +505,7 @@ const SearchContent = () => {
         <div className="input-buttons">
           {isConnected && (
             <IconButton
-              icon={isRecording ? 'fa fa-stop' : 'fa fa-microphone'}
+              icon={isRecording ? 'stop' : 'microphone'}
               onClick={handleMicClick}
               style={{
                 opacity: microphonePermissionStatus === 'denied' ? 0.5 : 1,
@@ -514,7 +514,7 @@ const SearchContent = () => {
             />
           )}
           {currentLanguage !== 'en' && (
-            <IconButton icon="fa fa-keyboard-o" onClick={HandleKeyboardToggle} />
+            <IconButton icon="keyboard" onClick={HandleKeyboardToggle} />
           )}
         </div>
       </div>

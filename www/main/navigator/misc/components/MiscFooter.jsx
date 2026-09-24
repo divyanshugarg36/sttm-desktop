@@ -7,6 +7,7 @@ import { classNames } from '../../../common/utils';
 import { setOverlayScreen } from '../../../common/store/redux/appSlice';
 import { setShortcutTray } from '../../../common/store/redux/userSettingsSlice';
 import { setVerseHistory } from '../../../common/store/redux/navigatorSlice';
+import { Icon } from '../../../common/sttm-ui';
 
 const remote = require('@electron/remote');
 
@@ -60,11 +61,11 @@ export const MiscFooter = ({ waheguruSlide, moolMantraSlide, blankSlide, anandSa
             toggleTray(!shortcutTray);
           }}
         >
-          <i className={`${shortcutTray ? 'fa fa-caret-down' : 'fa fa-caret-up'}`} />
+          <Icon name={shortcutTray ? 'chevron-down' : 'chevron-up'} />
           <span>{i18n.t(`SHORTCUT_TRAY.QUICK_INSERT`)}</span>
         </div>
         <a className="clear-history" onClick={clearHistory}>
-          <i className="fa fa-history" />
+          <Icon name="clock" />
           <span>{i18n.t(`SHORTCUT_TRAY.CLEAR_HISTORY`)}</span>
         </a>
       </div>

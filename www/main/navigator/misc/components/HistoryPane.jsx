@@ -17,6 +17,7 @@ import {
   setPane3,
   setVerseHistory,
 } from '../../../common/store/redux/navigatorSlice';
+import { Icon } from '../../../common/sttm-ui';
 
 const remote = require('@electron/remote');
 
@@ -169,7 +170,7 @@ export const HistoryPane = ({ className, paneId }) => {
               deleteFromHistory(element, e);
             }}
           >
-            <i className="fa-solid fa-xmark"></i>
+            <Icon name="x" />
           </button>
         </div>
       </div>,

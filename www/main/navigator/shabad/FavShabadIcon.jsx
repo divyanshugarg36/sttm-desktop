@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import classNames from '../../common/utils/classnames';
 import { addToFav, fetchFavShabad, removeFromFav } from '../misc/utils';
 import { setFavShabad } from '../../common/store/redux/navigatorSlice';
+import { Icon } from '../../common/sttm-ui';
 
 const remote = require('@electron/remote');
 
@@ -97,7 +98,7 @@ const FavShabadIcon = ({ paneId }) => {
           title={i18n.t('SHABAD_PANE.FAV_BTN_TOOLTIP')}
           onClick={toggleFavShabad}
         >
-          <i className={favShabadIndex < 0 ? 'fa-regular fa-star' : 'fa-solid fa-star'}></i>
+          <Icon name={favShabadIndex < 0 ? 'star' : 'star-solid'} />
         </button>
       );
     }

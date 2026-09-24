@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import anvaad from 'anvaad-js';
 import { useSelector } from 'react-redux';
+import Icon from '../icon';
 
 const remote = require('@electron/remote');
 
@@ -60,7 +61,7 @@ const SearchResults = ({
               if (!pane1.locked) onClick(shabadId, verseId, verse, 1);
             }}
           >
-            {pane1.locked ? <i className="fa-solid fa-lock"></i> : '1'}
+            {pane1.locked ? <Icon name="lock" /> : '1'}
           </button>
           <button
             className="button-pane-2"
@@ -69,7 +70,7 @@ const SearchResults = ({
               if (!pane2.locked) onClick(shabadId, verseId, verse, 2);
             }}
           >
-            {pane2.locked ? <i className="fa-solid fa-lock"></i> : '2'}
+            {pane2.locked ? <Icon name="lock" /> : '2'}
           </button>
           <button
             className="button-pane-3"
@@ -78,7 +79,7 @@ const SearchResults = ({
               if (!pane3.locked) onClick(shabadId, verseId, verse, 3);
             }}
           >
-            {pane3.locked ? <i className="fa-solid fa-lock"></i> : '3'}
+            {pane3.locked ? <Icon name="lock" /> : '3'}
           </button>
         </div>
       );

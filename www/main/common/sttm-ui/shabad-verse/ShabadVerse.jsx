@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Icon from '../icon';
 
 const ShabadVerse = ({
   activeVerse,
@@ -32,7 +33,7 @@ const ShabadVerse = ({
     >
       <span className="shabad-pane-controls">
         {versesRead.map(
-          (isRead, index) => isRead === verseId && <i key={index} className="fa fa-fw fa-check" />,
+          (isRead, index) => isRead === verseId && <Icon key={index} name="check" className="check-icon" />,
         )}
       </span>
       {verse ? (
@@ -54,9 +55,10 @@ const ShabadVerse = ({
           {englishVerse && englishVerse.split('<h1>')[1].split('</h1>')[0]}
         </span>
       )}
-      <i
+      <Icon
+        name="home"
         onClick={() => changeHomeVerse(lineNumber)}
-        className={`fa ${isHomeVerse !== lineNumber ? `fa-home hoverIcon` : `fa-fw fa-home`}`}
+        className={`home-icon ${isHomeVerse !== lineNumber ? 'hoverIcon' : ''}`.trim()}
       />
     </li>
   );

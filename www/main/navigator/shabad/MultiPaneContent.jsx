@@ -6,6 +6,7 @@ import { ShabadText } from './ShabadText';
 import { FavoritePane, HistoryPane } from '../misc/components';
 import { useSlides } from '../../common/hooks';
 import { navigatorActions } from '../../common/store/redux/navigatorSlice';
+import { Icon } from '../../common/sttm-ui';
 
 const remote = require('@electron/remote');
 
@@ -48,13 +49,13 @@ const MultiPaneContent = ({ data }) => {
         dispatch(setPaneAttributes({ ...paneAttributes, content: i18n.t('MULTI_PANE.SHABAD') }));
       }}
       onMouseEnter={(e) => {
-        e.currentTarget.children[0].classList.add('fa-beat');
+        e.currentTarget.children[0].classList.add('icon-beat');
       }}
       onMouseLeave={(e) => {
-        e.currentTarget.children[0].classList.remove('fa-beat');
+        e.currentTarget.children[0].classList.remove('icon-beat');
       }}
     >
-      <i className="fa-solid fa-arrow-left"></i>
+      <Icon name="arrow-left" />
       <span>{i18n.t('MULTI_PANE.SHABAD_BTN')}</span>
     </button>
   );

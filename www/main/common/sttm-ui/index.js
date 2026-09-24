@@ -5,6 +5,7 @@ export { default as Overlay } from './overlay';
 export { default as Checkbox } from './checkbox';
 export { default as CustomBgTile } from './custom-tile';
 export { default as InputBox } from './inputbox';
+export { default as Icon } from './icon';
 export { default as IconButton } from './iconbutton';
 export { default as SearchResults } from './search-results';
 export { default as ShabadVerse } from './shabad-verse';

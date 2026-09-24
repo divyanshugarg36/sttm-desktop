@@ -8,6 +8,7 @@ import {
   setIsMiscSlideGurmukhi,
   setIsAnnouncement,
 } from '../../../common/store/redux/navigatorSlice';
+import { Icon } from '../../../common/sttm-ui';
 
 const remote = require('@electron/remote');
 
@@ -89,7 +90,7 @@ const getBaniControllerItems = ({
               {isAdminPinVisible && adminPin ? adminPin : '...'}
             </span>
             <span className="hide-btn" onClick={() => setAdminPinVisibility(!isAdminPinVisible)}>
-              <i className={`fa ${isAdminPinVisible ? 'fa-eye' : 'fa-eye-slash'}`} />
+              <Icon name={isAdminPinVisible ? 'eye' : 'eye-off'} />
             </span>
           </div>
           <button className="button lock-screen-btn" onClick={toggleLockScreen}>

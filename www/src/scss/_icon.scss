@@ -1,0 +1,31 @@
+// sikhi-ui icons (common/sttm-ui/icon): an <i> holding a 1em SVG drawn in
+// currentColor, so the `i` rules that sized and coloured the old icon font
+// still apply.
+.app-icon {
+  // Like the icon font's .fa: upright, and any label inside sits beside the icon.
+  align-items: center;
+  display: inline-flex;
+  font-style: normal;
+  line-height: 1;
+  vertical-align: -0.125em;
+
+  > svg {
+    flex-shrink: 0;
+  }
+}
+
+// Hover nudge on the multi-pane "back to shabad" arrow.
+.icon-beat {
+  animation: icon-beat 1s ease-in-out infinite;
+}
+
+@keyframes icon-beat {
+  0%,
+  90% {
+    transform: scale(1);
+  }
+
+  45% {
+    transform: scale(1.25);
+  }
+}

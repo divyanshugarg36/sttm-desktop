@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
+import Icon from '../icon';
 
 const remote = require('@electron/remote');
 
@@ -27,7 +28,7 @@ const MultipaneDropdown = ({
       <div className="history-item">
         {`Pane ${index + 1}`}
         {item.locked ? (
-          <i style={{ fontSize: '12px', marginLeft: '8px' }} className="fa-solid fa-lock"></i>
+          <Icon name="lock" style={{ fontSize: '12px', marginLeft: '8px' }} />
         ) : (
           ''
         )}

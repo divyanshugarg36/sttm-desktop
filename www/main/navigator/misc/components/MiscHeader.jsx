@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { classNames } from '../../../common/utils';
 import { setCurrentMiscPanel, setHistoryOrder } from '../../../common/store/redux/navigatorSlice';
+import { Icon } from '../../../common/sttm-ui';
 
 const remote = require('@electron/remote');
 
@@ -36,31 +37,31 @@ export const MiscHeader = () => {
           className={classNames('misc-button', isHistory && 'misc-active')}
           onClick={() => setTab('History')}
         >
-          <i className="fa fa-clock-o">
+          <Icon name="clock">
             <span className="Icon-label" key="History">
               {i18n.t('TOOLBAR.HISTORY')}
             </span>
-          </i>
+          </Icon>
         </a>
         <a
           className={classNames('misc-button', isFav && 'misc-active')}
           onClick={() => setTab('Favorite')}
         >
-          <i className="fa fa-heart">
+          <Icon name="heart">
             <span className="Icon-label" key="Favorite">
               {i18n.t('TOOLBAR.FAVORITE')}
             </span>
-          </i>
+          </Icon>
         </a>
         <a
           className={classNames('misc-button', isOther && 'misc-active')}
           onClick={() => setTab('Others')}
         >
-          <i className="fa fa-ellipsis-h">
+          <Icon name="dots">
             <span className="Icon-label" key="Others">
               {i18n.t('TOOLBAR.OTHERS')}
             </span>
-          </i>
+          </Icon>
         </a>
       </div>
       <div className="misc-header-sort">

@@ -104,7 +104,7 @@ const Announcement = ({ isGurmukhi }) => {
         {isGurmukhi && (
           <IconButton
             className="keyboard-toggle"
-            icon="fa fa-keyboard-o"
+            icon="keyboard"
             onClick={HandleKeyboardToggle}
           />
         )}

@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Icon from '../icon';
 
 const FilterTag = ({ close, title, filterType }) => (
   <div className="filter-tag" title={filterType}>
     <span className="filter-tag--remove" onClick={close}>
-      <i className="fa fa-times" />
+      <Icon name="x" />
     </span>
     <span className="filter-tag--title">{title}</span>
   </div>

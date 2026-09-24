@@ -6,6 +6,7 @@ import FavShabadIcon from './FavShabadIcon';
 import ArrowIcon from './ArrowIcon';
 import { setDefaultPaneId } from '../../common/store/redux/userSettingsSlice';
 import { navigatorActions } from '../../common/store/redux/navigatorSlice';
+import { Icon } from '../../common/sttm-ui';
 
 const remote = require('@electron/remote');
 
@@ -86,11 +87,7 @@ const MultiPaneHeader = ({ data }) => {
       <div className="pane-info">
         <span className="pane-symbol">{paneId}</span>
         <button onClick={lockPane} ref={lockIcon}>
-          {paneAttributes.locked ? (
-            <i className="fa-solid fa-lock"></i>
-          ) : (
-            <i className="fa-solid fa-lock-open"></i>
-          )}
+          <Icon name={paneAttributes.locked ? 'lock' : 'lock-open'} />
         </button>
       </div>
       <span className="pane-title">{paneAttributes.content}</span>

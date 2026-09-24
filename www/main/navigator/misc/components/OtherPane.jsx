@@ -13,6 +13,7 @@ import {
   setPane2,
   setPane3,
 } from '../../../common/store/redux/navigatorSlice';
+import { Icon } from '../../../common/sttm-ui';
 
 const remote = require('@electron/remote');
 
@@ -116,13 +117,13 @@ export const OtherPane = ({ className }) => {
     <ul className={`list-of-items ${className}`}>
       <li>
         <a onClick={openRandomShabad}>
-          <i className="fa fa-random list-icon" />
+          <Icon name="random" className="list-icon" />
           {i18n.t('OTHERS.SHOW_RANDOM_SHABAD')}
         </a>
       </li>
       <li>
         <a onClick={openDailyHukamnana}>
-          <i className="fa fa-gavel list-icon" />
+          <Icon name="hukamnama" className="list-icon" />
           {i18n.t('OTHERS.DAILY_HUKAMNAMA')}
         </a>
       </li>

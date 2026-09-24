@@ -2,6 +2,7 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { classNames } from '../../common/utils';
 import { setSingleDisplayActiveTab } from '../../common/store/redux/navigatorSlice';
+import { Icon } from '../../common/sttm-ui';
 
 export const singleDisplayFooter = () => {
   const { singleDisplayActiveTab } = useSelector((state) => state.navigator);
@@ -39,31 +40,31 @@ export const singleDisplayFooter = () => {
         className={classNames('tab-switch', singleDisplayActiveTab === 'search' && 'active')}
         onClick={openSearchPane}
       >
-        <i className="fa fa-search" />
+        <Icon name="search" />
       </button>
       <button
         className={classNames('tab-switch', singleDisplayActiveTab === 'history' && 'active')}
         onClick={openHistoryPane}
       >
-        <i className="fa fa-history" />
+        <Icon name="clock" />
       </button>
       <button
         className={classNames('tab-switch', singleDisplayActiveTab === 'shabad' && 'active')}
         onClick={openShabadPane}
       >
-        <i className="fa fa-dot-circle-o" />
+        <Icon name="target" />
       </button>
       <button
         className={classNames('tab-switch', singleDisplayActiveTab === 'favorite' && 'active')}
         onClick={openFavoritePane}
       >
-        <i className="fa fa-heart" />
+        <Icon name="heart" />
       </button>
       <button
         className={classNames('tab-switch', singleDisplayActiveTab === 'other' && 'active')}
         onClick={openOtherPane}
       >
-        <i className="fa fa-ellipsis-h" />
+        <Icon name="dots" />
       </button>
     </div>
   );

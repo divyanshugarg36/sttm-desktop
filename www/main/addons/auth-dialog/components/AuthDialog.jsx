@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import isOnline from 'is-online';
 
-import { Overlay } from '../../../common/sttm-ui';
+import { Icon, Overlay } from '../../../common/sttm-ui';
 import { SP_API } from '../../../common/constants/api-urls';
 
 const remote = require('@electron/remote');
@@ -76,7 +76,7 @@ const AuthDialog = ({ onScreenClose, className }) => {
                       onScreenClose();
                     }}
                   >
-                    <i className="fa-solid fa-right-from-bracket"></i>
+                    <Icon name="logout" />
                     {i18n.t('AUTH.LOGOUT_LABEL')}
                   </button>
                 ) : (
@@ -92,7 +92,7 @@ const AuthDialog = ({ onScreenClose, className }) => {
                       shell.openExternal(`${SP_API}/login/sso`);
                     }}
                   >
-                    <i className="fa-solid fa-right-to-bracket"></i>
+                    <Icon name="login" />
                     {i18n.t('AUTH.LOGIN_LABEL')}
                   </button>
                 )}
