@@ -13,6 +13,10 @@
   $highlight-bg: $dull-blue;
   $highlight-text: $transparent-blue;
   color: $text-base;
+  // sikhi-ui cool Box (the main-screen panes) on dark themes: the same
+  // sand-to-blue gradient, tinted into the theme's own surface colour.
+  --sui-atom-box-cool-background: linear-gradient(90deg, #{mix(#f6e9d7, $bg-alt, 14%)} 0%, #{mix(#e3e7ed, $bg-alt, 14%)} 100%);
+  --sui-atom-box-gradient-shadow: 0 12px 36px rgba(0, 0, 0, 0.4);
   $button-bg: $princeton-orange;
   $tray-bg: $philippine-gray;
 
