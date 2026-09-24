@@ -1,6 +1,6 @@
 /* global chrome */
 import { ipcRenderer } from 'electron';
-import tingle from '../../../assets/js/vendor/tingle';
+import tingle from '../../common/vendor/tingle';
 
 const remote = require('@electron/remote');
 

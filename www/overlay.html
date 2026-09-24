@@ -10,11 +10,7 @@
   <body>
     <div id="overlay-container"></div>
 
-    <script>
-      const app = require('./js/overlay/app.js').default;
-      const { createRoot } = require('react-dom/client');
-      const root = createRoot(document.getElementById('overlay-container'));
-      root.render(app());
-    </script>
+    <!-- Built by Vite; the dev server swaps in the source entry (see vite.config.mts). -->
+    <script type="module" src="./dist/overlay.js"></script>
   </body>
 </html>

@@ -98,6 +98,13 @@ This will use `npm` that is included with `nodejs` to install project dependenci
 npm start
 ```
 
+`npm start` builds everything and rebuilds on change (reload the window to see renderer changes).
+For hot reload of the main, viewer and overlay windows, run the Vite dev server instead:
+
+```bash
+npm run dev
+```
+
 
 ## Packaging
 

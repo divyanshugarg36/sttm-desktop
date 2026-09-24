@@ -19,5 +19,5 @@
     "skipLibCheck": true,
     "types": ["node", "react", "react-dom"]
   },
-  "include": ["www/main/**/*", "types/**/*.d.ts"]
+  "include": ["www/main/**/*", "types/**/*.d.ts", "vite.config.mts"]
 }

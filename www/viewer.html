@@ -11,19 +11,7 @@
   </head>
   <body class="viewer">
     <div id="viewer-container"></div>
-    <script>
-        const { ipcRenderer } = require('electron');
-        let root = null;
-
-        ipcRenderer.on('wc-webview-enabled', () => {
-          const app = require('./js/viewer/viewerApp.js').default;
-          const { createRoot } = require('react-dom/client');
-
-          if (!root) {
-            root = createRoot(document.getElementById('viewer-container'));
-          }
-          root.render(app());
-        });
-    </script>
+    <!-- Built by Vite; the dev server swaps in the source entry (see vite.config.mts). -->
+    <script type="module" src="./dist/viewer.js"></script>
   </body>
 </html>

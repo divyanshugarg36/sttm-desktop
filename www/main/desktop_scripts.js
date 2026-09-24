@@ -1,4 +1,4 @@
-import tingle from '../assets/js/vendor/tingle';
+import tingle from './common/vendor/tingle';
 
 const { ipcRenderer } = require('electron');
 const electron = require('electron');
