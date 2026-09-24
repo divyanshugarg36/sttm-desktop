@@ -186,6 +186,11 @@
           font-size: 18px;
         }
 
+        // Same width as the native slider it replaces.
+        .setting-range {
+          flex: 0 0 128px;
+        }
+
         .custom-checkbox {
           input[type='checkbox'] {
             left: -9999px;

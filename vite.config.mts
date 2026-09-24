@@ -21,8 +21,10 @@ const { dependencies } = JSON.parse(readFileSync(resolve(projectRoot, 'package.j
   dependencies: Record<string, string>;
 };
 
-// Deep imports the renderer uses, which need their own shim.
-const subpathImports = ['react-dom/client'];
+// Deep imports the renderer uses, which need their own shim. sikhi-ui is a
+// devDependency, so it is bundled; its react/jsx-runtime import must still load
+// the app's React, not a second copy.
+const subpathImports = ['react-dom/client', 'react/jsx-runtime'];
 
 const nodeLoaded = Object.fromEntries(
   [...Object.keys(dependencies), ...subpathImports].map((name) => [name, { type: 'cjs' as const }]),

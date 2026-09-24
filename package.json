@@ -27,7 +27,7 @@
     "dist:win": "npm run pack:win && electron-builder --win --x64 --publish always",
     "dist:win32": "npm run pack:win32 && electron-builder --win --ia32 --publish always",
     "build-css": "run-p build-css:*",
-    "build-css:main": "sass --style=compressed --no-source-map --load-path=www/src/scss www/src/scss/styles.scss www/assets/css/bundle.css",
+    "build-css:main": "sass --style=compressed --no-source-map --load-path=www/src/scss --load-path=node_modules www/src/scss/styles.scss www/assets/css/bundle.css",
     "build-css:obs": "sass --style=compressed --no-source-map --load-path=www/src/scss/obs www/src/scss/obs/styles.scss www/obs/bundle.css",
     "build-main": "vite build -c vite.main.config.mts",
     "build-renderer": "vite build",
@@ -45,6 +45,7 @@
   "license": "OSL-3.0",
   "devDependencies": {
     "@electron/notarize": "^2.3.0",
+    "@khalisfoundation/sikhi-ui": "1.36.1",
     "@types/node": "^24.13.6",
     "@types/react": "^18.3.31",
     "@types/react-dom": "^18.3.7",
