@@ -1,9 +1,9 @@
 /* eslint-disable global-require */
-// The BaniDB functions of realm-search.js, read from the SQLite BaniDB through
-// @khalisfoundation/banidb. Each returns what its Realm version did (Verse rows
-// with Gurmukhi, Translations / Visraam as JSON strings, Source, Shabads, …),
-// so the app code reading them is unchanged. Like Realm, a lookup that finds
-// nothing leaves its promise pending.
+// The BaniDB functions, read from the SQLite BaniDB through
+// @khalisfoundation/banidb. Each returns the rows the app was written for when
+// it used Realm (Verse rows with Gurmukhi, Translations / Visraam as JSON
+// strings, Source, Shabads, …), so the code reading them is unchanged. As with
+// Realm, a lookup that finds nothing leaves its promise pending.
 import { DatabaseSync } from 'node:sqlite';
 import { createBaniDB } from '@khalisfoundation/banidb';
 import * as CONSTS from './constants';
@@ -22,14 +22,29 @@ export const sqlitePath =
 
 export const hasSqliteDB = () => fs.existsSync(sqlitePath) && fs.statSync(sqlitePath).size > 0;
 
+const WAIT_FOR_DB_MS = 1000;
+
 let client;
 let database;
 
+/** The open database. On first launch it waits for the download to finish. */
+const openDatabase = async () => {
+  while (!hasSqliteDB()) {
+    // eslint-disable-next-line no-await-in-loop
+    await new Promise((resolve) => {
+      setTimeout(resolve, WAIT_FOR_DB_MS);
+    });
+  }
+  if (!database) {
+    database = new DatabaseSync(sqlitePath, { readOnly: true });
+  }
+  return database;
+};
+
 const banidb = () => {
   if (!client) {
-    database = new DatabaseSync(sqlitePath, { readOnly: true });
     client = createBaniDB({
-      db: { query: async (sql, params = []) => database.prepare(sql).all(...params) },
+      db: { query: async (sql, params = []) => (await openDatabase()).prepare(sql).all(...params) },
     });
   }
   return client;

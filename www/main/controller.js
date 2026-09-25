@@ -20,7 +20,7 @@ if (!isUnsupportedWindow) {
       enabled: false,
     },
     {
-      label: i18n.t('MENU.APP.DB_VERSION', { version: global.platform.getRealmDBLastModified() }),
+      label: i18n.t('MENU.APP.DB_VERSION', { version: global.platform.getDBLastModified() }),
       enabled: false,
     },
     {
