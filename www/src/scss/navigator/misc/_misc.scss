@@ -65,56 +65,83 @@ $misc-footer-active: 70px;
   }
   
   .misc-footer {
-    @include flex($fd-value: column);
     height: fit-content;
-    position: relative;
-    transition: 0.5s all ease;
+    width: 100%;
     .clear-pane {
-      @include flex($jc-value: space-between);
+      @include flex($jc-value: flex-end);
       height: 40px;
-      transition: 0.5s all ease;
-      .quick-tray {
-        cursor: pointer;
-
-        span {
-          color: $white;
-          margin-left: 6px;
-        }
-      }
-      .footer-toggler {
-        padding: 12px;
-      }
-      .footer-toggler-inactive {
-        padding: 12px;
-      }
       // sikhi-ui ghost PrimaryButton.
       .clear-history {
         margin-right: 12px;
       }
     }
-    &.shortcut-tray-active {
-      bottom: 0px;
+  }
+}
+
+// Quick Insert: a toggle that opens a drawer of slides, under the verse list.
+.quick-insert {
+  @include flex($fd-value: column, $ai-value: stretch);
+  // sikhi-ui ghost PrimaryButton that opens and closes the drawer.
+  .quick-tray {
+    align-self: flex-start;
+    margin: 8px 12px;
+  }
+  .shortcut-drawer.shortcut-drawer-active {
+    @include flex($jc-value: space-evenly);
+    flex-wrap: wrap;
+    gap: 8px;
+    height: auto;
+    padding: 12px;
+    // sikhi-ui amber PrimaryButtons.
+    .tray-item-icon {
+      @include flex($jc-value: center, $width: fit-content);
     }
-    .shortcut-drawer.shortcut-drawer-active {
-      @include flex($jc-value: space-evenly);
-      height: 70px;
-      // sikhi-ui amber PrimaryButtons.
-      .tray-item-icon {
-        @include flex($jc-value: center, $width: fit-content);
-      }
-    }
-    .shortcut-drawer {
-      height: 0;
-      transition: 0.5s all ease;
-      .tray-item-icon {
-        display: none;
-      }
+  }
+  .shortcut-drawer {
+    height: 0;
+    transition: 0.5s all ease;
+    .tray-item-icon {
+      display: none;
     }
   }
 }
 
 .history-results {
   overflow-y: auto;
+
+  // History rows, styled like sttm-web's controller history list
+  // (.bani-list__item.history-list__item): type badge, label, delete button.
+  &.history-list {
+    list-style: none;
+    margin: 0;
+    padding: 12px;
+  }
+
+  .history-list__item {
+    align-items: center;
+    border-radius: var(--sui-radii-md);
+    color: var(--sui-semantic-accent-default);
+    cursor: pointer;
+    display: flex;
+    font-weight: var(--sui-typography-font-weights-semibold);
+    gap: 8px;
+    padding: 12px;
+
+    &:hover {
+      background-color: color-mix(in srgb, var(--sui-semantic-accent-default) 4%, transparent);
+    }
+  }
+
+  .history-list__label {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  // sikhi-ui ghost icon button: remove from history.
+  .history-list__delete {
+    color: var(--sui-semantic-foreground-muted);
+    flex: 0 0 auto;
+  }
 
   .history-item-container {
     align-items: center;

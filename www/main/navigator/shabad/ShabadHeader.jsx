@@ -24,11 +24,10 @@ const ShabadHeader = () => {
 
   return (
     <div className="shabad-pane-header">
-      <FavShabadIcon />
       <PrimaryButton
         className={classNames('toggle-viewer-btn', !showViewer && 'btn-danger')}
         variant={showViewer ? 'default' : 'destructive'}
-        size="sm"
+        size="xs"
         shape="rounded-md"
         leftIcon={<Icon name={showViewer ? 'eye-off' : 'eye'} />}
         onClick={() => setShowViewer(!showViewer)}
@@ -36,6 +35,7 @@ const ShabadHeader = () => {
       >
         {showViewer ? i18n.t('SHABAD_PANE.HIDE_SCREEN') : i18n.t('SHABAD_PANE.SHOW_DISPLAY')}
       </PrimaryButton>
+      <FavShabadIcon />
       <ArrowIcon paneId={defaultPaneId} />
     </div>
   );

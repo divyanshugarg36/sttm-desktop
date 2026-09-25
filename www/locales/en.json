@@ -495,9 +495,15 @@
   "SHORTCUT": {
     "COPY_TO_CLIPBOARD": "Verse copied to clipboard!"
   },
+  "HISTORY_TYPES": {
+    "SHABAD": "Shabad",
+    "BANI": "Bani",
+    "CEREMONY": "Ceremony"
+  },
   "SHABAD_PANE": {
     "SHOW_DISPLAY": "Show Display",
     "HIDE_SCREEN": "Hide Display",
+    "HOME_VERSE": "Set as home verse",
     "MARK_FAV": "Add to favorites",
     "UNMARK_FAV": "Remove from favorites",
     "FAV_BTN_TOOLTIP": "Add or remove the current displayed Shabad to your list of favorites. Your favorites are available under the tabs in the bottom right hand panel.",

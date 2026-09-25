@@ -7,7 +7,7 @@ import ShabadHeader from './ShabadHeader';
 import MultiPaneHeader from './MultiPaneHeader';
 import MultiPaneContent from './MultiPaneContent';
 
-const ShabadPane = ({ className, multiPaneId = false }) => {
+const ShabadPane = ({ className = '', multiPaneId = false, plain = false, footer = null }) => {
   const { activePaneId } = useSelector((state) => state.navigator);
   const { defaultPaneId } = useSelector((state) => state.userSettings);
   return (
@@ -15,8 +15,10 @@ const ShabadPane = ({ className, multiPaneId = false }) => {
       <Pane
         header={multiPaneId ? MultiPaneHeader : ShabadHeader}
         content={MultiPaneContent}
+        footer={footer}
         data={{ multiPaneId: multiPaneId || defaultPaneId }}
         className={multiPaneId === activePaneId ? 'live-pane' : 'inactive-pane'}
+        plain={plain}
       />
     </div>
   );
@@ -25,5 +27,7 @@ const ShabadPane = ({ className, multiPaneId = false }) => {
 ShabadPane.propTypes = {
   className: PropTypes.string,
   multiPaneId: PropTypes.number,
+  plain: PropTypes.bool,
+  footer: PropTypes.elementType,
 };
 export default ShabadPane;

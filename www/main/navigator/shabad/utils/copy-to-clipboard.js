@@ -8,7 +8,9 @@ const { i18n } = remote.require('./app');
 
 export const copyToClipboard = (activeVerseRef) => {
   if (activeVerseRef && activeVerseRef.current) {
-    const nonUniCodePanktee = activeVerseRef.current.childNodes[1].innerText;
+    // The Gurbani Akhar text in the verse row's sikhi-ui BaaniLine.
+    const nonUniCodePanktee =
+      activeVerseRef.current.querySelector('.sui-gurbani-display')?.innerText || '';
     const uniCodePanktee = anvaad.unicode(nonUniCodePanktee);
     copy(uniCodePanktee);
     new Noty({

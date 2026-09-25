@@ -2,10 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { iconMap } from '@khalisfoundation/sikhi-ui';
 import {
-  ArrowLeftCircle,
   ArrowLongLeft,
-  ArrowRightCircle,
   ClockCircle,
+  Columns,
   Dots,
   EyeOff,
   Flower,
@@ -15,6 +14,8 @@ import {
   Login,
   Logout,
   MinusCircle,
+  Monitor,
+  Presentation,
   Target,
   Trash,
   TypeBold,
@@ -25,11 +26,10 @@ import {
 
 // Icons sikhi-ui doesn't ship yet, from the same Mynaui set its own icons come from.
 const extraIcons = {
-  'arrow-left-circle': ArrowLeftCircle,
   'arrow-long-left': ArrowLongLeft,
-  'arrow-right-circle': ArrowRightCircle,
   bold: TypeBold,
   clock: ClockCircle,
+  columns: Columns,
   dots: Dots,
   'eye-off': EyeOff,
   flower: Flower,
@@ -40,6 +40,8 @@ const extraIcons = {
   login: Login,
   logout: Logout,
   'minus-circle': MinusCircle,
+  monitor: Monitor,
+  presentation: Presentation,
   target: Target,
   trash: Trash,
   'volume-high': VolumeHigh,

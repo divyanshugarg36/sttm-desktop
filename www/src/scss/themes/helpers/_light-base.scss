@@ -51,7 +51,6 @@
   #toolbar,
   #toolbar-nav,
   .bani-list,
-  .settings-container,
   .fav-results {
     background-color: $nav-bg;
 
@@ -59,10 +58,6 @@
       border-color: $alt-bg;
       border-top-color: $active-focus;
     }
-  }
-
-  .workspace-bar {
-    background-color: $dialog-bg;
   }
 
   .viewer-controls {
@@ -119,27 +114,10 @@
     }
 
     .pane-footer {
-      background-color: $alt-bg;
+      background-color: var(--sui-semantic-accent-muted);
 
       .clear-pane {
-        background-color: $not-so-white;
-
-        .quick-tray>i {
-          color: $white;
-        }
-
-        .footer-toggler-inactive {
-          background-color: $tray-bg;
-        }
-
-        .footer-toggler {
-          background-color: $tray-bg;
-        }
-      }
-
-      // Transparent, so the pane's gradient sits behind the amber buttons.
-      .shortcut-drawer {
-        background: transparent;
+        background-color: var(--sui-semantic-accent-muted);
       }
     }
   }
@@ -151,7 +129,7 @@
       }
 
       .search-footer {
-        background-color: $statusbar-bg;
+        background-color: var(--sui-semantic-accent-muted);
       }
     }
 
@@ -341,19 +319,7 @@
 
   .verse-block {
 
-    .search-li,
-    .shabad-li {
-      &:hover {
-        background-color: $transparent-light-black;
-        &:has(.flower-verse) {
-          background-color: transparent;
-        }
-      }
-    }
-  }
-
-  .shabad-pane-header {
-    >i {
+    .search-li {
       &:hover {
         background-color: $transparent-light-black;
       }

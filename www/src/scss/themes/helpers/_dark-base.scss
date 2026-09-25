@@ -28,7 +28,6 @@
   #toolbar-nav,
   .tingle-modal-box,
   .bani-list,
-  .settings-container,
   .fav-results {
     background-color: $bg-alt;
 
@@ -142,7 +141,7 @@
   }
 
   .search-footer {
-    background: $bg-main;
+    background: var(--sui-semantic-accent-muted);
   }
 
   .search-pane {
@@ -161,25 +160,8 @@
 
   .pane-footer {
     .clear-pane {
-      background-color: $black;
-
-      .quick-tray>i {
-        color: $white;
-      }
-
-      .footer-toggler-inactive {
-        background: $tray-bg;
-      }
-
-      .footer-toggler {
-        background-color: $tray-bg;
-      }
+      background-color: var(--sui-semantic-accent-muted);
     }
-  }
-
-  // Transparent, so the pane's gradient sits behind the amber buttons.
-  .shortcut-drawer {
-    background: transparent;
   }
 
   &.shortcut-tray-true .shortcut-toggle {
@@ -426,29 +408,13 @@
     }
   }
 
-  .workspace-bar {
-    background-color: $bg-main;
-  }
-
   ::-webkit-scrollbar-thumb {
     background-color: $scrollbar;
   }
 
   .verse-block {
 
-    .search-li,
-    .shabad-li {
-      &:hover {
-        background-color: $transparent-light-white;
-        &:has(.flower-verse) {
-          background-color: transparent;
-        }
-      }
-    }
-  }
-
-  .shabad-pane-header {
-    >i {
+    .search-li {
       &:hover {
         background-color: $transparent-light-white;
       }

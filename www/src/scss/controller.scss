@@ -40,6 +40,15 @@ $gurmukhi-font-family-thick: 'gurbaniakharthick';
   src: url('../fonts/gurbaniakharheavytrue-webfont.ttf') format('truetype');
 }
 
+// sikhi-ui's primary font (--sui-typography-fonts-primary), bundled so it
+// works offline. One variable file covers weights 400-800.
+@font-face {
+  font-family: 'Baloo Paaji 2';
+  font-style: normal;
+  font-weight: 400 800;
+  src: url('../fonts/BalooPaaji2-Variable.ttf') format('truetype');
+}
+
 #navigator {
   .gurmukhi {
     font-family: $gurmukhi-font-family;
@@ -97,7 +106,7 @@ ul {
   height: 100%;
   overflow-x: auto;
   // Clear the side nav (#toolbar-nav), plus a 2px gap.
-  padding: 10px 10px 40px ($toolbar-offset + 2px);
+  padding: 6px 6px 6px ($toolbar-offset);
   width: 100%;
 
   &.single-display {
@@ -249,14 +258,66 @@ ul {
     }
   }
 
-  .navigator-column {
-    align-items: center;
+  // Presenter: two columns, each pane taking an equal share of the height.
+  .navigator-columns {
     display: flex;
+    height: 100%;
+    width: 100%;
+  }
+
+  .navigator-column {
+    display: flex;
+    flex: 1 1 0;
     flex-direction: column;
-    flex-wrap: wrap;
-    justify-content: space-evenly;
-    position: relative;
-    width: 50%;
+    min-width: 0;
+
+    >.pane-container {
+      flex: 1 1 0;
+      max-height: none;
+      min-height: 0;
+    }
+  }
+
+  // The viewer and the shabad's verses share one box.
+  .presenter-column {
+    padding: 10px;
+
+    .presenter-box {
+      box-sizing: border-box;
+      height: 100%;
+      padding: 12px;
+    }
+
+    .pane-container {
+      flex: 1 1 0;
+      max-height: none;
+      min-height: 0;
+      padding: 0;
+    }
+
+    .viewer-pane .pane-content {
+      border: none;
+    }
+
+    .shabad-pane {
+      background: color-mix(in srgb, var(--sui-semantic-accent-default) 4%, transparent);
+
+      // The Quick Insert bar under the verses.
+      .pane-footer {
+        background-color: var(--sui-semantic-accent-muted);
+      }
+
+      .pane-header {
+        background-color: transparent;
+        height: auto;
+        line-height: normal;
+        padding: 12px;
+
+        .shabad-pane-header {
+          height: auto;
+        }
+      }
+    }
   }
 
   .navigator-row {
@@ -273,7 +334,9 @@ ul {
     height: 50%;
   }
 
-  .shabad1-container, .shabad2-container, .shabad3-container {
+  .shabad1-container,
+  .shabad2-container,
+  .shabad3-container {
     grid-row: 1;
   }
 
@@ -303,11 +366,6 @@ ul {
 
   #language-selector {
     visibility: hidden;
-  }
-
-  .workspace-bar {
-    height: 0;
-    overflow: hidden;
   }
 }
 

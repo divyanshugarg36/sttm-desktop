@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Box } from '@khalisfoundation/sikhi-ui';
 
 import Categories from './Categories';
 
@@ -9,9 +10,14 @@ const SettingsContainer = ({ settingsObj }) => {
     const category = settingsObj[cat];
     if (category.type === 'title') {
       settingsList.push(
-        <div className="settings-container" id={cat} key={`settings-container-${index}`}>
+        <Box
+          variant="gradient"
+          className="settings-container"
+          id={cat}
+          key={`settings-container-${index}`}
+        >
           <Categories category={category} />
-        </div>,
+        </Box>,
       );
     }
   });

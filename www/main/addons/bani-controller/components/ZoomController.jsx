@@ -41,7 +41,7 @@ const ZoomController = () => {
     <div className="zoom-dialogue overlay-ui ui-sync-button">
       <img className="zoom-logo" src="assets/img/icons/zoom.svg" />
       <header className="sync-header">{i18n.t('TOOLBAR.ZOOM_HEADING')}</header>
-      <Box variant="blur" className="zoom-content-wrapper">
+      <Box variant="gradient" className="zoom-content-wrapper">
         <div className="zoom-content">
           <div className="zoom-code-label"> {i18n.t('TOOLBAR.ZOOM_CC_OVERLAY.INPUT_HELPER')} </div>
           <div className="zoom-form">
