@@ -215,8 +215,8 @@
     background-color: $alt-bg;
   }
 
+  // Panes take their background from sikhi-ui's Box.
   .pane {
-    background-color: $nav-bg;
     color: $base-text !important;
 
     a.panktee.current {
