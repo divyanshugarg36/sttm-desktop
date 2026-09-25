@@ -40,7 +40,7 @@ export const MiscHeader = () => {
         index={tabs.findIndex(({ panel }) => panel === currentMiscPanel)}
         onChange={(index) => setTab(tabs[index].panel)}
       >
-        <FatehTabList variant="underline">
+        <FatehTabList variant="pilled">
           {tabs.map(({ panel, icon, label }) => (
             <FatehTab key={panel} className="misc-button">
               <Icon name={icon} />

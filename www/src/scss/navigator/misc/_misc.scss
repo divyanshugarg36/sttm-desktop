@@ -13,14 +13,25 @@ $misc-footer-active: 70px;
     min-height: $misc-header;
     width: 100%;
 
+    // sikhi-ui pilled FatehTabs, one per panel (icon beside its label),
+    // compacted like the search pane's pickers to fit the 40px header.
     .misc-header-nav {
+      align-items: center;
       display: inline-flex;
+
+      .sui-fateh-tabs--pilled {
+        gap: 6px;
+      }
     }
-    // sikhi-ui underline FatehTabs, one per panel: icon beside its label.
     .misc-button {
       align-items: center;
       display: inline-flex;
+      font-size: 13px;
       gap: 6px;
+      height: 28px;
+      letter-spacing: normal;
+      padding: 0 12px;
+      text-transform: none;
     }
 
     .turban {
