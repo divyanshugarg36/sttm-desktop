@@ -157,11 +157,12 @@ const SEARCH_TYPE = {
 
 const query = (searchQuery, searchType, searchSource, resultRows = 20) => {
   const isAng = searchType === CONSTS.SEARCH_TYPES.ANG;
-  // Ang search reads the source being browsed, not the search filter (as before).
-  const source = isAng
-    ? (global.core.search.currentMeta && global.core.search.currentMeta.source) ||
-      CONSTS.SOURCE_TYPES.GURU_GRANTH_SAHIB
-    : searchSource;
+  // Angs are numbered per source: an ang search reads the Source filter, or
+  // Guru Granth Sahib when it is "all".
+  const source =
+    isAng && searchSource === CONSTS.SOURCE_TYPES.ALL_SOURCES
+      ? CONSTS.SOURCE_TYPES.GURU_GRANTH_SAHIB
+      : searchSource;
   return banidb()
     .search(searchQuery.trim(), {
       type: SEARCH_TYPE[searchType],

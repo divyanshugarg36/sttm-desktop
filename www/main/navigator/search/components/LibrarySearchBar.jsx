@@ -4,7 +4,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import { SearchBar } from '@khalisfoundation/sikhi-ui';
 
 import { InputContext } from '../../../launchpad';
+import { SEARCH_TYPES } from '../../../banidb/constants';
 import {
+  setCurrentLanguage,
+  setCurrentSearchType,
   setCurrentWriter,
   setCurrentRaag,
   setCurrentSource,
@@ -14,6 +17,21 @@ import {
 const remote = require('@electron/remote');
 
 const analytics = remote.getGlobal('analytics');
+const { i18n } = remote.require('./app');
+
+// Every search type, in the web's order, with its label.
+const searchTypes = [
+  [SEARCH_TYPES.FIRST_LETTERS, 'FIRST_LETTER_START'],
+  [SEARCH_TYPES.FIRST_LETTERS_ANYWHERE, 'FIRST_LETTER_ANYWHERE'],
+  [SEARCH_TYPES.FIRST_LETTERS_ENGLISH, 'FIRST_LETTER_ENGLISH'],
+  [SEARCH_TYPES.MAIN_LETTERS, 'MAIN_LETTERS'],
+  [SEARCH_TYPES.GURMUKHI_WORD, 'FULL_WORDS_GURMUKHI'],
+  [SEARCH_TYPES.ENGLISH_WORD, 'FULL_WORDS_ENGLISH'],
+  [SEARCH_TYPES.ANG, 'ANG'],
+];
+
+// Types searched with English input; the rest take Gurmukhi.
+const englishSearchTypes = [SEARCH_TYPES.ENGLISH_WORD, SEARCH_TYPES.FIRST_LETTERS_ENGLISH];
 
 const filterActions = {
   source: setCurrentSource,
@@ -64,23 +82,47 @@ export const LibrarySearchBar = ({
     }
   }, [shortcuts]);
 
-  // Space is the next-verse shortcut, so word searches add it themselves.
+  // Space is the next-verse shortcut, so searches that take words add it
+  // themselves.
   const handleKeyDown = (event) => {
-    if (event.keyCode === 32 && [2, 3].includes(currentSearchType)) {
+    if (
+      event.keyCode === 32 &&
+      [SEARCH_TYPES.GURMUKHI_WORD, SEARCH_TYPES.ENGLISH_WORD, SEARCH_TYPES.MAIN_LETTERS].includes(
+        currentSearchType,
+      )
+    ) {
       setQuery(`${query} `);
     }
   };
 
   const values = {
     query,
+    type: String(currentSearchType),
     source: currentSource,
     writer: currentWriter,
     raag: currentRaag,
   };
 
+  const handleSearchTypeChange = (value) => {
+    const searchType = parseInt(value, 10);
+    const language = englishSearchTypes.includes(searchType) ? 'en' : 'gr';
+    dispatch(setCurrentSearchType(searchType));
+    if (currentLanguage !== language) {
+      dispatch(setCurrentLanguage(language));
+    }
+    analytics.trackEvent({
+      category: 'search',
+      action: 'search-type',
+      label: value,
+    });
+  };
+
   const handleChange = (next) => {
     if (next.query !== query) {
       setQuery(next.query || '');
+    }
+    if (next.type !== undefined && next.type !== values.type) {
+      handleSearchTypeChange(next.type);
     }
     Object.keys(filterActions).forEach((key) => {
       if (next[key] !== undefined && next[key] !== values[key]) {
@@ -101,25 +143,34 @@ export const LibrarySearchBar = ({
       wrapperVariant="default"
       placeholder={placeholder}
       values={values}
+      // The search type always shows as a dropdown ('left'); source, writer
+      // and raag sit behind the Filters button ('right').
       filters={{
+        type: {
+          options: searchTypes.map(([value, label]) => ({
+            value: String(value),
+            label: i18n.t(`SEARCH.${label}`),
+          })),
+          defaultValue: String(SEARCH_TYPES.FIRST_LETTERS),
+          position: 'left',
+        },
         source: {
           label: 'Source',
           options: toOptions(sourceArray),
           defaultValue: 'all',
-          position: 'left',
+          position: 'right',
         },
-        // 'left' filters always show as dropdowns, so there is no Filters button to open.
         writer: {
           label: 'Writer',
           options: toOptions(writerArray),
           defaultValue: 'all',
-          position: 'left',
+          position: 'right',
         },
         raag: {
           label: 'Raag',
           options: toOptions(raagArray),
           defaultValue: 'all',
-          position: 'left',
+          position: 'right',
         },
       }}
       onChange={handleChange}
@@ -127,7 +178,7 @@ export const LibrarySearchBar = ({
       onSearch={() => {}}
       enableKeyboard={isGurmukhi}
       isGurmukhi={isGurmukhi}
-      showMatras={currentSearchType === 2}
+      showMatras={currentSearchType === SEARCH_TYPES.GURMUKHI_WORD}
       onMicClick={onMicClick}
       isRecording={isRecording}
       isProcessing={isProcessing}
