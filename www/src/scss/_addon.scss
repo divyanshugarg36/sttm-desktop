@@ -1,4 +1,6 @@
+// A sikhi-ui blur Box, like the main-screen panes.
 .addon-overlay {
+  border-radius: 12px;
   height: calc(100vh - 40px);
   left: $toolbar-offset + 12px;
   max-width: 600px;

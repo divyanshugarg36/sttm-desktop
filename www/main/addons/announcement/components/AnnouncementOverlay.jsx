@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
+import { Box } from '@khalisfoundation/sikhi-ui';
 
 import { Overlay, Switch } from '../../../common/sttm-ui';
 import Announcement from './Announcement';
@@ -20,7 +21,7 @@ const AnnouncementPane = ({ onScreenClose, className }) => {
 
   return (
     <Overlay onScreenClose={onScreenClose} className={className}>
-      <div className="addon-overlay">
+      <Box variant="blur" className="addon-overlay">
         <header>
           <h2>Announcement</h2>
           <Switch
@@ -34,7 +35,7 @@ const AnnouncementPane = ({ onScreenClose, className }) => {
         <Announcement isGurmukhi={isGurmukhi} />
         <MiscSlides />
         <DhanGuru isGurmukhi={isGurmukhi} />
-      </div>
+      </Box>
     </Overlay>
   );
 };
