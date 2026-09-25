@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
-import { PrimaryButton } from '@khalisfoundation/sikhi-ui';
+import { PrimaryButton, SimpleSelect } from '@khalisfoundation/sikhi-ui';
 
 import FavShabadIcon from './FavShabadIcon';
 import ArrowIcon from './ArrowIcon';
@@ -91,7 +91,19 @@ const MultiPaneHeader = ({ data }) => {
           <Icon name={paneAttributes.locked ? 'lock' : 'lock-open'} />
         </PrimaryButton>
       </div>
-      <span className="pane-title">{paneAttributes.content}</span>
+      <SimpleSelect
+        className="pane-title pane-options-dropdown"
+        variant="fateh"
+        selectSize="sm"
+        value={paneAttributes.content}
+        onChange={selectPaneOption}
+        options={[
+          'MULTI_PANE.SHABAD',
+          'TOOLBAR.HISTORY',
+          'MULTI_PANE.FAVORITES',
+          'MULTI_PANE.MISC_SLIDES',
+        ].map((key) => ({ value: i18n.t(key), label: i18n.t(key) }))}
+      />
       <div className="pane-tools">
         <FavShabadIcon paneId={paneId} />
         <ArrowIcon paneId={paneId} />
@@ -104,16 +116,6 @@ const MultiPaneHeader = ({ data }) => {
             Clear
           </PrimaryButton>
         )}
-        <select
-          onChange={selectPaneOption}
-          value={paneAttributes.content}
-          className="pane-options-dropdown"
-        >
-          <option>{i18n.t('MULTI_PANE.SHABAD')}</option>
-          <option>{i18n.t('TOOLBAR.HISTORY')}</option>
-          <option>{i18n.t('MULTI_PANE.FAVORITES')}</option>
-          <option>{i18n.t('MULTI_PANE.MISC_SLIDES')}</option>
-        </select>
       </div>
     </div>
   );

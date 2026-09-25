@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { convertToCamelCase } from '../../common/utils';
+import { SimpleSelect } from '@khalisfoundation/sikhi-ui';
+import { convertToCamelCase, toGroupedSelectOptions } from '../../common/utils';
 import { setQuickToolsOpen } from '../../common/store/redux/viewerSettingsSlice';
 import platform from '../../desktop_scripts';
 import Icon from '../../common/sttm-ui/icon';
@@ -148,26 +149,12 @@ const QuickTools = ({ isMiscSlide, baniOptions }) => {
       return <div>{dropdownLabel(order)}</div>;
     }
 
-    const markup = baniOptions.map(
-      (optionObj, optionIndex) =>
-        optionObj.options.length && (
-          <optgroup key={`option-${optionIndex}`} label={dropdownLabel(optionObj.label)}>
-            {optionObj.options.map((optionName, nameIndex) => (
-              <option
-                key={`option-name-${nameIndex}`}
-                value={optionName.id}
-                disabled={disabledContent.includes(optionName.id)}
-              >
-                {optionName.text}
-              </option>
-            ))}
-          </optgroup>
-        ),
-    );
     return (
       <>
         <div>{dropdownLabel(order)}</div>
-        <select
+        <SimpleSelect
+          variant="bordered"
+          selectSize="sm"
           value={order}
           onChange={(event) => {
             const newOrder = [...baniOrder];
@@ -182,9 +169,11 @@ const QuickTools = ({ isMiscSlide, baniOptions }) => {
               }),
             );
           }}
-        >
-          {markup}
-        </select>
+          options={toGroupedSelectOptions(baniOptions, {
+            groupLabel: dropdownLabel,
+            isDisabled: (id) => disabledContent.includes(id),
+          })}
+        />
       </>
     );
   };

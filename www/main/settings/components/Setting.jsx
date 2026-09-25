@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { PrimaryButton, Range, SimpleSelect, Toggle } from '@khalisfoundation/sikhi-ui';
 
 import { Checkbox, Icon } from '../../common/sttm-ui';
-import { convertToCamelCase } from '../../common/utils';
+import { convertToCamelCase, toGroupedSelectOptions } from '../../common/utils';
 import { settings } from '../../../configs/user-settings.json';
 import { userSettingsActions } from '../../common/store/redux/userSettingsSlice';
 
@@ -165,25 +165,17 @@ const Setting = ({ settingObj, stateVar, stateFunction }) => {
     case 'bani-options-dropdown':
       settingDOM = (
         <>
-          <select
+          <SimpleSelect
+            variant="bordered"
+            selectSize="sm"
             value={userSettings[stateVar]}
             onChange={handleInputChange}
             style={{ marginRight: '8px' }}
-          >
-            {filteredBaniOptions.map((optionObj, optionIndex) => (
-              <optgroup key={`option-${optionIndex}`} label={dropdownLabel(optionObj.label)}>
-                {optionObj.options.map((optionName, nameIndex) => (
-                  <option
-                    key={`option-name-${nameIndex}`}
-                    value={optionName.id}
-                    disabled={disabledContent.includes(optionName.id)}
-                  >
-                    {optionName.text}
-                  </option>
-                ))}
-              </optgroup>
-            ))}
-          </select>
+            options={toGroupedSelectOptions(filteredBaniOptions, {
+              groupLabel: dropdownLabel,
+              isDisabled: (id) => disabledContent.includes(id),
+            })}
+          />
           <span>{dropdownLabel(userSettings[stateVar])}</span>
         </>
       );

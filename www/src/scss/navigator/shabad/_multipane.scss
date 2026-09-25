@@ -51,21 +51,9 @@
         }
       }
 
+      // sikhi-ui fateh SimpleSelect: what the pane shows.
       .pane-options-dropdown {
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        appearance: none;
-        background: url('../../assets/img/icons/ellipsis-vertical-solid.svg');
-        background-position: center;
-        background-repeat: no-repeat;
-        background-size: auto 18px;
-        border: none;
-        color: transparent;
-        cursor: pointer;
-        height: 40px;
-        outline: none;
-        padding: 16px;
-        width: 40px;
+        margin-left: 6px;
       }
     }
 
