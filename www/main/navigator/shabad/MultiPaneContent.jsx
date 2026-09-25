@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
+import { PrimaryButton } from '@khalisfoundation/sikhi-ui';
 
 import { ShabadText } from './ShabadText';
 import { FavoritePane, HistoryPane } from '../misc/components';
@@ -42,8 +43,10 @@ const MultiPaneContent = ({ data }) => {
   }, [currentWorkspace]);
 
   const goToShabadBtn = (
-    <button
+    <PrimaryButton
       className="multipane-content-btn"
+      variant="ghost"
+      size="xs"
       style={paneAttributes.activeShabad ? {} : { display: 'none' }}
       onClick={() => {
         dispatch(setPaneAttributes({ ...paneAttributes, content: i18n.t('MULTI_PANE.SHABAD') }));
@@ -57,7 +60,7 @@ const MultiPaneContent = ({ data }) => {
     >
       <Icon name="arrow-left" />
       <span>{i18n.t('MULTI_PANE.SHABAD_BTN')}</span>
-    </button>
+    </PrimaryButton>
   );
 
   switch (paneAttributes.content) {

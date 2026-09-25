@@ -2,9 +2,9 @@ import React, { useRef, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { ipcRenderer } from 'electron';
 import { useSelector, useDispatch } from 'react-redux';
+import { GurmukhiKeyboard, PrimaryButton } from '@khalisfoundation/sikhi-ui';
 import { classNames } from '../../../common/utils';
 import { IconButton } from '../../../common/sttm-ui';
-import { GurmukhiKeyboard } from '../../../navigator/search/components/GurmukhiKeyboard';
 import {
   setIsMiscSlide,
   setMiscSlideText,
@@ -111,16 +111,18 @@ const Announcement = ({ isGurmukhi }) => {
       </div>
       {keyboardOpenStatus && isGurmukhi && (
         <GurmukhiKeyboard
+          className="announcement-keyboard"
           title={i18n.t('INSERT.GURMUKHI_KEYBOARD')}
-          searchType={2}
-          query={announcementVal}
-          setQuery={setAnnouncementVal}
+          value={announcementVal}
+          onKeyClick={setAnnouncementVal}
+          active
+          showMatras
         />
       )}
       <div className="announcement-actions">
-        <button className="announcement-slide-btn" onClick={addAnnouncement}>
+        <PrimaryButton className="announcement-slide-btn" size="sm" onClick={addAnnouncement}>
           {i18n.t('INSERT.ADD_ANNOUNCEMENT')}
-        </button>
+        </PrimaryButton>
       </div>
     </div>
   );

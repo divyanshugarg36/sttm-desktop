@@ -1,5 +1,6 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { PrimaryButton } from '@khalisfoundation/sikhi-ui';
 import { setDefaultPaneId } from '../../../common/store/redux/userSettingsSlice';
 
 const remote = require('@electron/remote');
@@ -22,8 +23,10 @@ const SearchFooter = () => {
       <span>{searchShabadsCount ? `${searchShabadsCount} Results` : ''}</span>
       {currentWorkspace === i18n.t('WORKSPACES.MULTI_PANE') && (
         <div className="default-pane-switcher">
-          <button
+          <PrimaryButton
             className={`pane-1-btn ${addActiveClass(1)}`}
+            mode="icon"
+            size="xs"
             onClick={() => {
               if (defaultPaneId !== 1) {
                 dispatch(setDefaultPaneId(1));
@@ -32,9 +35,11 @@ const SearchFooter = () => {
             disabled={pane1.locked}
           >
             1
-          </button>
-          <button
+          </PrimaryButton>
+          <PrimaryButton
             className={`pane-2-btn ${addActiveClass(2)}`}
+            mode="icon"
+            size="xs"
             onClick={() => {
               if (defaultPaneId !== 2) {
                 dispatch(setDefaultPaneId(2));
@@ -43,9 +48,11 @@ const SearchFooter = () => {
             disabled={pane2.locked}
           >
             2
-          </button>
-          <button
+          </PrimaryButton>
+          <PrimaryButton
             className={`pane-3-btn ${addActiveClass(3)}`}
+            mode="icon"
+            size="xs"
             onClick={() => {
               if (defaultPaneId !== 3) {
                 dispatch(setDefaultPaneId(3));
@@ -54,7 +61,7 @@ const SearchFooter = () => {
             disabled={pane3.locked}
           >
             3
-          </button>
+          </PrimaryButton>
         </div>
       )}
     </div>

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
+import { PrimaryButton } from '@khalisfoundation/sikhi-ui';
 
 import FavShabadIcon from './FavShabadIcon';
 import ArrowIcon from './ArrowIcon';
@@ -86,16 +87,22 @@ const MultiPaneHeader = ({ data }) => {
     <div className={`shabad-pane-header pane-${paneId}`}>
       <div className="pane-info">
         <span className="pane-symbol">{paneId}</span>
-        <button onClick={lockPane} ref={lockIcon}>
+        <PrimaryButton variant="ghost" mode="icon" size="xs" onClick={lockPane} ref={lockIcon}>
           <Icon name={paneAttributes.locked ? 'lock' : 'lock-open'} />
-        </button>
+        </PrimaryButton>
       </div>
       <span className="pane-title">{paneAttributes.content}</span>
       <div className="pane-tools">
         <FavShabadIcon paneId={paneId} />
         <ArrowIcon paneId={paneId} />
         {paneAttributes.activeShabad && (
-          <button onClick={() => dispatch(setPaneAttributes(defaultPaneAttributes))}>Clear</button>
+          <PrimaryButton
+            variant="ghost"
+            size="xs"
+            onClick={() => dispatch(setPaneAttributes(defaultPaneAttributes))}
+          >
+            Clear
+          </PrimaryButton>
         )}
         <select
           onChange={selectPaneOption}

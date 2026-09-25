@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import anvaad from 'anvaad-js';
 import { useSelector } from 'react-redux';
+import { PrimaryButton } from '@khalisfoundation/sikhi-ui';
 import Icon from '../icon';
 
 const remote = require('@electron/remote');
@@ -54,33 +55,39 @@ const SearchResults = ({
     if (currentWorkspace === i18n.t('WORKSPACES.MULTI_PANE')) {
       return (
         <div className="button-container">
-          <button
+          <PrimaryButton
             className="button-pane-1"
+            mode="icon"
+            size="xs"
             disabled={pane1.locked}
             onClick={() => {
               if (!pane1.locked) onClick(shabadId, verseId, verse, 1);
             }}
           >
             {pane1.locked ? <Icon name="lock" /> : '1'}
-          </button>
-          <button
+          </PrimaryButton>
+          <PrimaryButton
             className="button-pane-2"
+            mode="icon"
+            size="xs"
             disabled={pane2.locked}
             onClick={() => {
               if (!pane2.locked) onClick(shabadId, verseId, verse, 2);
             }}
           >
             {pane2.locked ? <Icon name="lock" /> : '2'}
-          </button>
-          <button
+          </PrimaryButton>
+          <PrimaryButton
             className="button-pane-3"
+            mode="icon"
+            size="xs"
             disabled={pane3.locked}
             onClick={() => {
               if (!pane3.locked) onClick(shabadId, verseId, verse, 3);
             }}
           >
             {pane3.locked ? <Icon name="lock" /> : '3'}
-          </button>
+          </PrimaryButton>
         </div>
       );
     }

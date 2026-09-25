@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { shell } from 'electron';
+import { PrimaryButton } from '@khalisfoundation/sikhi-ui';
 import { ZOOM_LINK } from '../../../common/constants';
 
 const remote = require('@electron/remote');
@@ -51,20 +52,25 @@ const ZoomController = () => {
               onChange={handleApiInputChange}
             />
             {showSaveBtn ? (
-              <button className="button save-btn" onClick={saveApiCode}>
+              <PrimaryButton className="save-btn" size="sm" onClick={saveApiCode}>
                 {i18n.t('TOOLBAR.ZOOM_CC_OVERLAY.SAVE_BUTTON')}
-              </button>
+              </PrimaryButton>
             ) : (
-              <button className="button clear-btn" onClick={clearApiCode}>
+              <PrimaryButton className="clear-btn" variant="outline" size="sm" onClick={clearApiCode}>
                 {i18n.t('TOOLBAR.ZOOM_CC_OVERLAY.CLEAR_BUTTON')}
-              </button>
+              </PrimaryButton>
             )}
           </div>
 
-          <button className="instructions-btn" onClick={openBrowser}>
-            <img className="play-icon" src="assets/img/icons/play-button.svg" />
-            <span> {i18n.t('TOOLBAR.ZOOM_CC_OVERLAY.INSTRUCTIONS_BUTTON')} </span>
-          </button>
+          <PrimaryButton
+            className="instructions-btn"
+            variant="ghost"
+            size="sm"
+            leftIcon={<img className="play-icon" src="assets/img/icons/play-button.svg" />}
+            onClick={openBrowser}
+          >
+            {i18n.t('TOOLBAR.ZOOM_CC_OVERLAY.INSTRUCTIONS_BUTTON')}
+          </PrimaryButton>
 
           <div className="quick-container">
             <div className="quick-title">

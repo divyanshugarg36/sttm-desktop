@@ -15,11 +15,8 @@
     }
 }
 
-.increase-speed-btn, .decrease-speed-btn {
-    background: transparent;
+.increase-speed-btn.sui-button, .decrease-speed-btn.sui-button {
     color: $cadmium-orange;
-    outline: none;
-    cursor: pointer;
 
     &.disabled {
         color: $not-so-white;
@@ -37,19 +34,17 @@
     transition: opacity 0.15s ease-in-out;
 }
 
-.autoplay-icon-btn {
-    align-items: center;
+// The play / pause ring: white, the size of its 40px progress circle.
+.autoplay-icon-btn.sui-button {
     background: $white;
-    border: none;
-    border-radius: 50%;
-    cursor: pointer;
-    display: flex;
     height: 40px;
-    justify-content: center;
-    outline: none;
-    padding: 0;
     width: 40px;
     position: relative;
+
+    > svg {
+        height: 40px;
+        width: 40px;
+    }
 
 
     .bg-circle {

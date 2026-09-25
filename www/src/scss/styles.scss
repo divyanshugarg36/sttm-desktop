@@ -341,12 +341,13 @@ button {
         transform: scale(1.1);
       }
 
+      // `background`, not background-color: ButtonCard's own is a gradient image.
       &.nitnem-bani {
-        background-color: $tag-nitnem-color;
+        background: $tag-nitnem-color;
       }
 
       &.popular-bani {
-        background-color: $tag-popular-color;
+        background: $tag-popular-color;
       }
     }
 
@@ -387,17 +388,13 @@ button {
   width: 35px;
 }
 
-.close-screen {
-  background-color: transparent;
+// The overlays' close button: a white ring on the dark backdrop.
+.close-screen.sui-button {
   border: 2px solid white;
-  border-radius: 50%;
   color: white;
-  cursor: pointer;
   height: 40px;
-  line-height: 35px;
   position: fixed;
   right: $presenter-pane-gap;
-  text-align: center;
   top: $presenter-pane-gap;
   width: 40px;
 
@@ -544,10 +541,6 @@ button {
           width: 70%;
         }
 
-        .clear-btn {
-          background-color: #7a7a7a;
-        }
-
         .hidden-btn {
           display: none;
         }
@@ -557,22 +550,12 @@ button {
         text-align: center;
       }
 
-      button {
-        cursor: pointer;
-        vertical-align: top;
+      .instructions-btn {
+        display: flex;
+        margin: auto;
 
-        &.instructions-btn {
-          align-items: center;
-          background-color: $rust-red;
-          color: white;
-          display: flex;
-          margin: auto;
-          padding: 12px;
-
-          .play-icon {
-            margin-right: 10px;
-            width: 20px;
-          }
+        .play-icon {
+          width: 20px;
         }
       }
 
@@ -1053,6 +1036,7 @@ body.show-overlay {
 .theme-instance {
   align-items: center;
   background-color: #fff;
+  font-size: inherit;
   background-position: center center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -1089,21 +1073,9 @@ body.show-overlay {
 }
 
 .delete-button {
-  background-color: #c0392b;
-  border-radius: 50%;
-  color: white;
-  cursor: pointer;
-  font-size: 14px;
-  height: 20px;
-  padding: 3px;
   position: relative;
   right: 35px;
   top: 15px;
-  width: 20px;
-
-  &:hover {
-    background-color: #e74c3c;
-  }
 }
 
 .file-input-label {
