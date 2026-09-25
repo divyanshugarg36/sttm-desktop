@@ -17,6 +17,7 @@
   // The sikhi-ui SearchBar keeps its full height when its keyboard opens.
   .library-search-bar {
     flex-shrink: 0;
+    padding: 0 12px;
 
     // Microphone access denied: dim the mic, as the old search bar did.
     &.mic-denied .sui-search-bar__mic-btn {
