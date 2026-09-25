@@ -671,7 +671,10 @@ app.on('ready', () => {
         }),
       );
     }
-    splash.close();
+    // dom-ready fires again on every reload, after the splash is already gone.
+    if (!splash.isDestroyed()) {
+      splash.close();
+    }
     mainWindow.show();
     const token = retrieveToken();
     if (token) {
