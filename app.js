@@ -625,7 +625,9 @@ app.on('ready', () => {
     frame: process.platform === 'linux', // show frame only on linux
     show: false,
     backgroundColor: '#000000',
-    titleBarStyle: 'hidden',
+    // macOS only: on Linux a hidden title bar removes the native title bar,
+    // its window buttons and the menu bar.
+    titleBarStyle: process.platform === 'darwin' ? 'hidden' : 'default',
     webPreferences: {
       nodeIntegration: true,
       enableRemoteModule: true,
