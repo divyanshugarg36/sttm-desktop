@@ -34,7 +34,6 @@
     "watch-renderer": "vite build --watch",
     "dev:renderer": "vite",
     "watch-css": "nodemon --watch www -e scss -x \"npm run build-css\"",
-    "rebuild-realm": "$(npm bin)/electron-rebuild -f -w realm",
     "postinstall": "patch-package && electron-builder install-app-deps"
   },
   "repository": {
@@ -123,7 +122,6 @@
     "react-transition-group": "^4.4.5",
     "react-virtuoso": "^4.18.15",
     "read-chunk": "^3.2.0",
-    "realm": "^10.19.5",
     "sharp": "^0.32.6",
     "socket.io": "^4.8.3",
     "uuid": "^9.0.1"

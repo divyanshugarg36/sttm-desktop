@@ -1,5 +1,6 @@
 import tingle from './common/vendor/tingle';
 import { downloadFile } from './common/utils/download-file';
+import { hasSqliteDB, reopen, sqlitePath } from './banidb';
 
 const { ipcRenderer } = require('electron');
 const electron = require('electron');
@@ -14,24 +15,29 @@ const moment = require('moment');
 const { i18n, isUnsupportedWindow } = remote.require('./app');
 const ipc = electron.ipcRenderer;
 const userDataPath = remote.app.getPath('userData');
+const DB_URL = 'https://banidb.blob.core.windows.net/database';
+// The SQLite BaniDB: a zip holding banidb.sqlite, and the zip's MD5.
 const database = {
-  realm: {
-    dbCompressedName: 'sttmdesktop-evergreen-v2.zip',
-    dbName: 'sttmdesktop-evergreen-v2.realm',
-    dbSchema: 'realm-schema-evergreen.json',
-    md5: 'sttmdesktop-evergreen-v2.md5',
-  },
+  dbCompressedName: 'sttmdesktop-banidb-sqlite.zip',
+  dbName: path.basename(sqlitePath),
+  md5: 'sttmdesktop-banidb-sqlite.md5',
 };
 
-const dbPlatform = 'realm';
-const dbSchemaPath = (schemaPath) =>
-  !database[dbPlatform].dbSchema || path.resolve(schemaPath, database[dbPlatform].dbSchema);
-
-const dbPath = path.resolve(userDataPath, database[dbPlatform].dbName);
-const dbSchema = dbSchemaPath(userDataPath);
+// A development file (STTM_BANIDB_SQLITE) is used as is, never replaced.
+const dbPath = sqlitePath;
 const newDBFolder = path.resolve(userDataPath, 'new-db');
-const newDBPath = path.resolve(newDBFolder, database[dbPlatform].dbName);
-const newDBSchema = dbSchemaPath(newDBFolder);
+const newDBPath = path.resolve(newDBFolder, database.dbName);
+// Realm databases of earlier versions
+const oldDBs = [
+  'data.db',
+  'sttmdesktop.realm',
+  'sttmdesktop.realm.lock',
+  'sttmdesktop.realm.management',
+  'sttmdesktop-evergreen-v2.realm',
+  'sttmdesktop-evergreen-v2.realm.lock',
+  'sttmdesktop-evergreen-v2.realm.management',
+  'realm-schema-evergreen.json',
+];
 
 const { store } = remote.require('./app');
 
@@ -86,7 +92,7 @@ const platform = {
   ipc,
   store,
 
-  getRealmDBLastModified() {
+  getDBLastModified() {
     try {
       if (fs.existsSync(dbPath)) {
         const stats = fs.statSync(dbPath);
@@ -102,14 +108,9 @@ const platform = {
 
   init() {
     // Initialize DB right away if it exists
-    if (
-      fs.existsSync(dbPath) &&
-      fs.statSync(dbPath).size > 0 &&
-      (dbPlatform !== 'realm' || fs.existsSync(dbSchema))
-    ) {
-      this.initDB();
+    if (hasSqliteDB()) {
       // Check if there's a newer version
-      this.downloadLatestDB();
+      if (!process.env.STTM_BANIDB_SQLITE) this.downloadLatestDB();
     } else {
       // Download the DB
       this.downloadLatestDB(true);
@@ -136,18 +137,15 @@ const platform = {
     }
     isOnline().then((online) => {
       if (online) {
-        fetch(`https://banidb.blob.core.windows.net/database/${database[dbPlatform].md5}`)
+        fetch(`${DB_URL}/${database.md5}`)
           .then((response) => (response.status === 200 ? response.text() : null))
           .then((newestDBHash) => {
             if (newestDBHash === null) return null;
             const curDBHash = store.get('curDBHash');
             if (force || curDBHash !== newestDBHash) {
-              const dbCompressed = path.resolve(
-                userDataPath,
-                database[dbPlatform].dbCompressedName,
-              );
+              const dbCompressed = path.resolve(userDataPath, database.dbCompressedName);
               return downloadFile(
-                `https://banidb.blob.core.windows.net/database/${database[dbPlatform].dbCompressedName}`,
+                `${DB_URL}/${database.dbCompressedName}`,
                 dbCompressed,
                 (state) => {
                   const win = remote.getCurrentWindow();
@@ -165,26 +163,19 @@ const platform = {
                     fs.unlinkSync(dbCompressed);
                     // Replace current DB file with new version
                     fs.renameSync(newDBPath, dbPath);
-                    if (dbPlatform === 'realm') {
-                      fs.renameSync(newDBSchema, dbSchema);
-                    }
-                    platform.initDB();
+                    reopen();
                     // Delete old DBs
-                    // TODO: Update to check if directory and use fs.rmdir
-                    // TODO: Add sttmdesktop.realm.management
-                    const oldDBs = ['data.db', 'sttmdesktop.realm', 'sttmdesktop.realm.lock'];
                     oldDBs.forEach((oldDB) => {
-                      const oldDBPath = path.resolve(userDataPath, oldDB);
-                      fs.access(oldDBPath, (err) => {
-                        if (!err) {
-                          fs.unlink(oldDBPath, (err1) => {
-                            if (err1) {
-                              // eslint-disable-next-line no-console
-                              console.log(`Could not delete old database ${oldDB}: ${err1}`);
-                            }
-                          });
-                        }
-                      });
+                      fs.rm(
+                        path.resolve(userDataPath, oldDB),
+                        { recursive: true, force: true },
+                        (err1) => {
+                          if (err1) {
+                            // eslint-disable-next-line no-console
+                            console.log(`Could not delete old database ${oldDB}: ${err1}`);
+                          }
+                        },
+                      );
                     });
                     const win = remote.getCurrentWindow();
                     win.setProgressBar(-1);
@@ -207,11 +198,6 @@ const platform = {
         global.core.search.offline(10);
       }
     });
-  },
-
-  initDB() {
-    // dbSchema = dbSchemaPath(userDataPath);
-    // newDBSchema = dbSchemaPath(newDBFolder);
   },
 
   updateSettings() {
