@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { useSelector, useDispatch } from 'react-redux';
+import { PrimaryButton } from '@khalisfoundation/sikhi-ui';
 
 import {
   setMiscSlideText,
@@ -36,8 +37,9 @@ const getBaniControllerItems = ({
         </>
       ),
       control: (
-        <button
-          className="button copy-code-btn"
+        <PrimaryButton
+          className="copy-code-btn"
+          size="sm"
           onClick={() => {
             if (code) {
               if (!isAnnouncement) {
@@ -71,7 +73,7 @@ const getBaniControllerItems = ({
           }}
         >
           {i18n.t('TOOLBAR.SYNC_CONTROLLER.PRESENT_CODE')}
-        </button>
+        </PrimaryButton>
       ),
     },
     {
@@ -93,9 +95,9 @@ const getBaniControllerItems = ({
               <Icon name={isAdminPinVisible ? 'eye' : 'eye-off'} />
             </span>
           </div>
-          <button className="button lock-screen-btn" onClick={toggleLockScreen}>
+          <PrimaryButton className="lock-screen-btn" size="sm" onClick={toggleLockScreen}>
             Lock Screen
-          </button>
+          </PrimaryButton>
         </div>
       ),
     },

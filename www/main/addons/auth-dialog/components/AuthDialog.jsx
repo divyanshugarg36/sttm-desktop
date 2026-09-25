@@ -3,6 +3,7 @@ import { ipcRenderer, shell } from 'electron';
 
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { PrimaryButton } from '@khalisfoundation/sikhi-ui';
 import isOnline from 'is-online';
 
 import { Icon, Overlay } from '../../../common/sttm-ui';
@@ -61,8 +62,11 @@ const AuthDialog = ({ onScreenClose, className }) => {
                     : i18n.t('AUTH.LOGIN_DESC')}
                 </p>
                 {userToken ? (
-                  <button
-                    className="button auth-button logout-button"
+                  <PrimaryButton
+                    className="auth-button logout-button"
+                    variant="outline"
+                    size="sm"
+                    leftIcon={<Icon name="logout" />}
                     onClick={async () => {
                       analytics.trackEvent({
                         category: 'User Authentication',
@@ -76,12 +80,13 @@ const AuthDialog = ({ onScreenClose, className }) => {
                       onScreenClose();
                     }}
                   >
-                    <Icon name="logout" />
                     {i18n.t('AUTH.LOGOUT_LABEL')}
-                  </button>
+                  </PrimaryButton>
                 ) : (
-                  <button
-                    className="button auth-button login-button"
+                  <PrimaryButton
+                    className="auth-button login-button"
+                    size="sm"
+                    leftIcon={<Icon name="login" />}
                     onClick={() => {
                       analytics.trackEvent({
                         category: 'User Authentication',
@@ -92,9 +97,8 @@ const AuthDialog = ({ onScreenClose, className }) => {
                       shell.openExternal(`${SP_API}/login/sso`);
                     }}
                   >
-                    <Icon name="login" />
                     {i18n.t('AUTH.LOGIN_LABEL')}
-                  </button>
+                  </PrimaryButton>
                 )}
               </div>
             </div>

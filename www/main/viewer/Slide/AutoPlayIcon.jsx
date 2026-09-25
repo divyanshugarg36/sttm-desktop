@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
+import { PrimaryButton } from '@khalisfoundation/sikhi-ui';
+import { Icon } from '../../common/sttm-ui';
 
 const SIZE = 40;
 const STROKE = 4;
@@ -71,35 +73,31 @@ const AutoPlayIcon = () => {
 
   return (
     <div className="autoplay-icon-container">
-      <button
+      <PrimaryButton
         className={`${autoplayDelay <= 1 ? 'disabled' : ''} decrease-speed-btn`}
+        variant="ghost"
+        mode="icon"
+        size="sm"
+        shape="circle"
         aria-label="Decrease speed"
         style={{
-          display: autoplayToggle ? 'initial' : 'none',
+          display: autoplayToggle ? 'inline-flex' : 'none',
         }}
         onClick={() => {
           handleSpeedChange(-1);
         }}
       >
-        <svg
-          width={SIZE}
-          height={SIZE}
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <rect x="7" y="11" width="10" height="2" rx="1" fill="currentColor" />
-        </svg>
-      </button>
+        <Icon name="minus" />
+      </PrimaryButton>
       <div className="autoplay-center-container">
         <div className="speed-display">{autoplayDelay}s</div>
-        <button
+        <PrimaryButton
           aria-label={autoplayToggle ? 'Pause autoplay' : 'Start autoplay'}
           onClick={toggleAutoplay}
           className="autoplay-icon-btn"
+          variant="plain"
+          mode="icon"
+          shape="circle"
         >
           <svg width={SIZE} height={SIZE}>
             <circle
@@ -114,32 +112,24 @@ const AutoPlayIcon = () => {
           <span className="play-pause-container">
             {autoplayToggle ? <PauseIcon size={24} /> : <PlayIcon size={24} />}
           </span>
-        </button>
+        </PrimaryButton>
       </div>
-      <button
+      <PrimaryButton
         className={`${autoplayDelay >= 20 ? 'disabled' : ''} increase-speed-btn`}
+        variant="ghost"
+        mode="icon"
+        size="sm"
+        shape="circle"
         aria-label="Increase speed"
         style={{
-          display: autoplayToggle ? 'initial' : 'none',
+          display: autoplayToggle ? 'inline-flex' : 'none',
         }}
         onClick={() => {
           handleSpeedChange(1);
         }}
       >
-        <svg
-          width={SIZE}
-          height={SIZE}
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <rect x="11" y="7" width="2" height="10" rx="1" fill="currentColor" />
-          <rect x="7" y="11" width="10" height="2" rx="1" fill="currentColor" />
-        </svg>
-      </button>
+        <Icon name="plus" />
+      </PrimaryButton>
     </div>
   );
 };

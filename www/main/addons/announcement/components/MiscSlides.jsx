@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { PrimaryButton } from '@khalisfoundation/sikhi-ui';
 
 import { useSlides } from '../../../common/hooks';
 import { MultipaneDropdown } from '../../../common/sttm-ui';
@@ -41,8 +42,11 @@ const MiscSlides = () => {
             clickHandler={openSlideFromDropdown}
           />
         }
-        <button
+        <PrimaryButton
           className="misc-slide-button"
+          variant="amber"
+          size="sm"
+          shape="rounded-md"
           onClick={(e) => {
             if (currentWorkspace === i18n.t('WORKSPACES.MULTI_PANE')) {
               paneSelector.current.style.left = `${e.clientX - 100}px`;
@@ -58,34 +62,43 @@ const MiscSlides = () => {
           }}
         >
           {i18n.t(`SHORTCUT_TRAY.ANAND_SAHIB`)}
-        </button>
-        <button
+        </PrimaryButton>
+        <PrimaryButton
           className="misc-slide-button"
+          variant="amber"
+          size="sm"
+          shape="rounded-md"
           onClick={() => {
             setPaneSelectorActive(false);
             displayMoolMantraSlide({ openedFrom: 'shortcut-tray' });
           }}
         >
           {i18n.t(`SHORTCUT_TRAY.MOOL_MANTRA`)}
-        </button>
-        <button
+        </PrimaryButton>
+        <PrimaryButton
           className="gurmukhi misc-slide-button"
+          variant="amber"
+          size="sm"
+          shape="rounded-md"
           onClick={() => {
             setPaneSelectorActive(false);
             displayWaheguruSlide({ openedFrom: 'shortcut-tray' });
           }}
         >
           vwihgurU
-        </button>
-        <button
+        </PrimaryButton>
+        <PrimaryButton
           className="misc-slide-button"
+          variant="amber"
+          size="sm"
+          shape="rounded-md"
           onClick={() => {
             setPaneSelectorActive(false);
             displayBlankViewer({ openedFrom: 'shortcut-tray' });
           }}
         >
           {i18n.t(`SHORTCUT_TRAY.BLANK`)}
-        </button>
+        </PrimaryButton>
       </div>
     </>
   );

@@ -22,13 +22,6 @@ $themeLowLight: (
   }
 
   .launchpad .single-display-switches {
-    .tab-switch,
-    & {
-      background: $darker-grey;
-    }
-    .tab-switch.active {
-      background: $black !important;
-      color: $light-grey !important;
-    }
+    background: $darker-grey;
   }
 }

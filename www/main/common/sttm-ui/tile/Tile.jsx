@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { ButtonCard } from '@khalisfoundation/sikhi-ui';
 
 import { classNames, joinClasses } from '../../utils';
 
@@ -27,13 +28,13 @@ const Tile = ({
   });
 
   return (
-    <button
+    <ButtonCard
       onClick={onClick}
       className={`ui-tile ${tileClassname}`}
       style={theme ? getThemeSwatchStyles(theme) : null}
     >
       <span className={classNames(isEngTransliterated && 'eng-tile')}>{children || content}</span>
-    </button>
+    </ButtonCard>
   );
 };
 

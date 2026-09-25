@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { ButtonCard, PrimaryButton } from '@khalisfoundation/sikhi-ui';
 import Icon from '../icon';
 
 const CustomBgTile = ({ customBg, onApply, onRemove }) => {
@@ -9,15 +10,23 @@ const CustomBgTile = ({ customBg, onApply, onRemove }) => {
 
   return (
     <>
-      <button
+      <ButtonCard
         key={customBg.name}
         onClick={onApply}
-        className={`theme-instance`}
+        className="theme-instance"
         style={getCustomBgImageForTile(customBg)}
       />
-      <button key={customBg.backgroundImage} className="delete-button" onClick={onRemove}>
+      <PrimaryButton
+        key={customBg.backgroundImage}
+        className="delete-button"
+        variant="destructive"
+        mode="icon"
+        size="xs"
+        shape="circle"
+        onClick={onRemove}
+      >
         <Icon name="trash" />
-      </button>
+      </PrimaryButton>
     </>
   );
 };

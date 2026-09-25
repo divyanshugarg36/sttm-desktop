@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
+import { PrimaryButton } from '@khalisfoundation/sikhi-ui';
 import {
   setActiveShabadId,
   setInitialVerseId,
@@ -165,13 +166,16 @@ export const HistoryPane = ({ className, paneId }) => {
           <p className="history-item gurmukhi">{element.label}</p>
         </div>
         <div className="history-item-options">
-          <button
+          <PrimaryButton
+            variant="ghost"
+            mode="icon"
+            size="xs"
             onClick={(e) => {
               deleteFromHistory(element, e);
             }}
           >
             <Icon name="x" />
-          </button>
+          </PrimaryButton>
         </div>
       </div>,
     );

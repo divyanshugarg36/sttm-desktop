@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import isOnline from 'is-online';
 import { useSelector, useDispatch } from 'react-redux';
+import { PrimaryButton } from '@khalisfoundation/sikhi-ui';
 
 import { shell } from 'electron';
 import { fetchFavShabad, removeFromFav } from '../utils';
@@ -183,14 +184,14 @@ export const FavoritePane = ({ className, paneId }) => {
       <div className="nologin">
         <p className="error">{errorMessage}</p>
         {!userToken && (
-          <button
-            className="button"
+          <PrimaryButton
+            size="sm"
             onClick={() => {
               shell.openExternal(`${SP_API}/login/sso`);
             }}
           >
             Login
-          </button>
+          </PrimaryButton>
         )}
       </div>
       {isFetching && <div className="sttm-loader" />}
@@ -227,13 +228,16 @@ export const FavoritePane = ({ className, paneId }) => {
               >
                 {time}
               </p>
-              <button
+              <PrimaryButton
+                variant="ghost"
+                mode="icon"
+                size="xs"
                 onClick={() => {
                   deleteFromFav(element);
                 }}
               >
                 <Icon name="x" />
-              </button>
+              </PrimaryButton>
             </div>
           </div>
         );

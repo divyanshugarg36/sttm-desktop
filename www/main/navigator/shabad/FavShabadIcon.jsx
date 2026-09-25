@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { useSelector, useDispatch } from 'react-redux';
+import { PrimaryButton } from '@khalisfoundation/sikhi-ui';
 import classNames from '../../common/utils/classnames';
 import { addToFav, fetchFavShabad, removeFromFav } from '../misc/utils';
 import { setFavShabad } from '../../common/store/redux/navigatorSlice';
@@ -92,14 +93,17 @@ const FavShabadIcon = ({ paneId }) => {
   ) {
     if (currentShabad && !isLoading && userToken) {
       return (
-        <button
+        <PrimaryButton
           className={classNames('fav-btn', favShabadIndex >= 0 && 'unfav-btn')}
+          variant="ghost"
+          mode="icon"
+          size="xs"
           ref={favBtnRef}
           title={i18n.t('SHABAD_PANE.FAV_BTN_TOOLTIP')}
           onClick={toggleFavShabad}
         >
           <Icon name={favShabadIndex < 0 ? 'star' : 'star-solid'} />
-        </button>
+        </PrimaryButton>
       );
     }
   }

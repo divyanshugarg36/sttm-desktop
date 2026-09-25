@@ -1,10 +1,8 @@
 @import 'waveform';
 
+// sikhi-ui ButtonCard; each use (theme swatch, bani, ceremony) sets its size.
 .ui-tile {
   align-items: center;
-  background-color: $white;
-  border-radius: 2px;
-  color: $black;
   display: flex;
   justify-content: center;
   padding: 16px;

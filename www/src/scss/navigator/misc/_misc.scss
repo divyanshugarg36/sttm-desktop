@@ -144,16 +144,8 @@ $misc-footer-active: 70px;
       font-style: italic;
       margin-left: 8px;
 
-      > button {
-        background-color: transparent;
-        border: none;
-        border-radius: 50%;
-        cursor: pointer;
-        font-size: 14px;
-        height: 24px;
-        padding: 4px;
-        width: 24px;
-        transition: 0.3s all;
+      // sikhi-ui ghost icon PrimaryButton: delete from history.
+      > .sui-button {
         color: $grey;
 
         &:hover {
@@ -193,19 +185,9 @@ $misc-footer-active: 70px;
       margin: 0px 4px;
     }
 
-    > button {
-      background-color: transparent;
-      border-radius: 50%;
-      font-size: 14px;
-      height: 24px;
-      margin-right: auto;
-      padding: 4px;
-      width: 24px;
-      transition:0.3s all;
-
-      &:hover {
-        color: $red;
-      }
+    // sikhi-ui ghost icon PrimaryButton: remove from favorites.
+    > .sui-button:hover {
+      color: $red;
     }
   }
 }
@@ -267,18 +249,6 @@ $misc-footer-active: 70px;
   }
   &-slide-btn {
     align-self: center;
-    background: $lapis-lazuli;
-    border: 0;
-    border-radius: 8px;
-    font-size: 0.9rem;
-    color: $white;
-    cursor: pointer;
-    display: block;
-    line-height: 1;
-    padding: 0.85em 1em;
-    text-align: center;
-    -webkit-font-smoothing: antialiased;
-    -webkit-appearance: none;
   }
   &-body {
     display: flex;
@@ -308,15 +278,6 @@ $misc-footer-active: 70px;
   @include flex($jc-value: flex-start);
   gap: 20px;
   padding: 0 32px;
-
-  .misc-slide-button {
-    background: $cadmium-orange;
-    border-radius: 4px;
-    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
-    color: $white;
-    cursor: pointer;
-    padding: 8px;
-  }
 }
 
 .dhan-guru {

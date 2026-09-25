@@ -37,18 +37,8 @@
       justify-content: flex-end;
       width: 100px;
 
-      button {
-        background-color: transparent;
-        cursor: pointer;
-        padding: 0 8px;
-      }
-
-      .fav-btn {
-        border-radius: 50%;
+      .fav-btn.sui-button {
         margin: 0;
-        i {
-          padding-right: 0;
-        }
       }
 
       .arrow-icons {
@@ -151,17 +141,7 @@
 }
 
 .multipane-content-btn {
-  border: 1px solid black;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
   margin: 12px;
-  padding: 8px;
-  width: 160px;
-
-  span {
-    margin-left: 12px;
-  }
 }
 
 .multipane-dropdown {

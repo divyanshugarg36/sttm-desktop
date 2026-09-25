@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
-import { Range, SimpleSelect, Toggle } from '@khalisfoundation/sikhi-ui';
+import { PrimaryButton, Range, SimpleSelect, Toggle } from '@khalisfoundation/sikhi-ui';
 
-import { Checkbox } from '../../common/sttm-ui';
+import { Checkbox, Icon } from '../../common/sttm-ui';
 import { convertToCamelCase } from '../../common/utils';
 import { settings } from '../../../configs/user-settings.json';
 import { userSettingsActions } from '../../common/store/redux/userSettingsSlice';
@@ -190,15 +190,17 @@ const Setting = ({ settingObj, stateVar, stateFunction }) => {
       break;
     case 'reset-button':
       settingDOM = (
-        <button
+        <PrimaryButton
+          className="icon-reset"
+          variant="outline"
+          size="sm"
+          leftIcon={<Icon name="reset" />}
           onClick={() => {
             handleReset(title);
           }}
-          className="icon-reset"
         >
-          <img src="assets/img/icons/reset-transparent.svg" alt="Reset Font Sizes to Default" />
-          <span>{i18n.t(`SETTINGS.${title}`)}</span>
-        </button>
+          {i18n.t(`SETTINGS.${title}`)}
+        </PrimaryButton>
       );
       break;
     default:

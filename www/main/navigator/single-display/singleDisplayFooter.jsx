@@ -1,5 +1,6 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { PrimaryButton } from '@khalisfoundation/sikhi-ui';
 import { classNames } from '../../common/utils';
 import { setSingleDisplayActiveTab } from '../../common/store/redux/navigatorSlice';
 import { Icon } from '../../common/sttm-ui';
@@ -36,36 +37,51 @@ export const singleDisplayFooter = () => {
 
   return (
     <div className="single-display-switches">
-      <button
+      <PrimaryButton
         className={classNames('tab-switch', singleDisplayActiveTab === 'search' && 'active')}
+        variant={singleDisplayActiveTab === 'search' ? 'default' : 'ghost'}
+        mode="icon"
+        size="sm"
         onClick={openSearchPane}
       >
         <Icon name="search" />
-      </button>
-      <button
+      </PrimaryButton>
+      <PrimaryButton
         className={classNames('tab-switch', singleDisplayActiveTab === 'history' && 'active')}
+        variant={singleDisplayActiveTab === 'history' ? 'default' : 'ghost'}
+        mode="icon"
+        size="sm"
         onClick={openHistoryPane}
       >
         <Icon name="clock" />
-      </button>
-      <button
+      </PrimaryButton>
+      <PrimaryButton
         className={classNames('tab-switch', singleDisplayActiveTab === 'shabad' && 'active')}
+        variant={singleDisplayActiveTab === 'shabad' ? 'default' : 'ghost'}
+        mode="icon"
+        size="sm"
         onClick={openShabadPane}
       >
         <Icon name="target" />
-      </button>
-      <button
+      </PrimaryButton>
+      <PrimaryButton
         className={classNames('tab-switch', singleDisplayActiveTab === 'favorite' && 'active')}
+        variant={singleDisplayActiveTab === 'favorite' ? 'default' : 'ghost'}
+        mode="icon"
+        size="sm"
         onClick={openFavoritePane}
       >
         <Icon name="heart" />
-      </button>
-      <button
+      </PrimaryButton>
+      <PrimaryButton
         className={classNames('tab-switch', singleDisplayActiveTab === 'other' && 'active')}
+        variant={singleDisplayActiveTab === 'other' ? 'default' : 'ghost'}
+        mode="icon"
+        size="sm"
         onClick={openOtherPane}
       >
         <Icon name="dots" />
-      </button>
+      </PrimaryButton>
     </div>
   );
 };
