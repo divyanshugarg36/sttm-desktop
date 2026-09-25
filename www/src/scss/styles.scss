@@ -47,7 +47,7 @@ $tag-popular-color: #ce744e;
 @import '@khalisfoundation/sikhi-ui/dist/styles';
 
 @import 'controller.scss', 'markdown', 'themes/themes', 'update', 'viewer', 'window', 'addon', 'akhandpaatt',
-  'overlay', 'animations', 'noty', 'icon', 'ui-library', 'workspace-bar', 'navigator/common/pane',
+  'overlay', 'animations', 'noty', 'icon', 'ui-library', 'navigator/common/pane',
   'navigator/common/verse-block', 'navigator/search/searchNew', 'navigator/shabad/shabad', 'navigator/shabad/multipane',
   'navigator/misc/misc', 'navigator/common/icon-button', 'navigator/viewer/viewer',
   'navigator/search/gurmukhi-keyboard', 'navigator/common/autoplay_icon';
@@ -420,7 +420,17 @@ button {
   padding-top: 10px;
   z-index: 1300;
 
-  // Top and bottom groups: sikhi-ui SideNavs, icons only.
+  .toolbar-top {
+    width: 100%;
+
+    // Separates the workspace switcher from the add-ons below it.
+    .toolbar-workspaces {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      margin-bottom: 12px;
+    }
+  }
+
+  // Workspaces, add-ons and the bottom group: sikhi-ui SideNavs, icons only.
   .sui-side-nav {
     background: transparent;
     border-right: none;

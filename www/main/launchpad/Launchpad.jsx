@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import Toolbar from '../toolbar';
 import Navigator from '../navigator';
-import WorkspaceBar from '../workspace-bar';
 import { useKeys, useSlides } from '../common/hooks';
 
 import {
@@ -204,25 +203,22 @@ const Launchpad = () => {
   const isSingleDisplayMode = currentWorkspace === i18n.t('WORKSPACES.SINGLE_DISPLAY');
 
   return (
-    <>
-      <WorkspaceBar />
-      <div className={`launchpad${isSingleDisplayMode ? ' single-display misc-pane' : ''}`}>
-        <Toolbar />
-        {isSundarGutkaOverlay && <SundarGutka onScreenClose={onScreenClose} />}
-        <BaniController
-          onScreenClose={onScreenClose}
-          className={isBaniControllerOverlay ? '' : 'd-none'}
-        />
-        {isCeremoniesOverlay && <Ceremonies onScreenClose={onScreenClose} />}
-        {isLockScreen && <LockScreen onScreenClose={onScreenClose} />}
-        <Announcement onScreenClose={onScreenClose} className={isAnnouncement ? '' : 'd-none'} />
-        {isSettingsOverlay && <Settings onScreenClose={onScreenClose} />}
-        <AuthDialog onScreenClose={onScreenClose} className={isAuthDialog ? '' : 'd-none'} />
-        <InputContext.Provider value={ref}>
-          <Navigator />
-        </InputContext.Provider>
-      </div>
-    </>
+    <div className={`launchpad${isSingleDisplayMode ? ' single-display misc-pane' : ''}`}>
+      <Toolbar />
+      {isSundarGutkaOverlay && <SundarGutka onScreenClose={onScreenClose} />}
+      <BaniController
+        onScreenClose={onScreenClose}
+        className={isBaniControllerOverlay ? '' : 'd-none'}
+      />
+      {isCeremoniesOverlay && <Ceremonies onScreenClose={onScreenClose} />}
+      {isLockScreen && <LockScreen onScreenClose={onScreenClose} />}
+      <Announcement onScreenClose={onScreenClose} className={isAnnouncement ? '' : 'd-none'} />
+      {isSettingsOverlay && <Settings onScreenClose={onScreenClose} />}
+      <AuthDialog onScreenClose={onScreenClose} className={isAuthDialog ? '' : 'd-none'} />
+      <InputContext.Provider value={ref}>
+        <Navigator />
+      </InputContext.Provider>
+    </div>
   );
 };
 
