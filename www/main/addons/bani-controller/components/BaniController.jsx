@@ -1,5 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux';
 import React, { useState, useEffect, useRef } from 'react';
+import { Box } from '@khalisfoundation/sikhi-ui';
 import PropTypes from 'prop-types';
 
 import isOnline from 'is-online';
@@ -248,7 +249,10 @@ const BaniController = ({ onScreenClose, className }) => {
           <header className="sync-header" data-key="MOBILE_DEVICE_SYNC">
             {title}
           </header>
-          <div className={`sync-content-wrapper ${isFetchingCode ? 'loading' : ''}`}>
+          <Box
+            variant="blur"
+            className={`sync-content-wrapper ${isFetchingCode ? 'loading' : ''}`}
+          >
             <div className="sync-content">
               {isFetchingCode ? (
                 <div className="sttm-loader" />
@@ -270,7 +274,7 @@ const BaniController = ({ onScreenClose, className }) => {
             </div>
 
             <QrCode canvasRef={canvasRef} />
-          </div>
+          </Box>
         </div>
       </div>
     </Overlay>

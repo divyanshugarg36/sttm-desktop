@@ -3,7 +3,7 @@ import { ipcRenderer, shell } from 'electron';
 
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { PrimaryButton } from '@khalisfoundation/sikhi-ui';
+import { Box, PrimaryButton } from '@khalisfoundation/sikhi-ui';
 import isOnline from 'is-online';
 
 import { Icon, Overlay } from '../../../common/sttm-ui';
@@ -49,7 +49,7 @@ const AuthDialog = ({ onScreenClose, className }) => {
             <header className="sync-header">
               {userToken ? i18n.t('AUTH.LOGOUT_LABEL') : i18n.t('AUTH.LOGIN_LABEL')}
             </header>
-            <div className="sync-content-wrapper">
+            <Box variant="blur" className="sync-content-wrapper">
               <div className="sync-content auth-content">
                 <h1>
                   {userInfo
@@ -101,16 +101,16 @@ const AuthDialog = ({ onScreenClose, className }) => {
                   </PrimaryButton>
                 )}
               </div>
-            </div>
+            </Box>
           </div>
         ) : (
           <div className="sync overlay-ui ui-sync-button">
             <header className="sync-header">{i18n.t('AUTH.LOGIN_LABEL')}</header>
-            <div className="sync-content-wrapper">
+            <Box variant="blur" className="sync-content-wrapper">
               <div className="sync-content auth-content">
                 <p>{i18n.t('AUTH.INTERNET_ERR')}</p>
               </div>
-            </div>
+            </Box>
           </div>
         )}
       </div>

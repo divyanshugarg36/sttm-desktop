@@ -500,8 +500,9 @@ button {
     max-width: 500px;
   }
 
+  // sikhi-ui blur Boxes, like the main-screen panes.
   .sync-content-wrapper {
-    border-radius: 5px;
+    border-radius: 12px;
     position: relative;
     width: 500px;
 
@@ -530,7 +531,7 @@ button {
   }
 
   .zoom-content-wrapper {
-    border-radius: 5px;
+    border-radius: 12px;
 
     .zoom-content {
       padding: 18px;
