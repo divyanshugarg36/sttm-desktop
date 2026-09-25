@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
+import { PrimaryButton } from '@khalisfoundation/sikhi-ui';
 import * as banidb from '../../banidb';
 import {
   setInitialVerseId,
@@ -134,22 +135,23 @@ const ArrowIcon = ({ paneId }) => {
     }
   }, [shortcuts]);
 
+  const arrows = (
+    <>
+      <PrimaryButton variant="plain" mode="icon" size="xs" onClick={navigateVerseLeft}>
+        <Icon name="skip-back" />
+      </PrimaryButton>
+      <PrimaryButton variant="plain" mode="icon" size="xs" onClick={navigateVerseRight}>
+        <Icon name="skip-forward" />
+      </PrimaryButton>
+    </>
+  );
+
   if (currentWorkspace === i18n.t('WORKSPACES.MULTI_PANE')) {
     if (paneBani[paneId] === 'shabad') {
-      return (
-        <div className="arrow-icons">
-          <Icon name="arrow-left-circle" onClick={navigateVerseLeft} />
-          <Icon name="arrow-right-circle" onClick={navigateVerseRight} />
-        </div>
-      );
+      return <div className="arrow-icons">{arrows}</div>;
     }
   } else if (activeShabadId && !isSundarGutkaBani && !isCeremonyBani) {
-    return (
-      <>
-        <Icon name="arrow-left-circle" onClick={navigateVerseLeft} />
-        <Icon name="arrow-right-circle" onClick={navigateVerseRight} />
-      </>
-    );
+    return arrows;
   }
   return null;
 };

@@ -3,11 +3,10 @@ import PropTypes from 'prop-types';
 import Pane from '../../../common/sttm-ui/pane/Pane';
 import SearchContent from './SearchContent';
 import SearchFooter from './SearchFooter';
-import SearchHeader from './SearchHeader';
 
-const SearchPane = ({ className }) => (
+const SearchPane = ({ className = '' }) => (
   <div className={`pane-container search-pane ${className}`}>
-    <Pane header={SearchHeader} content={SearchContent} footer={SearchFooter} />
+    <Pane content={SearchContent} footer={SearchFooter} />
   </div>
 );
 

@@ -2,11 +2,10 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import SearchPane from './search/components/SearchPane';
 import ShabadPane from './shabad/ShabadPane';
-import { MiscPane } from './misc/components';
+import { MiscPane, QuickInsert } from './misc/components';
 import ViewerPane from './viewer/ViewerPane';
 import { Pane } from '../common/sttm-ui/pane';
 import { singleDisplayContent, singleDisplayFooter, singleDisplayHeader } from './single-display';
-import { useSlides } from '../common/hooks';
 
 const remote = require('@electron/remote');
 
@@ -16,13 +15,6 @@ const Navigator = () => {
   const { currentWorkspace } = useSelector((state) => state.userSettings);
 
   const { minimizedBySingleDisplay } = useSelector((state) => state.navigator);
-
-  const {
-    displayWaheguruSlide,
-    displayMoolMantraSlide,
-    displayBlankViewer,
-    displayAnandSahibBhog,
-  } = useSlides();
 
   let controllerMarkup = null;
   const isCurrentWorkSpaceSingleDisplay = currentWorkspace === i18n.t('WORKSPACES.SINGLE_DISPLAY');
@@ -57,15 +49,20 @@ const Navigator = () => {
       </div>
     );
   } else {
-    controllerMarkup = (
-      <div className="navigator-row">
-        <ShabadPane />
-        <MiscPane
-          waheguruSlide={displayWaheguruSlide}
-          moolMantraSlide={displayMoolMantraSlide}
-          blankSlide={displayBlankViewer}
-          anandSahibBhog={displayAnandSahibBhog}
-        />
+    // Presenter: the viewer and the shabad's verses share one box on the left,
+    // search and the misc pane stack on the right.
+    return (
+      <div className="navigator-columns">
+        <div className="navigator-column presenter-column">
+          <div className="pane pane-box presenter-box">
+            <ViewerPane plain />
+            <ShabadPane plain footer={QuickInsert} />
+          </div>
+        </div>
+        <div className="navigator-column">
+          <SearchPane />
+          <MiscPane />
+        </div>
       </div>
     );
   }

@@ -3,20 +3,6 @@
 .search-pane {
   @include pane-containers;
 
-  .left-pane {
-    @include inline-flex($jc-value: initial, $width: fit-content);
-
-    i {
-      font-size: 22px;
-      color: $mild-dark;
-    }
-
-    .language-selector {
-      display: inline-flex;
-      align-items: center;
-    }
-  }
-
   // The sikhi-ui SearchBar keeps its full height when its keyboard opens.
   .library-search-bar {
     flex-shrink: 0;
@@ -31,25 +17,6 @@
     // The placeholder is English even when the query is Gurbani Akhar.
     .sui-search-bar__input.gurmukhi::placeholder {
       font-family: var(--sui-typography-fonts-primary);
-    }
-  }
-
-  // Language picker: sikhi-ui pilled FatehTabs, compacted to fit the 40px
-  // pane header.
-  .language-selector {
-    display: inline-flex;
-    align-items: center;
-
-    .sui-fateh-tabs--pilled {
-      gap: 6px;
-
-      .sui-fateh-link {
-        font-size: 13px;
-        height: 28px;
-        letter-spacing: normal;
-        padding: 0 12px;
-        text-transform: none;
-      }
     }
   }
 

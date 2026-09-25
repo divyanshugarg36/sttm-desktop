@@ -1,4 +1,5 @@
 @import '../utils/variables';
+
 .pane-container {
   flex: 1;
   max-height: 45vh;
@@ -13,23 +14,37 @@
   overflow: hidden;
   height: 100%;
   width: 100%;
+
   .multipane-grid & {
     min-width: 300px;
   }
-  // Panes are sikhi-ui Boxes (blur variant). overflow: hidden above clips
-  // the bars to the corners.
-  &.sui-box--blur {
+
+  // A pane's box, on the library's surface-alt background (#fafafa in the
+  // default theme). overflow: hidden above clips the bars to the corners.
+  &.pane-box {
+    background-color: var(--sui-semantic-background-surface-alt);
+    // The library accent at 10% (#1139791A in the default theme).
+    border: 2px solid color-mix(in srgb, var(--sui-semantic-accent-default) 10%, transparent);
     border-radius: 12px;
+    box-shadow: 15px 15px 45px 0 rgba(43, 59, 81, 0.1);
+
+    // The box's own header bar (e.g. the History tabs). Headers of panes
+    // nested inside a box, like the verse list's, aren't direct children.
+    >.pane-header {
+      background-color: var(--sui-semantic-accent-muted);
+    }
 
     // See-through content area, so the box colour shows behind the results.
-    > .pane-content {
+    >.pane-content {
       background-color: transparent;
     }
   }
+
   i {
     cursor: pointer;
   }
 }
+
 .pane-header {
   height: 40px;
   @include inline-flex;
@@ -44,19 +59,21 @@
   }
 
   .shabad-pn {
-      display: inline-block;
-      font-size: 1.1rem;
-      width: 36px;
-      height: 40px;
-      text-align: center;
-      line-height: 36px;
-      margin-left:0px;
-      &:hover {
-        background: #eaeaea;
-      }
+    display: inline-block;
+    font-size: 1.1rem;
+    width: 36px;
+    height: 40px;
+    text-align: center;
+    line-height: 36px;
+    margin-left: 0px;
+
+    &:hover {
+      background: #eaeaea;
     }
-    
+  }
+
 }
+
 .pane-content {
   @include flex($fd-value: column, $ai-value: initial, $jc-value: flex-start);
   flex-grow: 1;
@@ -65,6 +82,7 @@
   overflow: auto;
   z-index: 5;
 }
+
 .pane-footer {
   @include flex($ai-value: center, $jc-value: space-around);
   z-index: 10;

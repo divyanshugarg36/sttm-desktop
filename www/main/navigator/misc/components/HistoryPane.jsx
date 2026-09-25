@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
-import { PrimaryButton } from '@khalisfoundation/sikhi-ui';
+import { Badge, PrimaryButton } from '@khalisfoundation/sikhi-ui';
 import {
   setActiveShabadId,
   setInitialVerseId,
@@ -24,7 +24,15 @@ const remote = require('@electron/remote');
 
 const { i18n } = remote.require('./app');
 
-export const HistoryPane = ({ className, paneId }) => {
+// History rows match sttm-web's controller history list: a type badge, then
+// the label.
+const TYPE_BADGE_VARIANT = {
+  shabad: 'default',
+  bani: 'secondary',
+  ceremony: 'warning',
+};
+
+export const HistoryPane = ({ className = '', paneId }) => {
   const {
     verseHistory,
     activeShabadId,
@@ -156,36 +164,37 @@ export const HistoryPane = ({ className, paneId }) => {
 
   verseHistory.forEach((element) => {
     versesMarkup.push(
-      <div className="history-item-container" key={`history-${element.shabadId}`}>
-        <div
-          className="history-item-text"
-          onClick={() => {
-            openShabadFromHistory(element);
+      <li
+        className="history-list__item"
+        key={`history-${element.shabadId}`}
+        onClick={() => {
+          openShabadFromHistory(element);
+        }}
+      >
+        <Badge variant={TYPE_BADGE_VARIANT[element.type] || 'default'} size="xs" shape="pill">
+          {i18n.t(`HISTORY_TYPES.${(element.type || 'shabad').toUpperCase()}`)}
+        </Badge>
+        <span className="history-list__label gurmukhi">{element.label}</span>
+        <PrimaryButton
+          className="history-list__delete"
+          variant="ghost"
+          mode="icon"
+          size="xs"
+          onClick={(e) => {
+            deleteFromHistory(element, e);
           }}
         >
-          <p className="history-item gurmukhi">{element.label}</p>
-        </div>
-        <div className="history-item-options">
-          <PrimaryButton
-            variant="ghost"
-            mode="icon"
-            size="xs"
-            onClick={(e) => {
-              deleteFromHistory(element, e);
-            }}
-          >
-            <Icon name="x" />
-          </PrimaryButton>
-        </div>
-      </div>,
+          <Icon name="x" />
+        </PrimaryButton>
+      </li>,
     );
   });
 
   return (
     <div className={className}>
-      <div className={`history-results ${className}`}>
+      <ul className={`history-results history-list ${className}`}>
         {historyOrder === 'newest' ? versesMarkup : versesMarkup.slice().reverse()}
-      </div>
+      </ul>
     </div>
   );
 };

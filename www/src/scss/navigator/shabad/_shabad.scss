@@ -46,21 +46,18 @@
     height: 100%;
     width: 100%;
 
-    // sikhi-ui PrimaryButton; the red "Show Display" state keeps its pulse.
+    // sikhi-ui PrimaryButton, on the left with everything else pushed right;
+    // the red "Show Display" state keeps its pulse.
     .toggle-viewer-btn {
-      margin-right: 12px;
+      margin-right: auto;
+
+      ~ .fav-btn.sui-button {
+        margin-right: 0;
+      }
 
       &.btn-danger {
         animation: pulse-border 3s infinite, blink-btn 3s infinite;
       }
-    }
-
-    > i {
-      border-radius: 50%;
-      font-size: 18px;
-      padding: 6px;
-      margin: 6px;
-      transition: 0.3s all ease;
     }
   }
 }

@@ -7,52 +7,53 @@
   overflow-x: hidden;
   overflow-y: scroll;
 
-  .shabad-pane-list {
-    display: flex;
+  // A verse row: a single-verse sikhi-ui GurbaniVerseList (ShabadVerse).
+  .shabad-verse {
+    cursor: pointer;
+    padding: 6px 10px;
 
-    .hoverIcon {
-      display: none;
+    // sikhi-ui shrinks the active verse to its text (fit-content), which
+    // pulls the home button in against the verse; keep it full width.
+    .sui-gurbani-active-verse {
+      box-sizing: border-box;
+      width: 100%;
     }
 
-    .verse-content {
-      flex-grow: 1;
-      padding: 10px 0;
-      line-height: 1.3;
+    // The tick: centred on the row, as the old list did.
+    .sui-gurbani-line-start {
+      align-items: center;
+      bottom: 0;
+
+      .check-icon {
+        color: var(--sui-semantic-foreground-muted);
+        display: inline-flex;
+        font-size: 16px;
+      }
+    }
+
+    // The home button shows on hover, and always on the home verse.
+    .sui-gurbani-line-actions {
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    &:hover .sui-gurbani-line-actions {
+      opacity: 0.5;
+    }
+
+    &.shabad-verse--home .sui-gurbani-line-actions {
+      opacity: 1;
     }
 
     &:hover {
-      .hoverIcon {
-        display: inline;
-        opacity: 0.5;
-      }
+      background-color: color-mix(in srgb, var(--sui-semantic-accent-default) 6%, transparent);
     }
-    .shabad-pane-controls {
-      display: inline-flex;
-      width: 8%;
-      justify-content: center;
-      align-items: center;
-      z-index: 1;
-      i {
-        font-size: 1rem;
-      }
-      .check-icon {
-        font-size: 10px;
-      }
-    }
-  }
-  .shabad-pane-active {
-    .theme-light-theme & {
-      background-color: $transparent-blue;
-    }
-    .theme-dark-theme & {
-      background-color: $dull-blue;
-    }
-    .inactive-pane & {
-      .theme-light-theme & {
-        background-color: $transparent-light-black;
-      }
-      .theme-dark-theme & {
-        background-color: $transparent-light-white;
+
+    &.flower-verse {
+      cursor: not-allowed;
+
+      &:hover {
+        background-color: transparent;
       }
     }
   }
@@ -98,23 +99,6 @@
       padding: 2px 10px;
     }
 
-    &.shabad-li {
-      align-items: center;
-      display: flex;
-      justify-content: center;
-      padding: 0 10px;
-      transition: 0.3s all ease;
-
-      &:has(.flower-verse) {
-        cursor: not-allowed;
-
-        &:hover {
-          .hoverIcon {
-            display: none;
-          }
-        }
-      }
-    }
     div {
       display: inline-flex;
       a {

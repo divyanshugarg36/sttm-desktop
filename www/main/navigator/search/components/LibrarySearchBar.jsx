@@ -117,6 +117,24 @@ export const LibrarySearchBar = ({
     });
   };
 
+  // The language pill in the search bar. Each language starts on its first
+  // letter search.
+  const handleLanguageToggle = (toGurmukhi) => {
+    const language = toGurmukhi ? 'gr' : 'en';
+    const searchType = toGurmukhi ? SEARCH_TYPES.FIRST_LETTERS : SEARCH_TYPES.ENGLISH_WORD;
+    if (currentSearchType !== searchType) {
+      dispatch(setCurrentSearchType(searchType));
+    }
+    if (currentLanguage !== language) {
+      dispatch(setCurrentLanguage(language));
+    }
+    analytics.trackEvent({
+      category: 'search',
+      action: 'language',
+      label: language,
+    });
+  };
+
   const handleChange = (next) => {
     if (next.query !== query) {
       setQuery(next.query || '');
@@ -176,7 +194,11 @@ export const LibrarySearchBar = ({
       onChange={handleChange}
       // Results update as you type, so Enter / the search button have nothing extra to do.
       onSearch={() => {}}
-      enableKeyboard={isGurmukhi}
+      // The keyboard toggle only shows in Gurmukhi; enableKeyboard also shows
+      // the language pill, which is needed in English to switch back.
+      enableKeyboard
+      showLanguageToggle
+      onLanguageToggle={handleLanguageToggle}
       isGurmukhi={isGurmukhi}
       showMatras={currentSearchType === SEARCH_TYPES.GURMUKHI_WORD}
       onMicClick={onMicClick}
