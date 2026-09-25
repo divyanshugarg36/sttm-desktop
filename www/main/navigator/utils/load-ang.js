@@ -5,9 +5,10 @@ const remote = require('@electron/remote');
 
 const { i18n } = remote.require('./app');
 
-export const loadAng = (angNo) =>
+// sourceId defaults to Guru Granth Sahib.
+export const loadAng = (angNo, sourceId) =>
   banidb
-    .loadAng(angNo)
+    .loadAng(angNo, sourceId)
     .then((verses) => verses)
     .catch((err) => {
       new Noty({

@@ -207,6 +207,7 @@
   "SEARCH": {
     "ANG": "Ang",
     "FIRST_LETTER_ANYWHERE": "First Letter (Anywhere)",
+    "FIRST_LETTER_ENGLISH": "First Letter (Anywhere) - English",
     "FIRST_LETTER_START": "First Letter (Start)",
     "FULL_WORDS": "Full Word(s)",
     "FULL_WORDS_ENGLISH": "Full Word(s) - English",

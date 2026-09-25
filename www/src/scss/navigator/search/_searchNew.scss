@@ -2,12 +2,15 @@
 
 .search-pane {
   @include pane-containers;
+
   .left-pane {
     @include inline-flex($jc-value: initial, $width: fit-content);
+
     i {
       font-size: 22px;
       color: $mild-dark;
     }
+
     .language-selector {
       display: inline-flex;
       align-items: center;
@@ -17,7 +20,7 @@
   // The sikhi-ui SearchBar keeps its full height when its keyboard opens.
   .library-search-bar {
     flex-shrink: 0;
-    padding: 0 12px;
+    padding: 12px;
 
     // Microphone access denied: dim the mic, as the old search bar did.
     &.mic-denied .sui-search-bar__mic-btn {
@@ -31,10 +34,9 @@
     }
   }
 
-  // Language and search-type pickers: sikhi-ui pilled FatehTabs, compacted to
-  // fit the 40px pane header side by side.
-  .language-selector,
-  .search-type {
+  // Language picker: sikhi-ui pilled FatehTabs, compacted to fit the 40px
+  // pane header.
+  .language-selector {
     display: inline-flex;
     align-items: center;
 
@@ -50,6 +52,7 @@
       }
     }
   }
+
   .search-result-controls {
     @include flex;
     align-items: baseline;
@@ -95,24 +98,18 @@
       }
     }
   }
-  .search-select {
-    width: 53%;
-
-    select {
-      cursor: pointer;
-      width: 100%;
-    }
-  }
 
   .search-content {
     @include flex;
     margin: 0;
     width: 100%;
+
     .input-buttons {
       height: 40px;
       display: flex;
       align-items: center;
     }
+
     span {
       align-self: center;
     }
@@ -189,14 +186,17 @@
       overflow: hidden;
     }
   }
+
   .search-results {
     flex-grow: 1;
     overflow: auto;
   }
+
   .search-footer {
     @include flex($ai-value: center, $jc-value: initial, $width: 100%);
     font-size: 14px;
     padding: 10px;
+
     span {
       &:not(:last-child) {
         @include inline-flex($width: initial);
@@ -204,6 +204,7 @@
         height: 20px;
         border-left: 3px solid;
       }
+
       &:last-child {
         margin-left: auto;
         display: flex;
@@ -211,15 +212,19 @@
         font-style: italic;
       }
     }
+
     .search-footer-span1 {
       color: #e1802f;
     }
+
     .search-footer-span2 {
       color: #348ce7;
     }
+
     .search-footer-span3 {
       color: #65a757;
     }
+
     .search-footer-span4 {
       color: #717171;
     }
@@ -228,6 +233,7 @@
 
 .bani-words {
   margin: 0 2px !important;
+
   &.highlight {
     font-weight: bold;
   }
@@ -246,10 +252,13 @@
 }
 
 @keyframes voiceWave {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: scaleY(0.5);
     opacity: 0.6;
   }
+
   50% {
     transform: scaleY(1);
     opacity: 1;
