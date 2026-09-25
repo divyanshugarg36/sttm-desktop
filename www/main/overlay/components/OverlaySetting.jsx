@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
+import { SimpleSelect } from '@khalisfoundation/sikhi-ui';
 import LayoutSelector from './LayoutSelector';
 import { getDefaultSettings } from '../../common/store/user-settings/get-saved-overlay-settings';
 import { convertToCamelCase } from '../../common/utils';
@@ -51,7 +52,9 @@ const OverlaySetting = ({ settingObj, stateVar, stateFunction }) => {
       const defaultSettings = getDefaultSettings();
       Object.keys(baniOverlayState).forEach((state) => {
         if (baniOverlayState[state] !== defaultSettings[state]) {
-          dispatch(baniOverlayActions[`set${convertToCamelCase(state, true)}`](defaultSettings[state]));
+          dispatch(
+            baniOverlayActions[`set${convertToCamelCase(state, true)}`](defaultSettings[state]),
+          );
         }
       });
     } else {
@@ -84,13 +87,13 @@ const OverlaySetting = ({ settingObj, stateVar, stateFunction }) => {
   switch (type) {
     case 'dropdown':
       settingDOM.push(
-        <select onChange={handleInputChange} value={baniOverlayState[stateVar]}>
-          {Object.keys(settingObj.options).map((op, opIndex) => (
-            <option key={`control-dropdown-options-${opIndex}`} value={op}>
-              {settingObj.options[op]}
-            </option>
-          ))}
-        </select>,
+        <SimpleSelect
+          variant="bordered"
+          selectSize="sm"
+          value={baniOverlayState[stateVar]}
+          onChange={handleInputChange}
+          options={Object.entries(settingObj.options).map(([value, label]) => ({ value, label }))}
+        />,
       );
       break;
     case 'color-input':

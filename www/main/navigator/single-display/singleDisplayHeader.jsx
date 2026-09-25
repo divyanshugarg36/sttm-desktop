@@ -1,5 +1,6 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { SimpleSelect } from '@khalisfoundation/sikhi-ui';
 import ShabadHeader from '../shabad/ShabadHeader';
 import {
   setMinimizedBySingleDisplay,
@@ -66,15 +67,18 @@ export const singleDisplayHeader = () => {
         <div className="history-order">
           <div className="history-order-select">
             <label>Sort by: </label>
-            <select
+            <SimpleSelect
+              variant="bordered"
+              selectSize="sm"
               value={historyOrder}
               onChange={(e) => {
                 dispatch(setHistoryOrder(e.target.value));
               }}
-            >
-              <option value="newest">Newest First</option>
-              <option value="oldest">Oldest First</option>
-            </select>
+              options={[
+                { value: 'newest', label: 'Newest First' },
+                { value: 'oldest', label: 'Oldest First' },
+              ]}
+            />
           </div>
         </div>
       )}
