@@ -161,7 +161,7 @@ const CeremonyPane = ({ token, name, id, onScreenClose }) => {
   };
 
   return (
-    <Box variant="blur" className="ceremony-pane" id={paneId}>
+    <Box variant="gradient" className="ceremony-pane" id={paneId}>
       {
         <MultipaneDropdown
           paneSelectorActive={paneSelectorActive}

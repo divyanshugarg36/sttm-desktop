@@ -49,7 +49,7 @@ const AuthDialog = ({ onScreenClose, className }) => {
             <header className="sync-header">
               {userToken ? i18n.t('AUTH.LOGOUT_LABEL') : i18n.t('AUTH.LOGIN_LABEL')}
             </header>
-            <Box variant="blur" className="sync-content-wrapper">
+            <Box variant="gradient" className="sync-content-wrapper">
               <div className="sync-content auth-content">
                 <h1>
                   {userInfo
@@ -106,7 +106,7 @@ const AuthDialog = ({ onScreenClose, className }) => {
         ) : (
           <div className="sync overlay-ui ui-sync-button">
             <header className="sync-header">{i18n.t('AUTH.LOGIN_LABEL')}</header>
-            <Box variant="blur" className="sync-content-wrapper">
+            <Box variant="gradient" className="sync-content-wrapper">
               <div className="sync-content auth-content">
                 <p>{i18n.t('AUTH.INTERNET_ERR')}</p>
               </div>

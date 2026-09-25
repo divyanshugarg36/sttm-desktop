@@ -147,7 +147,9 @@
     }
   }
 
+  // sikhi-ui gradient Boxes, like the other overlays.
   .settings-container {
+    border-radius: 12px;
     margin-bottom: 20px;
     max-width: 500px;
     padding: 12px;
@@ -159,7 +161,7 @@
 
     .controls-container {
       h4 {
-        color: #757575;
+        color: var(--sui-semantic-foreground-muted);
         font-size: 12px;
         letter-spacing: 0.2em;
         padding-top: 0.75em;

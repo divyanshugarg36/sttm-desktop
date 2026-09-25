@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { Box } from '@khalisfoundation/sikhi-ui';
 import { Tile, CustomBgTile, VideoWithOverlay } from '../../common/sttm-ui';
 
 import { themes } from '../../theme_editor';
@@ -39,7 +40,7 @@ const ThemeContainer = () => {
   }, []);
 
   return (
-    <div className="settings-container themes-container">
+    <Box variant="gradient" className="settings-container themes-container">
       <div id="custom-theme-options">
         {themeTypes.map(({ type, title }) => (
           <React.Fragment key={type}>
@@ -114,7 +115,7 @@ const ThemeContainer = () => {
           ))}
         </span>
       </div>
-    </div>
+    </Box>
   );
 };
 

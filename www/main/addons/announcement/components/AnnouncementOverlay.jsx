@@ -21,7 +21,7 @@ const AnnouncementPane = ({ onScreenClose, className }) => {
 
   return (
     <Overlay onScreenClose={onScreenClose} className={className}>
-      <Box variant="blur" className="addon-overlay">
+      <Box variant="gradient" className="addon-overlay">
         <header>
           <h2>Announcement</h2>
           <Switch

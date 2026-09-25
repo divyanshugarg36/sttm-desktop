@@ -250,7 +250,7 @@ const BaniController = ({ onScreenClose, className }) => {
             {title}
           </header>
           <Box
-            variant="blur"
+            variant="gradient"
             className={`sync-content-wrapper ${isFetchingCode ? 'loading' : ''}`}
           >
             <div className="sync-content">
