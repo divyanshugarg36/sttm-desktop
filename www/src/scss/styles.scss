@@ -368,9 +368,12 @@ button {
     text-transform: capitalize;
   }
 
+  // sikhi-ui blur Box, like the main-screen panes; overflow clips the header
+  // to its corners.
   .ceremony-pane {
-    border-radius: 3px;
+    border-radius: 12px;
     margin-bottom: 15px;
+    overflow: hidden;
   }
 }
 

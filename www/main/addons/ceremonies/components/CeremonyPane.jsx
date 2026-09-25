@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
+import { Box } from '@khalisfoundation/sikhi-ui';
 
 import { MultipaneDropdown, Switch, Tile } from '../../../common/sttm-ui';
 import { ceremoniesFilter } from '../../../common/constants';
@@ -160,7 +161,7 @@ const CeremonyPane = ({ token, name, id, onScreenClose }) => {
   };
 
   return (
-    <div className="ceremony-pane" id={paneId}>
+    <Box variant="blur" className="ceremony-pane" id={paneId}>
       {
         <MultipaneDropdown
           paneSelectorActive={paneSelectorActive}
@@ -240,7 +241,7 @@ const CeremonyPane = ({ token, name, id, onScreenClose }) => {
           </div>
         </div>
       </div>
-    </div>
+    </Box>
   );
 };
 
