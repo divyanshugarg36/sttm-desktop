@@ -1,20 +1,39 @@
+// Records the verse in the shabad's history entry: where to continue from and
+// which verses have been read (ticked in the verse list). verseHistory is
+// frozen Redux state, so the entry is replaced rather than edited in place.
 export const udpateHistory = (
   currentShabadId,
   newTraversedVerse,
-  { verseHistory, setPaneAttributes, paneAttributes },
+  { verseHistory, setVerseHistory, setPaneAttributes, paneAttributes },
 ) => {
   const existingShabadIndex = verseHistory.findIndex(
     (historyShabad) => historyShabad.shabadId === currentShabadId,
   );
   const currentHistoryObj = verseHistory[existingShabadIndex];
   if (currentHistoryObj) {
-    currentHistoryObj.continueFrom = newTraversedVerse;
-    if (!currentHistoryObj.versesRead.includes(newTraversedVerse)) {
-      currentHistoryObj.versesRead = [...currentHistoryObj.versesRead, newTraversedVerse];
+    const isNewVerse = !currentHistoryObj.versesRead.includes(newTraversedVerse);
+    if (!isNewVerse && currentHistoryObj.continueFrom === newTraversedVerse) {
+      return;
+    }
+    const updatedHistoryObj = {
+      ...currentHistoryObj,
+      continueFrom: newTraversedVerse,
+      versesRead: isNewVerse
+        ? [...currentHistoryObj.versesRead, newTraversedVerse]
+        : currentHistoryObj.versesRead,
+    };
+    setVerseHistory(
+      verseHistory.map((historyShabad, index) =>
+        index === existingShabadIndex ? updatedHistoryObj : historyShabad,
+      ),
+    );
+    // activeVerse drives resuming the shabad and the intelligent spacebar, so
+    // it follows every verse change, not just the first visit.
+    if (isNewVerse || paneAttributes.activeVerse !== newTraversedVerse) {
       setPaneAttributes({
         ...paneAttributes,
         activeVerse: newTraversedVerse,
-        versesRead: currentHistoryObj.versesRead,
+        versesRead: updatedHistoryObj.versesRead,
       });
     }
   }
@@ -108,24 +127,29 @@ export const sendToBaniController = (
     if (!crossPlatformId) {
       baniVerse = activeShabad.find((obj) => obj.verseId === newTraversedVerse);
     }
+    // A bani's verse can be missing from the list while it's still loading;
+    // skip the bani/ceremony update then rather than throw.
+    const baniHighlight = crossPlatformId || baniVerse?.crossPlatformId;
     if (isSundarGutkaBani && sundarGutkaBaniId) {
+      if (!baniHighlight) return;
       window.socket.emit('data', {
         host: 'sttm-desktop',
         type: 'bani',
         id: paneAttributes.activeShabad,
         shabadid: paneAttributes.activeShabad, // @deprecated
-        highlight: crossPlatformId || baniVerse.crossPlatformId,
+        highlight: baniHighlight,
         baniLength,
         // mangalPosition,
         verseChange: false,
       });
     } else if (isCeremonyBani && ceremonyId) {
+      if (!baniHighlight) return;
       window.socket.emit('data', {
         host: 'sttm-desktop',
         type: 'ceremony',
         id: paneAttributes.activeShabad,
         shabadid: paneAttributes.activeShabad, // @deprecated
-        highlight: crossPlatformId || baniVerse.crossPlatformId,
+        highlight: baniHighlight,
         verseChange: false,
       });
     } else if (activeShabadId) {
