@@ -13,35 +13,6 @@
   $highlight-bg: $dull-blue;
   $highlight-text: $transparent-blue;
   color: $text-base;
-  // sikhi-ui solid Box (the main-screen panes) on dark themes: the theme's
-  // own surface and border colours.
-  --sui-atom-box-solid-background: #{$bg-alt};
-  --sui-atom-box-solid-border: #{$border};
-  // sikhi-ui tabs and buttons on dark themes: accents and buttons from the
-  // design system's dark theme, text from this theme's palette.
-  --sui-semantic-accent-default: #d2e2f6;
-  --sui-semantic-border-default: #{$border};
-  --sui-semantic-border-muted: #{$bg-bright};
-  --sui-atom-fateh-tabs-text: #{$text-dim};
-  --sui-atom-button-default-background: #203c6a;
-  --sui-atom-button-default-background-hover: #2a4d7f;
-  --sui-atom-button-default-background-active: #1a3258;
-  --sui-atom-button-amber-text: #{$text-bright};
-  --sui-atom-button-ghost-text: #{$text-base};
-  --sui-atom-button-ghost-background-hover: rgba(255, 255, 255, 0.1);
-  --sui-atom-select-bordered-background: rgba(255, 255, 255, 0.06);
-  --sui-atom-select-bordered-border: #{$border};
-  --sui-atom-select-bordered-text: #{$text-base};
-  --sui-atom-select-background: rgba(255, 255, 255, 0.08);
-  --sui-atom-select-text: #{$text-base};
-  --sui-atom-select-icon: #{$text-base};
-  --sui-atom-search-bar-input-background: rgba(255, 255, 255, 0.06);
-  --sui-atom-search-bar-input-border: #{$border};
-  --sui-atom-search-bar-icon: #{$text-dim};
-  --sui-semantic-background-page: #{$bg-alt};
-  --sui-semantic-foreground-default: #{$text-base};
-  --sui-semantic-foreground-muted: #{$text-dim};
-  --sui-semantic-foreground-subtle: #{$text-dim};
   $button-bg: $princeton-orange;
   $tray-bg: $philippine-gray;
 
@@ -250,10 +221,13 @@
     background: #203c6a;
   }
 
-  .pane,
+  // Panes take their background from sikhi-ui's Box.
   .takeover-page {
     background: $bg-main;
+  }
 
+  .pane,
+  .takeover-page {
     h2 {
       border-top: 1px $border solid;
       color: $text-dim;

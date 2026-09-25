@@ -7,6 +7,7 @@ import app from '../app';
 import platform from '../desktop_scripts';
 import controller from '../controller';
 import core from '../index';
+import { syncSikhiUiTheme } from '../common/sui-theme';
 
 const root = createRoot(document.getElementById('navigator'));
 root.render(app());
@@ -19,3 +20,4 @@ global.core.menu.init();
 global.platform.init();
 
 document.body.classList.add(process.platform);
+syncSikhiUiTheme();

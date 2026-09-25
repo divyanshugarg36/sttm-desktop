@@ -16,11 +16,9 @@
   .multipane-grid & {
     min-width: 300px;
   }
-  // Panes are sikhi-ui Boxes (solid variant): a flat, bordered, rounded card.
-  // overflow: hidden above clips the bars to the corners.
+  // Panes are sikhi-ui Boxes (solid variant). overflow: hidden above clips
+  // the bars to the corners.
   &.sui-box--solid {
-    // Beats the themes' flat `.pane` background (they load earlier).
-    background: var(--sui-atom-box-solid-background);
     border-radius: 12px;
 
     // See-through content area, so the box colour shows behind the results.
