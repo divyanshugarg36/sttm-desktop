@@ -8,7 +8,6 @@ const remote = require('@electron/remote');
 const { webUtils } = require('electron');
 const fs = require('fs');
 const path = require('path');
-const { pathToFileURL } = require('url');
 const sharp = require('sharp');
 const readChunk = require('read-chunk');
 const imageType = require('image-type');
@@ -24,9 +23,10 @@ const alertError = (message) => {
   alert(message);
 };
 
-// The file:// URL a background is shown by, and matched against the applied
-// one. One form everywhere, with the path encoded (spaces, #, %…).
-const backgroundUrl = (filePath) => pathToFileURL(filePath).href;
+// The URL a background is shown by, and matched against the applied one. The
+// main process serves the backgrounds folder on sttm-bg:// (app.js), which
+// the dev server's http:// pages can load, unlike file://.
+const backgroundUrl = (filePath) => `sttm-bg://user/${encodeURIComponent(path.basename(filePath))}`;
 
 const ensureFolder = () => fs.promises.mkdir(customBackgroundsPath, { recursive: true });
 
