@@ -157,7 +157,7 @@ export const LibrarySearchBar = ({
 
   return (
     <SearchBar
-      className={`library-search-bar ${isMicDenied ? 'mic-denied' : ''}`.trim()}
+      className={`search-pane__bar ${isMicDenied ? 'search-pane__bar--mic-denied' : ''}`.trim()}
       wrapperVariant="gradient"
       placeholder={placeholder}
       values={values}

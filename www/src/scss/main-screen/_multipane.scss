@@ -56,18 +56,6 @@
     }
   }
 
-  // The pane's 1 / 2 / 3 button in the search footer.
-  .#{$pane}-btn {
-    &:disabled {
-      cursor: not-allowed;
-    }
-
-    &.active {
-      background-color: $color;
-      color: white;
-    }
-  }
-
   // The pane's button on each search result.
   .button-#{$pane} {
     cursor: pointer;
@@ -94,16 +82,6 @@
     &:disabled i {
       cursor: not-allowed;
     }
-  }
-}
-
-.default-pane-switcher {
-  flex-grow: 1;
-  text-align: right;
-
-  button {
-    cursor: pointer;
-    padding: 8px 12px;
   }
 }
 

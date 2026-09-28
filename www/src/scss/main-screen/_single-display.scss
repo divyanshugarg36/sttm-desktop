@@ -44,11 +44,11 @@
     // Docked to the screen edge: no rounded corners on the boxes or the search
     // bar, except the navigator's own top corners (see __pane).
     .pane--box,
-    .search-pane .library-search-bar {
+    .search-pane .search-pane__bar {
       border-radius: 0;
     }
 
-    .search-pane .library-search-bar {
+    .search-pane .search-pane__bar {
       padding: 6px !important;
     }
 
@@ -70,7 +70,7 @@
           height: inherit;
         }
 
-        .search-footer {
+        .search-pane__footer {
           margin: 0;
           width: 100%;
         }

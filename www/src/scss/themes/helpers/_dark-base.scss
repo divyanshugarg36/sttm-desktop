@@ -140,7 +140,7 @@
     color: $white;
   }
 
-  .search-footer {
+  .search-pane__footer {
     background: var(--sui-semantic-accent-muted);
   }
 
@@ -436,7 +436,7 @@
       background-color: rgba($color, 0.6);
       color: rgba($white, 0.7);
     }
-    .#{$pane}-btn {
+    .search-pane__pane-switch--#{$pane} {
       background-color: $bg-alt;
       color: $text-base;
 

@@ -14,19 +14,26 @@ const SearchFooter = ({ className }) => {
   const { currentWorkspace, defaultPaneId } = useSelector((state) => state.userSettings);
   const dispatch = useDispatch();
 
-  const addActiveClass = (id) => (id === defaultPaneId ? 'active' : '');
+  const switchClass = (id) =>
+    classNames(
+      'search-pane__pane-switch',
+      `search-pane__pane-switch--pane-${id}`,
+      id === defaultPaneId && 'search-pane__pane-switch--active',
+    );
 
   return (
-    <div className={classNames(className, 'search-footer')}>
-      <span className="search-footer-span1">Sri Guru Granth Sahib</span>
-      <span className="search-footer-span2">Sri Dasam Granth</span>
-      <span className="search-footer-span3">Amrit Keertan</span>
-      <span className="search-footer-span4">Other</span>
-      <span>{searchShabadsCount ? `${searchShabadsCount} Results` : ''}</span>
+    <div className={classNames(className, 'search-pane__footer')}>
+      <span className="search-pane__source search-pane__source--sggs">Sri Guru Granth Sahib</span>
+      <span className="search-pane__source search-pane__source--sdg">Sri Dasam Granth</span>
+      <span className="search-pane__source search-pane__source--ak">Amrit Keertan</span>
+      <span className="search-pane__source search-pane__source--other">Other</span>
+      <span className="search-pane__count">
+        {searchShabadsCount ? `${searchShabadsCount} Results` : ''}
+      </span>
       {currentWorkspace === i18n.t('WORKSPACES.MULTI_PANE') && (
-        <div className="default-pane-switcher">
+        <div className="search-pane__pane-switcher">
           <PrimaryButton
-            className={`pane-1-btn ${addActiveClass(1)}`}
+            className={switchClass(1)}
             mode="icon"
             size="xs"
             onClick={() => {
@@ -39,7 +46,7 @@ const SearchFooter = ({ className }) => {
             1
           </PrimaryButton>
           <PrimaryButton
-            className={`pane-2-btn ${addActiveClass(2)}`}
+            className={switchClass(2)}
             mode="icon"
             size="xs"
             onClick={() => {
@@ -52,7 +59,7 @@ const SearchFooter = ({ className }) => {
             2
           </PrimaryButton>
           <PrimaryButton
-            className={`pane-3-btn ${addActiveClass(3)}`}
+            className={switchClass(3)}
             mode="icon"
             size="xs"
             onClick={() => {
