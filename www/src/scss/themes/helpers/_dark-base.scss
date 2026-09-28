@@ -56,7 +56,6 @@
   .pane__header,
   .misc .navigator-header,
   .more-tabs .nav-header-tab,
-  .settings-nav,
   .misc-pane__actions,
   .settings-preview-title {
     background-color: $bg-main;
@@ -73,18 +72,6 @@
           filter: invert(1);
         }
       }
-    }
-  }
-
-  .settings-nav {
-    span {
-      &:hover {
-        background-color: $not-so-black;
-      }
-    }
-
-    &-active {
-      background-color: $not-so-black;
     }
   }
 
@@ -113,22 +100,6 @@
       background: none !important;
       border: 1px solid $border;
     }
-  }
-
-  .control-item {
-    .custom-checkbox {
-      input[type='checkbox']+label::before {
-        filter: invert(0.7);
-      }
-    }
-
-    input[type='range']::before {
-      color: $white;
-    }
-  }
-
-  .control-item:hover {
-    background-color: $bg-main;
   }
 
   .announcement-text {

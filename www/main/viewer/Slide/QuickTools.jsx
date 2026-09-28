@@ -3,7 +3,12 @@ import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { PrimaryButton, SimpleSelect, Tooltip } from '@khalisfoundation/sikhi-ui';
-import { classNames, convertToCamelCase, toGroupedSelectOptions } from '../../common/utils';
+import {
+  classNames,
+  contentLabelKey,
+  convertToCamelCase,
+  toGroupedSelectOptions,
+} from '../../common/utils';
 import { setQuickToolsOpen } from '../../common/store/redux/viewerSettingsSlice';
 import platform from '../../desktop_scripts';
 import Icon from '../../common/sttm-ui/icon';
@@ -44,24 +49,7 @@ const QuickTools = ({ isMiscSlide, baniOptions }) => {
 
   const { disabledContent } = useSelector((state) => state.navigator);
 
-  const dropdownLabel = (option) => {
-    if (option.includes('gurbani')) {
-      return i18n.t(`QUICK_TOOLS.BANI`);
-    }
-    if (option.includes('announcements')) {
-      return i18n.t(`QUICK_TOOLS.ANNOUNCEMENTS`);
-    }
-    if (option.includes('teeka')) {
-      return i18n.t(`QUICK_TOOLS.TEEKA`);
-    }
-    if (option.includes('translation')) {
-      return i18n.t(`QUICK_TOOLS.TRANSLATION`);
-    }
-    if (option.includes('transliteration')) {
-      return i18n.t(`QUICK_TOOLS.TRANSLITERATION`);
-    }
-    return '';
-  };
+  const dropdownLabel = (option) => i18n.t(contentLabelKey(option));
 
   // A line's settings: Bani / Announcements by name, the content lines by
   // position (content1..3).

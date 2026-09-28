@@ -12,9 +12,9 @@ const SettingsContainer = ({ settingsObj }) => {
       settingsList.push(
         <Box
           variant="gradient"
-          className="settings-container"
+          className="settings-category"
           id={cat}
-          key={`settings-container-${index}`}
+          key={`settings-category-${index}`}
         >
           <Categories category={category} />
         </Box>,

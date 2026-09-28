@@ -4,6 +4,7 @@ const log = require('electron-log');
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
+const { pathToFileURL } = require('url');
 const { v4: uuidv4 } = require('uuid');
 const portfinder = require('portfinder');
 const i18n = require('i18next');
@@ -76,7 +77,29 @@ const {
   globalShortcut,
   systemPreferences,
   shell,
+  protocol,
+  net,
 } = electron;
+
+// Saved custom backgrounds (<userData>/user_backgrounds) are served as
+// sttm-bg://user/<file>, so a window can show them whether it's loaded from
+// www/ (file://) or the Vite dev server (http://), which may not load file://.
+const CUSTOM_BG_SCHEME = 'sttm-bg';
+protocol.registerSchemesAsPrivileged([
+  { scheme: CUSTOM_BG_SCHEME, privileges: { standard: true, secure: true, supportFetchAPI: true } },
+]);
+
+const serveCustomBackgrounds = () => {
+  const backgroundsPath = path.join(app.getPath('userData'), 'user_backgrounds');
+  protocol.handle(CUSTOM_BG_SCHEME, (request) => {
+    const file = path.join(backgroundsPath, decodeURIComponent(new URL(request.url).pathname));
+    // Only files inside the backgrounds folder.
+    if (!file.startsWith(`${backgroundsPath}${path.sep}`)) {
+      return new Response('Not found', { status: 404 });
+    }
+    return net.fetch(pathToFileURL(file).toString());
+  });
+};
 
 const store = new Store({
   configName: 'user-preferences',
@@ -648,6 +671,8 @@ app.on('ready', () => {
   splash.loadURL(`file://${__dirname}/www/splash.html`);
   splash.center();
   remote.enable(mainWindow.webContents);
+
+  serveCustomBackgrounds();
 
   // Set up session permission handler for microphone access (required for Windows)
   const { session } = electron;

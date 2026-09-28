@@ -1,15 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Box } from '@khalisfoundation/sikhi-ui';
-import { Tile, CustomBgTile, VideoWithOverlay } from '../../common/sttm-ui';
+import { Box, PrimaryButton } from '@khalisfoundation/sikhi-ui';
+import { Tile, CustomBgTile, VideoWithOverlay, Icon } from '../../common/sttm-ui';
+import { classNames } from '../../common/utils';
 
 import { themes } from '../../theme_editor';
 import {
   applyTheme,
-  uploadImage,
   setDefaultBg,
-  upsertCustomBackgrounds,
-  removeCustomBackgroundFile,
+  listCustomBackgrounds,
+  addCustomBackgroundFromInput,
+  removeCustomBackground,
 } from '../utils';
 import {
   setTheme as setThemeAction,
@@ -27,94 +28,113 @@ const themeTypes = [
   { type: 'VIDEO', title: 'VIDEOS' },
 ];
 
+// The theme picker: colour, background, special and video themes as tiles in a
+// grid, then the user's own background images.
 const ThemeContainer = () => {
   const [customThemes, setCustomThemes] = useState([]);
+  const uploadInput = useRef(null);
   const dispatch = useDispatch();
   const setTheme = (value) => dispatch(setThemeAction(value));
   const setThemeBg = (value) => dispatch(setThemeBgAction(value));
   const { theme: currentTheme, themeBg } = useSelector((state) => state.userSettings);
   const groupThemes = (themeType) => themes.filter(({ type }) => type.includes(themeType));
 
+  const refreshCustomThemes = async () => setCustomThemes(await listCustomBackgrounds());
+
   useEffect(() => {
-    upsertCustomBackgrounds(setCustomThemes);
+    refreshCustomThemes();
   }, []);
 
-  return (
-    <Box variant="gradient" className="settings-container themes-container">
-      <div id="custom-theme-options">
-        {themeTypes.map(({ type, title }) => (
-          <React.Fragment key={type}>
-            <header className="options-header">
-              {i18n.t(`THEMES.${title}`)}
-              {type === 'VIDEO' && (
-                <span className="notes">{i18n.t('SETTINGS.CHROMECAST_UNAVAILABLE')}</span>
-              )}
-            </header>
-            <span className="theme-tile-holder">
-              {groupThemes(type).map((theme) => (
-                <Tile
-                  key={theme.name}
-                  onClick={() => {
-                    if (currentTheme !== theme.key) {
-                      applyTheme(theme, false, setTheme, setThemeBg, themeBg);
-                    }
-                    setDefaultBg(theme, setThemeBg, themeBg);
-                  }}
-                  className={theme['background-video'] ? 'video-theme-instance' : 'theme-instance'}
-                  theme={theme}
-                >
-                  {theme['background-video'] ? (
-                    <VideoWithOverlay
-                      src={theme['background-video']}
-                      overlayContent={i18n.t(`THEMES.${theme.name}`)}
-                    />
-                  ) : (
-                    i18n.t(`THEMES.${theme.name}`)
-                  )}
-                </Tile>
-              ))}
-            </span>
-          </React.Fragment>
-        ))}
+  const isCustomBg = themeBg && themeBg.type === 'custom';
 
-        <header className="options-header">{i18n.t(`THEMES.CUSTOM_BACKGROUNDS`)}</header>
-        <label className="file-input-label">
-          {i18n.t('THEMES.NEW_IMAGE')}
+  // Removing the background in use falls back to the current theme's own.
+  const removeCustomTheme = async (tile) => {
+    await removeCustomBackground(tile.path);
+    if (isCustomBg && themeBg.url === tile.url) {
+      setDefaultBg(
+        themes.find(({ key }) => key === currentTheme),
+        setThemeBg,
+        themeBg,
+      );
+      global.core.platformMethod('updateSettings');
+    }
+    refreshCustomThemes();
+  };
+
+  return (
+    <Box variant="gradient" className="theme-picker">
+      {themeTypes.map(({ type, title }) => (
+        <section key={type} className="theme-picker__section">
+          <h4 className="theme-picker__title">
+            {i18n.t(`THEMES.${title}`)}
+            {type === 'VIDEO' && (
+              <span className="theme-picker__note">
+                {i18n.t('SETTINGS.CHROMECAST_UNAVAILABLE')}
+              </span>
+            )}
+          </h4>
+          <div className="theme-picker__tiles">
+            {groupThemes(type).map((theme) => (
+              <Tile
+                key={theme.name}
+                onClick={() => applyTheme(theme, false, setTheme, setThemeBg, themeBg)}
+                className={classNames(
+                  'theme-picker__tile',
+                  theme['background-video'] && 'theme-picker__tile--video',
+                  !isCustomBg && theme.key === currentTheme && 'theme-picker__tile--active',
+                )}
+                theme={theme}
+              >
+                {theme['background-video'] ? (
+                  <VideoWithOverlay
+                    src={theme['background-video']}
+                    poster={theme['background-video-poster']}
+                    overlayContent={i18n.t(`THEMES.${theme.name}`)}
+                  />
+                ) : (
+                  i18n.t(`THEMES.${theme.name}`)
+                )}
+              </Tile>
+            ))}
+          </div>
+        </section>
+      ))}
+
+      <section className="theme-picker__section">
+        <h4 className="theme-picker__title">{i18n.t(`THEMES.CUSTOM_BACKGROUNDS`)}</h4>
+        <div className="theme-picker__upload">
+          <PrimaryButton
+            variant="outline"
+            size="sm"
+            leftIcon={<Icon name="plus" />}
+            onClick={() => uploadInput.current.click()}
+          >
+            {i18n.t('THEMES.NEW_IMAGE')}
+          </PrimaryButton>
+          <span className="theme-picker__note">{i18n.t('THEMES.RECOMMENDED')}</span>
           <input
+            ref={uploadInput}
             className="file-input"
             onChange={async (e) => {
-              await uploadImage(e);
-              upsertCustomBackgrounds(setCustomThemes);
+              await addCustomBackgroundFromInput(e);
+              refreshCustomThemes();
             }}
-            id="themebg-upload"
             type="file"
             accept="image/png, image/jpeg"
           />
-        </label>
-        <p className="helper-text">{i18n.t('THEMES.RECOMMENDED')}</p>
-        <span className="theme-tile-holder">
+        </div>
+        <div className="theme-picker__tiles">
           {customThemes.map((tile) => (
-            <React.Fragment key={tile.name}>
-              <CustomBgTile
-                customBg={tile}
-                onApply={() => {
-                  applyTheme(tile, 'custom', setTheme, setThemeBg);
-                }}
-                onRemove={() => {
-                  removeCustomBackgroundFile(tile['background-image-path']);
-                  upsertCustomBackgrounds(setCustomThemes);
-                  if (tile['background-image'] === themeBg.url.href) {
-                    const currentThemeInstance = themes.filter(
-                      (theme) => theme.key === currentTheme,
-                    );
-                    setDefaultBg(currentThemeInstance, setThemeBg, themeBg);
-                  }
-                }}
-              />
-            </React.Fragment>
+            <CustomBgTile
+              key={tile.name}
+              customBg={tile}
+              isActive={isCustomBg && themeBg.url === tile.url}
+              onApply={() => applyTheme(tile, true, setTheme, setThemeBg, themeBg)}
+              onRemove={() => removeCustomTheme(tile)}
+            />
           ))}
-        </span>
-      </div>
+        </div>
+      </section>
     </Box>
   );
 };

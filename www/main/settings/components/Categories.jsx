@@ -2,91 +2,47 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 
-import Setting from './Setting';
+import SettingRow from './SettingRow';
 import { convertToCamelCase } from '../../common/utils';
 
 const remote = require('@electron/remote');
 
-const { store, i18n } = remote.require('./app');
+const { i18n } = remote.require('./app');
 
-const SettingsFactory = ({ subCategory }) => {
-  const settingsDOM = [];
+// A titled group of settings (a subcategory). A setting with a condition shows
+// only while another setting has the given value, e.g. the vishraam options
+// while vishraams are shown.
+const SettingsGroup = ({ id, group }) => {
   const userSettings = useSelector((state) => state.userSettings);
+  const settingKeys = Object.keys(group.settingObjs).filter((settingKey) => {
+    const { condition, conditionValue } = group.settingObjs[settingKey];
+    return !condition || userSettings[convertToCamelCase(condition)] === conditionValue;
+  });
 
-  Object.keys(subCategory.settingObjs).forEach((settingKey, settingIndex) => {
-    const { addonObj, addon, condition, conditionValue } = subCategory.settingObjs[settingKey];
-
-    if (condition) {
-      if (userSettings[convertToCamelCase(condition)] !== conditionValue) {
-        return;
-      }
-    }
-
-    const addonMarkup = [];
-
-    if (addon) {
-      addonObj.forEach((add, index) => {
-        addonMarkup.push(
-          <Setting
-            key={`setting-addon-${index}`}
-            settingObj={add}
-            stateVar={convertToCamelCase(addon[index])}
-            stateFunction={`set${convertToCamelCase(addon[index], true)}`}
-          />,
-        );
-      });
-    }
-
-    settingsDOM.push(
-      <div className="control-item" id={settingKey} key={settingIndex}>
-        {/* 1. Push the Addon first */}
-        {addon && addonMarkup}
-
-        {/* 2. Then add title */}
-        <span>
-          {subCategory.settingObjs[settingKey].title &&
-            i18n.t(`SETTINGS.${subCategory.settingObjs[settingKey].title}`)}
-        </span>
-
-        {/* 3. Push notes and default value text */}
-        <span className="notes">
-          {subCategory.settingObjs[settingKey].notes &&
-            i18n.t(`SETTINGS.${subCategory.settingObjs[settingKey].notes}`)}
-          {subCategory.settingObjs[settingKey].type === 'range' &&
-            `(Default: ${subCategory.settingObjs[settingKey].initialValue})`}
-          {subCategory.settingObjs[settingKey].store &&
-            store.get(subCategory.settingObjs[settingKey].store)}
-        </span>
-
-        {/* 4. Push the setting input */}
-        <Setting
-          settingObj={subCategory.settingObjs[settingKey]}
-          stateVar={convertToCamelCase(settingKey)}
-          stateFunction={`set${convertToCamelCase(settingKey, true)}`}
+  return (
+    <section className="settings-group" id={id}>
+      <h4 className="settings-group__title">{i18n.t(`SETTINGS.${group.title}`)}</h4>
+      {settingKeys.map((settingKey) => (
+        <SettingRow
+          key={settingKey}
+          settingKey={settingKey}
+          settingObj={group.settingObjs[settingKey]}
         />
-      </div>,
-    );
-  });
-  return settingsDOM;
+      ))}
+    </section>
+  );
 };
 
-const Categories = ({ category }) => {
-  const categoriesDOM = [];
-  Object.keys(category.subCatObjs).forEach((subCat, scIndex) => {
-    categoriesDOM.push(
-      <div key={`control-${scIndex}`} className={`controls-container`} id={`settings-${subCat}`}>
-        <h4>{i18n.t(`SETTINGS.${category.subCatObjs[subCat].title}`)}</h4>
-        <SettingsFactory subCategory={category.subCatObjs[subCat]} />
-      </div>,
-    );
-  });
-
-  return categoriesDOM;
+SettingsGroup.propTypes = {
+  id: PropTypes.string,
+  group: PropTypes.object,
 };
 
-SettingsFactory.prototypes = {
-  subCategory: PropTypes.object,
-};
+// A category's groups, one after another.
+const Categories = ({ category }) =>
+  Object.keys(category.subCatObjs).map((subCat) => (
+    <SettingsGroup key={subCat} id={`settings-${subCat}`} group={category.subCatObjs[subCat]} />
+  ));
 
 Categories.propTypes = {
   category: PropTypes.object,

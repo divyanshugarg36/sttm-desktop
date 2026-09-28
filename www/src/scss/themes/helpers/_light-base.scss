@@ -86,20 +86,9 @@
   .pane__header,
   .navigator-header,
   .more-tabs .nav-header-tab,
-  .settings-nav,
   .settings-preview-title {
     background-color: $statusbar-bg;
     color: $base-text;
-  }
-
-  .control-item {
-    input[type='range']::before {
-      color: $base-text;
-    }
-  }
-
-  .control-item:hover {
-    background-color: $statusbar-bg;
   }
 
   // Single-Display's tab switches, on the muted accent rather than the plain

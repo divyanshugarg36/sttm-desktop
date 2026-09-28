@@ -1,0 +1,70 @@
+// A settings row: [visibility] name and note … control (a toggle, select,
+// slider with its value, or a reset button).
+
+.setting-row {
+  align-items: center;
+  border-radius: var(--sui-radii-md);
+  display: flex;
+  gap: 12px;
+  margin: 0 12px;
+  min-height: 48px;
+  padding: 6px 12px;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: color-mix(in srgb, var(--sui-semantic-accent-default) 4%, transparent);
+  }
+
+  // A reset button on its own, at the end of its group.
+  &--action {
+    justify-content: flex-end;
+
+    &:hover {
+      background-color: transparent;
+    }
+  }
+
+  &__label {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  &__title {
+    font-size: var(--sui-typography-font-sizes-base);
+    line-height: var(--sui-typography-line-heights-base);
+  }
+
+  &__note {
+    color: var(--sui-semantic-foreground-muted);
+    font-size: var(--sui-typography-font-sizes-xs);
+    line-height: var(--sui-typography-line-heights-sm);
+  }
+
+  &__control {
+    align-items: center;
+    display: flex;
+    flex: 0 0 auto;
+    gap: 12px;
+  }
+
+  &__select {
+    min-width: 144px;
+  }
+
+  // Which content a slide line shows, beside its font size.
+  &__content {
+    width: 112px;
+  }
+
+  &__value {
+    font-variant-numeric: tabular-nums;
+    min-width: 24px;
+    text-align: right;
+  }
+
+  &__range {
+    flex: 0 0 128px;
+  }
+}

@@ -8,7 +8,8 @@
 
 // Foundation and the older partials.
 @import 'foundation/foundation', 'animations', 'forms', 'header', 'helpers', 'share-sync',
-  'settings', 'notifications';
+  'overlays/settings/settings', 'overlays/settings/setting-row', 'overlays/settings/settings-preview',
+  'overlays/settings/theme-picker', 'notifications';
 
 @import 'markdown', 'themes/themes', 'update', 'viewer', 'window', 'addon', 'akhandpaatt', 'overlay', 'animations',
   'noty', 'icon', 'ui-library';
@@ -711,44 +712,6 @@ body.show-overlay {
     letter-spacing: 2px;
     text-transform: uppercase;
   }
-}
-
-.delete-button {
-  position: relative;
-  right: 35px;
-  top: 15px;
-}
-
-.file-input-label {
-  display: block;
-  margin: 10px;
-
-  &.disabled {
-    background: #e0e0e0;
-    cursor: default;
-
-    &:hover {
-      box-shadow: none;
-    }
-  }
-}
-
-.helper-text {
-  font-size: 12px;
-  font-style: italic;
-  line-height: 12px;
-  margin: 0 auto 10px 10px;
-  width: 100%;
-}
-
-.file-input-label {
-  display: block;
-  margin: 10px;
-}
-
-.file-input-label {
-  display: block;
-  margin: 10px;
 }
 
 .win32 .options-page {

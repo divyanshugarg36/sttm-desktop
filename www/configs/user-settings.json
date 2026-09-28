@@ -167,11 +167,15 @@
       "initialValue": false
     },
     "larivaar-assist": {
+      "condition": "larivaar",
+      "conditionValue": true,
       "title": "LARIVAAR_ASSIST",
       "notes": "LARIVAAR_ASSIST_MSG",
       "initialValue": false
     },
     "larivaar-assist-type": {
+      "condition": "larivaar",
+      "conditionValue": true,
       "title": "ASSIST_TYPE",
       "type": "dropdown",
       "options": {
@@ -185,6 +189,8 @@
       "initialValue": false
     },
     "vishraam-type": {
+      "condition": "display-vishraams",
+      "conditionValue": true,
       "title": "VISHRAAM_OPTIONS",
       "type": "dropdown",
       "initialValue": "colored-words",
@@ -194,6 +200,8 @@
       }
     },
     "vishraam-source": {
+      "condition": "display-vishraams",
+      "conditionValue": true,
       "title": "VISHRAAM_SOURCE",
       "type": "dropdown",
       "options": {
@@ -223,6 +231,8 @@
       "initialValue": true
     },
     "autoplay-delay": {
+      "condition": "autoplay-toggle",
+      "conditionValue": true,
       "title": "DELAY",
       "type": "range",
       "max": 20,

@@ -2,7 +2,6 @@ export { default as Switch } from './switch';
 export { default as Tile } from './tile';
 export { default as VideoWithOverlay } from './video-with-overlay';
 export { default as Overlay } from './overlay';
-export { default as Checkbox } from './checkbox';
 export { default as CustomBgTile } from './custom-tile';
 export { default as InputBox } from './inputbox';
 export { default as Icon } from './icon';

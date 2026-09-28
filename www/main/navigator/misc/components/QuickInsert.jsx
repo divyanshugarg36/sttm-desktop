@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
 import { PrimaryButton } from '@khalisfoundation/sikhi-ui';
 
-import { uploadImage } from '../../../settings/utils/theme-bg-uploader';
+import { addCustomBackgroundFromInput } from '../../../settings/utils/custom-backgrounds';
 import { classNames } from '../../../common/utils';
 import { setOverlayScreen } from '../../../common/store/redux/appSlice';
 import { useSlides } from '../../../common/hooks';
@@ -89,10 +89,7 @@ export const QuickInsert = ({ className }) => {
         <input
           ref={customImageInput}
           className="file-input"
-          onChange={async (e) => {
-            await uploadImage(e);
-          }}
-          id="themebg-upload"
+          onChange={addCustomBackgroundFromInput}
           type="file"
           accept="image/png, image/jpeg"
         />

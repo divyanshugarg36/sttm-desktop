@@ -21,3 +21,13 @@
   position: relative;
   width: 100%;
 }
+
+// A small muted, letter-spaced, uppercase heading over a group of settings.
+@mixin section-title {
+  color: var(--sui-semantic-foreground-muted);
+  font-size: var(--sui-typography-font-sizes-xs);
+  letter-spacing: 0.2em;
+  margin: 0;
+  text-transform: uppercase;
+  word-spacing: 0.2em;
+}
