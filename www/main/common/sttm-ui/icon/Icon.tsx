@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { iconMap } from '@khalisfoundation/sikhi-ui';
 import {
   ArrowLongLeft,
@@ -24,8 +23,14 @@ import {
   X,
 } from '@mynaui/icons-react';
 
+/** An icon component: an <svg> that takes the usual SVG props. */
+type SvgIcon = (props: React.SVGProps<SVGSVGElement>) => React.ReactElement;
+
+// sikhi-ui's icons, looked up by any name.
+const sikhiIcons: Record<string, SvgIcon | undefined> = iconMap;
+
 // Icons sikhi-ui doesn't ship yet, from the same Mynaui set its own icons come from.
-const extraIcons = {
+const extraIcons: Record<string, SvgIcon | undefined> = {
   'arrow-long-left': ArrowLongLeft,
   bold: TypeBold,
   clock: ClockCircle,
@@ -50,8 +55,14 @@ const extraIcons = {
 
 // A sikhi-ui (or Mynaui) icon inside an <i>, drawn at 1em in currentColor like
 // the icon font it replaces, so the app's `i` styles still size and colour it.
-const Icon = ({ name, className = '', children, ...props }) => {
-  const Svg = iconMap[name] || extraIcons[name];
+type IconProps = React.HTMLAttributes<HTMLElement> & {
+  name: string;
+  className?: string;
+  children?: React.ReactNode;
+};
+
+const Icon = ({ name, className = '', children, ...props }: IconProps) => {
+  const Svg = sikhiIcons[name] || extraIcons[name];
   if (!Svg) {
     console.warn(`Icon "${name}" not found`);
     return null;
@@ -62,12 +73,6 @@ const Icon = ({ name, className = '', children, ...props }) => {
       {children}
     </i>
   );
-};
-
-Icon.propTypes = {
-  name: PropTypes.string.isRequired,
-  className: PropTypes.string,
-  children: PropTypes.node,
 };
 
 export default Icon;

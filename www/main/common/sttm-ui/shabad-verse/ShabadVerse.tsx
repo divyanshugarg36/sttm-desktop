@@ -1,6 +1,6 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { GurbaniVerseList } from '@khalisfoundation/sikhi-ui';
+import { GurbaniVerseList, type GurbaniVerse } from '@khalisfoundation/sikhi-ui';
+import { i18n } from '../../main-app';
 import Icon from '../icon';
 import { classNames } from '../../utils';
 
@@ -8,9 +8,21 @@ const FLOWER_VERSE_ID = 61;
 // The app's Gurbani Akhar font (controller.scss $gurmukhi-font-family).
 const GURMUKHI_FONT = 'gurbaniakhar';
 
-const remote = require('@electron/remote');
-
-const { i18n } = remote.require('./app');
+type ShabadVerseProps = {
+  /** The active verse's ID, keyed by its line number. */
+  activeVerse: Record<number, number>;
+  changeHomeVerse: (lineNumber: number) => void;
+  /** The home verse's line number (the pane's homeVerse). */
+  isHomeVerse: number | false;
+  lineNumber: number;
+  versesRead: number[];
+  activeVerseRef: React.Ref<HTMLDivElement>;
+  updateTraversedVerse: (verseId: number | undefined, lineNumber: number) => void;
+  verse?: string;
+  englishVerse?: string;
+  /** Undefined for a line without an ID. */
+  verseId?: number;
+};
 
 // One line of the verse list: a single-verse sikhi-ui GurbaniVerseList, so the
 // list can stay virtualised (ShabadText renders one per row). A tick on the
@@ -27,19 +39,21 @@ const ShabadVerse = ({
   verse,
   englishVerse,
   verseId,
-}) => {
+}: ShabadVerseProps) => {
   const isActive = verseId !== undefined && activeVerse[lineNumber] === verseId;
-  const isRead = versesRead.includes(verseId);
+  const isRead = verseId !== undefined && versesRead.includes(verseId);
   const isFlowerVerse = verseId === FLOWER_VERSE_ID;
   // Announcements carry their text as English markup instead of Gurbani.
   const text = verse || englishVerse?.split('<h1>')[1]?.split('</h1>')[0] || '';
-  const gurbaniVerse = {
-    verseId,
+  // Only the text is shown, so there are no transliterations or translations.
+  const gurbaniVerse: GurbaniVerse = {
+    // Passed on as it is, undefined included, as before.
+    verseId: verseId as number,
     shabadId: 0,
     verse: { gurmukhi: text, unicode: text },
     larivaar: { gurmukhi: text, unicode: text },
-    transliteration: {},
-    translation: {},
+    transliteration: {} as GurbaniVerse['transliteration'],
+    translation: {} as GurbaniVerse['translation'],
     source: { sourceId: '', pageNo: 0 },
   };
 
@@ -79,19 +93,6 @@ const ShabadVerse = ({
       />
     </div>
   );
-};
-
-ShabadVerse.propTypes = {
-  activeVerse: PropTypes.object,
-  changeHomeVerse: PropTypes.func,
-  isHomeVerse: PropTypes.number,
-  lineNumber: PropTypes.number,
-  versesRead: PropTypes.array,
-  activeVerseRef: PropTypes.object,
-  updateTraversedVerse: PropTypes.func,
-  verse: PropTypes.string,
-  englishVerse: PropTypes.string,
-  verseId: PropTypes.number,
 };
 
 export default ShabadVerse;

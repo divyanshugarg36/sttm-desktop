@@ -1,9 +1,14 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { PrimaryButton } from '@khalisfoundation/sikhi-ui';
 import Icon from '../icon';
 
-const Overlay = ({ onScreenClose, children, className }) => (
+type OverlayProps = {
+  onScreenClose?: React.MouseEventHandler<HTMLElement>;
+  children?: React.ReactNode;
+  className?: string;
+};
+
+const Overlay = ({ onScreenClose, children, className }: OverlayProps) => (
   <div className={`backdrop ${className}`} onClick={onScreenClose}>
     {children}
     <PrimaryButton
@@ -18,11 +23,5 @@ const Overlay = ({ onScreenClose, children, className }) => (
     </PrimaryButton>
   </div>
 );
-
-Overlay.propTypes = {
-  onScreenClose: PropTypes.func,
-  children: PropTypes.node,
-  className: PropTypes.string,
-};
 
 export default Overlay;

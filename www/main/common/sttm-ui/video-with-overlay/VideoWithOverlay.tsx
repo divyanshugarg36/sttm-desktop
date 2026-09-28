@@ -1,20 +1,25 @@
 import React, { useRef } from 'react';
-import PropTypes from 'prop-types';
 
 // A video theme's tile: its poster with a caption, playing the video only
 // while hovered. Several 1080p videos playing at once as thumbnails run the
 // GPU out of hardware decoders, and whichever misses out stays black.
-const VideoWithOverlay = ({ src, poster, overlayContent }) => {
-  const video = useRef(null);
+type VideoWithOverlayProps = {
+  src?: string;
+  poster?: string;
+  overlayContent?: React.ReactNode;
+};
+
+const VideoWithOverlay = ({ src, poster, overlayContent }: VideoWithOverlayProps) => {
+  const video = useRef<HTMLVideoElement>(null);
 
   const play = () => {
-    video.current.play().catch(() => {});
+    video.current!.play().catch(() => {});
   };
 
   // Back to the poster, releasing the decoder.
   const stop = () => {
-    video.current.pause();
-    video.current.load();
+    video.current!.pause();
+    video.current!.load();
   };
 
   return (
@@ -32,12 +37,6 @@ const VideoWithOverlay = ({ src, poster, overlayContent }) => {
       <div className="video-tile__caption">{overlayContent}</div>
     </div>
   );
-};
-
-VideoWithOverlay.propTypes = {
-  src: PropTypes.string,
-  poster: PropTypes.string,
-  overlayContent: PropTypes.node,
 };
 
 export default VideoWithOverlay;

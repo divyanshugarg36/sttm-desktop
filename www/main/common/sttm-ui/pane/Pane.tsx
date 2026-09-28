@@ -1,7 +1,20 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+/** What a pane passes its slots (ShabadPane: the pane it shows). */
+export type PaneData = { multiPaneId?: number };
 
-const noData = {};
+/** The props each slot component gets. */
+export type PaneSlotProps = { className: string; data: PaneData };
+
+type PaneProps = {
+  content?: React.ComponentType<PaneSlotProps> | null;
+  header?: React.ComponentType<PaneSlotProps> | null;
+  footer?: React.ComponentType<PaneSlotProps> | null;
+  className?: string;
+  data?: PaneData;
+  plain?: boolean;
+};
+
+const noData: PaneData = {};
 
 // The header, content and footer components each render their own root, which
 // takes the slot's class (pane__header / pane__content / pane__footer).
@@ -13,21 +26,12 @@ const Pane = ({
   className = '',
   data = noData,
   plain = false,
-}) => (
+}: PaneProps) => (
   <div className={['pane', !plain && 'pane--box', className].filter(Boolean).join(' ')}>
     {Header ? <Header className="pane__header" data={data} /> : ''}
     {Content ? <Content className="pane__content" data={data} /> : ''}
     {Footer ? <Footer className="pane__footer" data={data} /> : ''}
   </div>
 );
-
-Pane.propTypes = {
-  content: PropTypes.any,
-  header: PropTypes.any,
-  footer: PropTypes.any,
-  className: PropTypes.string,
-  data: PropTypes.any,
-  plain: PropTypes.bool,
-};
 
 export default Pane;

@@ -1,8 +1,13 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import Icon from '../icon';
 
-const FilterTag = ({ close, title, filterType }) => (
+type FilterTagProps = {
+  close: React.MouseEventHandler<HTMLSpanElement>;
+  title: string;
+  filterType: string;
+};
+
+const FilterTag = ({ close, title, filterType }: FilterTagProps) => (
   <div className="filter-tag" title={filterType}>
     <span className="filter-tag--remove" onClick={close}>
       <Icon name="x" />
@@ -10,11 +15,5 @@ const FilterTag = ({ close, title, filterType }) => (
     <span className="filter-tag--title">{title}</span>
   </div>
 );
-
-FilterTag.propTypes = {
-  close: PropTypes.func.isRequired,
-  title: PropTypes.string.isRequired,
-  filterType: PropTypes.string.isRequired,
-};
 
 export default FilterTag;

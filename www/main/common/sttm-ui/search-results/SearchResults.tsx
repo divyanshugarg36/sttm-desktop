@@ -1,13 +1,24 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import anvaad from 'anvaad-js';
-import { useSelector } from 'react-redux';
 import { PrimaryButton } from '@khalisfoundation/sikhi-ui';
+import { i18n } from '../../main-app';
+import { useAppSelector } from '../../store/redux/hooks';
 import Icon from '../icon';
 
-const remote = require('@electron/remote');
-
-const { i18n } = remote.require('./app');
+type SearchResultsProps = {
+  ang?: number;
+  /** Opens the shabad at the verse, in the given pane. */
+  onClick: (shabadId: number, verseId: number, verse: string, paneId: number) => void;
+  searchType: number;
+  raag?: string | null;
+  shabadId: number;
+  sourceId?: string;
+  searchQuery: string;
+  verse: string;
+  verseId: number;
+  writer?: string;
+  currentLanguage?: string;
+};
 
 const SearchResults = ({
   ang,
@@ -21,11 +32,11 @@ const SearchResults = ({
   verseId,
   writer,
   currentLanguage,
-}) => {
-  const { currentWorkspace, defaultPaneId } = useSelector((state) => state.userSettings);
-  const { pane1, pane2, pane3 } = useSelector((state) => state.navigator);
+}: SearchResultsProps) => {
+  const { currentWorkspace, defaultPaneId } = useAppSelector((state) => state.userSettings);
+  const { pane1, pane2, pane3 } = useAppSelector((state) => state.navigator);
 
-  const getClassForAng = (baniSource) => {
+  const getClassForAng = (baniSource?: string) => {
     if (baniSource === 'G') {
       return 'search-result__ang--sggs';
     }
@@ -38,7 +49,7 @@ const SearchResults = ({
     return 'search-result__ang--other';
   };
 
-  const getBorderColorClass = (baniSource) => {
+  const getBorderColorClass = (baniSource?: string) => {
     if (baniSource === 'G') {
       return 'search-result__body--sggs';
     }
@@ -94,7 +105,12 @@ const SearchResults = ({
     return null;
   };
 
-  const isHighlightRequired = (gurbaniVerse, word, wordIndex, searchCharacters) => {
+  const isHighlightRequired = (
+    gurbaniVerse: string,
+    word: string,
+    wordIndex: number,
+    searchCharacters: string,
+  ) => {
     const wordsToHightlight = searchCharacters.length;
     const mainLetters = anvaad.mainLetters(gurbaniVerse);
     const firstLetters = mainLetters
@@ -131,7 +147,7 @@ const SearchResults = ({
     return false;
   };
 
-  const highlightKeywords = (gurbaniVerse, searchCharacters) => {
+  const highlightKeywords = (gurbaniVerse: string, searchCharacters: string) => {
     if (gurbaniVerse) {
       const brokenWords = gurbaniVerse.split(' ');
       return brokenWords.map((word, index) => (
@@ -174,20 +190,6 @@ const SearchResults = ({
       {shabadPaneButtons()}
     </li>
   );
-};
-
-SearchResults.propTypes = {
-  ang: PropTypes.number,
-  onClick: PropTypes.func,
-  raag: PropTypes.string,
-  searchQuery: PropTypes.string,
-  searchType: PropTypes.number,
-  shabadId: PropTypes.number,
-  sourceId: PropTypes.string,
-  verse: PropTypes.string,
-  verseId: PropTypes.number,
-  writer: PropTypes.string,
-  currentLanguage: PropTypes.string,
 };
 
 export default SearchResults;

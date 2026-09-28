@@ -1,5 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
-import PropTypes from 'prop-types';
+
+type VoiceWaveProps = {
+  stream?: MediaStream | null;
+  isRecording: boolean;
+  handleMicClick: () => void;
+  width?: number;
+  height?: number;
+  barColor?: string;
+  barWidth?: number;
+  barGap?: number;
+};
 
 export const VoiceWave = ({
   stream,
@@ -10,12 +20,12 @@ export const VoiceWave = ({
   barColor = '#666',
   barWidth = 3,
   barGap = 2,
-}) => {
-  const animationRef = useRef();
-  const analyserRef = useRef(null);
-  const dataArrayRef = useRef(null);
-  const startTimeRef = useRef(null);
-  const [bars, setBars] = useState([]);
+}: VoiceWaveProps) => {
+  const animationRef = useRef<number>(undefined);
+  const analyserRef = useRef<AnalyserNode | null>(null);
+  const dataArrayRef = useRef<Uint8Array<ArrayBuffer> | null>(null);
+  const startTimeRef = useRef<number | null>(null);
+  const [bars, setBars] = useState<number[]>([]);
   const [duration, setDuration] = useState('00:00');
 
   useEffect(() => {
@@ -31,7 +41,7 @@ export const VoiceWave = ({
 
     startTimeRef.current = Date.now();
 
-    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const audioContext = new (window.AudioContext || window.webkitAudioContext!)();
     const analyser = audioContext.createAnalyser();
     const source = audioContext.createMediaStreamSource(stream);
 
@@ -48,7 +58,7 @@ export const VoiceWave = ({
       analyserRef.current.getByteFrequencyData(dataArrayRef.current);
 
       const numBars = Math.floor(width / (barWidth + barGap));
-      const newBars = [];
+      const newBars: number[] = [];
 
       for (let i = 0; i < numBars; i++) {
         const dataIndex = Math.floor((i / numBars) * dataArrayRef.current.length);
@@ -120,15 +130,4 @@ export const VoiceWave = ({
       </svg>
     </div>
   );
-};
-
-VoiceWave.propTypes = {
-  stream: PropTypes.instanceOf(MediaStream),
-  isRecording: PropTypes.bool.isRequired,
-  handleMicClick: PropTypes.func.isRequired,
-  width: PropTypes.number,
-  height: PropTypes.number,
-  barColor: PropTypes.string,
-  barWidth: PropTypes.number,
-  barGap: PropTypes.number,
 };

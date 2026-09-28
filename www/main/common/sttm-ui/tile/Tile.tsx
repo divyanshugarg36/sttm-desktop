@@ -1,8 +1,25 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { ButtonCard } from '@khalisfoundation/sikhi-ui';
 
 import { classNames, joinClasses } from '../../utils';
+
+/** The parts of a theme (themes.json) a tile's swatch uses. */
+type TileTheme = {
+  key: string;
+  'background-color'?: string;
+  'background-image'?: string;
+  'gurbani-color'?: string;
+};
+
+type TileProps = {
+  children?: React.ReactNode;
+  className?: string;
+  theme?: TileTheme | null;
+  type?: 'extras';
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  content?: string;
+  isEngTransliterated?: boolean;
+};
 
 const Tile = ({
   children,
@@ -12,14 +29,14 @@ const Tile = ({
   onClick,
   content,
   isEngTransliterated = false,
-}) => {
+}: TileProps) => {
   const tileClassname = joinClasses([
     `${type}-tile`,
     theme ? `${theme.key}-tile` : null,
     className || null,
   ]);
 
-  const getThemeSwatchStyles = (themeInstance) => ({
+  const getThemeSwatchStyles = (themeInstance: TileTheme) => ({
     backgroundColor: themeInstance['background-color'],
     backgroundImage: themeInstance['background-image']
       ? `url(assets/img/custom_backgrounds/${themeInstance['background-image']})`
@@ -31,21 +48,11 @@ const Tile = ({
     <ButtonCard
       onClick={onClick}
       className={`ui-tile ${tileClassname}`}
-      style={theme ? getThemeSwatchStyles(theme) : null}
+      style={theme ? getThemeSwatchStyles(theme) : undefined}
     >
       <span className={classNames(isEngTransliterated && 'eng-tile')}>{children || content}</span>
     </ButtonCard>
   );
-};
-
-Tile.propTypes = {
-  onClick: PropTypes.func,
-  className: PropTypes.string,
-  content: PropTypes.string,
-  theme: PropTypes.object,
-  children: PropTypes.node,
-  type: PropTypes.oneOf(['extras']),
-  isEngTransliterated: PropTypes.bool,
 };
 
 export default Tile;

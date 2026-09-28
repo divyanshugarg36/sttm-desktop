@@ -1,8 +1,17 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { SimpleSelect } from '@khalisfoundation/sikhi-ui';
 
-const FilterDropdown = ({ title, onChange, currentValue, optionsArray }) => (
+/** A filter option: the value it sets and the text it shows. */
+type FilterOption = { value: string; text: string };
+
+type FilterDropdownProps = {
+  title: string;
+  onChange?: React.ChangeEventHandler<HTMLSelectElement>;
+  optionsArray: FilterOption[];
+  currentValue?: string;
+};
+
+const FilterDropdown = ({ title, onChange, currentValue, optionsArray }: FilterDropdownProps) => (
   <SimpleSelect
     id={`dropdown-${title}`}
     className="select-bani-dd-group"
@@ -16,12 +25,5 @@ const FilterDropdown = ({ title, onChange, currentValue, optionsArray }) => (
     options={optionsArray.map((option) => ({ value: option.value, label: option.text }))}
   />
 );
-
-FilterDropdown.propTypes = {
-  title: PropTypes.string,
-  onChange: PropTypes.func,
-  optionsArray: PropTypes.array,
-  currentValue: PropTypes.string,
-};
 
 export default FilterDropdown;

@@ -1,7 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 
-const Switch = ({ title, controlId, className, onToggle, value = false, disabled = false }) => {
+type SwitchProps = {
+  title?: string;
+  controlId?: string;
+  className?: string;
+  onToggle?: (isSwitched: boolean) => void;
+  value?: boolean;
+  disabled?: boolean;
+};
+
+const Switch = ({
+  title,
+  controlId,
+  className,
+  onToggle,
+  value = false,
+  disabled = false,
+}: SwitchProps) => {
   const [isSwitched, setSwitchedState] = useState(value);
 
   useEffect(() => {
@@ -29,15 +44,6 @@ const Switch = ({ title, controlId, className, onToggle, value = false, disabled
       </div>
     </div>
   );
-};
-
-Switch.propTypes = {
-  title: PropTypes.string,
-  controlId: PropTypes.string,
-  className: PropTypes.string,
-  value: PropTypes.bool,
-  disabled: PropTypes.bool,
-  onToggle: PropTypes.func,
 };
 
 export default Switch;

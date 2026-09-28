@@ -1,19 +1,22 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
+import { i18n } from '../../main-app';
+import { useAppSelector } from '../../store/redux/hooks';
 import Icon from '../icon';
 
-const remote = require('@electron/remote');
-
-const { i18n } = remote.require('./app');
+type MultipaneDropdownProps = {
+  paneSelectorActive: boolean;
+  /** Passed by callers; not used here. */
+  setPaneSelectorActive?: (active: boolean) => void;
+  paneSelector: React.Ref<HTMLDivElement>;
+  clickHandler: (event: React.MouseEvent<HTMLDivElement>, paneId: number) => void;
+};
 
 const MultipaneDropdown = ({
   paneSelectorActive,
-  setPaneSelectorActive,
   paneSelector,
   clickHandler,
-}) => {
-  const { pane1, pane2, pane3 } = useSelector((state) => state.navigator);
+}: MultipaneDropdownProps) => {
+  const { pane1, pane2, pane3 } = useAppSelector((state) => state.navigator);
   const dropdownOptions = [pane1, pane2, pane3].map((item, index) => (
     <div
       key={`pane-option-${index + 1}`}
@@ -43,13 +46,6 @@ const MultipaneDropdown = ({
       {dropdownOptions}
     </div>
   );
-};
-
-MultipaneDropdown.propTypes = {
-  paneSelectorActive: PropTypes.bool,
-  setPaneSelectorActive: PropTypes.func,
-  paneSelector: PropTypes.object,
-  clickHandler: PropTypes.func,
 };
 
 export default MultipaneDropdown;

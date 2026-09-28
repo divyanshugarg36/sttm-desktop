@@ -1,25 +1,30 @@
 import React, { useContext, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { useSelector, useDispatch } from 'react-redux';
 import { InputContext } from '../../../launchpad';
+import { analytics } from '../../main-app';
+import { useAppDispatch, useAppSelector } from '../../store/redux/hooks';
 import { setShortcuts } from '../../store/redux/navigatorSlice';
 
-const remote = require('@electron/remote');
+type InputBoxProps = {
+  placeholder?: string;
+  disabled?: boolean;
+  className?: string;
+  query: string;
+  setQuery: (query: string) => void;
+  /** Passed by the old search bar; not used. */
+  databaseProgress?: number;
+};
 
-const analytics = remote.getGlobal('analytics');
+const InputBox = ({ placeholder, disabled, className, query, setQuery }: InputBoxProps) => {
+  const { currentSearchType, searchQuery, shortcuts } = useAppSelector((state) => state.navigator);
+  const dispatch = useAppDispatch();
 
-const InputBox = ({ placeholder, disabled, className, query, setQuery }) => {
-  const { currentSearchType, searchQuery, shortcuts } = useSelector(
-    (state) => state.navigator,
-  );
-  const dispatch = useDispatch();
-
-  const inputContextRef = useContext(InputContext);
-  const handleChange = (event) => {
+  // Launchpad (still JS) provides the search input's ref through InputContext.
+  const inputContextRef = useContext(InputContext) as React.RefObject<HTMLInputElement>;
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(event.target.value);
   };
 
-  const handleSpace = (event) => {
+  const handleSpace = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.keyCode === 32 && [2, 3].includes(currentSearchType)) {
       setQuery(`${query} `);
     }
@@ -27,7 +32,7 @@ const InputBox = ({ placeholder, disabled, className, query, setQuery }) => {
 
   // keyboard shortcut to focus on search input
   const focusInputbox = () => {
-    inputContextRef.current.focus();
+    inputContextRef.current!.focus();
   };
 
   const sendAnalytics = () => {
@@ -67,14 +72,6 @@ const InputBox = ({ placeholder, disabled, className, query, setQuery }) => {
       />
     </>
   );
-};
-
-InputBox.propTypes = {
-  placeholder: PropTypes.string,
-  disabled: PropTypes.bool,
-  className: PropTypes.string,
-  query: PropTypes.string,
-  setQuery: PropTypes.func,
 };
 
 export default InputBox;

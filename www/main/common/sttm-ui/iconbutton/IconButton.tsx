@@ -1,9 +1,13 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { PrimaryButton } from '@khalisfoundation/sikhi-ui';
 import Icon from '../icon';
 
-const IconButton = ({ icon, onClick, className = '', ...props }) => (
+// Any other prop (style, disabled, title…) goes to the PrimaryButton.
+type IconButtonProps = Omit<React.ComponentProps<typeof PrimaryButton>, 'children'> & {
+  icon: string;
+};
+
+const IconButton = ({ icon, onClick, className = '', ...props }: IconButtonProps) => (
   <PrimaryButton
     className={`icon-button ${className}`.trim()}
     mode="icon"
@@ -16,11 +20,5 @@ const IconButton = ({ icon, onClick, className = '', ...props }) => (
     <Icon name={icon} />
   </PrimaryButton>
 );
-
-IconButton.propTypes = {
-  icon: PropTypes.string,
-  onClick: PropTypes.func,
-  className: PropTypes.string,
-};
 
 export default IconButton;
