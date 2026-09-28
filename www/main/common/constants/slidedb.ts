@@ -63,28 +63,7 @@ const dropdownStrings = {
     'GRANTH_SAHIB_JI',
   ],
 };
-const announcemenetPlaceholder = {
-  english: 'ADD_ANNOUNCEMENT_TEXT',
-  gurmukhi: 'GoSxw ie`Qy ilKo ...',
-};
-const allowedAnnouncementTags = [
-  'b',
-  'i',
-  'em',
-  'u',
-  'pre',
-  'strong',
-  'div',
-  'code',
-  'br',
-  'p',
-  'ul',
-  'li',
-  'ol',
-];
 export default {
   slideStrings,
   dropdownStrings,
-  announcemenetPlaceholder,
-  allowedAnnouncementTags,
 };
