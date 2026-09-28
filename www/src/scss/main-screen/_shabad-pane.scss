@@ -48,6 +48,11 @@
   height: 100%;
   width: 100%;
 
+  // As a pane's own header bar it keeps the bar's height.
+  &.pane__header {
+    height: 40px;
+  }
+
   // sikhi-ui PrimaryButton, on the left with everything else pushed right;
   // the red "Show Display" state keeps its pulse.
   .toggle-viewer-btn {
@@ -69,16 +74,16 @@
 }
 
 // Presenter: the verse pane shares a box with the viewer.
-.launchpad .presenter-column .shabad-pane {
+.launchpad .presenter-layout__column--viewer .shabad-pane {
   background: color-mix(in srgb, var(--sui-semantic-accent-default) 4%, transparent);
   border-radius: var(--sui-radii-lg);
 
   // The Quick Insert bar under the verses.
-  .pane-footer {
+  .pane__footer {
     background-color: var(--sui-semantic-accent-muted);
   }
 
-  .pane-header {
+  .pane__header {
     background-color: transparent;
     height: auto;
     line-height: normal;

@@ -25,7 +25,7 @@
   }
 
   #toolbar,
-  #toolbar-nav,
+  .toolbar-nav,
   .tingle-modal-box,
   .bani-list,
   .fav-results {
@@ -53,7 +53,7 @@
     }
   }
 
-  .pane-header,
+  .pane__header,
   .misc .navigator-header,
   .more-tabs .nav-header-tab,
   .settings-nav,
@@ -104,12 +104,12 @@
     }
   }
 
-  .pane-content {
+  .pane__content {
     background-color: $bg-alt;
   }
 
   .viewer-pane {
-    .pane-content {
+    .pane__content {
       background: none !important;
       border: 1px solid $border;
     }
@@ -146,7 +146,7 @@
 
   .search-pane {
     .pane {
-      .pane-footer {
+      .pane__footer {
         background-color: $not-so-black;
       }
     }
@@ -158,7 +158,7 @@
     }
   }
 
-  .pane-footer {
+  .pane__footer {
     .clear-pane {
       background-color: var(--sui-semantic-accent-muted);
     }
@@ -195,7 +195,7 @@
 
   // Side nav: the dark theme's accent is near-white, so use the design
   // system's dark navy to keep the white icons readable.
-  #toolbar-nav {
+  .toolbar-nav {
     background: #203c6a;
   }
 

@@ -6,7 +6,7 @@ import { HistoryPane } from './HistoryPane';
 import { OtherPane } from './OtherPane';
 import { classNames } from '../../../common/utils';
 
-// One root for the panels, as the pane slot (`className` is its pane-content class).
+// One root for the panels, as the pane slot (`className` is its pane__content class).
 export const MiscContent = ({ className }) => {
   const { currentMiscPanel } = useSelector((state) => state.navigator);
 

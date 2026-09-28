@@ -1,29 +1,113 @@
-// Single-Display: the viewer fills the screen and a small navigator floats
-// in the bottom-right corner, with tab switches along its bottom.
+// Single-Display: the viewer fills the screen and a small navigator floats in
+// the bottom-right corner, with tab switches along its bottom.
 
-.launchpad .single-display-controller {
-  bottom: 0;
-  box-shadow: 0 10px 20px $transparent-black;
-  min-height: 390px;
-  height: 45vh;
-  position: fixed;
-  right: 0;
-  z-index: 2;
-
-  .shabad-pane {
+.single-display {
+  &__viewer {
     height: 100%;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
 
-    .pane {
-      height: inherit;
-    }
+    > .viewer-pane {
+      padding: 0;
 
-    .shabad-list {
-      height: inherit;
+      .pane {
+        height: 100vh;
+        width: 100%;
+      }
     }
   }
 
-  // The single-display header is itself the pane-header.
-  .pane .pane-header.header-controller {
+  &__navigator {
+    bottom: 0;
+    box-shadow: 0 10px 20px $transparent-black;
+    min-height: 390px;
+    height: 45vh;
+    position: fixed;
+    right: 0;
+    z-index: 2;
+
+    .shabad-pane {
+      height: 100%;
+
+      .pane,
+      .shabad-list {
+        height: inherit;
+      }
+    }
+
+    .pane__content > div {
+      padding: 0;
+    }
+
+    // Docked to the screen edge: no rounded corners on the boxes or the search
+    // bar, except the navigator's own top corners (see __pane).
+    .pane--box,
+    .search-pane .library-search-bar {
+      border-radius: 0;
+    }
+
+    .search-pane .library-search-bar {
+      padding: 6px !important;
+    }
+
+    // Open: every pane fills the navigator.
+    &--expanded {
+      .pane {
+        height: 100%;
+        transition: 0.3s ease all;
+      }
+
+      .pane__footer {
+        display: block;
+      }
+
+      .search-pane {
+        height: 100%;
+
+        .pane {
+          height: inherit;
+        }
+
+        .search-footer {
+          margin: 0;
+          width: 100%;
+        }
+      }
+    }
+
+    // Collapsed to its header.
+    &--minimized {
+      min-height: auto;
+      height: 5vh;
+
+      .pane {
+        height: 40px;
+        transition: 0.3s ease all;
+      }
+
+      .pane__footer {
+        display: none;
+      }
+    }
+  }
+
+  // The navigator's box, rounded on top like the main screen's boxes.
+  &__pane {
+    min-width: 550px;
+
+    &.pane--box {
+      border-radius: 12px 12px 0 0;
+    }
+
+    .shabad-pane-header {
+      margin-right: 24px;
+    }
+  }
+
+  // The navigator's header names the open tab; it is itself the pane__header.
+  &__header {
     display: flex;
     justify-content: space-between;
     width: 100%;
@@ -35,109 +119,10 @@
     }
   }
 
-  .pane .pane-content>div {
-    padding: 0;
-  }
-
-  // Docked to the screen edge: no rounded corners on the boxes or the search bar,
-  // except the navigator's own top corners, rounded like the main screen's boxes.
-  .pane.pane-box,
-  .search-pane .library-search-bar {
-    border-radius: 0;
-  }
-
-  .search-pane .library-search-bar {
-    padding: 6px !important;
-  }
-
-  .pane.pane-box.single-display-pane {
-    border-radius: 12px 12px 0 0;
-  }
-}
-
-.launchpad .single-display-pane {
-  min-width: 550px;
-
-  .shabad-pane-header {
-    margin-right: 24px;
-  }
-}
-
-// The navigator collapsed to its header, or open.
-.launchpad .single-display-minimize {
-  .pane {
+  &__switches {
+    background: rgba(221, 221, 221, 1);
+    display: flex;
     height: 40px;
-    transition: 0.3s ease all;
+    width: 100%;
   }
-
-  .pane-footer {
-    display: none;
-  }
-}
-
-.launchpad .single-display-maximize {
-  .search-pane {
-    height: 100%;
-
-    .pane {
-      height: inherit;
-    }
-
-    .search-footer {
-      margin: 0;
-      width: 100%;
-    }
-  }
-
-  .pane {
-    height: 100%;
-    transition: 0.3s ease all;
-  }
-
-  .pane-footer {
-    display: block;
-  }
-}
-
-.launchpad .single-display-switches {
-  display: flex;
-  height: 40px;
-  width: 100%;
-}
-
-.launchpad .single-display-viewer {
-  height: 100%;
-  left: 0;
-  position: fixed;
-  top: 0;
-  width: 100%;
-
-  >.viewer-pane {
-    padding: 0;
-
-    .pane {
-      height: 100vh;
-      width: 100%;
-    }
-  }
-}
-
-// The side nav sliding out of the way, and back.
-.launchpad .single-display-hide-left {
-  left: -75px !important;
-  transition: 0.3s ease all;
-}
-
-.launchpad .single-display-show-left {
-  left: 0 !important;
-  transition: 0.3s ease all;
-}
-
-.launchpad .single-display-minimize {
-  min-height: auto;
-  height: 5vh;
-}
-
-.launchpad .single-display-switches {
-  background: rgba(221, 221, 221, 1);
 }

@@ -132,7 +132,7 @@ MultiPaneView.propTypes = {
   data: PropTypes.any,
 };
 
-// One root for the view, as the pane slot (`className` is its pane-content class).
+// One root for the view, as the pane slot (`className` is its pane__content class).
 const MultiPaneContent = ({ data, className }) => (
   <div className={className}>
     <MultiPaneView data={data} />

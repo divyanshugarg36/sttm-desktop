@@ -1,7 +1,7 @@
-// The side nav (#toolbar-nav): workspaces, add-ons and the bottom group,
-// each a sikhi-ui SideNav showing icons only.
+// The side nav: workspaces, add-ons and the bottom group, each a sikhi-ui
+// SideNav showing icons only.
 
-#toolbar-nav {
+.toolbar-nav {
   @extend .fullscreen-fixed;
 
   align-items: center;
@@ -13,47 +13,58 @@
   width: $toolbar-offset;
   z-index: 1300;
 
-  .toolbar-top {
+  &__top {
     width: 100%;
   }
 
   // Separates the workspace switcher from the add-ons below it.
-  .toolbar-top .toolbar-workspaces {
+  &__top &__workspaces {
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     margin-bottom: 12px;
   }
-}
 
-#toolbar-nav .sui-side-nav {
-  background: transparent;
-  border-right: none;
-  gap: 12px;
-  padding: 0 4px 12px;
-  width: 100%;
-}
+  .sui-side-nav {
+    background: transparent;
+    border-right: none;
+    gap: 12px;
+    padding: 0 4px 12px;
+    width: 100%;
+  }
 
-#toolbar-nav .sui-side-nav__item {
-  color: rgba(255, 255, 255, 0.75);
-  gap: 0;
-  padding: 6px 0;
+  .sui-side-nav__item {
+    color: rgba(255, 255, 255, 0.75);
+    gap: 0;
+    padding: 6px 0;
 
-  &:hover:not(.sui-side-nav__item--active) {
-    background: rgba(255, 255, 255, 0.12);
+    &:hover:not(.sui-side-nav__item--active) {
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
+    }
+  }
+
+  .sui-side-nav__item--active {
+    background: rgba(255, 255, 255, 0.22);
     color: #fff;
+  }
+
+  // Visually hidden; still names the button for screen readers.
+  .sui-side-nav__label {
+    clip-path: inset(50%);
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
   }
 }
 
-#toolbar-nav .sui-side-nav__item--active {
-  background: rgba(255, 255, 255, 0.22);
-  color: #fff;
+// In Single-Display the side nav slides away with the minimised navigator.
+.toolbar-nav--hidden {
+  left: -75px !important;
+  transition: 0.3s ease all;
 }
 
-// Visually hidden; still names the button for screen readers.
-#toolbar-nav .sui-side-nav__label {
-  clip-path: inset(50%);
-  height: 1px;
-  overflow: hidden;
-  position: absolute;
-  white-space: nowrap;
-  width: 1px;
+.toolbar-nav--shown {
+  left: 0 !important;
+  transition: 0.3s ease all;
 }

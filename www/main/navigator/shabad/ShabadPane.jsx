@@ -11,7 +11,7 @@ const ShabadPane = ({ className = '', multiPaneId = false, plain = false, footer
   const { activePaneId } = useSelector((state) => state.navigator);
   const { defaultPaneId } = useSelector((state) => state.userSettings);
   return (
-    <div className={`pane-container shabad-pane ${className}`}>
+    <div className={`pane-wrapper shabad-pane ${className}`}>
       <Pane
         header={multiPaneId ? MultiPaneHeader : ShabadHeader}
         content={MultiPaneContent}

@@ -49,7 +49,7 @@
   }
 
   #toolbar,
-  #toolbar-nav,
+  .toolbar-nav,
   .bani-list,
   .fav-results {
     background-color: $nav-bg;
@@ -83,7 +83,7 @@
     }
   }
 
-  .pane-header,
+  .pane__header,
   .navigator-header,
   .more-tabs .nav-header-tab,
   .settings-nav,
@@ -113,7 +113,7 @@
       }
     }
 
-    .pane-footer {
+    .pane__footer {
       background-color: var(--sui-semantic-accent-muted);
 
       .clear-pane {
@@ -124,7 +124,7 @@
 
   .search-pane {
     .pane {
-      .pane-footer {
+      .pane__footer {
         background-color: transparent;
       }
 
@@ -141,12 +141,12 @@
   }
 
   .viewer-pane {
-    .pane-content {
+    .pane__content {
       border: 1px solid $alt-grey;
     }
   }
 
-  .pane-footer {
+  .pane__footer {
     background: $statusbar-bg;
   }
 
@@ -181,7 +181,7 @@
   }
 
   // Side nav: the design system's accent colour, with white icons.
-  #toolbar-nav {
+  .toolbar-nav {
     background-color: var(--sui-semantic-accent-default);
   }
 

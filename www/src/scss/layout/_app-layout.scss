@@ -1,5 +1,5 @@
-// The main screen's layout: the launchpad with its workspace grids
-// (Presenter columns, Multi-Pane grid), and where #navigator sits.
+// The main screen's layout: the launchpad and each workspace's grid
+// (Presenter columns, Multi-Pane rows), and where #navigator sits.
 
 .launchpad {
   display: flex;
@@ -7,11 +7,11 @@
   flex-wrap: wrap;
   height: 100%;
   overflow-x: auto;
-  // Clear the side nav (#toolbar-nav), plus a 2px gap.
+  // Clear the side nav (.toolbar-nav), plus a 2px gap.
   padding: 6px 6px 6px ($toolbar-offset);
   width: 100%;
 
-  &.single-display {
+  &--single-display {
     display: unset;
     height: unset;
     overflow-x: unset;
@@ -20,80 +20,79 @@
   }
 }
 
-// Presenter: two columns, each pane taking an equal share of the height.
-.launchpad .navigator-columns {
+// Presenter: two columns, each pane taking an equal share of the height. The
+// viewer column holds the viewer and the shabad's verses in one box.
+.presenter-layout {
   display: flex;
   height: 100%;
   width: 100%;
-}
 
-.launchpad .navigator-column {
-  display: flex;
-  flex: 1 1 0;
-  flex-direction: column;
-  min-width: 0;
-
-  > .pane-container {
+  &__column {
+    display: flex;
     flex: 1 1 0;
-    max-height: none;
-    min-height: 0;
+    flex-direction: column;
+    min-width: 0;
+
+    > .pane-wrapper {
+      flex: 1 1 0;
+      max-height: none;
+      min-height: 0;
+    }
+
+    &--viewer {
+      padding: 10px;
+
+      .pane-wrapper {
+        flex: 1 1 0;
+        max-height: none;
+        min-height: 0;
+        padding: 0;
+      }
+
+      .viewer-pane .pane__content {
+        border: none;
+      }
+    }
   }
-}
 
-// The viewer and the shabad's verses share one box.
-.launchpad .presenter-column {
-  padding: 10px;
-
-  .presenter-box {
+  &__box {
     box-sizing: border-box;
     height: 100%;
     padding: 12px;
   }
+}
 
-  .pane-container {
-    flex: 1 1 0;
-    max-height: none;
-    min-height: 0;
-    padding: 0;
+// Multi-Pane: the viewer and search on top, three shabad panes below across
+// a six-column grid.
+.multipane-layout {
+  &__top {
+    height: 50%;
+    width: 100vw;
+    display: flex;
+    justify-content: space-evenly;
   }
 
-  .viewer-pane .pane-content {
-    border: none;
+  &__panes {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    width: 100%;
+    height: 50%;
   }
-}
 
-.launchpad .navigator-row {
-  height: 50%;
-  width: 100vw;
-  display: flex;
-  justify-content: space-evenly;
-}
-
-// Multi-Pane: three shabad panes across a six-column grid.
-.launchpad .multipane-grid {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  width: 100%;
-  height: 50%;
-}
-
-.launchpad {
-  .shabad1-container,
-  .shabad2-container,
-  .shabad3-container {
+  &__pane {
     grid-row: 1;
-  }
 
-  .shabad1-container {
-    grid-column: 1/3;
-  }
+    &--1 {
+      grid-column: 1/3;
+    }
 
-  .shabad2-container {
-    grid-column: 3/5;
-  }
+    &--2 {
+      grid-column: 3/5;
+    }
 
-  .shabad3-container {
-    grid-column: 5/7;
+    &--3 {
+      grid-column: 5/7;
+    }
   }
 }
 
@@ -112,13 +111,13 @@
     height: 40px;
   }
 
-  &.minimized #toolbar-nav {
+  &.minimized .toolbar-nav {
     left: -80px;
     transition: left 1s ease;
   }
 }
 
-.presenter-view #navigator.minimized #toolbar-nav {
+.presenter-view #navigator.minimized .toolbar-nav {
   left: 0;
 }
 

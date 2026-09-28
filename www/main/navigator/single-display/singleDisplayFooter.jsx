@@ -36,9 +36,12 @@ export const singleDisplayFooter = ({ className }) => {
   };
 
   return (
-    <div className={classNames(className, 'single-display-switches')}>
+    <div className={classNames(className, 'single-display__switches')}>
       <PrimaryButton
-        className={classNames('tab-switch', singleDisplayActiveTab === 'search' && 'active')}
+        className={classNames(
+          'single-display__switch',
+          singleDisplayActiveTab === 'search' && 'active',
+        )}
         variant={singleDisplayActiveTab === 'search' ? 'default' : 'ghost'}
         mode="icon"
         size="sm"
@@ -47,7 +50,10 @@ export const singleDisplayFooter = ({ className }) => {
         <Icon name="search" />
       </PrimaryButton>
       <PrimaryButton
-        className={classNames('tab-switch', singleDisplayActiveTab === 'history' && 'active')}
+        className={classNames(
+          'single-display__switch',
+          singleDisplayActiveTab === 'history' && 'active',
+        )}
         variant={singleDisplayActiveTab === 'history' ? 'default' : 'ghost'}
         mode="icon"
         size="sm"
@@ -56,7 +62,10 @@ export const singleDisplayFooter = ({ className }) => {
         <Icon name="clock" />
       </PrimaryButton>
       <PrimaryButton
-        className={classNames('tab-switch', singleDisplayActiveTab === 'shabad' && 'active')}
+        className={classNames(
+          'single-display__switch',
+          singleDisplayActiveTab === 'shabad' && 'active',
+        )}
         variant={singleDisplayActiveTab === 'shabad' ? 'default' : 'ghost'}
         mode="icon"
         size="sm"
@@ -65,7 +74,10 @@ export const singleDisplayFooter = ({ className }) => {
         <Icon name="target" />
       </PrimaryButton>
       <PrimaryButton
-        className={classNames('tab-switch', singleDisplayActiveTab === 'favorite' && 'active')}
+        className={classNames(
+          'single-display__switch',
+          singleDisplayActiveTab === 'favorite' && 'active',
+        )}
         variant={singleDisplayActiveTab === 'favorite' ? 'default' : 'ghost'}
         mode="icon"
         size="sm"
@@ -74,7 +86,10 @@ export const singleDisplayFooter = ({ className }) => {
         <Icon name="heart" />
       </PrimaryButton>
       <PrimaryButton
-        className={classNames('tab-switch', singleDisplayActiveTab === 'other' && 'active')}
+        className={classNames(
+          'single-display__switch',
+          singleDisplayActiveTab === 'other' && 'active',
+        )}
         variant={singleDisplayActiveTab === 'other' ? 'default' : 'ghost'}
         mode="icon"
         size="sm"

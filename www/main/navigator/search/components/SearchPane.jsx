@@ -5,7 +5,7 @@ import SearchContent from './SearchContent';
 import SearchFooter from './SearchFooter';
 
 const SearchPane = ({ className = '' }) => (
-  <div className={`pane-container search-pane ${className}`}>
+  <div className={`pane-wrapper search-pane ${className}`}>
     <Pane content={SearchContent} footer={SearchFooter} />
   </div>
 );
