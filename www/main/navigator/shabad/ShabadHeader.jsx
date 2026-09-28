@@ -24,9 +24,12 @@ const ShabadHeader = ({ className }) => {
   }, [showViewer]);
 
   return (
-    <div className={classNames(className, 'shabad-pane-header')}>
+    <div className={classNames(className, 'shabad-pane__header')}>
       <PrimaryButton
-        className={classNames('toggle-viewer-btn', !showViewer && 'btn-danger')}
+        className={classNames(
+          'shabad-pane__toggle-viewer',
+          !showViewer && 'shabad-pane__toggle-viewer--off',
+        )}
         variant={showViewer ? 'default' : 'destructive'}
         size="xs"
         shape="rounded-md"

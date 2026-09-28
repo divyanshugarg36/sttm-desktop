@@ -1,21 +1,18 @@
-// History / Favorites / Others.
-
-$misc-header: 60px;
-$misc-footer-inactive: 40px;
-$misc-footer-active: 70px;
+// The misc pane: History / Favorites / Others tabs over the open tab's list
+// (history-list, favorite-list, other-list), and the Clear History footer.
 
 .misc-pane {
   @include pane-containers;
-}
 
-// The History / Favorites / Others tabs: sikhi-ui pilled FatehTabs.
-.misc-pane .misc-header {
-  display: inline-flex;
-  justify-content: space-between;
-  min-height: $misc-header;
-  width: 100%;
+  &__header {
+    display: inline-flex;
+    justify-content: space-between;
+    min-height: 60px;
+    width: 100%;
+  }
 
-  .misc-header-nav {
+  // sikhi-ui pilled FatehTabs.
+  &__tabs {
     align-items: center;
     display: inline-flex;
 
@@ -24,142 +21,23 @@ $misc-footer-active: 70px;
     }
   }
 
-  .misc-button {
+  &__tab {
     align-items: center;
     display: inline-flex;
   }
-}
 
-.misc-pane .list-of-items {
-  @include flex($fd-value: column, $jc-value: start);
-  margin: 0;
-  padding: 0;
-  height: 320px;
-  overflow: auto;
-
-  li {
-    overflow: visible;
-    text-overflow: ellipsis;
+  &__footer {
+    height: fit-content;
     width: 100%;
   }
 
-  li a {
-    display: block;
-    padding: 0.3rem 1rem;
-    width: 100%;
-
-    i {
-      padding: 8px;
-    }
-
-    select {
-      margin-left: 12px;
-    }
-  }
-}
-
-.misc-pane .misc-footer {
-  height: fit-content;
-  width: 100%;
-
-  .clear-pane {
+  &__actions {
     @include flex($jc-value: flex-end);
     height: 40px;
-
-    // sikhi-ui PrimaryButton, like the verse pane's Hide Display.
-    .clear-history {
-      margin-right: 12px;
-    }
-  }
-}
-
-// History rows, styled like sttm-web's controller history list
-// (.bani-list__item.history-list__item): type badge, label, delete button.
-.history-results {
-  overflow-y: auto;
-
-  &.history-list {
-    list-style: none;
-    margin: 0;
-    padding: 12px;
   }
 
-  .history-list__item {
-    align-items: center;
-    border-radius: var(--sui-radii-md);
-    color: var(--sui-semantic-accent-default);
-    cursor: pointer;
-    display: flex;
-    font-weight: var(--sui-typography-font-weights-semibold);
-    gap: 8px;
-    padding: 12px;
-
-    &:hover {
-      background-color: color-mix(in srgb, var(--sui-semantic-accent-default) 4%, transparent);
-    }
-  }
-
-  .history-list__label {
-    flex: 1 1 auto;
-    min-width: 0;
-  }
-
-  // sikhi-ui ghost icon button: remove from history.
-  .history-list__delete {
-    color: var(--sui-semantic-foreground-muted);
-    flex: 0 0 auto;
-  }
-}
-
-.history-results .history-item-container {
-  align-items: center;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  padding: 0px 10px;
-  transition: 0.3s all ease;
-
-  .history-item {
-    cursor: pointer;
-    margin: 0;
-    padding: 16px 4px;
-    flex-grow: 1;
-  }
-}
-
-.fav-shabad-container {
-  align-items: center;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  padding: 0px 10px;
-  transition: 0.3s all ease;
-
-  .fav-shabad-text {
-    cursor: pointer;
-    width: 65%;
-  }
-
-  .fav-item {
-    margin: 0;
-    padding: 16px 0;
-  }
-
-  .fav-shabad-options {
-    align-items: center;
-    color: $grey;
-    display: flex;
-    font-size: 12px;
-    font-style: italic;
-
-    > p,
-    > button {
-      margin: 0px 4px;
-    }
-
-    // sikhi-ui ghost icon PrimaryButton: remove from favorites.
-    > .sui-button:hover {
-      color: $red;
-    }
+  // sikhi-ui PrimaryButton, like the verse pane's Hide Display.
+  &__clear-history {
+    margin-right: 12px;
   }
 }

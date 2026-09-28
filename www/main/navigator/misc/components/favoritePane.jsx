@@ -180,9 +180,9 @@ export const FavoritePane = ({ className, paneId }) => {
   }, [favShabad]);
 
   return (
-    <div className={`fav-results ${className}`}>
-      <div className="nologin">
-        <p className="error">{errorMessage}</p>
+    <div className={`favorite-list ${className}`}>
+      <div className="favorite-list__login">
+        <p className="favorite-list__error">{errorMessage}</p>
         {!userToken && (
           <PrimaryButton
             size="sm"
@@ -198,10 +198,10 @@ export const FavoritePane = ({ className, paneId }) => {
       {parsedFav.map((element, index) => {
         const { shabadId, verseId, date, time, verse, id } = element;
         return (
-          <div className="fav-shabad-container" key={`fav-shabad-${index}`}>
-            <div className="fav-shabad-text">
+          <div className="favorite-list__item" key={`fav-shabad-${index}`}>
+            <div className="favorite-list__text">
               <p
-                className="fav-item gurmukhi"
+                className="favorite-list__verse gurmukhi"
                 key={`favshabad-${index}`}
                 data-id={id}
                 onClick={() => {
@@ -211,9 +211,9 @@ export const FavoritePane = ({ className, paneId }) => {
                 {verse}
               </p>
             </div>
-            <div className="fav-shabad-options">
+            <div className="favorite-list__meta">
               <p
-                className="date"
+                className="favorite-list__date"
                 style={
                   currentWorkspace === i18n.t('WORKSPACES.MULTI_PANE') ? { display: 'none' } : {}
                 }
@@ -221,7 +221,7 @@ export const FavoritePane = ({ className, paneId }) => {
                 {date}
               </p>
               <p
-                className="time"
+                className="favorite-list__time"
                 style={
                   currentWorkspace === i18n.t('WORKSPACES.MULTI_PANE') ? { display: 'none' } : {}
                 }

@@ -148,7 +148,7 @@ const ArrowIcon = ({ paneId }) => {
 
   if (currentWorkspace === i18n.t('WORKSPACES.MULTI_PANE')) {
     if (paneBani[paneId] === 'shabad') {
-      return <div className="arrow-icons">{arrows}</div>;
+      return <div className="shabad-pane__arrows">{arrows}</div>;
     }
   } else if (activeShabadId && !isSundarGutkaBani && !isCeremonyBani) {
     return arrows;

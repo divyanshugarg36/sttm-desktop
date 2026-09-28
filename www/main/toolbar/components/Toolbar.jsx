@@ -7,6 +7,7 @@ import { setOverlayScreen } from '../../common/store/redux/appSlice';
 import { setCurrentWorkspace } from '../../common/store/redux/userSettingsSlice';
 import { Icon } from '../../common/sttm-ui';
 import { updateViewerScale } from '../../viewer/utils';
+import { classNames } from '../../common/utils';
 
 const remote = require('@electron/remote');
 
@@ -73,14 +74,14 @@ const Toolbar = () => {
 
   return (
     <div
-      id="toolbar-nav"
-      className={`${
-        minimizedBySingleDisplay ? 'single-display-hide-left' : 'single-display-show-left'
-      }`}
+      className={classNames(
+        'toolbar-nav',
+        minimizedBySingleDisplay ? 'toolbar-nav--hidden' : 'toolbar-nav--shown',
+      )}
     >
-      <div className="toolbar-top">
+      <div className="toolbar-nav__top">
         <SideNav
-          className="toolbar-workspaces"
+          className="toolbar-nav__workspaces"
           items={workspaces}
           activeKey={currentWorkspace}
           onSelect={changeWorkspace}
@@ -88,7 +89,7 @@ const Toolbar = () => {
         <SideNav items={toolbarTop} activeKey={overlayScreen} onSelect={toggleOverlay} />
       </div>
       <SideNav
-        className="toolbar-bottom"
+        className="toolbar-nav__bottom"
         items={toolbarBottom}
         activeKey={overlayScreen}
         onSelect={toggleOverlay}

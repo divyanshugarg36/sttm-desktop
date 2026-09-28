@@ -11,9 +11,9 @@ export const singleDisplayContent = ({ className }) => {
     const components = (
       <div className={className}>
         <SearchPane className={tabName === 'search' ? '' : 'd-none'} />
-        <div className={tabName === 'shabad' ? 'pane-container shabad-pane' : 'd-none'}>
+        <div className={tabName === 'shabad' ? 'pane-wrapper shabad-pane' : 'd-none'}>
           <div className="pane">
-            <MultiPaneContent className="pane-content" data={{ multiPaneId: defaultPaneId }} />
+            <MultiPaneContent className="pane__content" data={{ multiPaneId: defaultPaneId }} />
           </div>
         </div>
         <HistoryPane className={tabName === 'history' ? '' : 'd-none'} />

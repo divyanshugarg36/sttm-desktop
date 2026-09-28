@@ -11,7 +11,7 @@ export const MiscPane = () => {
   const paneRef = React.createRef();
 
   return (
-    <div className="pane-container misc-pane" ref={paneRef}>
+    <div className="pane-wrapper misc-pane" ref={paneRef}>
       <DataLayer initialState={initialState} reducer={reducer}>
         <Pane header={MiscHeader} content={MiscContent} footer={MiscFooter} />
       </DataLayer>

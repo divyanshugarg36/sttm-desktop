@@ -8,7 +8,7 @@ export const updateViewerScale = () => {
     };
   }
   const $fitInsideWindow = document.body.classList.contains('presenter-view')
-    ? document.querySelector('.viewer-content')
+    ? document.querySelector('.viewer-pane__content')
     : document.body;
 
   let previewStyles = '';

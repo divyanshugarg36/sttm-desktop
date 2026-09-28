@@ -94,7 +94,10 @@ const FavShabadIcon = ({ paneId }) => {
     if (currentShabad && !isLoading && userToken) {
       return (
         <PrimaryButton
-          className={classNames('fav-btn', favShabadIndex >= 0 && 'unfav-btn')}
+          className={classNames(
+            'shabad-pane__fav',
+            favShabadIndex >= 0 && 'shabad-pane__fav--saved',
+          )}
           variant="ghost"
           mode="icon"
           size="xs"

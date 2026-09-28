@@ -463,7 +463,7 @@ const SearchContent = ({ className }) => {
   );
 
   return (
-    <div className={classNames(className, 'search-content-container')}>
+    <div className={classNames(className, 'search-pane__body')}>
       <LibrarySearchBar
         query={query}
         setQuery={setQuery}
@@ -536,9 +536,9 @@ const SearchContent = ({ className }) => {
         </div>
       </div>
       */}
-      <div id="search-bg">
+      <div className="search-pane__download">
         <div
-          id="db-download-progress"
+          className="search-pane__download-progress"
           style={{
             width: `${databaseProgress * 100}%`,
             height: databaseProgress < 1 ? '2px' : '0px',
@@ -550,7 +550,7 @@ const SearchContent = ({ className }) => {
         <GurmukhiKeyboard searchType={currentSearchType} query={query} setQuery={setQuery} />
       )}
       */}
-      <div className="search-result-controls">
+      <div className="search-pane__filter-tags">
         {isShowFiltersTag && (
           <div className="filter-tag--container">
             {currentWriter !== 'all' && (
@@ -648,8 +648,13 @@ const SearchContent = ({ className }) => {
         </div>
         */}
       </div>
-      <div className={classNames('search-results', isShowFiltersTag && 'filter-applied')}>
-        <div className="verse-block">
+      <div
+        className={classNames(
+          'search-pane__results',
+          isShowFiltersTag && 'search-pane__results--filtered',
+        )}
+      >
+        <div className="verse-list">
           <Virtuoso
             data={filteredShabads}
             overscan={200}

@@ -1,6 +1,12 @@
+// The viewer pane: the projected slide, embedded as a webview.
 .viewer-pane {
   @include pane-containers;
-  .viewer-content {
+
+  > div {
+    background: none !important;
+  }
+
+  &__content {
     align-items: center;
     display: flex;
     min-width: 500px;
@@ -8,17 +14,10 @@
     overflow: hidden;
     height: 100%;
     width: 100%;
-    .base-ui {
-      width: 100%;
-      height: 100%;
-    }
-
-    #webview-viewer {
-      width: 100% !important;
-    }
   }
 
-  > div {
-    background: none !important;
+  &__webview {
+    width: 100% !important;
+    height: 100%;
   }
 }

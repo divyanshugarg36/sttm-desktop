@@ -13,7 +13,7 @@ $themeDark: (
 .theme-dark-theme {
   @include generateTheme($themeDark...);
 
-  .launchpad .single-display-switches {
+  .single-display__switches {
     background: $darker-grey;
   }
 }

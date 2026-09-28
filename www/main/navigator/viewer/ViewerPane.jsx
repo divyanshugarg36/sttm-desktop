@@ -4,7 +4,7 @@ import Pane from '../../common/sttm-ui/pane/Pane';
 import ViewerContent from './ViewerContent';
 
 const ViewerPane = React.memo(({ plain = false }) => (
-  <div className="pane-container viewer-pane">
+  <div className="pane-wrapper viewer-pane">
     <Pane header={null} content={ViewerContent} footer={null} plain={plain} />
   </div>
 ));

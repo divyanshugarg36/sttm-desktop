@@ -25,10 +25,10 @@
   }
 
   #toolbar,
-  #toolbar-nav,
+  .toolbar-nav,
   .tingle-modal-box,
   .bani-list,
-  .fav-results {
+  .favorite-list {
     background-color: $bg-alt;
 
     .sttm-loader {
@@ -53,11 +53,11 @@
     }
   }
 
-  .pane-header,
+  .pane__header,
   .misc .navigator-header,
   .more-tabs .nav-header-tab,
   .settings-nav,
-  .clear-pane,
+  .misc-pane__actions,
   .settings-preview-title {
     background-color: $bg-main;
     color: $text-base;
@@ -89,7 +89,7 @@
   }
 
   .misc-pane {
-    .misc-header {
+    .misc-pane__header {
       a {
         color: $grey;
 
@@ -104,12 +104,12 @@
     }
   }
 
-  .pane-content {
+  .pane__content {
     background-color: $bg-alt;
   }
 
   .viewer-pane {
-    .pane-content {
+    .pane__content {
       background: none !important;
       border: 1px solid $border;
     }
@@ -140,13 +140,13 @@
     color: $white;
   }
 
-  .search-footer {
+  .search-pane__footer {
     background: var(--sui-semantic-accent-muted);
   }
 
   .search-pane {
     .pane {
-      .pane-footer {
+      .pane__footer {
         background-color: $not-so-black;
       }
     }
@@ -158,8 +158,8 @@
     }
   }
 
-  .pane-footer {
-    .clear-pane {
+  .pane__footer {
+    .misc-pane__actions {
       background-color: var(--sui-semantic-accent-muted);
     }
   }
@@ -195,7 +195,7 @@
 
   // Side nav: the dark theme's accent is near-white, so use the design
   // system's dark navy to keep the white icons readable.
-  #toolbar-nav {
+  .toolbar-nav {
     background: #203c6a;
   }
 
@@ -217,7 +217,7 @@
   }
 
   .pane {
-    a.panktee.current {
+    a.search-result__text.current {
       background-color: $highlight-bg !important;
       color: $text-base !important;
 
@@ -314,11 +314,11 @@
     }
   }
 
-  .panktee {
+  .search-result__text {
     color: $text-base;
   }
 
-  .panktee span.gurmukhi span.highlight {
+  .search-result__text span.gurmukhi span.search-result__word--match {
     color: #fff;
   }
 
@@ -333,33 +333,33 @@
     }
   }
 
-  .history-order {
+  .history-sort {
     select {
       background-color: $bg-main;
       color: $text-base;
     }
   }
 
-  .history-results {
-    .history-item:hover {
+  .option-list {
+    .option-list__label:hover {
       background-color: $bg-bright;
     }
   }
 
-  .fav-results {
-    .fav-shabad-container {
+  .favorite-list {
+    .favorite-list__item {
       button {
         color: $text-base;
       }
     }
 
-    .fav-shabad-container:hover {
+    .favorite-list__item:hover {
       background-color: $bg-bright;
     }
   }
 
   .shabad-pane {
-    .pane-options-dropdown {
+    .shabad-pane__content-select {
       filter: invert(1);
 
       option {
@@ -368,13 +368,13 @@
       }
     }
 
-    .live-pane {
+    .pane--live {
       box-shadow: rgba($transparent-light-white, 0.25) 0px 13px 27px -5px,
       rgba($transparent-light-white, 0.3) 0px 8px 16px -8px;
     }
   }
 
-  .pane-tools {
+  .shabad-pane__tools {
     button,
     select,
     div > i {
@@ -386,35 +386,18 @@
     }
   }
 
-  .pane-info button {
+  .shabad-pane__info button {
     color: $text-base;
     background-color: transparent;
-  }
-
-  #footer {
-    background-color: $bg-main;
-
-    a {
-      color: $text-base;
-
-      &.active,
-      &:hover {
-        background-color: $bg-alt;
-      }
-
-      &.active {
-        color: $highlight-text;
-      }
-    }
   }
 
   ::-webkit-scrollbar-thumb {
     background-color: $scrollbar;
   }
 
-  .verse-block {
+  .verse-list {
 
-    .search-li {
+    .search-result {
       &:hover {
         background-color: $transparent-light-white;
       }
@@ -432,11 +415,11 @@
   }
 
   @each $pane, $color in $multipane-colors {
-    .button-#{$pane} {
+    .search-result__pane-button--#{$pane} {
       background-color: rgba($color, 0.6);
       color: rgba($white, 0.7);
     }
-    .#{$pane}-btn {
+    .search-pane__pane-switch--#{$pane} {
       background-color: $bg-alt;
       color: $text-base;
 

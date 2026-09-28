@@ -22,28 +22,30 @@ const Navigator = () => {
   if (isCurrentWorkSpaceSingleDisplay) {
     controllerMarkup = (
       <div
-        className={`single-display-controller ${
-          minimizedBySingleDisplay ? 'single-display-minimize' : 'single-display-maximize'
+        className={`single-display__navigator ${
+          minimizedBySingleDisplay
+            ? 'single-display__navigator--minimized'
+            : 'single-display__navigator--expanded'
         }`}
       >
         <Pane
           header={singleDisplayHeader}
           content={singleDisplayContent}
           footer={singleDisplayFooter}
-          className="single-display-pane"
+          className="single-display__pane"
         />
       </div>
     );
   } else if (currentWorkspace === i18n.t('WORKSPACES.MULTI_PANE')) {
     controllerMarkup = (
-      <div className="multipane-grid">
-        <div className="shabad1-container">
+      <div className="multipane-layout__panes">
+        <div className="multipane-layout__pane multipane-layout__pane--1">
           <ShabadPane multiPaneId={1} />
         </div>
-        <div className="shabad2-container">
+        <div className="multipane-layout__pane multipane-layout__pane--2">
           <ShabadPane multiPaneId={2} />
         </div>
-        <div className="shabad3-container">
+        <div className="multipane-layout__pane multipane-layout__pane--3">
           <ShabadPane multiPaneId={3} />
         </div>
       </div>
@@ -52,14 +54,14 @@ const Navigator = () => {
     // Presenter: the viewer and the shabad's verses share one box on the left,
     // search and the misc pane stack on the right.
     return (
-      <div className="navigator-columns">
-        <div className="navigator-column presenter-column">
-          <div className="pane pane-box presenter-box">
+      <div className="presenter-layout">
+        <div className="presenter-layout__column presenter-layout__column--viewer">
+          <div className="pane pane--box presenter-layout__box">
             <ViewerPane plain />
             <ShabadPane plain footer={QuickInsert} />
           </div>
         </div>
-        <div className="navigator-column">
+        <div className="presenter-layout__column">
           <SearchPane />
           <MiscPane />
         </div>
@@ -69,7 +71,11 @@ const Navigator = () => {
 
   return (
     <>
-      <div className={isCurrentWorkSpaceSingleDisplay ? 'single-display-viewer' : 'navigator-row'}>
+      <div
+        className={
+          isCurrentWorkSpaceSingleDisplay ? 'single-display__viewer' : 'multipane-layout__top'
+        }
+      >
         <ViewerPane />
         {!isCurrentWorkSpaceSingleDisplay && <SearchPane />}
       </div>

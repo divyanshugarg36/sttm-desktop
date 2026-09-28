@@ -1,0 +1,35 @@
+// History rows, styled like sttm-web's controller history list
+// (.bani-list__item.history-list__item): type badge, label, delete button.
+
+.history-list {
+  list-style: none;
+  margin: 0;
+  overflow-y: auto;
+  padding: 12px;
+
+  &__item {
+    align-items: center;
+    border-radius: var(--sui-radii-md);
+    color: var(--sui-semantic-accent-default);
+    cursor: pointer;
+    display: flex;
+    font-weight: var(--sui-typography-font-weights-semibold);
+    gap: 8px;
+    padding: 12px;
+
+    &:hover {
+      background-color: color-mix(in srgb, var(--sui-semantic-accent-default) 4%, transparent);
+    }
+  }
+
+  &__label {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  // sikhi-ui ghost icon button: remove from history.
+  &__delete {
+    color: var(--sui-semantic-foreground-muted);
+    flex: 0 0 auto;
+  }
+}

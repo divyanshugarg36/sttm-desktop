@@ -62,11 +62,11 @@ export const singleDisplayHeader = ({ className }) => {
   };
 
   return (
-    <div className={classNames(className, 'header-controller')}>
+    <div className={classNames(className, 'single-display__header')}>
       <span>{getActiveTab(singleDisplayActiveTab)}</span>
       {singleDisplayActiveTab === 'history' && verseHistory.length > 1 && (
-        <div className="history-order">
-          <div className="history-order-select">
+        <div className="history-sort">
+          <div className="history-sort__select">
             <label>Sort by: </label>
             <SimpleSelect
               variant="bordered"

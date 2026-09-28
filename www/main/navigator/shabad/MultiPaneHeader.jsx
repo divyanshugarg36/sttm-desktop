@@ -85,15 +85,21 @@ const MultiPaneHeader = ({ data, className }) => {
   };
 
   return (
-    <div className={classNames(className, 'shabad-pane-header', `pane-${paneId}`)}>
-      <div className="pane-info">
-        <span className="pane-symbol">{paneId}</span>
+    <div
+      className={classNames(
+        className,
+        'shabad-pane__header',
+        `shabad-pane__header--pane-${paneId}`,
+      )}
+    >
+      <div className="shabad-pane__info">
+        <span className="shabad-pane__number">{paneId}</span>
         <PrimaryButton variant="ghost" mode="icon" size="xs" onClick={lockPane} ref={lockIcon}>
           <Icon name={paneAttributes.locked ? 'lock' : 'lock-open'} />
         </PrimaryButton>
       </div>
       <SimpleSelect
-        className="pane-title pane-options-dropdown"
+        className="shabad-pane__content-select"
         variant="fateh"
         selectSize="sm"
         value={paneAttributes.content}
@@ -105,7 +111,7 @@ const MultiPaneHeader = ({ data, className }) => {
           'MULTI_PANE.MISC_SLIDES',
         ].map((key) => ({ value: i18n.t(key), label: i18n.t(key) }))}
       />
-      <div className="pane-tools">
+      <div className="shabad-pane__tools">
         <FavShabadIcon paneId={paneId} />
         <ArrowIcon paneId={paneId} />
         {paneAttributes.activeShabad && (

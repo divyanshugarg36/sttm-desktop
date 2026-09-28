@@ -1,0 +1,30 @@
+// The "open in pane…" menu (common/sttm-ui/multipane-dropdown), used by the
+// overlays' shabad lists.
+.multipane-dropdown {
+  list-style-type: none;
+  overflow: hidden;
+  position: absolute;
+  padding: 4px;
+  z-index: 10;
+
+  &--closed {
+    height: 0px;
+    transition: 0.3s height ease;
+    opacity: 0;
+  }
+
+  &--open {
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    height: 154px;
+    transition: 0.3s height ease;
+    opacity: 1;
+  }
+
+  &__option--locked {
+    opacity: 0.5;
+
+    .option-list__label {
+      cursor: not-allowed;
+    }
+  }
+}

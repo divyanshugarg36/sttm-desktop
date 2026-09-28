@@ -45,7 +45,7 @@ const MultiPaneView = ({ data }) => {
 
   const goToShabadBtn = (
     <PrimaryButton
-      className="multipane-content-btn"
+      className="shabad-pane__back-to-shabad"
       variant="ghost"
       size="xs"
       style={paneAttributes.activeShabad ? {} : { display: 'none' }}
@@ -88,30 +88,30 @@ const MultiPaneView = ({ data }) => {
       return (
         <>
           {goToShabadBtn}
-          <ul className="history-results">
+          <ul className="option-list">
             <li
-              className="history-item-container"
+              className="option-list__row"
               onClick={() => displayAnandSahibBhog({ openedFrom: 'multipane-content', paneId })}
             >
-              <p className="history-item">{i18n.t(`SHORTCUT_TRAY.ANAND_SAHIB`)}</p>
+              <p className="option-list__label">{i18n.t(`SHORTCUT_TRAY.ANAND_SAHIB`)}</p>
             </li>
             <li
-              className="history-item-container"
+              className="option-list__row"
               onClick={() => displayMoolMantraSlide({ openedFrom: 'multipane-content' })}
             >
-              <p className="history-item">{i18n.t(`SHORTCUT_TRAY.MOOL_MANTRA`)}</p>
+              <p className="option-list__label">{i18n.t(`SHORTCUT_TRAY.MOOL_MANTRA`)}</p>
             </li>
             <li
-              className="history-item-container"
+              className="option-list__row"
               onClick={() => displayWaheguruSlide({ openedFrom: 'multipane-content' })}
             >
-              <p className="history-item">ਵਾਹਿਗੁਰੂ</p>
+              <p className="option-list__label">ਵਾਹਿਗੁਰੂ</p>
             </li>
             <li
-              className="history-item-container"
+              className="option-list__row"
               onClick={() => displayBlankViewer({ openedFrom: 'multiplane-content' })}
             >
-              <p className="history-item">{i18n.t(`SHORTCUT_TRAY.BLANK`)}</p>
+              <p className="option-list__label">{i18n.t(`SHORTCUT_TRAY.BLANK`)}</p>
             </li>
           </ul>
         </>
@@ -132,7 +132,7 @@ MultiPaneView.propTypes = {
   data: PropTypes.any,
 };
 
-// One root for the view, as the pane slot (`className` is its pane-content class).
+// One root for the view, as the pane slot (`className` is its pane__content class).
 const MultiPaneContent = ({ data, className }) => (
   <div className={className}>
     <MultiPaneView data={data} />

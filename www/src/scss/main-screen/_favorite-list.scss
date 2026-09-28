@@ -1,0 +1,53 @@
+// Favourite shabads: the login prompt, then a row per shabad with its date,
+// time and a remove button.
+
+.favorite-list {
+  > .sttm-loader {
+    margin: auto;
+  }
+
+  &__login {
+    text-align: center;
+  }
+
+  &__error {
+    margin: 14px;
+  }
+
+  &__item {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0px 10px;
+    transition: 0.3s all ease;
+  }
+
+  &__text {
+    cursor: pointer;
+    width: 65%;
+  }
+
+  &__verse {
+    margin: 0;
+    padding: 16px 0;
+  }
+
+  &__meta {
+    align-items: center;
+    color: $grey;
+    display: flex;
+    font-size: 12px;
+    font-style: italic;
+
+    > p,
+    > button {
+      margin: 0px 4px;
+    }
+
+    // sikhi-ui ghost icon PrimaryButton: remove from favorites.
+    > .sui-button:hover {
+      color: $red;
+    }
+  }
+}
