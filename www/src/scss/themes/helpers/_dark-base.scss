@@ -359,7 +359,7 @@
   }
 
   .shabad-pane {
-    .pane-options-dropdown {
+    .shabad-pane__content-select {
       filter: invert(1);
 
       option {
@@ -368,13 +368,13 @@
       }
     }
 
-    .live-pane {
+    .pane--live {
       box-shadow: rgba($transparent-light-white, 0.25) 0px 13px 27px -5px,
       rgba($transparent-light-white, 0.3) 0px 8px 16px -8px;
     }
   }
 
-  .pane-tools {
+  .shabad-pane__tools {
     button,
     select,
     div > i {
@@ -386,7 +386,7 @@
     }
   }
 
-  .pane-info button {
+  .shabad-pane__info button {
     color: $text-base;
     background-color: transparent;
   }

@@ -327,20 +327,20 @@
   }
 
   .shabad-pane {
-    .pane-options-dropdown {
+    .shabad-pane__content-select {
       option {
         color: $base-text;
       }
     }
     
-    .live-pane {
+    .pane--live {
       box-shadow: rgba($transparent-light-black, 0.25) 0px 13px 27px -5px,
       rgba($transparent-light-black, 0.3) 0px 8px 16px -8px;
     }
   }
 
 
-  .pane-tools {
+  .shabad-pane__tools {
 
     button,
     select,
@@ -353,7 +353,7 @@
     }
   }
 
-  .pane-info button {
+  .shabad-pane__info button {
     color: $base-text;
     background-color: transparent;
   }

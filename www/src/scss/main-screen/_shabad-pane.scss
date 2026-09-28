@@ -1,4 +1,5 @@
-// The shabad pane: the Hide Display header and the verse list.
+// The shabad pane: its header (Hide Display in Presenter; number, lock, content
+// and tools in Multi-Pane) and the verse list.
 
 @keyframes pulse-border {
   0% {
@@ -34,63 +35,124 @@
     outline: 0;
   }
 
-  .shabad-list {
-    height: 100%;
-  }
-
   .check-icon {
     color: $grey;
   }
-}
 
-.shabad-pane-header {
-  @include flex($ai-value: center, $jc-value: flex-end);
-  height: 100%;
-  width: 100%;
+  &__list {
+    height: 100%;
+  }
 
-  // As a pane's own header bar it keeps the bar's height.
-  &.pane__header {
-    height: 40px;
+  &__header {
+    @include flex($ai-value: center, $jc-value: flex-end);
+    height: 100%;
+    width: 100%;
+
+    // As a pane's own header bar it keeps the bar's height.
+    &.pane__header {
+      height: 40px;
+    }
+
+    // Multi-Pane: underlined in the pane's colour, its number in a swatch.
+    @each $pane, $color in $multipane-colors {
+      &--#{$pane} {
+        border-bottom: 2px solid $color;
+        display: flex;
+        justify-content: space-between;
+        position: relative;
+
+        .shabad-pane__number {
+          background-color: $color;
+        }
+      }
+    }
   }
 
   // sikhi-ui PrimaryButton, on the left with everything else pushed right;
-  // the red "Show Display" state keeps its pulse.
-  .toggle-viewer-btn {
+  // off (the display hidden), it pulses red.
+  &__toggle-viewer {
     margin-right: auto;
 
-    ~ .fav-btn.sui-button {
+    ~ .shabad-pane__fav.sui-button {
       margin-right: 0;
     }
 
-    &.btn-danger {
+    &--off {
       animation: pulse-border 3s infinite, blink-btn 3s infinite;
     }
   }
-}
 
-.fav-btn.sui-button {
-  color: $princeton-orange;
-  margin-right: auto;
-}
-
-// Presenter: the verse pane shares a box with the viewer.
-.launchpad .presenter-layout__column--viewer .shabad-pane {
-  background: color-mix(in srgb, var(--sui-semantic-accent-default) 4%, transparent);
-  border-radius: var(--sui-radii-lg);
-
-  // The Quick Insert bar under the verses.
-  .pane__footer {
-    background-color: var(--sui-semantic-accent-muted);
+  &__fav.sui-button {
+    color: $princeton-orange;
+    margin-right: auto;
   }
 
-  .pane__header {
-    background-color: transparent;
-    height: auto;
-    line-height: normal;
-    padding: 12px;
+  // Multi-Pane header: the pane's number and lock, then its tools.
+  &__header &__info {
+    height: 100%;
 
-    &.shabad-pane-header {
+    button {
+      height: 100%;
+
+      &.disabled {
+        opacity: 0.5;
+      }
+
+      &.disabled i {
+        cursor: not-allowed;
+      }
+    }
+  }
+
+  &__header &__number {
+    color: white;
+    display: inline-block;
+    height: 100%;
+    font-size: 18px;
+    margin-right: 4px;
+    text-align: center;
+    width: 40px;
+  }
+
+  &__header &__tools {
+    align-items: center;
+    display: flex;
+    justify-content: flex-end;
+    width: 100px;
+
+    .shabad-pane__fav.sui-button {
+      margin: 0;
+    }
+
+    .shabad-pane__arrows {
+      display: flex;
+    }
+  }
+
+  // "Back to shabad" in a pane showing history, favourites or misc slides.
+  &__back-to-shabad {
+    margin: 12px;
+  }
+
+  // Presenter: the verses share the viewer's box.
+  &--shared-box {
+    background: color-mix(in srgb, var(--sui-semantic-accent-default) 4%, transparent);
+    border-radius: var(--sui-radii-lg);
+
+    // The Quick Insert bar under the verses.
+    .pane__footer {
+      background-color: var(--sui-semantic-accent-muted);
+    }
+
+    .pane__header {
+      background-color: transparent;
       height: auto;
+      line-height: normal;
+      padding: 12px;
+
+      &.shabad-pane__header {
+        height: auto;
+      }
     }
   }
 }

@@ -340,7 +340,7 @@ export const ShabadText = ({
   }, [autoplayToggle, autoplayDelay]);
 
   return (
-    <div className="shabad-list">
+    <div className="shabad-pane__list">
       <div className="verse-block">
         <Virtuoso
           id={`shabad-text-${currentPane}`}

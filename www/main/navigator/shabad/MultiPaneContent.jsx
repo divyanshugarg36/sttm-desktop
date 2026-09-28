@@ -45,7 +45,7 @@ const MultiPaneView = ({ data }) => {
 
   const goToShabadBtn = (
     <PrimaryButton
-      className="multipane-content-btn"
+      className="shabad-pane__back-to-shabad"
       variant="ghost"
       size="xs"
       style={paneAttributes.activeShabad ? {} : { display: 'none' }}

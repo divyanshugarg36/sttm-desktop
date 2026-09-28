@@ -1,61 +1,6 @@
-// Multi-Pane: three shabad panes, each in its own colour ($multipane-colors).
+// Search results' open-in-pane buttons and menu, in each pane's colour.
 
 @each $pane, $color in $multipane-colors {
-  // A pane's header: its number, lock, title and tools.
-  .#{$pane} {
-    border-bottom: 2px solid $color;
-    display: flex;
-    justify-content: space-between;
-    position: relative;
-
-    .pane-info {
-      height: 100%;
-    }
-
-    .pane-info button {
-      height: 100%;
-
-      &.disabled {
-        opacity: 0.5;
-      }
-
-      &.disabled i {
-        cursor: not-allowed;
-      }
-    }
-
-    .pane-symbol {
-      background-color: $color;
-      color: white;
-      display: inline-block;
-      height: 100%;
-      font-size: 18px;
-      margin-right: 4px;
-      text-align: center;
-      width: 40px;
-    }
-
-    .pane-tools {
-      align-items: center;
-      display: flex;
-      justify-content: flex-end;
-      width: 100px;
-
-      .fav-btn.sui-button {
-        margin: 0;
-      }
-
-      .arrow-icons {
-        display: flex;
-      }
-
-      // sikhi-ui fateh SimpleSelect: what the pane shows.
-      .pane-options-dropdown {
-        margin-left: 6px;
-      }
-    }
-  }
-
   // The pane's button on each search result.
   .button-#{$pane} {
     cursor: pointer;
@@ -83,10 +28,6 @@
       cursor: not-allowed;
     }
   }
-}
-
-.multipane-content-btn {
-  margin: 12px;
 }
 
 // The "open in pane…" menu.

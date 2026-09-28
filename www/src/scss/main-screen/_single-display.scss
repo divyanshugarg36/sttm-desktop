@@ -32,7 +32,7 @@
       height: 100%;
 
       .pane,
-      .shabad-list {
+      .shabad-pane__list {
         height: inherit;
       }
     }
@@ -101,7 +101,7 @@
       border-radius: 12px 12px 0 0;
     }
 
-    .shabad-pane-header {
+    .shabad-pane__header {
       margin-right: 24px;
     }
   }
