@@ -35,7 +35,7 @@
     }
   }
 
-  .pane .pane-content > div {
+  .pane .pane-content>div {
     padding: 0;
   }
 
@@ -44,6 +44,10 @@
   .pane.pane-box,
   .search-pane .library-search-bar {
     border-radius: 0;
+  }
+
+  .search-pane .library-search-bar {
+    padding: 6px !important;
   }
 
   .pane.pane-box.single-display-pane {
@@ -108,7 +112,7 @@
   top: 0;
   width: 100%;
 
-  > .viewer-pane {
+  >.viewer-pane {
     padding: 0;
 
     .pane {
