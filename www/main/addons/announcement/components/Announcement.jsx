@@ -57,12 +57,12 @@ const Announcement = ({ isGurmukhi }) => {
     if (!isAnnouncement) {
       dispatch(setIsAnnouncement(true));
     }
-    analytics.trackEvent(
-      'display',
-      'announcement-slide',
-      'announcement-content',
-      inputRef.current.value,
-    );
+    analytics.trackEvent({
+      category: 'display',
+      action: 'announcement-slide',
+      label: 'announcement-content',
+      value: inputRef.current.value,
+    });
   };
 
   const handleChange = (event) => {
