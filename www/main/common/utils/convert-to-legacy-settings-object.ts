@@ -1,4 +1,4 @@
-const convertToLegacySettingsObj = (newObject) => {
+const convertToLegacySettingsObj = (newObject: Record<string, unknown>) => {
   const legacyObj = {
     toolbar: {
       'gurbani-options': {

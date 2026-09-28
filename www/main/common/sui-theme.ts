@@ -9,17 +9,20 @@ import {
 // --sttm-theme-type every app theme sets on <body>). Not sikhi-ui's
 // ThemeProvider: it replaces the body's theme-* classes, which the app's
 // themes are built on.
-const SUI_THEMES = { light: 'khalis-blue-light', dark: 'khalis-blue-dark' };
+const SUI_THEMES = { light: 'khalis-blue-light', dark: 'khalis-blue-dark' } as const;
 
-const variables = {};
-const variablesFor = (type) => {
+type ThemeType = keyof typeof SUI_THEMES;
+
+const variables: Partial<Record<ThemeType, Record<string, string>>> = {};
+const variablesFor = (type: ThemeType) => {
   if (!variables[type]) {
-    variables[type] = generateCSSVariables(resolveTheme(getTheme(SUI_THEMES[type])));
+    // Both keys are sikhi-ui's built-in themes, so getTheme always finds them.
+    variables[type] = generateCSSVariables(resolveTheme(getTheme(SUI_THEMES[type])!));
   }
   return variables[type];
 };
 
-let appliedType = null;
+let appliedType: ThemeType | null = null;
 const applyThemeType = () => {
   const themeType = getComputedStyle(document.body).getPropertyValue('--sttm-theme-type').trim();
   const type = themeType === 'dark' ? 'dark' : 'light';

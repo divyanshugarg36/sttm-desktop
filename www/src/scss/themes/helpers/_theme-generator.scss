@@ -77,7 +77,7 @@
   // follow nested rules in place (after them), where LibSass moved them first.
   background-color: $background-color;
   background-image: $background-image;
-  // Read by common/sui-theme.js to pick sikhi-ui's light or dark theme.
+  // Read by common/sui-theme.ts to pick sikhi-ui's light or dark theme.
   --sttm-theme-type: #{$type};
 
   @if $type == 'light' {

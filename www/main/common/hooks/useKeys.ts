@@ -1,7 +1,16 @@
 import { useEffect, useRef } from 'react';
-import PropTypes from 'prop-types';
 
-export const useKeys = (key, shortcutType, cb) => {
+/**
+ * 'single': the key on its own. 'combination': the key with Ctrl (Cmd on
+ * macOS).
+ */
+type ShortcutType = 'single' | 'combination';
+
+export const useKeys = (
+  key: string,
+  shortcutType: ShortcutType,
+  cb: (event: KeyboardEvent) => void,
+) => {
   const callbackRef = useRef(cb);
 
   useEffect(() => {
@@ -9,8 +18,8 @@ export const useKeys = (key, shortcutType, cb) => {
   });
 
   useEffect(() => {
-    const handle = (event) => {
-      if (!event.target.classList.contains('disable-kb-shortcuts')) {
+    const handle = (event: KeyboardEvent) => {
+      if (!(event.target as Element).classList.contains('disable-kb-shortcuts')) {
         const defaultException = ['Space', 'ArrowUp', 'ArrowDown'];
         if (defaultException.includes(event.code)) {
           event.preventDefault();
@@ -32,9 +41,4 @@ export const useKeys = (key, shortcutType, cb) => {
     document.addEventListener('keydown', handle);
     return () => document.removeEventListener('keydown', handle);
   }, [key]);
-};
-
-useKeys.propTypes = {
-  key: PropTypes.string,
-  cb: PropTypes.function,
 };

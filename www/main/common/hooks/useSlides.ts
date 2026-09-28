@@ -1,5 +1,6 @@
-import { useSelector, useDispatch } from 'react-redux';
 import insertSlide from '../constants/slidedb';
+import { analytics, i18n } from '../main-app';
+import { useAppDispatch, useAppSelector } from '../store/redux/hooks';
 import { setAkhandpatt, setAutoplayToggle } from '../store/redux/userSettingsSlice';
 import {
   setIsMiscSlide,
@@ -13,15 +14,16 @@ import {
   setPane3,
 } from '../store/redux/navigatorSlice';
 
-const remote = require('@electron/remote');
-
-const { i18n } = remote.require('./app');
-
-const analytics = remote.getGlobal('analytics');
+/** Where a slide was opened from, for analytics. */
+interface OpenedFrom {
+  openedFrom: string;
+}
 
 export const useSlides = () => {
-  const { akhandpatt, autoplayToggle, defaultPaneId } = useSelector((state) => state.userSettings);
-  const dispatch = useDispatch();
+  const { akhandpatt, autoplayToggle, defaultPaneId } = useAppSelector(
+    (state) => state.userSettings,
+  );
+  const dispatch = useAppDispatch();
   const {
     isMiscSlide,
     miscSlideText,
@@ -32,9 +34,9 @@ export const useSlides = () => {
     pane1,
     pane2,
     pane3,
-  } = useSelector((state) => state.navigator);
+  } = useAppSelector((state) => state.navigator);
 
-  const addMiscSlide = (givenText) => {
+  const addMiscSlide = (givenText: string) => {
     if (isAnnouncement) {
       dispatch(setIsAnnouncement(false));
     }
@@ -52,7 +54,7 @@ export const useSlides = () => {
     }
   };
 
-  const displayWaheguruSlide = ({ openedFrom }) => {
+  const displayWaheguruSlide = ({ openedFrom }: OpenedFrom) => {
     addMiscSlide(insertSlide.slideStrings.waheguru);
     analytics.trackEvent({
       category: 'display',
@@ -61,7 +63,7 @@ export const useSlides = () => {
     });
   };
 
-  const displayMoolMantraSlide = ({ openedFrom }) => {
+  const displayMoolMantraSlide = ({ openedFrom }: OpenedFrom) => {
     addMiscSlide(insertSlide.slideStrings.moolMantra);
     analytics.trackEvent({
       category: 'display',
@@ -70,7 +72,7 @@ export const useSlides = () => {
     });
   };
 
-  const displayBlankViewer = ({ openedFrom }) => {
+  const displayBlankViewer = ({ openedFrom }: OpenedFrom) => {
     addMiscSlide('');
     analytics.trackEvent({
       category: 'display',
@@ -79,7 +81,10 @@ export const useSlides = () => {
     });
   };
 
-  const displayAnandSahibBhog = ({ openedFrom, paneId = null }) => {
+  const displayAnandSahibBhog = ({
+    openedFrom,
+    paneId = null,
+  }: OpenedFrom & { paneId?: number | null }) => {
     if (isSundarGutkaBani) {
       dispatch(setIsSundarGutkaBani(false));
     }

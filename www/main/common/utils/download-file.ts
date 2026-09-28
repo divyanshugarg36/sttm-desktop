@@ -1,13 +1,19 @@
 // node-fetch (Node's HTTP stack) rather than the renderer's fetch, so remote
 // files download without CORS, as they did with `request`.
-const fs = require('fs');
-const fetch = require('node-fetch');
+import fs from 'fs';
+import fetch from 'node-fetch';
 
 const PROGRESS_INTERVAL_MS = 1000;
 // Abort if no data arrives for this long. node-fetch doesn't end or error the
 // body when a connection drops mid-download, so without this it would wait
 // forever. An idle limit (not a total one) keeps slow downloads working.
 const IDLE_TIMEOUT_MS = 30000;
+
+/** A progress report, in the shape request-progress used. */
+export interface DownloadProgress {
+  percent: number | null;
+  size: { total: number | null; transferred: number };
+}
 
 /**
  * Stream `url` to `destination`. Resolves once the file is fully written, and
@@ -17,11 +23,11 @@ const IDLE_TIMEOUT_MS = 30000;
  * known) - the shape request-progress used to report.
  */
 export const downloadFile = async (
-  url,
-  destination,
-  onProgress = () => {},
-  { idleTimeoutMs = IDLE_TIMEOUT_MS } = {},
-) => {
+  url: string,
+  destination: string,
+  onProgress: (progress: DownloadProgress) => void = () => {},
+  { idleTimeoutMs = IDLE_TIMEOUT_MS }: { idleTimeoutMs?: number } = {},
+): Promise<void> => {
   const response = await fetch(url);
   if (response.status !== 200) {
     throw new Error(`Download failed (${response.status}): ${url}`);
@@ -30,7 +36,7 @@ export const downloadFile = async (
   const total = Number(response.headers.get('content-length')) || null;
   let transferred = 0;
   let lastReport = 0;
-  let idleTimer;
+  let idleTimer: ReturnType<typeof setTimeout> | undefined;
   const resetIdleTimer = () => {
     clearTimeout(idleTimer);
     idleTimer = setTimeout(() => {
@@ -40,7 +46,7 @@ export const downloadFile = async (
     }, idleTimeoutMs);
   };
 
-  response.body.on('data', (chunk) => {
+  response.body.on('data', (chunk: Buffer) => {
     resetIdleTimer();
     transferred += chunk.length;
     const now = Date.now();
@@ -52,9 +58,9 @@ export const downloadFile = async (
 
   try {
     resetIdleTimer();
-    await new Promise((resolve, reject) => {
+    await new Promise<void>((resolve, reject) => {
       const file = fs.createWriteStream(destination);
-      response.body.on('error', (error) => {
+      response.body.on('error', (error: Error) => {
         file.destroy();
         reject(error);
       });
