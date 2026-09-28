@@ -51,7 +51,7 @@
   #toolbar,
   .toolbar-nav,
   .bani-list,
-  .fav-results {
+  .favorite-list {
     background-color: $nav-bg;
 
     .sttm-loader {
@@ -102,8 +102,14 @@
     background-color: $statusbar-bg;
   }
 
+  // Single-Display's tab switches, on the muted accent rather than the plain
+  // pane footer colour below.
+  .single-display__navigator .single-display__switches {
+    background-color: var(--sui-semantic-accent-muted);
+  }
+
   .misc-pane {
-    .misc-header {
+    .misc-pane__header {
       a {
         color: $grey;
       }
@@ -116,7 +122,7 @@
     .pane__footer {
       background-color: var(--sui-semantic-accent-muted);
 
-      .clear-pane {
+      .misc-pane__actions {
         background-color: var(--sui-semantic-accent-muted);
       }
     }
@@ -276,44 +282,27 @@
     }
   }
 
-  .history-order {
+  .history-sort {
     select {
       color: $base-text;
     }
   }
 
-  .history-results {
-    .history-item:hover {
+  .option-list {
+    .option-list__label:hover {
       background-color: $statusbar-bg;
     }
   }
 
-  .fav-results {
-    .fav-shabad-container {
+  .favorite-list {
+    .favorite-list__item {
       button {
         color: $base-text;
       }
     }
 
-    .fav-shabad-container:hover {
+    .favorite-list__item:hover {
       background-color: $statusbar-bg;
-    }
-  }
-
-  #footer {
-    background-color: $statusbar-bg;
-
-    a {
-      color: $base-text;
-
-      &.active,
-      &:hover {
-        background-color: $nav-bg;
-      }
-
-      &.active {
-        color: $active-focus;
-      }
     }
   }
 

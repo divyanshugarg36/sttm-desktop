@@ -1,0 +1,22 @@
+// A list of plain rows: a pane's misc slides (Anand Sahib, Mool Mantar…) and
+// the open-in-pane menu's options.
+
+.option-list {
+  overflow-y: auto;
+
+  &__row {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0px 10px;
+    transition: 0.3s all ease;
+  }
+
+  &__label {
+    cursor: pointer;
+    margin: 0;
+    padding: 16px 4px;
+    flex-grow: 1;
+  }
+}

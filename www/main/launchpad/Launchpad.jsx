@@ -203,9 +203,7 @@ const Launchpad = () => {
   const isSingleDisplayMode = currentWorkspace === i18n.t('WORKSPACES.SINGLE_DISPLAY');
 
   return (
-    <div
-      className={`launchpad${isSingleDisplayMode ? ' launchpad--single-display misc-pane' : ''}`}
-    >
+    <div className={`launchpad${isSingleDisplayMode ? ' launchpad--single-display' : ''}`}>
       <Toolbar />
       {isSundarGutkaOverlay && <SundarGutka onScreenClose={onScreenClose} />}
       <BaniController

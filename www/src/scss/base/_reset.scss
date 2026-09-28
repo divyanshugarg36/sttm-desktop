@@ -61,18 +61,6 @@ button {
   border-radius: 50%;
   height: 60px;
   width: 60px;
-
-  .fav-results > & {
-    margin: auto;
-  }
-}
-
-.fav-results .error {
-  margin: 14px;
-}
-
-.nologin {
-  text-align: center;
 }
 
 @keyframes spin {

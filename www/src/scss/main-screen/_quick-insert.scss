@@ -1,4 +1,4 @@
-// Quick Insert: a toggle that opens a drawer of slides, under the verse list.
+// Quick Insert: a row of slides under the verse list.
 .quick-insert {
   background: color-mix(in srgb, var(--sui-semantic-accent-default) 4%, transparent) !important;
   border-bottom-left-radius: var(--sui-radii-lg);
@@ -6,7 +6,7 @@
 
   // One row of sikhi-ui muted PrimaryButtons that scrolls sideways, with the
   // scrollbar hidden.
-  .quick-insert-items {
+  &__items {
     display: flex;
     gap: 12px;
     overflow-x: auto;
@@ -17,9 +17,9 @@
     &::-webkit-scrollbar {
       display: none;
     }
+  }
 
-    .tray-item-icon {
-      flex-shrink: 0;
-    }
+  &__item {
+    flex-shrink: 0;
   }
 }

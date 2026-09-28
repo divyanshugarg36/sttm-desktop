@@ -192,7 +192,7 @@ export const HistoryPane = ({ className = '', paneId }) => {
 
   return (
     <div className={className}>
-      <ul className={`history-results history-list ${className}`}>
+      <ul className={`history-list ${className}`}>
         {historyOrder === 'newest' ? versesMarkup : versesMarkup.slice().reverse()}
       </ul>
     </div>

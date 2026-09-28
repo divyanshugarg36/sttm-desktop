@@ -28,7 +28,7 @@
   .toolbar-nav,
   .tingle-modal-box,
   .bani-list,
-  .fav-results {
+  .favorite-list {
     background-color: $bg-alt;
 
     .sttm-loader {
@@ -57,7 +57,7 @@
   .misc .navigator-header,
   .more-tabs .nav-header-tab,
   .settings-nav,
-  .clear-pane,
+  .misc-pane__actions,
   .settings-preview-title {
     background-color: $bg-main;
     color: $text-base;
@@ -89,7 +89,7 @@
   }
 
   .misc-pane {
-    .misc-header {
+    .misc-pane__header {
       a {
         color: $grey;
 
@@ -159,7 +159,7 @@
   }
 
   .pane__footer {
-    .clear-pane {
+    .misc-pane__actions {
       background-color: var(--sui-semantic-accent-muted);
     }
   }
@@ -333,27 +333,27 @@
     }
   }
 
-  .history-order {
+  .history-sort {
     select {
       background-color: $bg-main;
       color: $text-base;
     }
   }
 
-  .history-results {
-    .history-item:hover {
+  .option-list {
+    .option-list__label:hover {
       background-color: $bg-bright;
     }
   }
 
-  .fav-results {
-    .fav-shabad-container {
+  .favorite-list {
+    .favorite-list__item {
       button {
         color: $text-base;
       }
     }
 
-    .fav-shabad-container:hover {
+    .favorite-list__item:hover {
       background-color: $bg-bright;
     }
   }
@@ -389,23 +389,6 @@
   .shabad-pane__info button {
     color: $text-base;
     background-color: transparent;
-  }
-
-  #footer {
-    background-color: $bg-main;
-
-    a {
-      color: $text-base;
-
-      &.active,
-      &:hover {
-        background-color: $bg-alt;
-      }
-
-      &.active {
-        color: $highlight-text;
-      }
-    }
   }
 
   ::-webkit-scrollbar-thumb {

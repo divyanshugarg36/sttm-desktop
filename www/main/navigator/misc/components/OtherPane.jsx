@@ -114,16 +114,16 @@ export const OtherPane = ({ className }) => {
   };
 
   return (
-    <ul className={`list-of-items ${className}`}>
+    <ul className={`other-list ${className}`}>
       <li>
         <a onClick={openRandomShabad}>
-          <Icon name="random" className="list-icon" />
+          <Icon name="random" className="other-list__icon" />
           {i18n.t('OTHERS.SHOW_RANDOM_SHABAD')}
         </a>
       </li>
       <li>
         <a onClick={openDailyHukamnana}>
-          <Icon name="hukamnama" className="list-icon" />
+          <Icon name="hukamnama" className="other-list__icon" />
           {i18n.t('OTHERS.DAILY_HUKAMNAMA')}
         </a>
       </li>

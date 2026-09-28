@@ -27,10 +27,10 @@ const ViewerContent = ({ className }) => {
   }, []);
 
   return (
-    <div className={classNames(className, 'viewer-content')}>
+    <div className={classNames(className, 'viewer-pane__content')}>
       <webview
         src="viewer.html"
-        className="base-ui"
+        className="viewer-pane__webview"
         id="webview-viewer"
         ref={webviewRef}
         /* eslint-disable react/no-unknown-property */

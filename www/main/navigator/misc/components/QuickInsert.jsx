@@ -73,11 +73,11 @@ export const QuickInsert = ({ className }) => {
 
   return (
     <div className={classNames(className, 'quick-insert')}>
-      <div className="quick-insert-items">
+      <div className="quick-insert__items">
         {trayItems.map(({ key, label, className: itemClassName, onClick }) => (
           <PrimaryButton
             key={key}
-            className={classNames('tray-item-icon', itemClassName)}
+            className={classNames('quick-insert__item', itemClassName)}
             variant="muted"
             size="sm"
             shape="rounded-md"

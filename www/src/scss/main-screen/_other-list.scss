@@ -1,0 +1,29 @@
+// The Others tab: Random Shabad, Hukamnama and the like.
+
+.other-list {
+  @include flex($fd-value: column, $jc-value: start);
+  margin: 0;
+  padding: 0;
+  height: 320px;
+  overflow: auto;
+
+  li {
+    overflow: visible;
+    text-overflow: ellipsis;
+    width: 100%;
+  }
+
+  li a {
+    display: block;
+    padding: 0.3rem 1rem;
+    width: 100%;
+
+    i {
+      padding: 8px;
+    }
+
+    select {
+      margin-left: 12px;
+    }
+  }
+}

@@ -35,24 +35,24 @@ export const MiscHeader = ({ className }) => {
   };
 
   return (
-    <div className={classNames(className, 'misc-header')}>
+    <div className={classNames(className, 'misc-pane__header')}>
       <FatehTabs
-        className="misc-header-nav"
+        className="misc-pane__tabs"
         index={tabs.findIndex(({ panel }) => panel === currentMiscPanel)}
         onChange={(index) => setTab(tabs[index].panel)}
       >
         <FatehTabList variant="pilled">
           {tabs.map(({ panel, label }) => (
-            <FatehTab key={panel} className="misc-button">
+            <FatehTab key={panel} className="misc-pane__tab">
               {i18n.t(label)}
             </FatehTab>
           ))}
         </FatehTabList>
       </FatehTabs>
-      <div className="misc-header-sort">
+      <div className="misc-pane__sort">
         {isHistory && verseHistory.length > 1 && (
-          <div className="history-order">
-            <div className="history-order-select">
+          <div className="history-sort">
+            <div className="history-sort__select">
               <label>Sort by: </label>
               <SimpleSelect
                 variant="bordered"

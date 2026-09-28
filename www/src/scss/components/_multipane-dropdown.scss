@@ -23,7 +23,7 @@
   &__option--locked {
     opacity: 0.5;
 
-    .history-item {
+    .option-list__label {
       cursor: not-allowed;
     }
   }

@@ -19,10 +19,10 @@ export const MiscFooter = ({ className }) => {
   };
 
   return (
-    <div className={classNames(className, 'misc-footer')}>
-      <div className="clear-pane">
+    <div className={classNames(className, 'misc-pane__footer')}>
+      <div className="misc-pane__actions">
         <PrimaryButton
-          className="clear-history"
+          className="misc-pane__clear-history"
           size="xs"
           shape="rounded-md"
           leftIcon={<Icon name="clock" />}
