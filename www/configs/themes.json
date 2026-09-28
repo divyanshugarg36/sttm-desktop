@@ -159,6 +159,7 @@
     "teeka-color": "#4b4b4b",
     "type": ["VIDEO"],
     "background-video": "assets/videos/ocean-view.mp4",
+    "background-video-poster": "assets/img/video-posters/ocean-view.jpg",
     "key": "ocean"
   },
   {
@@ -171,6 +172,7 @@
     "teeka-color": "#033780",
     "type": ["VIDEO"],
     "background-video": "assets/videos/clouds.mp4",
+    "background-video-poster": "assets/img/video-posters/clouds.jpg",
     "key": "clouds"
   },
   {
@@ -182,6 +184,7 @@
     "teeka-color": "#d1dbe2",
     "type": ["VIDEO"],
     "background-video": "assets/videos/melancholy.mp4",
+    "background-video-poster": "assets/img/video-posters/melancholy.jpg",
     "key": "melancholy"
   }
 ]

@@ -88,6 +88,7 @@ const ThemeContainer = () => {
                 {theme['background-video'] ? (
                   <VideoWithOverlay
                     src={theme['background-video']}
+                    poster={theme['background-video-poster']}
                     overlayContent={i18n.t(`THEMES.${theme.name}`)}
                   />
                 ) : (
