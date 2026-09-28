@@ -27,36 +27,36 @@ const SearchResults = ({
 
   const getClassForAng = (baniSource) => {
     if (baniSource === 'G') {
-      return 'sggs-color';
+      return 'search-result__ang--sggs';
     }
     if (baniSource === 'D') {
-      return 'sdg-color';
+      return 'search-result__ang--sdg';
     }
     if (baniSource === 'A') {
-      return 'ak-color';
+      return 'search-result__ang--ak';
     }
-    return 'other-color';
+    return 'search-result__ang--other';
   };
 
   const getBorderColorClass = (baniSource) => {
     if (baniSource === 'G') {
-      return 'sggs-border';
+      return 'search-result__body--sggs';
     }
     if (baniSource === 'D') {
-      return 'sdg-border';
+      return 'search-result__body--sdg';
     }
     if (baniSource === 'A') {
-      return 'ak-border';
+      return 'search-result__body--ak';
     }
-    return 'other-border';
+    return 'search-result__body--other';
   };
 
   const shabadPaneButtons = () => {
     if (currentWorkspace === i18n.t('WORKSPACES.MULTI_PANE')) {
       return (
-        <div className="button-container">
+        <div className="search-result__pane-buttons">
           <PrimaryButton
-            className="button-pane-1"
+            className="search-result__pane-button search-result__pane-button--pane-1"
             mode="icon"
             size="xs"
             disabled={pane1.locked}
@@ -67,7 +67,7 @@ const SearchResults = ({
             {pane1.locked ? <Icon name="lock" /> : '1'}
           </PrimaryButton>
           <PrimaryButton
-            className="button-pane-2"
+            className="search-result__pane-button search-result__pane-button--pane-2"
             mode="icon"
             size="xs"
             disabled={pane2.locked}
@@ -78,7 +78,7 @@ const SearchResults = ({
             {pane2.locked ? <Icon name="lock" /> : '2'}
           </PrimaryButton>
           <PrimaryButton
-            className="button-pane-3"
+            className="search-result__pane-button search-result__pane-button--pane-3"
             mode="icon"
             size="xs"
             disabled={pane3.locked}
@@ -137,8 +137,10 @@ const SearchResults = ({
       return brokenWords.map((word, index) => (
         <span
           key={index}
-          className={`bani-words ${
-            isHighlightRequired(gurbaniVerse, word, index, searchCharacters) ? 'highlight' : ''
+          className={`search-result__word ${
+            isHighlightRequired(gurbaniVerse, word, index, searchCharacters)
+              ? 'search-result__word--match'
+              : ''
           }`}
         >
           {word}
@@ -149,20 +151,22 @@ const SearchResults = ({
   };
 
   return (
-    <li className="search-li">
+    <li className="search-result">
       <div
         onClick={() => onClick(shabadId, verseId, verse, defaultPaneId)}
-        className={`search-list ${getBorderColorClass(sourceId)}`}
+        className={`search-result__body ${getBorderColorClass(sourceId)}`}
       >
-        <a className="panktee">
+        <a className="search-result__text">
           {!!ang && (
-            <span className={`${getClassForAng(sourceId)}`}>{`${i18n.t(
+            <span className={`search-result__ang ${getClassForAng(sourceId)}`}>{`${i18n.t(
               `SEARCH.ANG`,
             )} ${ang} `}</span>
           )}
           <span className="gurmukhi">{highlightKeywords(verse, searchQuery)}</span>
-          {currentLanguage === 'en' && <div className="eng-verse">{anvaad.translit(verse)}</div>}
-          <div className="search-list-footer">
+          {currentLanguage === 'en' && (
+            <div className="search-result__translit">{anvaad.translit(verse)}</div>
+          )}
+          <div className="search-result__meta">
             {`${writer}${writer && raag ? ', ' : ' '}${raag !== null ? raag : ''}`}
           </div>
         </a>

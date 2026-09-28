@@ -654,7 +654,7 @@ const SearchContent = ({ className }) => {
           isShowFiltersTag && 'search-pane__results--filtered',
         )}
       >
-        <div className="verse-block">
+        <div className="verse-list">
           <Virtuoso
             data={filteredShabads}
             overscan={200}

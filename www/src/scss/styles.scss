@@ -14,9 +14,10 @@
   'noty', 'icon', 'ui-library';
 
 // The main screen: its panes, and the components they share.
-@import 'main-screen/pane', 'main-screen/verse-block', 'main-screen/search-pane', 'main-screen/shabad-pane',
-  'main-screen/multipane', 'main-screen/misc-pane', 'main-screen/quick-insert', 'overlays/announcement',
-  'components/icon-button', 'main-screen/viewer-pane', 'viewer/autoplay-icon', 'main-screen/single-display';
+@import 'main-screen/pane', 'main-screen/verse-list', 'main-screen/search-result', 'main-screen/search-pane',
+  'main-screen/shabad-pane', 'components/multipane-dropdown', 'main-screen/misc-pane', 'main-screen/quick-insert',
+  'overlays/announcement', 'components/icon-button', 'main-screen/viewer-pane', 'viewer/autoplay-icon',
+  'main-screen/single-display';
 
 @import 'utils/utils', 'viewer/viewer';
 

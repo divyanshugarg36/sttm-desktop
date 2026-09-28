@@ -341,7 +341,7 @@ export const ShabadText = ({
 
   return (
     <div className="shabad-pane__list">
-      <div className="verse-block">
+      <div className="verse-list">
         <Virtuoso
           id={`shabad-text-${currentPane}`}
           data={filteredItems}

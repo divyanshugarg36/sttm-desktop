@@ -23,22 +23,20 @@ const MultipaneDropdown = ({
         }
       }}
       title={item.locked ? i18n.t('MULTI_PANE.LOCKED_PANE_MSG') : ''}
-      className={`history-item-container option-pane-${index + 1} ${item.locked ? 'locked-option' : ''}`}
+      className={`history-item-container multipane-dropdown__option ${
+        item.locked ? 'multipane-dropdown__option--locked' : ''
+      }`}
     >
       <div className="history-item">
         {`Pane ${index + 1}`}
-        {item.locked ? (
-          <Icon name="lock" style={{ fontSize: '12px', marginLeft: '8px' }} />
-        ) : (
-          ''
-        )}
+        {item.locked ? <Icon name="lock" style={{ fontSize: '12px', marginLeft: '8px' }} /> : ''}
       </div>
     </div>
   ));
   return (
     <div
       className={`history-results multipane-dropdown ${
-        paneSelectorActive ? 'enabled' : 'disabled'
+        paneSelectorActive ? 'multipane-dropdown--open' : 'multipane-dropdown--closed'
       }`}
       ref={paneSelector}
     >

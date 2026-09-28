@@ -193,7 +193,7 @@
   .pane {
     color: $base-text !important;
 
-    a.panktee.current {
+    a.search-result__text.current {
       background-color: $current-focus !important;
       color: $base-text !important;
 
@@ -256,10 +256,10 @@
     }
   }
 
-  .panktee span.gurmukhi {
+  .search-result__text span.gurmukhi {
     color: $base-text;
 
-    span.highlight {
+    span.search-result__word--match {
       color: $black;
     }
   }
@@ -317,9 +317,9 @@
     }
   }
 
-  .verse-block {
+  .verse-list {
 
-    .search-li {
+    .search-result {
       &:hover {
         background-color: $transparent-light-black;
       }
@@ -381,7 +381,7 @@
   }
 
   @each $pane, $color in $multipane-colors {
-    .button-#{$pane} {
+    .search-result__pane-button--#{$pane} {
       background-color: rgba($color, 0.3);
     }
   }

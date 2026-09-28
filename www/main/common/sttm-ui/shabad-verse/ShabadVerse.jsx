@@ -52,7 +52,7 @@ const ShabadVerse = ({
         'shabad-verse',
         isActive && 'shabad-verse--active',
         isHomeVerse === lineNumber && 'shabad-verse--home',
-        isFlowerVerse && 'flower-verse',
+        isFlowerVerse && 'shabad-verse--flower',
       )}
     >
       <GurbaniVerseList
@@ -62,7 +62,9 @@ const ShabadVerse = ({
         fontSize={1.3}
         lineHeight={1.6}
         highlight={isActive ? verseId : undefined}
-        renderLineStart={() => (isRead ? <Icon name="check" className="check-icon" /> : null)}
+        renderLineStart={() =>
+          isRead ? <Icon name="check" className="shabad-verse__check" /> : null
+        }
         actions={
           isFlowerVerse
             ? undefined

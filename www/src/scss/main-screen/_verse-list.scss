@@ -1,0 +1,66 @@
+// The scrolling list shared by search results and the shabad's verses.
+
+.verse-list {
+  z-index: 5;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  max-height: inherit;
+  overflow-x: hidden;
+  overflow-y: scroll;
+
+  i {
+    z-index: 100;
+  }
+}
+
+// A verse row: a single-verse sikhi-ui GurbaniVerseList (ShabadVerse).
+.shabad-verse {
+  cursor: pointer;
+  padding: 6px 10px;
+
+  // sikhi-ui shrinks the active verse to its text (fit-content), which
+  // pulls the home button in against the verse; keep it full width.
+  .sui-gurbani-active-verse {
+    box-sizing: border-box;
+    width: 100%;
+  }
+
+  // The tick: centred on the row, as the old list did.
+  .sui-gurbani-line-start {
+    align-items: center;
+    bottom: 0;
+
+    .shabad-verse__check {
+      color: var(--sui-semantic-foreground-muted);
+      display: inline-flex;
+      font-size: 16px;
+    }
+  }
+
+  // The home button shows on hover, and always on the home verse.
+  .sui-gurbani-line-actions {
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  &:hover .sui-gurbani-line-actions {
+    opacity: 0.5;
+  }
+
+  &.shabad-verse--home .sui-gurbani-line-actions {
+    opacity: 1;
+  }
+
+  &:hover {
+    background-color: color-mix(in srgb, var(--sui-semantic-accent-default) 6%, transparent);
+  }
+
+  &.shabad-verse--flower {
+    cursor: not-allowed;
+
+    &:hover {
+      background-color: transparent;
+    }
+  }
+}

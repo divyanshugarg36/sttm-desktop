@@ -217,7 +217,7 @@
   }
 
   .pane {
-    a.panktee.current {
+    a.search-result__text.current {
       background-color: $highlight-bg !important;
       color: $text-base !important;
 
@@ -314,11 +314,11 @@
     }
   }
 
-  .panktee {
+  .search-result__text {
     color: $text-base;
   }
 
-  .panktee span.gurmukhi span.highlight {
+  .search-result__text span.gurmukhi span.search-result__word--match {
     color: #fff;
   }
 
@@ -412,9 +412,9 @@
     background-color: $scrollbar;
   }
 
-  .verse-block {
+  .verse-list {
 
-    .search-li {
+    .search-result {
       &:hover {
         background-color: $transparent-light-white;
       }
@@ -432,7 +432,7 @@
   }
 
   @each $pane, $color in $multipane-colors {
-    .button-#{$pane} {
+    .search-result__pane-button--#{$pane} {
       background-color: rgba($color, 0.6);
       color: rgba($white, 0.7);
     }
