@@ -57,14 +57,17 @@
     }
 
     // The video fills the tile, its name over it. A playing video gets its own
-    // GPU layer, which can escape the tile's rounded clip while ButtonCard's
-    // hover lifts it (square corners); isolate the tile and round the video
-    // itself.
+    // GPU layer, which escapes the tile's rounded clip while it's transformed
+    // (square corners), so a video tile keeps ButtonCard's hover shadow but not
+    // its lift. Rounding the video itself instead stops some GPUs drawing it.
     &--video {
-      isolation: isolate;
       overflow: hidden;
       padding: 0;
       position: relative;
+
+      &:hover {
+        transform: none;
+      }
     }
   }
 
@@ -87,17 +90,12 @@
   }
 }
 
-// A looping video with a caption over it (VideoWithOverlay), rounded like the
-// ButtonCard it sits in; Tile wraps it in a span, so it can't inherit the
-// card's radius.
+// A looping video with a caption over it (VideoWithOverlay).
 .video-tile {
-  border-radius: var(--sui-radii-lg);
   inset: 0;
-  overflow: hidden;
   position: absolute;
 
   &__video {
-    border-radius: inherit;
     display: block;
     height: 100%;
     object-fit: cover;
@@ -108,7 +106,6 @@
   &__caption {
     align-items: center;
     background: rgba(0, 0, 0, 0.5);
-    border-radius: inherit;
     color: white;
     display: flex;
     inset: 0;
