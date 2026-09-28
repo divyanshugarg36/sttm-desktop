@@ -39,10 +39,15 @@
     padding: 0;
   }
 
-  // Docked to the screen edge: no rounded corners on the boxes or the search bar.
+  // Docked to the screen edge: no rounded corners on the boxes or the search bar,
+  // except the navigator's own top corners, rounded like the main screen's boxes.
   .pane.pane-box,
   .search-pane .library-search-bar {
     border-radius: 0;
+  }
+
+  .pane.pane-box.single-display-pane {
+    border-radius: 12px 12px 0 0;
   }
 }
 
