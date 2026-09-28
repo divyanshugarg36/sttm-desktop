@@ -89,9 +89,10 @@ export const FavoritePane = ({ className, paneId }: FavoritePaneProps) => {
     );
     removeFromFav(inputElement.shabadId, userToken);
 
+    // favShabad is frozen Redux state, so the entry is filtered out of a copy
+    // rather than spliced out in place.
     if (favShabadIndex >= 0) {
-      favShabad.splice(favShabadIndex, 1);
-      dispatch(setFavShabad([...favShabad]));
+      dispatch(setFavShabad(favShabad.filter((_, index) => index !== favShabadIndex)));
     }
   };
 
