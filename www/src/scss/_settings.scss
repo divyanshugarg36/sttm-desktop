@@ -127,35 +127,34 @@
     }
   }
 
-  .main-settings-wrapper,
+  // The category tabs stay put above the categories, which scroll.
+  .main-settings-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-width: 500px;
+    overflow: hidden;
+  }
+
+  .settings-categories,
   .other-settings {
     min-width: 500px;
     overflow-y: auto;
   }
 
+  .settings-categories {
+    flex: 1;
+  }
+
+  // sikhi-ui pilled FatehTabs on a gradient Box; a tab scrolls to its category.
   .settings-nav {
-    align-items: center;
-    display: flex;
-    justify-content: space-around;
+    border-radius: 12px;
+    flex-shrink: 0;
+    margin-bottom: 12px;
     max-width: 500px;
-    position: sticky;
-    top: 0;
-    z-index: 100;
+    padding: 12px;
 
-    span {
-      flex-grow: 1;
-      padding: 16px;
-      text-align: center;
-
-      &:hover {
-        background-color: $extra-light-grey;
-        cursor: pointer;
-      }
-    }
-
-    &-active {
-      background-color: $extra-light-grey;
-      cursor: pointer;
+    .sui-fateh-tabs--pilled {
+      gap: 6px;
     }
   }
 

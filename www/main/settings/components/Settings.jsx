@@ -14,7 +14,9 @@ const Settings = ({ onScreenClose }) => (
     <div className="addon-wrapper settings-wrapper">
       <div className="main-settings-wrapper">
         <SettingsNav settingsNavObj={settingsNavObj} />
-        <SettingsContainer settingsObj={settingsObj} />
+        <div className="settings-categories">
+          <SettingsContainer settingsObj={settingsObj} />
+        </div>
       </div>
       <div className="other-settings">
         <SettingViewer />

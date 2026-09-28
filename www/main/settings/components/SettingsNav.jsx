@@ -1,44 +1,38 @@
 import React, { useState } from 'react';
-
 import PropTypes from 'prop-types';
+import { Box, FatehTab, FatehTabList, FatehTabs } from '@khalisfoundation/sikhi-ui';
 
 const remote = require('@electron/remote');
 
 const { i18n } = remote.require('./app');
 
+// The settings categories as sikhi-ui pilled tabs, like the misc pane's, on a
+// gradient Box like the categories'. All categories stay on one scrolling
+// page; a tab scrolls to its category.
 const SettingsNav = ({ settingsNavObj }) => {
-  const [activeTab, setActiveTab] = useState('slide-layout');
+  const categories = Object.keys(settingsNavObj);
+  const [activeIndex, setActiveIndex] = useState(0);
 
-  const isActiveClass = (activeCategory) => {
-    switch (activeCategory) {
-      case 'slide-layout':
-        return activeTab === 'slide-layout' ? 'settings-nav-active' : '';
-      case 'app-settings':
-        return activeTab === 'app-settings' ? 'settings-nav-active' : '';
-      case 'bani-and-languages':
-        return activeTab === 'bani-and-languages' ? 'settings-nav-active' : '';
-      default:
-        return activeTab === 'slide-layout' ? 'settings-nav-active' : '';
-    }
+  const openCategory = (index) => {
+    setActiveIndex(index);
+    document
+      .getElementById(categories[index])
+      .scrollIntoView({ block: 'center', behavior: 'smooth' });
   };
 
-  const settingNavItems = [];
-  Object.keys(settingsNavObj).forEach((category, index) => {
-    const { title } = settingsNavObj[category];
-    settingNavItems.push(
-      <span
-        className={isActiveClass(category)}
-        key={`settings-item-heading-${index}`}
-        onClick={() => {
-          document.getElementById(category).scrollIntoView({ block: 'center', behavior: 'smooth' });
-          setActiveTab(category);
-        }}
-      >
-        {i18n.t(`SETTINGS.${title}`)}
-      </span>,
-    );
-  });
-  return <div className="settings-nav"> {settingNavItems} </div>;
+  return (
+    <Box variant="gradient" className="settings-nav">
+      <FatehTabs index={activeIndex} onChange={openCategory}>
+        <FatehTabList variant="pilled">
+          {categories.map((category) => (
+            <FatehTab key={category} className="settings-nav__tab">
+              {i18n.t(`SETTINGS.${settingsNavObj[category].title}`)}
+            </FatehTab>
+          ))}
+        </FatehTabList>
+      </FatehTabs>
+    </Box>
+  );
 };
 
 SettingsNav.propTypes = {
