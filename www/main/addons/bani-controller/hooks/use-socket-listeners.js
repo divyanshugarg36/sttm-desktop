@@ -121,7 +121,7 @@ const useSocketListeners = (
       },
       'request-control': () =>
         handleRequestControl(
-          adminPin,
+          isPinCorrect,
           fontSizes,
           activeShabad,
           activeShabadId,
