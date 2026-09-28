@@ -50,8 +50,10 @@
       border-radius: 5px;
     }
   }
+  // A preview of the projected slide: the viewer window's font, not the UI's.
   .settings-viewer {
     background-size: cover;
+    font-family: $body-font-family;
     display: flex;
     flex-direction: column;
     height: 280px;

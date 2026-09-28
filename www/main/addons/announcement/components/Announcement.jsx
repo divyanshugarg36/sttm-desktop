@@ -102,11 +102,7 @@ const Announcement = ({ isGurmukhi }) => {
           onChange={handleChange}
         />
         {isGurmukhi && (
-          <IconButton
-            className="keyboard-toggle"
-            icon="keyboard"
-            onClick={HandleKeyboardToggle}
-          />
+          <IconButton className="keyboard-toggle" icon="keyboard" onClick={HandleKeyboardToggle} />
         )}
       </div>
       {keyboardOpenStatus && isGurmukhi && (

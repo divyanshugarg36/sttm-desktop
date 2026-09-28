@@ -76,7 +76,7 @@ const MiscSlides = () => {
           {i18n.t(`SHORTCUT_TRAY.MOOL_MANTRA`)}
         </PrimaryButton>
         <PrimaryButton
-          className="gurmukhi misc-slide-button"
+          className="misc-slide-button"
           variant="amber"
           size="sm"
           shape="rounded-md"
@@ -85,7 +85,7 @@ const MiscSlides = () => {
             displayWaheguruSlide({ openedFrom: 'shortcut-tray' });
           }}
         >
-          vwihgurU
+          ਵਾਹਿਗੁਰੂ
         </PrimaryButton>
         <PrimaryButton
           className="misc-slide-button"

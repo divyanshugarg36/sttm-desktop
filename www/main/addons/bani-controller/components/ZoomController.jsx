@@ -56,7 +56,12 @@ const ZoomController = () => {
                 {i18n.t('TOOLBAR.ZOOM_CC_OVERLAY.SAVE_BUTTON')}
               </PrimaryButton>
             ) : (
-              <PrimaryButton className="clear-btn" variant="outline" size="sm" onClick={clearApiCode}>
+              <PrimaryButton
+                className="clear-btn"
+                variant="outline"
+                size="sm"
+                onClick={clearApiCode}
+              >
                 {i18n.t('TOOLBAR.ZOOM_CC_OVERLAY.CLEAR_BUTTON')}
               </PrimaryButton>
             )}

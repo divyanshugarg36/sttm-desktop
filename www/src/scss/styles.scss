@@ -214,12 +214,10 @@
       width: 125px;
 
       & > span {
-        font-family: 'gurbaniakhar';
         font-size: 1.1rem;
       }
 
       & > span.eng-tile {
-        font-family: $body-font-family;
         text-transform: capitalize;
         font-size: 0.9rem;
       }

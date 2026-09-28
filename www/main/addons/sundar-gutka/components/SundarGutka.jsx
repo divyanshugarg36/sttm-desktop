@@ -198,7 +198,7 @@ const SundarGutka = ({ isShowTranslitSwitch = false, onScreenClose }) => {
                     clickHandler={openBaniFromDropdown}
                   />
                 }
-                <ul id={blockListId} className={!isEngTransliterated && 'gurmukhi'}>
+                <ul id={blockListId}>
                   {taggedBanis.map((bani) => (
                     <li
                       key={bani.name}
@@ -211,7 +211,9 @@ const SundarGutka = ({ isShowTranslitSwitch = false, onScreenClose }) => {
                     >
                       <span className={`tag tag-${bani.baniTag}`} />
                       <span className={isEngTransliterated && 'english-bani'}>
-                        {isEngTransliterated ? anvaad.translit(bani.name) : bani.name}
+                        {isEngTransliterated
+                          ? anvaad.translit(bani.name)
+                          : anvaad.unicode(bani.name)}
                       </span>
                       <span className="translit-bani">{anvaad.translit(bani.name)}</span>
                     </li>

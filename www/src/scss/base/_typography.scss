@@ -23,6 +23,9 @@
   src: url('../fonts/BalooPaaji2-Variable.ttf') format('truetype');
 }
 
+// Bani text (verse lines, search results, history and favourites) and
+// Gurmukhi typed in Akhar (search, announcements) keep the Gurbani Akhar font.
+// UI text doesn't use this class.
 #navigator {
   .gurmukhi {
     font-family: $gurmukhi-font-family;
@@ -52,6 +55,12 @@ body {
   overflow: auto;
   padding: 0;
   position: relative;
+}
+
+// The app's UI (the main window) uses sikhi-ui's primary font, Baloo Paaji 2.
+// The viewer window keeps the body font above for its projected slides.
+body.controller {
+  font-family: var(--sui-typography-fonts-primary);
 }
 
 ul {

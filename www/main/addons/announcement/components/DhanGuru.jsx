@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import anvaad from 'anvaad-js';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
 import { ipcRenderer } from 'electron';
@@ -166,8 +167,8 @@ export const DhanGuru = ({ isGurmukhi }) => {
           >
             <span className="dhan-guru-button-prefix">{getGuruIndex(index)}</span>
             {isGurmukhi ? (
-              <span className="dhan-guru-button-text gurmukhi">
-                {insertSlide.slideStrings.dhanguruStrings[index].gurmukhi}
+              <span className="dhan-guru-button-text">
+                {anvaad.unicode(insertSlide.slideStrings.dhanguruStrings[index].gurmukhi)}
               </span>
             ) : (
               <span className="dhan-guru-button-text">{i18n.t(`INSERT.DHAN_GURU.${guru}`)}</span>

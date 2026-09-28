@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import anvaad from 'anvaad-js';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
 import { Box } from '@khalisfoundation/sikhi-ui';
@@ -171,7 +172,7 @@ const CeremonyPane = ({ token, name, id, onScreenClose }) => {
         />
       }
       <header className="toolbar-nh navigator-header">
-        <span className="gurmukhi">{name}</span>
+        <span>{anvaad.unicode(name)}</span>
       </header>
       <div className="ceremony-pane-content">
         <div className="ceremony-pane-options" id={`cpo-${paneId}`}>

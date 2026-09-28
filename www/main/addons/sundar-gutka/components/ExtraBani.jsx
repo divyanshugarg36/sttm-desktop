@@ -24,7 +24,7 @@ const ExtraBani = ({ title, banis = [], getBani, isEngTransliterated = false }) 
             className={groupItemClassName}
             isEngTransliterated={isEngTransliterated}
           >
-            {isEngTransliterated ? anvaad.translit(name) : name}
+            {isEngTransliterated ? anvaad.translit(name) : anvaad.unicode(name)}
           </Tile>
         ))}
       </div>

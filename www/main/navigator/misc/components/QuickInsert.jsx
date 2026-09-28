@@ -51,8 +51,7 @@ export const QuickInsert = ({ className }) => {
     },
     {
       key: 'waheguru',
-      label: 'vwihgurU',
-      className: 'gurmukhi',
+      label: 'ਵਾਹਿਗੁਰੂ',
       onClick: () => waheguruSlide({ openedFrom: 'shortcut-tray' }),
     },
     {

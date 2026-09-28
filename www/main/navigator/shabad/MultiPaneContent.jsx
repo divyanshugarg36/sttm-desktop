@@ -102,10 +102,10 @@ const MultiPaneView = ({ data }) => {
               <p className="history-item">{i18n.t(`SHORTCUT_TRAY.MOOL_MANTRA`)}</p>
             </li>
             <li
-              className="gurmukhi history-item-container"
+              className="history-item-container"
               onClick={() => displayWaheguruSlide({ openedFrom: 'multipane-content' })}
             >
-              <p className="history-item">vwihgurU</p>
+              <p className="history-item">ਵਾਹਿਗੁਰੂ</p>
             </li>
             <li
               className="history-item-container"
