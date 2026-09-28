@@ -8,7 +8,8 @@
 
 // Foundation and the older partials.
 @import 'foundation/foundation', 'animations', 'forms', 'header', 'helpers', 'share-sync',
-  'settings', 'notifications';
+  'overlays/settings/settings', 'overlays/settings/setting-row', 'overlays/settings/settings-preview',
+  'overlays/settings/theme-picker', 'notifications';
 
 @import 'markdown', 'themes/themes', 'update', 'viewer', 'window', 'addon', 'akhandpaatt', 'overlay', 'animations',
   'noty', 'icon', 'ui-library';

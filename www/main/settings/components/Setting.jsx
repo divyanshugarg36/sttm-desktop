@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
 import { PrimaryButton, Range, SimpleSelect, Toggle } from '@khalisfoundation/sikhi-ui';
 
-import { Checkbox, Icon } from '../../common/sttm-ui';
-import { convertToCamelCase, toGroupedSelectOptions } from '../../common/utils';
+import { Icon } from '../../common/sttm-ui';
+import { contentLabelKey, convertToCamelCase, toGroupedSelectOptions } from '../../common/utils';
 import { settings } from '../../../configs/user-settings.json';
 import { userSettingsActions } from '../../common/store/redux/userSettingsSlice';
 
@@ -37,30 +37,7 @@ const Setting = ({ settingObj, stateVar, stateFunction }) => {
     });
   };
 
-  const handleCheckboxChange = (event) => {
-    const value = event.target.checked;
-    dispatch(userSettingsActions[stateFunction](value));
-    analytics.trackEvent({
-      category: 'setting',
-      action: userSettingsActions[stateFunction],
-      label: value,
-    });
-  };
-
   let settingDOM;
-
-  const dropdownLabel = (option) => {
-    if (option.includes('teeka')) {
-      return i18n.t(`QUICK_TOOLS.TEEKA`);
-    }
-    if (option.includes('translation')) {
-      return i18n.t(`QUICK_TOOLS.TRANSLATION`);
-    }
-    if (option.includes('transliteration')) {
-      return i18n.t(`QUICK_TOOLS.TRANSLITERATION`);
-    }
-    return '';
-  };
 
   const handleResetFontSizes = () => {
     const { resetSettings } = settingObj;
@@ -113,9 +90,9 @@ const Setting = ({ settingObj, stateVar, stateFunction }) => {
     case 'range':
       settingDOM = (
         <>
-          <p className="range-value">{userSettings[stateVar]}</p>
+          <span className="setting-row__value">{userSettings[stateVar]}</span>
           <Range
-            className="setting-range"
+            className="setting-row__range"
             value={Number(userSettings[stateVar])}
             min={min}
             max={max}
@@ -130,7 +107,9 @@ const Setting = ({ settingObj, stateVar, stateFunction }) => {
     case 'dropdown':
       settingDOM = (
         <SimpleSelect
+          className="setting-row__select"
           variant="bordered"
+          selectSize="sm"
           value={userSettings[stateVar]}
           onChange={handleInputChange}
           options={Object.keys(options).map((op) => ({
@@ -144,7 +123,6 @@ const Setting = ({ settingObj, stateVar, stateFunction }) => {
       settingDOM = (
         <Toggle
           id={`${title}-switch`}
-          wrapperClassName={`control-item-switch-${title}`}
           size="lg"
           checked={!!userSettings[stateVar]}
           onChange={(event) => handleInputChange(event.target.checked)}
@@ -152,38 +130,41 @@ const Setting = ({ settingObj, stateVar, stateFunction }) => {
         />
       );
       break;
-    case 'checkbox':
+    // A content line's visibility, as an eye like the viewer's Quick Tools.
+    case 'checkbox': {
+      const isVisible = !!userSettings[stateVar];
       settingDOM = (
-        <Checkbox
-          id={`${title}-checkbox`}
-          name={`control-item-checkbox-${title}`}
-          handler={handleCheckboxChange}
-          checked={userSettings[stateVar]}
-        />
+        <PrimaryButton
+          variant="ghost"
+          mode="icon"
+          size="sm"
+          aria-label={isVisible ? 'Hide this line' : 'Show this line'}
+          aria-pressed={isVisible}
+          onClick={() => handleInputChange(!isVisible)}
+        >
+          <Icon name={isVisible ? 'eye' : 'eye-off'} />
+        </PrimaryButton>
       );
       break;
+    }
     case 'bani-options-dropdown':
       settingDOM = (
-        <>
-          <SimpleSelect
-            variant="bordered"
-            selectSize="sm"
-            value={userSettings[stateVar]}
-            onChange={handleInputChange}
-            style={{ marginRight: '8px' }}
-            options={toGroupedSelectOptions(filteredBaniOptions, {
-              groupLabel: dropdownLabel,
-              isDisabled: (id) => disabledContent.includes(id),
-            })}
-          />
-          <span>{dropdownLabel(userSettings[stateVar])}</span>
-        </>
+        <SimpleSelect
+          className="setting-row__content"
+          variant="bordered"
+          selectSize="sm"
+          value={userSettings[stateVar]}
+          onChange={handleInputChange}
+          options={toGroupedSelectOptions(filteredBaniOptions, {
+            groupLabel: (option) => i18n.t(contentLabelKey(option)),
+            isDisabled: (id) => disabledContent.includes(id),
+          })}
+        />
       );
       break;
     case 'reset-button':
       settingDOM = (
         <PrimaryButton
-          className="icon-reset"
           variant="outline"
           size="sm"
           leftIcon={<Icon name="reset" />}

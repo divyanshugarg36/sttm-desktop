@@ -40,17 +40,19 @@ const ThemeContainer = () => {
   }, []);
 
   return (
-    <Box variant="gradient" className="settings-container themes-container">
-      <div id="custom-theme-options">
+    <Box variant="gradient" className="theme-picker">
+      <div>
         {themeTypes.map(({ type, title }) => (
           <React.Fragment key={type}>
-            <header className="options-header">
+            <header className="theme-picker__title">
               {i18n.t(`THEMES.${title}`)}
               {type === 'VIDEO' && (
-                <span className="notes">{i18n.t('SETTINGS.CHROMECAST_UNAVAILABLE')}</span>
+                <span className="theme-picker__note">
+                  {i18n.t('SETTINGS.CHROMECAST_UNAVAILABLE')}
+                </span>
               )}
             </header>
-            <span className="theme-tile-holder">
+            <span className="theme-picker__tiles">
               {groupThemes(type).map((theme) => (
                 <Tile
                   key={theme.name}
@@ -77,7 +79,7 @@ const ThemeContainer = () => {
           </React.Fragment>
         ))}
 
-        <header className="options-header">{i18n.t(`THEMES.CUSTOM_BACKGROUNDS`)}</header>
+        <header className="theme-picker__title">{i18n.t(`THEMES.CUSTOM_BACKGROUNDS`)}</header>
         <label className="file-input-label">
           {i18n.t('THEMES.NEW_IMAGE')}
           <input
@@ -92,7 +94,7 @@ const ThemeContainer = () => {
           />
         </label>
         <p className="helper-text">{i18n.t('THEMES.RECOMMENDED')}</p>
-        <span className="theme-tile-holder">
+        <span className="theme-picker__tiles">
           {customThemes.map((tile) => (
             <React.Fragment key={tile.name}>
               <CustomBgTile

@@ -1,0 +1,64 @@
+// The Settings overlay's theme picker: colour, background and video themes
+// as tiles, on a gradient Box.
+
+.theme-picker {
+  border-radius: 12px;
+  margin-bottom: 12px;
+  max-width: 500px;
+  padding: 12px;
+
+  &__tiles {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  &__note {
+    color: var(--sui-semantic-foreground-muted);
+    font-size: var(--sui-typography-font-sizes-xs);
+    margin-left: 6px;
+  }
+}
+
+.video-thumbnail-settings {
+  position: relative;
+
+  // Block, so no gap under the video; as wide as its tile.
+  video {
+    display: block;
+    width: 100%;
+  }
+
+  .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    // A dark wash so the theme's name reads over the video.
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+  }
+}
+
+.video-theme-instance {
+  padding: 0;
+  width: 200px;
+  margin: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+
+  &:hover {
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    margin-bottom: 14px;
+    margin-top: 6px;
+  }
+
+  video,
+  .overlay {
+    border-radius: 5px;
+  }
+}

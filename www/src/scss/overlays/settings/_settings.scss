@@ -1,0 +1,72 @@
+// The Settings overlay: the category tabs and categories on the left, the
+// slide preview and theme picker on the right.
+
+.settings-wrapper {
+  display: flex;
+  height: 95vh;
+  left: $toolbar-offset + 12px;
+  margin-top: 24px;
+  position: relative;
+  scroll-behavior: smooth;
+  width: 82vw;
+}
+
+// The category tabs stay put above the categories, which scroll.
+.main-settings-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-width: 500px;
+  overflow: hidden;
+}
+
+.settings-categories,
+.other-settings {
+  min-width: 500px;
+  overflow-y: auto;
+}
+
+.settings-categories {
+  flex: 1;
+}
+
+.other-settings {
+  margin-left: 18px;
+}
+
+// sikhi-ui pilled FatehTabs on a gradient Box; a tab scrolls to its category.
+.settings-nav {
+  border-radius: 12px;
+  flex-shrink: 0;
+  margin-bottom: 12px;
+  max-width: 500px;
+  padding: 12px;
+
+  .sui-fateh-tabs--pilled {
+    gap: 6px;
+  }
+}
+
+// A category (Slide Layout, Bani & Languages, App Settings): a gradient Box of
+// titled groups of settings.
+.settings-category {
+  border-radius: 12px;
+  margin-bottom: 12px;
+  max-width: 500px;
+  padding: 12px 0;
+}
+
+.settings-group {
+  & + & {
+    margin-top: 12px;
+  }
+
+  &__title {
+    color: var(--sui-semantic-foreground-muted);
+    font-size: var(--sui-typography-font-sizes-xs);
+    letter-spacing: 0.2em;
+    margin: 0;
+    padding: 6px 24px;
+    text-transform: uppercase;
+    word-spacing: 0.2em;
+  }
+}

@@ -102,22 +102,6 @@
     }
   }
 
-  .control-item {
-    .custom-checkbox {
-      input[type='checkbox']+label::before {
-        filter: invert(0.7);
-      }
-    }
-
-    input[type='range']::before {
-      color: $white;
-    }
-  }
-
-  .control-item:hover {
-    background-color: $bg-main;
-  }
-
   .announcement-text {
     background-color: $bg-alt;
     color: $white;
