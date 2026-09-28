@@ -6,20 +6,23 @@ const SEARCH_TYPES = {
   ANG: 4,
   MAIN_LETTERS: 6,
   FIRST_LETTERS_ENGLISH: 7,
-};
+} as const;
 
-const GURMUKHI_SEARCH_TEXTS = {
+/** One of desktop's search types (SEARCH_TYPES). */
+type SearchTypeId = (typeof SEARCH_TYPES)[keyof typeof SEARCH_TYPES];
+
+const GURMUKHI_SEARCH_TEXTS: Record<number, string> = {
   [SEARCH_TYPES.FIRST_LETTERS]: 'FIRST_LETTER_START',
   [SEARCH_TYPES.FIRST_LETTERS_ANYWHERE]: 'FIRST_LETTER_ANYWHERE',
   [SEARCH_TYPES.GURMUKHI_WORD]: 'FULL_WORDS',
 };
 
-const ENGLISH_SEARCH_TEXTS = {
+const ENGLISH_SEARCH_TEXTS: Record<number, string> = {
   [SEARCH_TYPES.FIRST_LETTERS_ENGLISH]: 'FIRST_LETTER_START',
   [SEARCH_TYPES.ENGLISH_WORD]: 'FULL_WORDS',
 };
 
-const SEARCH_TEXTS = {
+const SEARCH_TEXTS: Record<number, string> = {
   [SEARCH_TYPES.FIRST_LETTERS]: 'FIRST_LETTER_START',
   [SEARCH_TYPES.FIRST_LETTERS_ANYWHERE]: 'FIRST_LETTER_ANYWHERE',
   [SEARCH_TYPES.GURMUKHI_WORD]: 'FULL_WORDS_GURMUKHI',
@@ -36,9 +39,12 @@ const SOURCE_TYPES = {
   AMRIT_KEERTAN: 'A',
   GURDAS_JI_VAARAN: 'S',
   REHATNAMAS: 'R',
-};
+} as const;
 
-const BINDI_CHARS = {
+/** One of the source filter's values (SOURCE_TYPES). */
+type SourceTypeId = (typeof SOURCE_TYPES)[keyof typeof SOURCE_TYPES];
+
+const BINDI_CHARS: Record<string, string> = {
   '103': '090', //  ਗ: 'ਗ਼'
   '106': '122', //  ਜ: 'ਜ਼'
   '115': '083', //  ਸ: 'ਸ਼'
@@ -47,7 +53,7 @@ const BINDI_CHARS = {
   '097': '069', //  ੳ : ਓ
 };
 
-const SOURCE_TEXTS = {
+const SOURCE_TEXTS: Record<string, string> = {
   [SOURCE_TYPES.ALL_SOURCES]: 'ALL_SOURCES',
   [SOURCE_TYPES.GURU_GRANTH_SAHIB]: 'GURU_GRANTH_SAHIB',
   [SOURCE_TYPES.DASAM_GRANTH]: 'DASAM_GRANTH',
@@ -58,7 +64,13 @@ const SOURCE_TEXTS = {
   [SOURCE_TYPES.REHATNAMAS]: 'REHATNAMAS',
 };
 
-const BASE_BANI_OPTIONS = [
+/** A group of the content options a slide line can show (teeka, a translation…). */
+interface BaniOptionGroup {
+  label: string;
+  options: { id: string; text: string }[];
+}
+
+const BASE_BANI_OPTIONS: BaniOptionGroup[] = [
   {
     label: 'teeka',
     options: [{ id: 'teeka-punjabi', text: 'Punjabi' }],
@@ -79,6 +91,8 @@ const BASE_BANI_OPTIONS = [
     ],
   },
 ];
+
+export type { SearchTypeId, SourceTypeId, BaniOptionGroup };
 
 export {
   SEARCH_TYPES,
