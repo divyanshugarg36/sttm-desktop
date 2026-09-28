@@ -147,7 +147,11 @@ const useSocketListeners = (
     };
     // if its an event from web and not from desktop itself
     if (socketData.host !== 'sttm-desktop') {
-      listenerActions[isPinCorrect ? socketData.type : 'request-control'](socketData);
+      const listenerAction = listenerActions[isPinCorrect ? socketData.type : 'request-control'];
+      // ignore message types the desktop doesn't handle
+      if (listenerAction) {
+        listenerAction(socketData);
+      }
     }
   }
 };
