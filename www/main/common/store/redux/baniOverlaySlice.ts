@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 // Redux Toolkit uses Immer, so reducers mutate a draft `state` directly.
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, type CaseReducer, type PayloadAction } from '@reduxjs/toolkit';
 
 import { convertToCamelCase } from '../../utils';
 import { savedOverlaySettings } from '../user-settings/get-saved-overlay-settings';
@@ -17,16 +17,53 @@ import overlayConfig from '../../../../configs/overlay.json';
 // See EASY-PEASY-TO-REDUX-MIGRATION.md.
 const { sidebar, bottomBar } = overlayConfig;
 
-const schema = { ...sidebar.settings, ...bottomBar.settings };
-const savedBaniOverlay = savedOverlaySettings.baniOverlay || {};
+/** The bani overlay (OBS) settings, one field per setting in configs/overlay.json. */
+export interface BaniOverlayState {
+  gurbaniTextColor: string;
+  gurbaniFont: string;
+  overlayLarivaar: boolean;
+  fitTextSwitch: boolean;
+  toggleAnnouncement: boolean;
+  larivaarAssist: boolean;
+  gurbaniSize: number;
+  textColor: string;
+  textFont: string;
+  textSize: number;
+  textFormat: { bold: boolean; italic: boolean };
+  bgColor: string;
+  padding: number;
+  bgOpacity: number;
+  overlayTheme: string;
+  dateFormat: string;
+  timeFormat: string;
+  reset: boolean;
+  layout: string;
+  toggleLogo: boolean;
+  toggleLink: boolean;
+  greenScreenToggle: boolean;
+}
 
-const initialState = {};
-const reducers = {};
+/** The setter action for each field: `layout` → `setLayout(payload)`. */
+type SettersOf<S> = {
+  [K in keyof S & string as `set${Capitalize<K>}`]: CaseReducer<S, PayloadAction<S[K]>>;
+};
+
+const schema: Record<string, { initialValue?: unknown }> = {
+  ...sidebar.settings,
+  ...bottomBar.settings,
+};
+const savedBaniOverlay: Record<string, unknown> = savedOverlaySettings.baniOverlay || {};
+
+const initialState = {} as Record<string, unknown>;
+const reducers: Record<string, CaseReducer<BaniOverlayState, PayloadAction<unknown>>> = {};
 // action type (`baniOverlay/setX`) → metadata the main middleware needs to persist.
-const actionMetaByType = {};
+const actionMetaByType: Record<
+  string,
+  { settingKey: string; stateVarName: keyof BaniOverlayState }
+> = {};
 
 Object.keys(schema).forEach((settingKey) => {
-  const stateVarName = convertToCamelCase(settingKey);
+  const stateVarName = convertToCamelCase(settingKey) as keyof BaniOverlayState;
   const setFuncName = `set${convertToCamelCase(settingKey, true)}`;
 
   // Mirrors createOverlaySettingsState (uses `||`, so falsy saved values fall
@@ -34,7 +71,7 @@ Object.keys(schema).forEach((settingKey) => {
   initialState[stateVarName] = savedBaniOverlay[settingKey] || schema[settingKey].initialValue;
 
   reducers[setFuncName] = (state, action) => {
-    state[stateVarName] = action.payload;
+    (state as Record<string, unknown>)[stateVarName] = action.payload;
   };
 
   actionMetaByType[`baniOverlay/${setFuncName}`] = { settingKey, stateVarName };
@@ -42,8 +79,8 @@ Object.keys(schema).forEach((settingKey) => {
 
 const baniOverlaySlice = createSlice({
   name: 'baniOverlay',
-  initialState,
-  reducers,
+  initialState: initialState as unknown as BaniOverlayState,
+  reducers: reducers as unknown as SettersOf<BaniOverlayState>,
 });
 
 // Generated action creators keyed by name — used by the inbound
@@ -76,7 +113,7 @@ export const {
 } = baniOverlaySlice.actions;
 
 // Initial state, reused by the overlay window's store.
-export const BANI_OVERLAY_INITIAL_STATE = initialState;
+export const BANI_OVERLAY_INITIAL_STATE = initialState as unknown as BaniOverlayState;
 
 // What the main window's settingsSyncMiddleware needs to persist baniOverlay.
 export const BANI_OVERLAY_SYNC = { actionMetaByType };

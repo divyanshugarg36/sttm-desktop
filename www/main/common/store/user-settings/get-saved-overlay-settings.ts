@@ -5,26 +5,33 @@ import overlayConfig from '../../../../configs/overlay.json';
 
 const { sidebar, bottomBar } = overlayConfig;
 
-const settings = { ...sidebar.settings, ...bottomBar.settings };
+const settings: Record<string, { initialValue?: unknown }> = {
+  ...sidebar.settings,
+  ...bottomBar.settings,
+};
+
+/** The saved settings, with the bani overlay's under `baniOverlay`. */
+type SavedWithOverlay = Record<string, unknown> & { baniOverlay?: Record<string, unknown> };
 
 export const getDefaultSettings = () => {
-  const defaultSettings = {};
+  const defaultSettings: Record<string, unknown> = {};
   Object.keys(settings).forEach((key) => {
     defaultSettings[key] = settings[key].initialValue;
   });
   return convertObjToCamelCase(defaultSettings);
 };
 
-const getOverlaySettings = () => {
-  if (savedSettings.baniOverlay) {
-    return savedSettings;
+const getOverlaySettings = (): SavedWithOverlay & { baniOverlay: Record<string, unknown> } => {
+  const saved = savedSettings as SavedWithOverlay;
+  if (saved.baniOverlay) {
+    return saved as SavedWithOverlay & { baniOverlay: Record<string, unknown> };
   }
-  const defaultSettings = {};
+  const defaultSettings: Record<string, unknown> = {};
   Object.keys(settings).forEach((key) => {
     defaultSettings[key] = settings[key].initialValue;
   });
-  savedSettings.baniOverlay = defaultSettings;
-  return savedSettings;
+  saved.baniOverlay = defaultSettings;
+  return saved as SavedWithOverlay & { baniOverlay: Record<string, unknown> };
 };
 
 export const savedOverlaySettings = getOverlaySettings();

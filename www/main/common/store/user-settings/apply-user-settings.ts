@@ -1,4 +1,7 @@
-export const applyUserSettings = (savedSettings) => {
+/** Saved settings: setting key (kebab-case) → value. */
+export type SavedSettings = Record<string, unknown>;
+
+export const applyUserSettings = (savedSettings: SavedSettings) => {
   if (typeof localStorage === 'object') {
     localStorage.setItem('userSettings', JSON.stringify(savedSettings));
   }

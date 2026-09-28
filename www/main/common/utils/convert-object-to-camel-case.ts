@@ -1,7 +1,7 @@
 import convertToCamelCase from './convert-to-camel-case';
 
-const convertObjToCamelCase = (obj) => {
-  const ccObj = {};
+const convertObjToCamelCase = <T>(obj: Record<string, T>) => {
+  const ccObj: Record<string, T> = {};
   Object.keys(obj).forEach((key) => {
     ccObj[convertToCamelCase(key)] = obj[key];
   });

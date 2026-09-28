@@ -1,8 +1,12 @@
+import fs from 'fs';
+import type { Middleware, PayloadAction } from '@reduxjs/toolkit';
+
 import { USER_SETTINGS_SYNC } from './userSettingsSlice';
 import { NAVIGATOR_SYNC } from './navigatorSlice';
 import { BANI_OVERLAY_SYNC } from './baniOverlaySlice';
 import { savedOverlaySettings } from '../user-settings/get-saved-overlay-settings';
 import { userConfigPath } from '../user-settings/get-saved-user-settings';
+import type { RootState } from './store';
 
 // Redux middleware that runs the side effects the easy-peasy settings actions
 // used to embed inside their reducers (see the old create-user-settings-state).
@@ -17,9 +21,9 @@ import { userConfigPath } from '../user-settings/get-saved-user-settings';
 // (the viewer's listener only sets state, it never re-sends) — the exact
 // behavior the old GlobalState inbound listener already had.
 
-const fs = require('fs');
-
-const settingsSyncMiddleware = (store) => (next) => (action) => {
+// Every action here is a slice's setter: `slice/setX` with its payload.
+const settingsSyncMiddleware: Middleware<object, RootState> = (store) => (next) => (rawAction) => {
+  const action = rawAction as PayloadAction<unknown>;
   // baniOverlay (main window): persist to the user config file and notify the
   // main process via `save-overlay-settings` (was create-overlay-settings-state).
   const overlayMeta = BANI_OVERLAY_SYNC.actionMetaByType[action.type];
@@ -58,7 +62,7 @@ const settingsSyncMiddleware = (store) => (next) => (action) => {
   const navMeta = NAVIGATOR_SYNC.actionMetaByType[action.type];
   if (navMeta) {
     const { stateVarName } = navMeta;
-    const oldValue = store.getState().navigator[stateVarName];
+    const oldValue: unknown = store.getState().navigator[stateVarName];
     const result = next(action);
     const message = JSON.stringify({
       stateName: stateVarName,
@@ -83,7 +87,7 @@ const settingsSyncMiddleware = (store) => (next) => (action) => {
 
   const { settingKey, stateVarName, schemaEntry } = meta;
   const { payload } = action;
-  const oldValue = store.getState().userSettings[stateVarName];
+  const oldValue: unknown = store.getState().userSettings[stateVarName];
 
   // Apply the pure reducer first so getState() below is current.
   const result = next(action);
@@ -128,16 +132,20 @@ const settingsSyncMiddleware = (store) => (next) => (action) => {
   }
 
   // 5. Side-effect callback registered on the global controller.
-  if (global.controller && typeof global.controller[settingKey] === 'function') {
-    global.controller[settingKey](payload);
+  const controllerCallback = (
+    global.controller as unknown as Record<string, unknown> | undefined
+  )?.[settingKey];
+  if (typeof controllerCallback === 'function') {
+    controllerCallback(payload);
   }
 
   // 6. Push font sizes to a connected WebController.
+  const fontSize = (key: string) => parseInt(String(savedSettings[key]), 10);
   const fontSizes = {
-    gurbani: parseInt(savedSettings['gurbani-font-size'], 10),
-    translation: parseInt(savedSettings['translation-font-size'], 10),
-    teeka: parseInt(savedSettings['teeka-font-size'], 10),
-    transliteration: parseInt(savedSettings['transliteration-font-size'], 10),
+    gurbani: fontSize('gurbani-font-size'),
+    translation: fontSize('translation-font-size'),
+    teeka: fontSize('teeka-font-size'),
+    transliteration: fontSize('transliteration-font-size'),
   };
   if (typeof window !== 'undefined' && window.socket !== undefined && window.socket !== null) {
     window.socket.emit('data', {

@@ -1,4 +1,4 @@
-import { configureStore, type UnknownAction } from '@reduxjs/toolkit';
+import { combineReducers, configureStore, type UnknownAction } from '@reduxjs/toolkit';
 
 import appReducer, { setUserToken } from './appSlice';
 import baniControllerReducer from './baniControllerSlice';
@@ -16,21 +16,26 @@ import platform from '../../../desktop_scripts';
 // register once, in the right process. See EASY-PEASY-TO-REDUX-MIGRATION.md.
 global.platform = platform;
 
+const rootReducer = combineReducers({
+  app: appReducer,
+  baniController: baniControllerReducer,
+  userSettings: userSettingsReducer,
+  navigator: navigatorReducer,
+  viewerSettings: viewerSettingsReducer,
+  baniOverlay: baniOverlayReducer,
+});
+
+// From the reducers rather than the store, so the middleware can use it
+// without a circular type.
+export type RootState = ReturnType<typeof rootReducer>;
+
 const store = configureStore({
-  reducer: {
-    app: appReducer,
-    baniController: baniControllerReducer,
-    userSettings: userSettingsReducer,
-    navigator: navigatorReducer,
-    viewerSettings: viewerSettingsReducer,
-    baniOverlay: baniOverlayReducer,
-  },
+  reducer: rootReducer,
   // Settings side effects (IPC/fs/DOM/socket) live in this middleware; reducers
   // stay pure.
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(settingsSyncMiddleware),
 });
 
-export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 
 /** Action creators looked up by name at runtime (settings setters and IPC). */

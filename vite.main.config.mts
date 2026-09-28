@@ -30,7 +30,7 @@ export default defineConfig({
         store: resolve(projectRoot, 'www/main/store.js'),
         'get-saved-user-settings': resolve(
           projectRoot,
-          'www/main/common/store/user-settings/get-saved-user-settings.js',
+          'www/main/common/store/user-settings/get-saved-user-settings.ts',
         ),
       },
       output: {
