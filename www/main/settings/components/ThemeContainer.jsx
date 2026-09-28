@@ -7,10 +7,10 @@ import { classNames } from '../../common/utils';
 import { themes } from '../../theme_editor';
 import {
   applyTheme,
-  uploadImage,
   setDefaultBg,
-  upsertCustomBackgrounds,
-  removeCustomBackgroundFile,
+  listCustomBackgrounds,
+  addCustomBackgroundFromInput,
+  removeCustomBackground,
 } from '../utils';
 import {
   setTheme as setThemeAction,
@@ -39,9 +39,27 @@ const ThemeContainer = () => {
   const { theme: currentTheme, themeBg } = useSelector((state) => state.userSettings);
   const groupThemes = (themeType) => themes.filter(({ type }) => type.includes(themeType));
 
+  const refreshCustomThemes = async () => setCustomThemes(await listCustomBackgrounds());
+
   useEffect(() => {
-    upsertCustomBackgrounds(setCustomThemes);
+    refreshCustomThemes();
   }, []);
+
+  const isCustomBg = themeBg && themeBg.type === 'custom';
+
+  // Removing the background in use falls back to the current theme's own.
+  const removeCustomTheme = async (tile) => {
+    await removeCustomBackground(tile.path);
+    if (isCustomBg && themeBg.url === tile.url) {
+      setDefaultBg(
+        themes.find(({ key }) => key === currentTheme),
+        setThemeBg,
+        themeBg,
+      );
+      global.core.platformMethod('updateSettings');
+    }
+    refreshCustomThemes();
+  };
 
   return (
     <Box variant="gradient" className="theme-picker">
@@ -59,15 +77,11 @@ const ThemeContainer = () => {
             {groupThemes(type).map((theme) => (
               <Tile
                 key={theme.name}
-                onClick={() => {
-                  if (currentTheme !== theme.key) {
-                    applyTheme(theme, false, setTheme, setThemeBg, themeBg);
-                  }
-                  setDefaultBg(theme, setThemeBg, themeBg);
-                }}
+                onClick={() => applyTheme(theme, false, setTheme, setThemeBg, themeBg)}
                 className={classNames(
                   'theme-picker__tile',
                   theme['background-video'] && 'theme-picker__tile--video',
+                  !isCustomBg && theme.key === currentTheme && 'theme-picker__tile--active',
                 )}
                 theme={theme}
               >
@@ -101,10 +115,9 @@ const ThemeContainer = () => {
             ref={uploadInput}
             className="file-input"
             onChange={async (e) => {
-              await uploadImage(e);
-              upsertCustomBackgrounds(setCustomThemes);
+              await addCustomBackgroundFromInput(e);
+              refreshCustomThemes();
             }}
-            id="themebg-upload"
             type="file"
             accept="image/png, image/jpeg"
           />
@@ -114,17 +127,9 @@ const ThemeContainer = () => {
             <CustomBgTile
               key={tile.name}
               customBg={tile}
-              onApply={() => {
-                applyTheme(tile, 'custom', setTheme, setThemeBg);
-              }}
-              onRemove={() => {
-                removeCustomBackgroundFile(tile['background-image-path']);
-                upsertCustomBackgrounds(setCustomThemes);
-                if (tile['background-image'] === themeBg.url.href) {
-                  const currentThemeInstance = themes.filter((theme) => theme.key === currentTheme);
-                  setDefaultBg(currentThemeInstance, setThemeBg, themeBg);
-                }
-              }}
+              isActive={isCustomBg && themeBg.url === tile.url}
+              onApply={() => applyTheme(tile, true, setTheme, setThemeBg, themeBg)}
+              onRemove={() => removeCustomTheme(tile)}
             />
           ))}
         </div>

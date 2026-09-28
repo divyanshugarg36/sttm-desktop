@@ -49,6 +49,13 @@
     text-transform: capitalize;
     width: 100%;
 
+    // The theme or background in use. An outline, since ButtonCard's hover
+    // owns the box-shadow.
+    &--active {
+      outline: 2px solid var(--sui-semantic-accent-default);
+      outline-offset: 2px;
+    }
+
     // The video fills the tile, its name over it. A playing video gets its own
     // GPU layer, which can escape the tile's rounded clip while ButtonCard's
     // hover lifts it (square corners); isolate the tile and round the video

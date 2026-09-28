@@ -2,10 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { ButtonCard, PrimaryButton } from '@khalisfoundation/sikhi-ui';
 import Icon from '../icon';
+import { classNames } from '../../utils';
 
-const CustomBgTile = ({ customBg, onApply, onRemove }) => {
+const CustomBgTile = ({ customBg, isActive = false, onApply, onRemove }) => {
   const getCustomBgImageForTile = (tile) => ({
-    backgroundImage: `url('${tile['background-image']}')`,
+    backgroundImage: `url('${tile.url}')`,
   });
 
   // A user background in the theme picker, with a remove button in its corner.
@@ -13,7 +14,7 @@ const CustomBgTile = ({ customBg, onApply, onRemove }) => {
     <div className="theme-picker__custom">
       <ButtonCard
         onClick={onApply}
-        className="theme-picker__tile"
+        className={classNames('theme-picker__tile', isActive && 'theme-picker__tile--active')}
         style={getCustomBgImageForTile(customBg)}
       />
       <PrimaryButton
@@ -32,7 +33,8 @@ const CustomBgTile = ({ customBg, onApply, onRemove }) => {
 };
 
 CustomBgTile.propTypes = {
-  customBg: PropTypes.object,
+  customBg: PropTypes.shape({ name: PropTypes.string, url: PropTypes.string }),
+  isActive: PropTypes.bool,
   onApply: PropTypes.func,
   onRemove: PropTypes.func,
 };
