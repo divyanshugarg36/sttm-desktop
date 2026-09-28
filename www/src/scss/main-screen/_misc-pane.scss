@@ -1,4 +1,5 @@
-@import '../utils/variables';
+// History / Favorites / Others.
+
 //Heights
 $misc-header: 60px;
 $misc-footer-inactive: 40px;
@@ -76,32 +77,6 @@ $misc-footer-active: 70px;
       .clear-history {
         margin-right: 12px;
       }
-    }
-  }
-}
-
-// Quick Insert: a toggle that opens a drawer of slides, under the verse list.
-.quick-insert {
-  background: color-mix(in srgb, var(--sui-semantic-accent-default) 4%, transparent) !important;
-  border-bottom-left-radius: var(--sui-radii-lg);
-  border-bottom-right-radius: var(--sui-radii-lg);
-
-  // One row of sikhi-ui muted PrimaryButtons that scrolls sideways, with the
-  // scrollbar hidden.
-  .quick-insert-items {
-    display: flex;
-    gap: 12px;
-    overflow-x: auto;
-    padding: 12px;
-    scrollbar-width: none;
-    width: 100%;
-
-    &::-webkit-scrollbar {
-      display: none;
-    }
-
-    .tray-item-icon {
-      flex-shrink: 0;
     }
   }
 }
@@ -216,157 +191,6 @@ $misc-footer-active: 70px;
     // sikhi-ui ghost icon PrimaryButton: remove from favorites.
     >.sui-button:hover {
       color: $red;
-    }
-  }
-}
-
-.announcement {
-  &-box {
-    @include flex($fd-value: column);
-    gap: 22px;
-    padding: 22px 12px;
-
-    header {
-      color: $sonic-silver;
-      font-size: 0.8em;
-      font-weight: bold;
-      letter-spacing: 0.15em;
-      text-align: center;
-      text-transform: uppercase;
-      word-spacing: 0.15em;
-      width: 80%;
-
-      i {
-        padding-right: 6px;
-      }
-    }
-  }
-
-  &-switch {
-    @include flex($jc-value: start, $ai-value: center, $width: auto);
-    gap: 8px;
-
-    .switch {
-      height: 1.2em;
-      width: 2em;
-
-      label:after {
-        height: 1.2em;
-        width: 1.2em;
-      }
-
-      input:checked {
-        +label:after {
-          left: 0.8em;
-        }
-      }
-    }
-  }
-
-  &-text {
-    border-radius: 10px;
-    display: inline-block;
-    height: 150px;
-    min-height: 100px;
-    min-width: 300px;
-    outline: none;
-    padding: 10px;
-    width: inherit;
-  }
-
-  &-gurmukhi-keyboard-text {
-    height: 35px;
-    border-radius: 8px;
-  }
-
-  &-slide-btn {
-    align-self: center;
-  }
-
-  &-body {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    padding: 24px;
-    width: 100%;
-
-    .gurmukhi-keyboard {
-      margin-top: -12px;
-    }
-
-    .textarea-container {
-      position: relative;
-
-      textarea {
-        width: 100%;
-      }
-    }
-  }
-
-  &-actions {
-    @include flex($ai-value: center, $jc-value: space-between, $width: 100%);
-  }
-}
-
-.misc-slides-pane {
-  @include flex($jc-value: flex-start);
-  gap: 20px;
-  padding: 0 32px;
-}
-
-.dhan-guru {
-  &-pane {
-    padding: 0 32px;
-    display: grid;
-    column-gap: 20px;
-    grid-auto-flow: column;
-    grid-template-rows: repeat(6, 1fr);
-  }
-
-  &-language-switch {
-    @include flex($width: fit-content);
-    padding: 6px;
-    margin: 4px auto;
-
-    span {
-      padding-right: 6px;
-    }
-  }
-
-  &-button {
-    color: $white;
-    display: grid;
-    grid-template-columns: 1fr 6fr;
-    height: 40px;
-    margin-bottom: 16px;
-    width: 250px;
-
-    &:hover {
-      cursor: pointer;
-
-      .dhan-guru-button {
-        &-prefix {
-          background: url('../../assets/img/icons/play-button-filled.svg') no-repeat center center;
-          background-color: $cadmium-orange;
-          background-size: 26px;
-          color: transparent;
-        }
-
-        &-text {
-          background: $rust;
-        }
-      }
-    }
-
-    &-prefix {
-      @include flex($jc-value: center, $width: auto);
-      background: $cadmium-orange;
-    }
-
-    &-text {
-      @include flex($jc-value: start, $width: auto);
-      background: $darker-grey;
-      padding-left: 8px;
     }
   }
 }

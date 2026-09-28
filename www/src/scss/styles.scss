@@ -1,142 +1,23 @@
-$presenter-pane-gap: 25px;
-$title-bar-offset: 10px;
-$ws-offset: 40px;
-$keyboard-height: 128px;
-$toolbar-offset: 48px;
-$toolbar-small-offset: 50px;
-$toolbar-width-offset: $toolbar-offset/2;
-$bani-list-width: 300px;
-$tag-nitnem-color: #5488d6;
-$tag-popular-color: #ce744e;
-
-@mixin calculateTop($row-num, $is-windows: 0, $keyboard-offset: 0) {
-  $screen-offset: 50% * $row-num;
-  $pane-gap-ratio: 1;
-
-  @if $row-num == 1 {
-    $pane-gap-ratio: 0.5;
-  }
-
-  @if $is-windows == 0 {
-    top: calc(
-      #{$screen-offset} +
-        #{($presenter-pane-gap * $pane-gap-ratio) +
-        $keyboard-offset +
-        $ws-offset}
-    );
-  } @else if $is-windows == 1 {
-    top: calc(
-      #{$screen-offset} +
-        #{$presenter-pane-gap +
-        $title-bar-offset +
-        $keyboard-offset +
-        $ws-offset}
-    );
-  }
-}
-
-@mixin calculateDimensions() {
-  height: calc(50% - calc(#{$presenter-pane-gap} * 1.5) - #{$ws-offset/2});
-
-  $presenter-panes-container: calc(50% - #{$toolbar-width-offset});
-
-  width: calc(#{$presenter-panes-container} - calc(#{$presenter-pane-gap} * 1.5));
-}
+// Variables and mixins (no CSS output) load first.
+@import 'base/variables', 'base/mixins';
 
 // sikhi-ui component styles first, so the app's own rules still win on ties.
 @import '@khalisfoundation/sikhi-ui/dist/styles';
 
-@import 'controller.scss', 'markdown', 'themes/themes', 'update', 'viewer', 'window', 'addon', 'akhandpaatt',
-  'overlay', 'animations', 'noty', 'icon', 'ui-library', 'navigator/common/pane',
-  'navigator/common/verse-block', 'navigator/search/searchNew', 'navigator/shabad/shabad', 'navigator/shabad/multipane',
-  'navigator/misc/misc', 'navigator/common/icon-button', 'navigator/viewer/viewer',
-  'navigator/search/gurmukhi-keyboard', 'navigator/common/autoplay_icon';
+@import 'base/typography', 'controller', 'markdown', 'themes/themes', 'update', 'viewer', 'window', 'addon',
+  'akhandpaatt', 'overlay', 'animations', 'noty', 'icon', 'ui-library';
+
+// The main screen: its panes, and the components they share.
+@import 'main-screen/pane', 'main-screen/verse-block', 'main-screen/search-pane', 'main-screen/shabad-pane',
+  'main-screen/multipane', 'main-screen/misc-pane', 'main-screen/quick-insert', 'overlays/announcement',
+  'components/icon-button', 'main-screen/viewer-pane', 'viewer/autoplay-icon', 'main-screen/single-display';
 
 @import 'utils/utils', 'viewer/viewer';
 
-a {
-  cursor: pointer;
-}
+@import 'base/reset', 'layout/app-layout', 'layout/toolbar-nav';
 
-button {
-  border: none;
-}
-
-::-webkit-scrollbar {
-  width: 12px;
-}
-
-::-webkit-scrollbar-track {
-  background-color: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: #bdbdbd;
-  border-radius: 6px;
-}
-
-.hidden {
-  display: none;
-}
-
-.blur {
-  filter: blur(20px);
-}
-
-.fullscreen-fixed {
-  height: 100vh;
-  left: 0;
-  position: fixed;
-  top: 0;
-  width: 100%;
-}
-
-#app-frame {
-  @extend .fullscreen-fixed;
-
-  z-index: 1100;
-}
-
-.backdrop {
-  @extend .fullscreen-fixed;
-
-  background: rgba(0, 0, 0, 0.7);
-  position: fixed;
-  z-index: 1200;
-
-  &.hidden {
-    width: 0;
-  }
-}
-
-.sttm-loader {
-  animation: spin 2s linear infinite;
-  border: 6px solid;
-  border-radius: 50%;
-  height: 60px;
-  width: 60px;
-
-  .fav-results > & {
-    margin: auto;
-  }
-}
-
-.fav-results .error {
-  margin: 14px;
-}
-
-.nologin {
-  text-align: center;
-}
-
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
+// Overlays (Sundar Gutka, Ceremonies, Sync, Login, theme tiles); to be split
+// into overlays/ next.
 
 .sundar-gutka-wrapper,
 .ceremonies-wrapper {
@@ -410,62 +291,6 @@ button {
   }
 }
 
-#toolbar,
-#toolbar-nav {
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 100%;
-  padding-top: 10px;
-  z-index: 1300;
-
-  .toolbar-top {
-    width: 100%;
-
-    // Separates the workspace switcher from the add-ons below it.
-    .toolbar-workspaces {
-      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-      margin-bottom: 12px;
-    }
-  }
-
-  // Workspaces, add-ons and the bottom group: sikhi-ui SideNavs, icons only.
-  .sui-side-nav {
-    background: transparent;
-    border-right: none;
-    gap: 12px;
-    padding: 0 4px 12px;
-    width: 100%;
-
-    &__item {
-      color: rgba(255, 255, 255, 0.75);
-      gap: 0;
-      padding: 6px 0;
-
-      &:hover:not(.sui-side-nav__item--active) {
-        background: rgba(255, 255, 255, 0.12);
-        color: #fff;
-      }
-    }
-
-    &__item--active {
-      background: rgba(255, 255, 255, 0.22);
-      color: #fff;
-    }
-
-    // Visually hidden; still names the button for screen readers.
-    &__label {
-      clip-path: inset(50%);
-      height: 1px;
-      overflow: hidden;
-      position: absolute;
-      white-space: nowrap;
-      width: 1px;
-    }
-  }
-}
-
 .lock-screen-message {
   align-items: center;
   display: flex;
@@ -735,47 +560,6 @@ button {
   padding: 10px;
 }
 
-#toolbar,
-#toolbar-nav {
-  @extend .fullscreen-fixed;
-
-  padding-top: $presenter-pane-gap;
-  width: $toolbar-offset;
-
-  .bani-list,
-  .ceremonies-list {
-    height: calc(100vh - #{$presenter-pane-gap * 2});
-    left: $toolbar-offset + $presenter-pane-gap;
-    top: $presenter-pane-gap;
-    width: $bani-list-width;
-  }
-
-  .ceremonies-header {
-    width: 100%;
-  }
-
-  .ceremony-pane {
-    margin-bottom: 15px;
-  }
-
-  .ceremonies-list {
-    background: transparent;
-    height: 250px;
-  }
-
-  .ceremonies-list .ceremonies-header {
-    background: transparent;
-    color: white;
-    font-size: 24px;
-    padding: 0;
-  }
-
-  .bani-extras {
-    left: $toolbar-offset + $bani-list-width + ($presenter-pane-gap * 2);
-    top: $presenter-pane-gap;
-  }
-}
-
 // #main-viewer,
 // #viewer {
 //   height: 100%;
@@ -793,169 +577,6 @@ body.show-overlay {
     position: fixed;
     z-index: 0;
   }
-}
-
-.controller-on .shabad-pane .controller-signal {
-  display: block;
-}
-
-.shabad-pane {
-  .controller-signal {
-    bottom: 10px;
-    display: none;
-    height: 20px;
-    position: absolute;
-    right: 10px;
-    width: 20px;
-    img {
-      width: 100%;
-    }
-  }
-}
-
-#navigator {
-  bottom: 0;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
-  height: 300px;
-  position: fixed;
-  right: 0;
-  transition: height $transition-time $transition-easing;
-  width: 470px;
-
-  &.minimized {
-    height: 40px;
-
-    #toolbar,
-    #toolbar-nav {
-      left: -80px;
-      transition: left 1s ease;
-    }
-  }
-}
-
-.presenter-view #navigator.minimized {
-  #toolbar,
-  #toolbar-nav {
-    left: 0;
-  }
-}
-
-.darwin #navigator {
-  width: 500px;
-}
-
-.presenter-view.scale-viewer #navigator {
-  transition: none;
-}
-
-.controller.scale-viewer.presenter-view {
-  #navigator {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    position: static;
-    width: 100%;
-  }
-
-  #header {
-    .navigator-header {
-      display: none;
-    }
-  }
-
-  .preferences-open {
-    display: none;
-  }
-
-  #search-page .preferences-open {
-    display: block;
-  }
-
-  .fixed-takeover-pages {
-    position: fixed;
-
-    @include calculateDimensions();
-  }
-
-  #custom-slides-page {
-    @extend .fixed-takeover-pages;
-
-    left: $presenter-pane-gap;
-
-    @include calculateTop(1);
-  }
-
-  #menu-page,
-  #shabad-menu-page {
-    @extend .fixed-takeover-pages;
-
-    left: $presenter-pane-gap;
-
-    @include calculateTop(0);
-  }
-
-  .nav-page {
-    display: block;
-    position: fixed;
-    transition: 0.5s height ease;
-
-    @include calculateDimensions();
-
-    &:nth-child(1) {
-      left: $presenter-pane-gap + $toolbar-offset;
-
-      @include calculateTop(0);
-    }
-
-    &:nth-child(2) {
-      height: calc(50% - calc(#{$presenter-pane-gap} * 1.5) - #{$footerOffset + 20px});
-      left: auto;
-      right: $presenter-pane-gap;
-
-      @include calculateTop(1);
-    }
-
-    &:nth-child(3) {
-      left: $presenter-pane-gap + $toolbar-offset;
-
-      @include calculateTop(1);
-    }
-
-    .current-shabad-header {
-      border-bottom: 2px solid transparent;
-      transition: 0.5s border ease;
-    }
-
-    &:focus {
-      outline: 0;
-
-      .current-shabad-header {
-        border-bottom-color: #01579b;
-      }
-    }
-  }
-
-  #navigator.kb-active {
-    $height: calc(50% - calc(#{$presenter-pane-gap} * 3) - calc(#{$keyboard-height} / 2));
-
-    /* .nav-page {
-      &:nth-child(1) {
-        height: $height;
-      }
-
-      &:nth-child(1) { @include calculateTop(0,0,$keyboard-height); }
-    } */
-  }
-
-  #footer {
-    .menu-group-left {
-      display: none;
-    }
-  }
-}
-
-.controller.scale-viewer.presenter-view.shortcut-tray-true .nav-page:nth-child(2) {
-  height: calc(50% - calc(#{$presenter-pane-gap} * 1.5) - #{$totalSessionOffset + 20px});
 }
 
 // .scale-viewer {
@@ -1126,39 +747,6 @@ body.show-overlay {
 
 .win32 .options-page {
   top: 30px;
-}
-
-.win32 #toolbar,
-#toolbar-nav {
-  .bani-list {
-    width: 470px;
-  }
-
-  .close-overlay-ui {
-    top: $presenter-pane-gap + $title-bar-offset;
-  }
-}
-
-.controller.scale-viewer.presenter-view.win32 {
-  .nav-page:nth-child(1),
-  #menu-page,
-  #shabad-menu-page {
-    @include calculateTop(0, 1);
-  }
-
-  #navigator.kb-active {
-    $height: calc(
-      50% - calc(#{$presenter-pane-gap * 3} + #{$title-bar-offset}) - calc(#{$keyboard-height} / 2)
-    );
-
-    /* .nav-page {
-      &:nth-child(1) {
-        height: $height;
-      }
-
-      &:nth-child(1) { @include calculateTop(0,1,$keyboard-height); }
-    } */
-  }
 }
 
 .sundar-gutka-wrapper {

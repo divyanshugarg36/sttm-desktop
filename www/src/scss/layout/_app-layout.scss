@@ -1,0 +1,262 @@
+// The main screen's layout: the launchpad and its workspace grids
+// (Presenter columns, Multi-Pane grid), and #navigator's placement.
+
+.launchpad {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  height: 100%;
+  overflow-x: auto;
+  // Clear the side nav (#toolbar-nav), plus a 2px gap.
+  padding: 6px 6px 6px ($toolbar-offset);
+  width: 100%;
+
+  &.single-display {
+    display: unset;
+    height: unset;
+    overflow-x: unset;
+    padding: unset;
+    width: unset;
+  }
+
+  // Presenter: two columns, each pane taking an equal share of the height.
+  .navigator-columns {
+    display: flex;
+    height: 100%;
+    width: 100%;
+  }
+
+  .navigator-column {
+    display: flex;
+    flex: 1 1 0;
+    flex-direction: column;
+    min-width: 0;
+
+    >.pane-container {
+      flex: 1 1 0;
+      max-height: none;
+      min-height: 0;
+    }
+  }
+
+  // The viewer and the shabad's verses share one box.
+  .presenter-column {
+    padding: 10px;
+
+    .presenter-box {
+      box-sizing: border-box;
+      height: 100%;
+      padding: 12px;
+    }
+
+    .pane-container {
+      flex: 1 1 0;
+      max-height: none;
+      min-height: 0;
+      padding: 0;
+    }
+
+    .viewer-pane .pane-content {
+      border: none;
+    }
+  }
+
+  .navigator-row {
+    height: 50%;
+    width: 100vw;
+    display: flex;
+    justify-content: space-evenly;
+  }
+
+  .multipane-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    width: 100%;
+    height: 50%;
+  }
+
+  .shabad1-container,
+  .shabad2-container,
+  .shabad3-container {
+    grid-row: 1;
+  }
+
+  .shabad1-container {
+    grid-column: 1/3;
+  }
+
+  .shabad2-container {
+    grid-column: 3/5;
+  }
+
+  .shabad3-container {
+    grid-column: 5/7;
+  }
+}
+
+#navigator {
+  bottom: 0;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+  height: 300px;
+  position: fixed;
+  right: 0;
+  transition: height $transition-time $transition-easing;
+  width: 470px;
+
+  &.minimized {
+    height: 40px;
+
+    #toolbar,
+    #toolbar-nav {
+      left: -80px;
+      transition: left 1s ease;
+    }
+  }
+}
+
+.presenter-view #navigator.minimized {
+  #toolbar,
+  #toolbar-nav {
+    left: 0;
+  }
+}
+
+.darwin #navigator {
+  width: 500px;
+}
+
+.presenter-view.scale-viewer #navigator {
+  transition: none;
+}
+
+.controller.scale-viewer.presenter-view {
+  #navigator {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    position: static;
+    width: 100%;
+  }
+
+  #header {
+    .navigator-header {
+      display: none;
+    }
+  }
+
+  .preferences-open {
+    display: none;
+  }
+
+  #search-page .preferences-open {
+    display: block;
+  }
+
+  .fixed-takeover-pages {
+    position: fixed;
+
+    @include calculateDimensions();
+  }
+
+  #custom-slides-page {
+    @extend .fixed-takeover-pages;
+
+    left: $presenter-pane-gap;
+
+    @include calculateTop(1);
+  }
+
+  #menu-page,
+  #shabad-menu-page {
+    @extend .fixed-takeover-pages;
+
+    left: $presenter-pane-gap;
+
+    @include calculateTop(0);
+  }
+
+  .nav-page {
+    display: block;
+    position: fixed;
+    transition: 0.5s height ease;
+
+    @include calculateDimensions();
+
+    &:nth-child(1) {
+      left: $presenter-pane-gap + $toolbar-offset;
+
+      @include calculateTop(0);
+    }
+
+    &:nth-child(2) {
+      height: calc(50% - calc(#{$presenter-pane-gap} * 1.5) - #{$footerOffset + 20px});
+      left: auto;
+      right: $presenter-pane-gap;
+
+      @include calculateTop(1);
+    }
+
+    &:nth-child(3) {
+      left: $presenter-pane-gap + $toolbar-offset;
+
+      @include calculateTop(1);
+    }
+
+    .current-shabad-header {
+      border-bottom: 2px solid transparent;
+      transition: 0.5s border ease;
+    }
+
+    &:focus {
+      outline: 0;
+
+      .current-shabad-header {
+        border-bottom-color: #01579b;
+      }
+    }
+  }
+
+  #navigator.kb-active {
+    $height: calc(50% - calc(#{$presenter-pane-gap} * 3) - calc(#{$keyboard-height} / 2));
+
+    /* .nav-page {
+      &:nth-child(1) {
+        height: $height;
+      }
+
+      &:nth-child(1) { @include calculateTop(0,0,$keyboard-height); }
+    } */
+  }
+
+  #footer {
+    .menu-group-left {
+      display: none;
+    }
+  }
+}
+
+.controller.scale-viewer.presenter-view.shortcut-tray-true .nav-page:nth-child(2) {
+  height: calc(50% - calc(#{$presenter-pane-gap} * 1.5) - #{$totalSessionOffset + 20px});
+}
+
+.controller.scale-viewer.presenter-view.win32 {
+  .nav-page:nth-child(1),
+  #menu-page,
+  #shabad-menu-page {
+    @include calculateTop(0, 1);
+  }
+
+  #navigator.kb-active {
+    $height: calc(
+      50% - calc(#{$presenter-pane-gap * 3} + #{$title-bar-offset}) - calc(#{$keyboard-height} / 2)
+    );
+
+    /* .nav-page {
+      &:nth-child(1) {
+        height: $height;
+      }
+
+      &:nth-child(1) { @include calculateTop(0,1,$keyboard-height); }
+    } */
+  }
+}

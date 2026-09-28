@@ -1,0 +1,85 @@
+// Element defaults, scrollbars and small helper classes.
+
+a {
+  cursor: pointer;
+}
+
+button {
+  border: none;
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #bdbdbd;
+  border-radius: 6px;
+}
+
+.hidden {
+  display: none;
+}
+
+.blur {
+  filter: blur(20px);
+}
+
+.fullscreen-fixed {
+  height: 100vh;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+#app-frame {
+  @extend .fullscreen-fixed;
+
+  z-index: 1100;
+}
+
+.backdrop {
+  @extend .fullscreen-fixed;
+
+  background: rgba(0, 0, 0, 0.7);
+  position: fixed;
+  z-index: 1200;
+
+  &.hidden {
+    width: 0;
+  }
+}
+
+.sttm-loader {
+  animation: spin 2s linear infinite;
+  border: 6px solid;
+  border-radius: 50%;
+  height: 60px;
+  width: 60px;
+
+  .fav-results > & {
+    margin: auto;
+  }
+}
+
+.fav-results .error {
+  margin: 14px;
+}
+
+.nologin {
+  text-align: center;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

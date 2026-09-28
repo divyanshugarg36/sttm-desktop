@@ -1,0 +1,57 @@
+// Shared mixins (no CSS output).
+
+@mixin calculateTop($row-num, $is-windows: 0, $keyboard-offset: 0) {
+  $screen-offset: 50% * $row-num;
+  $pane-gap-ratio: 1;
+
+  @if $row-num == 1 {
+    $pane-gap-ratio: 0.5;
+  }
+
+  @if $is-windows == 0 {
+    top: calc(
+      #{$screen-offset} +
+        #{($presenter-pane-gap * $pane-gap-ratio) +
+        $keyboard-offset +
+        $ws-offset}
+    );
+  } @else if $is-windows == 1 {
+    top: calc(
+      #{$screen-offset} +
+        #{$presenter-pane-gap +
+        $title-bar-offset +
+        $keyboard-offset +
+        $ws-offset}
+    );
+  }
+}
+
+@mixin calculateDimensions() {
+  height: calc(50% - calc(#{$presenter-pane-gap} * 1.5) - #{$ws-offset/2});
+
+  $presenter-panes-container: calc(50% - #{$toolbar-width-offset});
+
+  width: calc(#{$presenter-panes-container} - calc(#{$presenter-pane-gap} * 1.5));
+}
+
+/* Display Flex   al=align-items jc=justify-content fd=flex-direction */
+@mixin flex($ai-value: center, $jc-value: space-between, $fd-value: row, $width: 100%) {
+  display: flex;
+  align-items: $ai-value;
+  justify-content: $jc-value;
+  flex-direction: $fd-value;
+  width: $width;
+}
+/* Display Inline-Flex   al=align-items jc=justify-content fd=flex-direction */
+@mixin inline-flex($ai-value: center, $jc-value: space-between, $width: 100%) {
+  display: inline-flex;
+  align-items: $ai-value;
+  justify-content: $jc-value;
+  width: $width;
+}
+/* Display pane containers eg. search-pane, shabad pane, etc */
+@mixin pane-containers {
+  padding: 10px;
+  position: relative;
+  width: 100%;
+}

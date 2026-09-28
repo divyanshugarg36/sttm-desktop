@@ -1,0 +1,32 @@
+// Shared SCSS variables (no CSS output).
+
+// Layout
+$presenter-pane-gap: 25px;
+$title-bar-offset: 10px;
+$ws-offset: 40px;
+$keyboard-height: 128px;
+$toolbar-offset: 48px;
+$toolbar-small-offset: 50px;
+$toolbar-width-offset: $toolbar-offset/2;
+$bani-list-width: 300px;
+$tag-nitnem-color: #5488d6;
+$tag-popular-color: #ce744e;
+
+// Legacy controller layout
+$sttm-orange: #f39c1d;
+$sttm-blue: #29679b;
+$transparent-black: rgba(0, 0, 0, 0.16);
+
+$transition-time: 600ms;
+$transition-easing: cubic-bezier(0.165, 0.84, 0.44, 1);
+
+$footerOffset: 40px;
+$shortcutTrayHeight: 70px;
+$totalSessionOffset: $footerOffset + $shortcutTrayHeight;
+$sessionPageHeight: calc(100% - #{$totalSessionOffset});
+
+// Fonts
+$body-font-family: -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
+  'Helvetica Neue', Arial, sans-serif !default;
+$gurmukhi-font-family: 'gurbaniakhar';
+$gurmukhi-font-family-thick: 'gurbaniakharthick';

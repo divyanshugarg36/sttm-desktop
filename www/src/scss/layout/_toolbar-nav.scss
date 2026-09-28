@@ -1,0 +1,109 @@
+// The side nav (#toolbar-nav): workspaces, add-ons and the bottom group.
+
+#toolbar,
+#toolbar-nav {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  padding-top: 10px;
+  z-index: 1300;
+
+  .toolbar-top {
+    width: 100%;
+
+    // Separates the workspace switcher from the add-ons below it.
+    .toolbar-workspaces {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      margin-bottom: 12px;
+    }
+  }
+
+  // Workspaces, add-ons and the bottom group: sikhi-ui SideNavs, icons only.
+  .sui-side-nav {
+    background: transparent;
+    border-right: none;
+    gap: 12px;
+    padding: 0 4px 12px;
+    width: 100%;
+
+    &__item {
+      color: rgba(255, 255, 255, 0.75);
+      gap: 0;
+      padding: 6px 0;
+
+      &:hover:not(.sui-side-nav__item--active) {
+        background: rgba(255, 255, 255, 0.12);
+        color: #fff;
+      }
+    }
+
+    &__item--active {
+      background: rgba(255, 255, 255, 0.22);
+      color: #fff;
+    }
+
+    // Visually hidden; still names the button for screen readers.
+    &__label {
+      clip-path: inset(50%);
+      height: 1px;
+      overflow: hidden;
+      position: absolute;
+      white-space: nowrap;
+      width: 1px;
+    }
+  }
+}
+
+#toolbar,
+#toolbar-nav {
+  @extend .fullscreen-fixed;
+
+  padding-top: $presenter-pane-gap;
+  width: $toolbar-offset;
+
+  .bani-list,
+  .ceremonies-list {
+    height: calc(100vh - #{$presenter-pane-gap * 2});
+    left: $toolbar-offset + $presenter-pane-gap;
+    top: $presenter-pane-gap;
+    width: $bani-list-width;
+  }
+
+  .ceremonies-header {
+    width: 100%;
+  }
+
+  .ceremony-pane {
+    margin-bottom: 15px;
+  }
+
+  .ceremonies-list {
+    background: transparent;
+    height: 250px;
+  }
+
+  .ceremonies-list .ceremonies-header {
+    background: transparent;
+    color: white;
+    font-size: 24px;
+    padding: 0;
+  }
+
+  .bani-extras {
+    left: $toolbar-offset + $bani-list-width + ($presenter-pane-gap * 2);
+    top: $presenter-pane-gap;
+  }
+}
+
+.win32 #toolbar,
+#toolbar-nav {
+  .bani-list {
+    width: 470px;
+  }
+
+  .close-overlay-ui {
+    top: $presenter-pane-gap + $title-bar-offset;
+  }
+}
