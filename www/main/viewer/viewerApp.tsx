@@ -1,20 +1,17 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import { ipcRenderer } from 'electron';
+import chromecast from 'electron-chromecast';
 
 import ShabadDeck from './ShabadDeck/ShabadDeck';
 import viewerStore from './store/viewer-store';
 import { castToReceiver, appendMessage, requestSession, stopApp, tingle } from './utils';
-
-const chromecast = require('electron-chromecast');
-const remote = require('@electron/remote');
-
-const { i18n } = remote.require('./app');
+import { i18n } from '../common/main-app';
+import { onFromMain } from '../common/ipc';
 
 const ViewerApp = () => {
   chromecast(
     (receivers) =>
-      new Promise((resolve) => {
+      new Promise<ChromecastReceiver>((resolve) => {
         const modal = new tingle.Modal({
           footer: true,
           stickyFooter: false,
@@ -29,9 +26,9 @@ const ViewerApp = () => {
               receiver.friendlyName,
               'tingle-btn tingle-btn--primary',
               `${receiver.ipAddress}_${receiver.port}`,
-              (e) => {
+              (e: MouseEvent) => {
                 if (
-                  e.target.getAttribute('data-reciever-id') ===
+                  (e.target as HTMLElement).getAttribute('data-reciever-id') ===
                   `${receiver.ipAddress}_${receiver.port}`
                 ) {
                   resolve(receiver);
@@ -60,17 +57,17 @@ const ViewerApp = () => {
       }),
   );
 
-  ipcRenderer.on('search-cast', (event, pos) => {
+  onFromMain('search-cast', (event, pos) => {
     requestSession();
     appendMessage(event);
     appendMessage(pos);
   });
 
-  ipcRenderer.on('stop-cast', () => {
+  onFromMain('stop-cast', () => {
     stopApp();
   });
 
-  ipcRenderer.on('cast-verse', () => {
+  onFromMain('cast-verse', () => {
     castToReceiver();
   });
   return (

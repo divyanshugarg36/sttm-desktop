@@ -8,7 +8,7 @@ export const updateViewerScale = () => {
     };
   }
   const $fitInsideWindow = document.body.classList.contains('presenter-view')
-    ? document.querySelector('.viewer-pane__content')
+    ? document.querySelector<HTMLElement>('.viewer-pane__content')!
     : document.body;
 
   let previewStyles = '';
@@ -26,16 +26,18 @@ export const updateViewerScale = () => {
     const proposedWidth = fitInsideHeight * viewerRatio;
     previewStyles += `width: ${proposedWidth}px;`;
   }
-  previewStyles = document.createTextNode(`.scale-viewer #webview-viewer { ${previewStyles} }`);
+  const previewStylesNode = document.createTextNode(
+    `.scale-viewer #webview-viewer { ${previewStyles} }`,
+  );
 
   const $previewStyles = document.getElementById('preview-styles');
   if ($previewStyles) {
     $previewStyles.innerHTML = '';
-    $previewStyles.appendChild(previewStyles);
+    $previewStyles.appendChild(previewStylesNode);
   } else {
     const style = document.createElement('style');
     style.id = 'preview-styles';
-    style.appendChild(previewStyles);
+    style.appendChild(previewStylesNode);
     document.head.appendChild(style);
   }
 };

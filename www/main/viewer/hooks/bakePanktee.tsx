@@ -1,14 +1,26 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useViewerSelector } from '../store/hooks';
+import type { GetFontSize, VishraamPlacement } from '../types';
+
+/** A word of the line, with its visraam type (from the active source) if it has one. */
+type PankteeWord = {
+  text: string;
+  vishraamType?: string | null;
+};
 
 const bakePanktee = () => {
-  const { displayVishraams, larivaarAssist, larivaar, gurbaniFontSize } = useSelector(
+  const { displayVishraams, larivaarAssist, larivaar, gurbaniFontSize } = useViewerSelector(
     (state) => state.userSettings,
   );
 
-  return (getFontSize, vishraamPlacement, vishraamSource, gurmukhiString = '') => {
+  return (
+    getFontSize: GetFontSize,
+    vishraamPlacement: VishraamPlacement,
+    vishraamSource: string,
+    gurmukhiString = '',
+  ) => {
     const filterAppliedVishraam = () => {
-      const activeVishraams = {};
+      const activeVishraams: Record<number, string> = {};
       if (vishraamPlacement) {
         Object.keys(vishraamPlacement).forEach((appliedVishraam) => {
           if (vishraamSource === appliedVishraam) {
@@ -24,24 +36,25 @@ const bakePanktee = () => {
       return activeVishraams;
     };
 
-    const breakIntoWords = (fullLine) => {
-      let wordsObj = [];
+    const breakIntoWords = (fullLine: string) => {
+      let wordsObj: PankteeWord[] = [];
       const splittedWords = fullLine.split(' ');
       const activeVishraams = filterAppliedVishraam();
       wordsObj = splittedWords.map((text, index) => {
-        const wordObj = { text };
+        const wordObj: PankteeWord = { text };
         wordObj.vishraamType = activeVishraams[index] ? activeVishraams[index] : null;
         return wordObj;
       });
       return wordsObj;
     };
 
-    const getVishraamStyle = (word) => {
+    const getVishraamStyle = (word: PankteeWord) => {
       if (larivaar && larivaarAssist) {
-        return null;
+        return undefined;
       }
       return (
-        (displayVishraams && word.vishraamType && `vishraam vishraam-${word.vishraamType}`) || null
+        (displayVishraams && word.vishraamType && `vishraam vishraam-${word.vishraamType}`) ||
+        undefined
       );
     };
 
@@ -56,7 +69,7 @@ const bakePanktee = () => {
           display: 'inline-block',
           margin: '0 0.15em',
           whiteSpace: 'nowrap',
-        };
+        } as const;
       }
       return breakIntoWords(gurmukhiString).map((word, i) => (
         <React.Fragment key={i}>

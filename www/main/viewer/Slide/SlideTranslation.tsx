@@ -1,14 +1,30 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
+import { useViewerSelector } from '../store/hooks';
+import type { GetFontSize, VerseTranslations } from '../types';
 
-const SlideTranslation = ({ getFontSize, translationObj, translationHTML, lang, position }) => {
+type SlideTranslationProps = {
+  getFontSize: GetFontSize;
+  translationObj?: VerseTranslations;
+  /** A custom line's English, as HTML (shown instead of translationObj's). */
+  translationHTML?: string;
+  lang?: string;
+  /** Which content line (0–2) the translation is on, for its font size. */
+  position?: number;
+};
+
+const SlideTranslation = ({
+  getFontSize,
+  translationObj,
+  translationHTML,
+  lang,
+  position,
+}: SlideTranslationProps) => {
   const { content1FontSize, content2FontSize, content3FontSize, translationEnglishSource } =
-    useSelector((state) => state.userSettings);
-  const [translationString, setTranslationString] = useState(null);
+    useViewerSelector((state) => state.userSettings);
+  const [translationString, setTranslationString] = useState<string | null | undefined>(null);
   const fontSizes = [content1FontSize, content2FontSize, content3FontSize];
 
-  const getTranslation = (translations) => {
+  const getTranslation = (translations: VerseTranslations) => {
     switch (lang) {
       case 'translation-english':
         setTranslationString(translations.en[translationEnglishSource]);
@@ -33,7 +49,8 @@ const SlideTranslation = ({ getFontSize, translationObj, translationHTML, lang, 
 
   let translationMarkup;
 
-  const customStyle = getFontSize(fontSizes[position]);
+  // The custom-English line has no position: its font size is undefined.
+  const customStyle = getFontSize(fontSizes[position as number]);
 
   if (translationHTML) {
     translationMarkup = (
@@ -54,12 +71,6 @@ const SlideTranslation = ({ getFontSize, translationObj, translationHTML, lang, 
   }
 
   return translationMarkup;
-};
-
-SlideTranslation.propTypes = {
-  getFontSize: PropTypes.func,
-  translationObj: PropTypes.object,
-  lang: PropTypes.string,
 };
 
 export default SlideTranslation;

@@ -1,16 +1,29 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
 import anvaad from 'anvaad-js';
+import { useViewerSelector } from '../store/hooks';
+import type { GetFontSize } from '../types';
 
-const SlideTransliteration = ({ getFontSize, gurmukhiString, lang, position }) => {
-  const { content1FontSize, content2FontSize, content3FontSize } = useSelector(
+type SlideTransliterationProps = {
+  getFontSize: GetFontSize;
+  gurmukhiString: string;
+  lang: string;
+  /** Which content line (0–2) the transliteration is on, for its font size. */
+  position: number;
+};
+
+const SlideTransliteration = ({
+  getFontSize,
+  gurmukhiString,
+  lang,
+  position,
+}: SlideTransliterationProps) => {
+  const { content1FontSize, content2FontSize, content3FontSize } = useViewerSelector(
     (state) => state.userSettings,
   );
   const fontSizes = [content1FontSize, content2FontSize, content3FontSize];
-  const [transliterationString, setTransliterationString] = useState(null);
+  const [transliterationString, setTransliterationString] = useState<string | null>(null);
 
-  const getTransliteration = (gurmukhi) => {
+  const getTransliteration = (gurmukhi: string) => {
     switch (lang) {
       case 'transliteration-english':
         setTransliterationString(anvaad.translit(gurmukhi));
@@ -40,13 +53,6 @@ const SlideTransliteration = ({ getFontSize, gurmukhiString, lang, position }) =
       </div>
     )
   );
-};
-
-SlideTransliteration.propTypes = {
-  getFontSize: PropTypes.func,
-  gurmukhiString: PropTypes.string,
-  lang: PropTypes.string,
-  position: PropTypes.number,
 };
 
 export default SlideTransliteration;

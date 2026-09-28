@@ -1,14 +1,18 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
 import { PrimaryButton } from '@khalisfoundation/sikhi-ui';
 import { Icon } from '../../common/sttm-ui';
+import { sendGlobalSetting } from '../../common/ipc';
+import { useViewerSelector } from '../store/hooks';
 
 const SIZE = 40;
 const STROKE = 4;
 const RADIUS = (SIZE - STROKE) / 2;
 
-const PlayIcon = ({ size = 24 }) => (
+type PlayPauseIconProps = {
+  size?: number;
+};
+
+const PlayIcon = ({ size = 24 }: PlayPauseIconProps) => (
   <svg
     width={size}
     height={size}
@@ -23,11 +27,7 @@ const PlayIcon = ({ size = 24 }) => (
   </svg>
 );
 
-PlayIcon.propTypes = {
-  size: PropTypes.number,
-};
-
-const PauseIcon = ({ size = 24 }) => (
+const PauseIcon = ({ size = 24 }: PlayPauseIconProps) => (
   <svg
     width={size}
     height={size}
@@ -43,31 +43,17 @@ const PauseIcon = ({ size = 24 }) => (
   </svg>
 );
 
-PauseIcon.propTypes = {
-  size: PropTypes.number,
-};
-
 const AutoPlayIcon = () => {
-  const { autoplayToggle, autoplayDelay } = useSelector((state) => state.userSettings);
+  const { autoplayToggle, autoplayDelay } = useViewerSelector((state) => state.userSettings);
 
   const toggleAutoplay = () => {
-    const globalObj = {
-      actionName: 'setAutoplayToggle',
-      payload: !autoplayToggle,
-      settingType: 'userSettings',
-    };
-    global.platform.ipc.send('update-global-setting', JSON.stringify(globalObj));
+    sendGlobalSetting('setAutoplayToggle', !autoplayToggle, 'userSettings');
   };
 
-  const handleSpeedChange = (sum) => {
+  const handleSpeedChange = (sum: number) => {
     const newDelay = autoplayDelay + sum;
     if (newDelay !== autoplayDelay && newDelay > 0 && newDelay <= 20) {
-      const globalObj = {
-        actionName: 'setAutoplayDelay',
-        payload: newDelay,
-        settingType: 'userSettings',
-      };
-      global.platform.ipc.send('update-global-setting', JSON.stringify(globalObj));
+      sendGlobalSetting('setAutoplayDelay', newDelay, 'userSettings');
     }
   };
 

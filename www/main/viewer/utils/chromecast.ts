@@ -1,29 +1,24 @@
-/* global chrome */
-import { ipcRenderer } from 'electron';
 import tingle from '../../common/vendor/tingle';
+import { analytics, i18n } from '../../common/main-app';
+import { sendToMain } from '../../common/ipc';
 
-const remote = require('@electron/remote');
-
-/* eslint-disable-next-line global-require */
-
-const { i18n } = remote.require('./app');
-const analytics = remote.getGlobal('analytics');
+// `chrome.cast` is the global electron-chromecast sets up (see viewerApp).
 
 const applicationID = 'ECF05819';
 const namespace = 'urn:x-cast:com.khalis.cast.sttm.gurbani';
-let session = null;
+let session: chrome.cast.Session | null = null;
 let isCastInitialized = false;
 
 /**
  * append message to debug message window
  * @param {string} message A message string
  */
-export const appendMessage = (message) => {
+export const appendMessage = (message: unknown) => {
   /* eslint-disable-next-line no-console */
   console.log(message);
 };
 
-const displayError = (errorMessage) => {
+const displayError = (errorMessage: string) => {
   const modal = new tingle.Modal({
     footer: true,
     stickyFooter: false,
@@ -43,7 +38,7 @@ const displayError = (errorMessage) => {
 /**
  * initialization error callback
  */
-const onError = (message) => {
+const onError = (message: chrome.cast.Error) => {
   appendMessage(`onError: ${JSON.stringify(message)}`);
 
   switch (message.code) {
@@ -58,9 +53,7 @@ const onError = (message) => {
 
 // Removes quicktools, paddingtools, and svg from clonedNode of viewer
 const getSanitizedViewer = () => {
-  const viewerHtml = document.querySelector('#viewer-container')
-    ? document.querySelector('#viewer-container').cloneNode(true)
-    : '';
+  const viewerHtml = document.querySelector('#viewer-container')!.cloneNode(true) as HTMLElement;
   viewerHtml.querySelector('.viewer-logo')?.remove();
   viewerHtml.querySelector('.slide-quicktools')?.remove();
   viewerHtml.querySelector('.slide-paddingtools')?.remove();
@@ -68,7 +61,7 @@ const getSanitizedViewer = () => {
   viewerHtml.querySelector('.shabad-deck')?.removeAttribute('style');
   viewerHtml.querySelector('.verse-slide-wrapper')?.removeAttribute('style');
 
-  const slideWrapper = viewerHtml.querySelector('#viewer-container-slide-wrapper');
+  const slideWrapper = viewerHtml.querySelector<HTMLElement>('#viewer-container-slide-wrapper');
   if (slideWrapper) {
     slideWrapper.style.width = '100%';
     slideWrapper.style.height = '100%';
@@ -88,7 +81,7 @@ const onInitSuccess = () => {
 /**
  * generic success callback
  */
-const onSuccess = (message) => {
+const onSuccess = (message: string) => {
   appendMessage(`onSuccess: ${message}`);
 };
 
@@ -97,12 +90,12 @@ const onSuccess = (message) => {
  * receiver CastMessageBus message handler will be invoked
  * @param {string} message A message string
  */
-export const sendMessage = (message) => {
+export const sendMessage = (message: string) => {
   if (session != null && session.status !== 'STOPPED') {
     session.sendMessage(
       namespace,
       message,
-      onSuccess.bind(this, i18n.t('CHROMECAST.MSG_SENT') + message),
+      onSuccess.bind(undefined, i18n.t('CHROMECAST.MSG_SENT') + message),
       onError,
     );
   } else {
@@ -145,25 +138,25 @@ export const castToReceiver = () => {
   waitForAnimationComplete();
 };
 
-const onRequestSessionSuccess = (e) => {
+const onRequestSessionSuccess = (e: chrome.cast.Session) => {
   appendMessage('onRequestSessionSuccess');
   session = e;
-  ipcRenderer.send('cast-session-active');
+  sendToMain('cast-session-active');
   castToReceiver();
 };
 
 /**
  * listener for session updates
  */
-const sessionUpdateListener = (isAlive) => {
+const sessionUpdateListener = (isAlive: boolean) => {
   let message = isAlive
     ? i18n.t('CHROMECAST.SESSION_UPDATED')
     : i18n.t('CHROMECAST.SESSION_REMOVED');
-  message += `: ${session.sessionId}`;
+  message += `: ${session!.sessionId}`;
   appendMessage(message);
   if (!isAlive) {
     session = null;
-    ipcRenderer.send('cast-session-stopped');
+    sendToMain('cast-session-stopped');
   }
 };
 
@@ -172,14 +165,14 @@ const sessionUpdateListener = (isAlive) => {
  * @param {string} givenNamespace The namespace of the message
  * @param {string} message A message string
  */
-const receiverMessage = (givenNamespace, message) => {
+const receiverMessage = (givenNamespace: string, message: string) => {
   appendMessage(`receiverMessage: ${givenNamespace}, ${message}`);
 };
 
 /**
  * session listener during initialization
  */
-const sessionListener = (e) => {
+const sessionListener = (e: chrome.cast.Session) => {
   appendMessage(`New session ID:${e.sessionId}`);
   session = e;
   session.addUpdateListener(sessionUpdateListener);
@@ -189,7 +182,7 @@ const sessionListener = (e) => {
 /**
  * receiver listener during initialization
  */
-const receiverListener = (e) => {
+const receiverListener = (e: string) => {
   if (e === chrome.cast.ReceiverAvailability.AVAILABLE) {
     appendMessage('receiver found');
   } else {
@@ -229,8 +222,8 @@ export const requestSession = () => {
  * stop app/session
  */
 export const stopApp = () => {
-  ipcRenderer.send('cast-session-stopped');
-  session.stop(onStopAppSuccess, onError);
+  sendToMain('cast-session-stopped');
+  session!.stop(onStopAppSuccess, onError);
 };
 
 export { tingle };

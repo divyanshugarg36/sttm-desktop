@@ -1,11 +1,16 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
 import ReactHtmlParser from 'html-react-parser';
+import { useViewerSelector } from '../store/hooks';
+import type { GetFontSize } from '../types';
 
-const SlideAnnouncement = ({ getFontSize }) => {
-  const { announcementsFontSize, leftAlign } = useSelector((state) => state.userSettings);
-  const { isMiscSlideGurmukhi, miscSlideText, isAnnouncement } = useSelector(
+type SlideAnnouncementProps = {
+  getFontSize: GetFontSize;
+  isMiscSlide?: boolean;
+};
+
+const SlideAnnouncement = ({ getFontSize }: SlideAnnouncementProps) => {
+  const { announcementsFontSize, leftAlign } = useViewerSelector((state) => state.userSettings);
+  const { isMiscSlideGurmukhi, miscSlideText, isAnnouncement } = useViewerSelector(
     (state) => state.navigator,
   );
   let gurmukhi = true;
@@ -24,10 +29,6 @@ const SlideAnnouncement = ({ getFontSize }) => {
       </span>
     </div>
   );
-};
-
-SlideAnnouncement.propTypes = {
-  getFontSize: PropTypes.func,
 };
 
 export default SlideAnnouncement;

@@ -1,15 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
+import { useViewerSelector } from '../store/hooks';
+import type { GetFontSize, VerseTranslations } from '../types';
 
-const SlideTeeka = ({ getFontSize, teekaObj, position }) => {
-  const { content1FontSize, content2FontSize, content3FontSize, teekaSource } = useSelector(
+type SlideTeekaProps = {
+  getFontSize: GetFontSize;
+  teekaObj: VerseTranslations;
+  /** Which content line (0–2) the teeka is on, for its font size. */
+  position: number;
+};
+
+const SlideTeeka = ({ getFontSize, teekaObj, position }: SlideTeekaProps) => {
+  const { content1FontSize, content2FontSize, content3FontSize, teekaSource } = useViewerSelector(
     (state) => state.userSettings,
   );
-  const [teekaString, setTeekaString] = useState(null);
+  const [teekaString, setTeekaString] = useState<string | null>(null);
   const fontSizes = [content1FontSize, content2FontSize, content3FontSize];
 
-  const getTeeka = (inputTeeka) => {
+  const getTeeka = (inputTeeka: VerseTranslations) => {
     if (inputTeeka && inputTeeka.pu) {
       if (inputTeeka.pu[teekaSource]) {
         setTeekaString(inputTeeka.pu[teekaSource]);
@@ -32,12 +39,6 @@ const SlideTeeka = ({ getFontSize, teekaObj, position }) => {
       </div>
     )
   );
-};
-
-SlideTeeka.propTypes = {
-  getFontSize: PropTypes.func,
-  teekaObj: PropTypes.object,
-  position: PropTypes.number,
 };
 
 export default SlideTeeka;

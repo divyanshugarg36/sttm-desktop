@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-function ViewerLogo(props) {
+function ViewerLogo(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       className="prefix__logo"

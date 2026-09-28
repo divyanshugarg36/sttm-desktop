@@ -1,11 +1,26 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { PrimaryButton } from '@khalisfoundation/sikhi-ui';
 import Icon from '../../common/sttm-ui/icon';
 
+type ToolStepperProps = {
+  label: string;
+  value: number;
+  onDecrease: () => void;
+  onIncrease: () => void;
+  min: number;
+  max: number;
+};
+
 // A − value + row for the viewer's tool popups (font size, padding), styled
 // like sttm-next's shabad controls: round muted buttons around the value.
-export const ToolStepper = ({ label, value, onDecrease, onIncrease, min, max }) => (
+export const ToolStepper = ({
+  label,
+  value,
+  onDecrease,
+  onIncrease,
+  min,
+  max,
+}: ToolStepperProps) => (
   <div className="tool-stepper">
     <PrimaryButton
       variant="muted"
@@ -32,12 +47,3 @@ export const ToolStepper = ({ label, value, onDecrease, onIncrease, min, max }) 
     </PrimaryButton>
   </div>
 );
-
-ToolStepper.propTypes = {
-  label: PropTypes.string,
-  value: PropTypes.number,
-  onDecrease: PropTypes.func,
-  onIncrease: PropTypes.func,
-  min: PropTypes.number,
-  max: PropTypes.number,
-};

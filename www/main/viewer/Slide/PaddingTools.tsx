@@ -1,16 +1,17 @@
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 
 import { PrimaryButton, Tooltip } from '@khalisfoundation/sikhi-ui';
-import { setPaddingToolsOpen } from '../../common/store/redux/viewerSettingsSlice';
+import {
+  setPaddingToolsOpen,
+  type ContainerPadding,
+} from '../../common/store/redux/viewerSettingsSlice';
 import Icon from '../../common/sttm-ui/icon';
+import { i18n } from '../../common/main-app';
+import { sendGlobalSetting } from '../../common/ipc';
+import { useViewerDispatch, useViewerSelector } from '../store/hooks';
 import { ToolStepper } from './ToolStepper';
 
-const remote = require('@electron/remote');
-
-const { i18n } = remote.require('./app');
-
-const PADDING_VARIANTS = ['top', 'right', 'bottom', 'left'];
+const PADDING_VARIANTS: (keyof ContainerPadding)[] = ['top', 'right', 'bottom', 'left'];
 const PADDING_STEP = 4;
 const PADDING_MAX = 48;
 const PADDING_MIN = 0;
@@ -18,21 +19,14 @@ const PADDING_MIN = 0;
 // Padding Tools: a button in the viewer's corner that opens a popup (as
 // sttm-next's shabad controls do) with a − value + stepper per side.
 const PaddingTools = () => {
-  const { containerPadding, paddingToolsOpen } = useSelector((state) => state.viewerSettings);
-  const dispatch = useDispatch();
+  const { containerPadding, paddingToolsOpen } = useViewerSelector((state) => state.viewerSettings);
+  const dispatch = useViewerDispatch();
 
-  const changePadding = (variant, step) => {
-    const current = parseInt(containerPadding[variant], 10);
+  const changePadding = (variant: keyof ContainerPadding, step: number) => {
+    const current = parseInt(String(containerPadding[variant]), 10);
     const value = Math.min(PADDING_MAX, Math.max(PADDING_MIN, current + step));
     if (value !== current) {
-      global.platform.ipc.send(
-        'update-global-setting',
-        JSON.stringify({
-          actionName: 'setPadding',
-          payload: { type: variant, value },
-          settingType: 'viewerSettings',
-        }),
-      );
+      sendGlobalSetting('setPadding', { type: variant, value }, 'viewerSettings');
     }
   };
 
@@ -55,7 +49,7 @@ const PaddingTools = () => {
                 </span>
                 <ToolStepper
                   label={`${variant} padding`}
-                  value={parseInt(containerPadding[variant], 10)}
+                  value={parseInt(String(containerPadding[variant]), 10)}
                   min={PADDING_MIN}
                   max={PADDING_MAX}
                   onDecrease={() => changePadding(variant, -PADDING_STEP)}

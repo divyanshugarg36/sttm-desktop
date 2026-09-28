@@ -1,6 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
 import { CSSTransition } from 'react-transition-group';
 
 import SlideTeeka from './SlideTeeka';
@@ -8,11 +6,23 @@ import SlideGurbani from './SlideGurbani';
 import SlideTranslation from './SlideTranslation';
 import SlideTransliteration from './SlideTransliteration';
 import SlideAnnouncement from './SlideAnnouncement';
-import platform from '../../desktop_scripts';
+import { sendToMain } from '../../common/ipc';
+import { useViewerSelector } from '../store/hooks';
+import type { NextLine, SlideLine, VerseTranslations, VishraamPlacement } from '../types';
 
-global.platform = platform;
+type SlideProps = {
+  /** The line to show; none on an empty slide. */
+  verseObj?: SlideLine | null;
+  nextLineObj?: NextLine | null;
+  isMiscSlide: boolean;
+  /** The empty slide's overlay colour (unused). */
+  bgColor?: string;
+  /** Registers the line's element, so Akhand Paatth can scroll to it. */
+  updateVerseRef?: (verseId: number | null, ref: HTMLDivElement | null) => void;
+  slideIndex?: number;
+};
 
-const Slide = React.memo(({ verseObj, nextLineObj, isMiscSlide, updateVerseRef }) => {
+const Slide = React.memo(({ verseObj, nextLineObj, isMiscSlide, updateVerseRef }: SlideProps) => {
   const {
     larivaar,
     larivaarAssist,
@@ -29,13 +39,13 @@ const Slide = React.memo(({ verseObj, nextLineObj, isMiscSlide, updateVerseRef }
     content3Visibility,
     akhandpatt,
     slideTransitions,
-  } = useSelector((state) => state.userSettings);
+  } = useViewerSelector((state) => state.userSettings);
 
-  const { activeVerseId } = useSelector((state) => state.navigator);
+  const { activeVerseId } = useViewerSelector((state) => state.navigator);
   const [showVerse, setShowVerse] = useState(true);
-  const [orderMarkup, setOrderMarkup] = useState(null);
+  const [orderMarkup, setOrderMarkup] = useState<React.ReactNode[] | null>(null);
 
-  const activeVerseRef = useRef(null);
+  const activeVerseRef = useRef<HTMLHeadingElement>(null);
 
   const visibilityStates = [content1Visibility, content2Visibility, content3Visibility];
 
@@ -58,7 +68,7 @@ const Slide = React.memo(({ verseObj, nextLineObj, isMiscSlide, updateVerseRef }
   const getVishraamType = () =>
     vishraamType === 'colored-words' ? 'vishraam-colored' : 'vishraam-gradient';
 
-  const getFontSize = (verseType) => ({ fontSize: `${verseType}vh` });
+  const getFontSize = (verseType: number) => ({ fontSize: `${verseType}vh` });
 
   useEffect(() => {
     if (akhandpatt) {
@@ -69,7 +79,7 @@ const Slide = React.memo(({ verseObj, nextLineObj, isMiscSlide, updateVerseRef }
 
     const timeoutId = setTimeout(() => {
       setShowVerse(true);
-      global.platform.ipc.send('cast-to-receiver');
+      sendToMain('cast-to-receiver');
     }, 200);
 
     // eslint-disable-next-line consistent-return
@@ -96,7 +106,7 @@ const Slide = React.memo(({ verseObj, nextLineObj, isMiscSlide, updateVerseRef }
             verseObj.Translations && (
               <SlideTeeka
                 getFontSize={getFontSize}
-                teekaObj={JSON.parse(verseObj.Translations)}
+                teekaObj={JSON.parse(verseObj.Translations) as VerseTranslations}
                 key={`line-${index}`}
                 position={index}
               />
@@ -109,7 +119,7 @@ const Slide = React.memo(({ verseObj, nextLineObj, isMiscSlide, updateVerseRef }
             verseObj.Translations && (
               <SlideTranslation
                 getFontSize={getFontSize}
-                translationObj={JSON.parse(verseObj.Translations)}
+                translationObj={JSON.parse(verseObj.Translations) as VerseTranslations}
                 key={`line-${index}`}
                 lang={content}
                 position={index}
@@ -155,7 +165,7 @@ const Slide = React.memo(({ verseObj, nextLineObj, isMiscSlide, updateVerseRef }
         className={akhandpatt ? '' : 'verse-slide-wrapper'}
         id={`verse-${verseObj.ID}`}
         ref={(el) => {
-          updateVerseRef(verseObj.ID, el);
+          updateVerseRef?.(verseObj.ID, el);
         }}
         data-verseid={verseObj.ID}
       >
@@ -186,7 +196,9 @@ const Slide = React.memo(({ verseObj, nextLineObj, isMiscSlide, updateVerseRef }
                       getFontSize={getFontSize}
                       gurmukhiString={verseObj.Gurmukhi}
                       larivaar={larivaar}
-                      vishraamPlacement={verseObj.Visraam ? JSON.parse(verseObj.Visraam) : {}}
+                      vishraamPlacement={
+                        verseObj.Visraam ? (JSON.parse(verseObj.Visraam) as VishraamPlacement) : {}
+                      }
                       vishraamSource={vishraamSource}
                     />
                   </h1>
@@ -206,7 +218,11 @@ const Slide = React.memo(({ verseObj, nextLineObj, isMiscSlide, updateVerseRef }
                       getFontSize={getFontSize}
                       gurmukhiString={nextLineObj.Gurmukhi}
                       larivaar={larivaar}
-                      vishraamPlacement={nextLineObj.Visraam ? JSON.parse(nextLineObj.Visraam) : {}}
+                      vishraamPlacement={
+                        nextLineObj.Visraam
+                          ? (JSON.parse(nextLineObj.Visraam) as VishraamPlacement)
+                          : {}
+                      }
                       vishraamSource={vishraamSource}
                     />
                   </div>
@@ -221,13 +237,5 @@ const Slide = React.memo(({ verseObj, nextLineObj, isMiscSlide, updateVerseRef }
 });
 
 Slide.displayName = 'Slide';
-
-Slide.propTypes = {
-  verseObj: PropTypes.object,
-  nextLineObj: PropTypes.object,
-  isMiscSlide: PropTypes.bool,
-  bgColor: PropTypes.string,
-  updateVerseRef: PropTypes.func,
-};
 
 export default Slide;

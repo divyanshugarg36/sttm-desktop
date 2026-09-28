@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import { useSelector, useDispatch } from 'react-redux';
 
 import { PrimaryButton, SimpleSelect, Tooltip } from '@khalisfoundation/sikhi-ui';
 import {
@@ -10,76 +8,73 @@ import {
   toGroupedSelectOptions,
 } from '../../common/utils';
 import { setQuickToolsOpen } from '../../common/store/redux/viewerSettingsSlice';
-import platform from '../../desktop_scripts';
+import type { UserSettingsState } from '../../common/store/redux/userSettingsSlice';
+import type { BaniOptionGroup } from '../../banidb/constants';
 import Icon from '../../common/sttm-ui/icon';
+import { i18n } from '../../common/main-app';
+import { sendGlobalSetting } from '../../common/ipc';
+import { useViewerDispatch, useViewerSelector } from '../store/hooks';
 import { ToolStepper } from './ToolStepper';
-
-const remote = require('@electron/remote');
-
-const { i18n } = remote.require('./app');
-
-global.platform = platform;
 
 const MIN_FONT_SIZE = 1;
 const MAX_FONT_SIZE = 20;
 
-const sendUserSetting = (actionName, payload) =>
-  global.platform.ipc.send(
-    'update-global-setting',
-    JSON.stringify({ actionName, payload, settingType: 'userSettings' }),
-  );
+type QuickToolsProps = {
+  isMiscSlide: boolean;
+  baniOptions: BaniOptionGroup[];
+};
 
 // Quick Tools: a cog in the viewer's corner that opens a popup (as sttm-next's
 // shabad controls do) with, per line of the slide, what it shows, whether it
 // shows, and its font size.
-const QuickTools = ({ isMiscSlide, baniOptions }) => {
-  const userSettings = useSelector((state) => state.userSettings);
+const QuickTools = ({ isMiscSlide, baniOptions }: QuickToolsProps) => {
+  const userSettings = useViewerSelector((state) => state.userSettings);
 
-  const { quickToolsOpen } = useSelector((state) => state.viewerSettings);
-  const dispatch = useDispatch();
+  const { quickToolsOpen } = useViewerSelector((state) => state.viewerSettings);
+  const dispatch = useViewerDispatch();
 
-  const [prevOrder, setPrevOrder] = useState([]);
+  const [prevOrder, setPrevOrder] = useState<string[]>([]);
 
-  const [baniOrder, setBaniOrder] = useState([
+  const [baniOrder, setBaniOrder] = useState<string[]>([
     'gurbani',
     userSettings.content1,
     userSettings.content2,
     userSettings.content3,
   ]);
 
-  const { disabledContent } = useSelector((state) => state.navigator);
+  const { disabledContent } = useViewerSelector((state) => state.navigator);
 
-  const dropdownLabel = (option) => i18n.t(contentLabelKey(option));
+  const dropdownLabel = (option: string) => i18n.t(contentLabelKey(option));
 
   // A line's settings: Bani / Announcements by name, the content lines by
   // position (content1..3).
-  const settingNames = (order, index, setting) =>
-    index > 0
+  const settingNames = (order: string, index: number, setting: 'FontSize' | 'Visibility') =>
+    (index > 0
       ? { state: `content${index}${setting}`, action: `setContent${index}${setting}` }
       : {
           state: `${order}${setting}`,
           action: `set${convertToCamelCase(`${order}-${setting}`, true)}`,
-        };
+        }) as { state: keyof UserSettingsState; action: string };
 
-  const changeFontSize = (order, index, step) => {
+  const changeFontSize = (order: string, index: number, step: number) => {
     const { state, action } = settingNames(order, index, 'FontSize');
-    const current = parseInt(userSettings[state], 10);
+    const current = parseInt(String(userSettings[state]), 10);
     const next = Math.min(MAX_FONT_SIZE, Math.max(MIN_FONT_SIZE, current + step));
     if (next !== current) {
-      sendUserSetting(action, next);
+      sendGlobalSetting(action, next);
     }
   };
 
-  const toggleVisibility = (order, index) => {
+  const toggleVisibility = (order: string, index: number) => {
     const { state, action } = settingNames(order, index, 'Visibility');
-    sendUserSetting(action, !userSettings[state]);
+    sendGlobalSetting(action, !userSettings[state]);
   };
 
-  const changeContent = (index, value) => {
+  const changeContent = (index: number, value: string) => {
     const newOrder = [...baniOrder];
     newOrder[index] = value;
     setBaniOrder(newOrder);
-    sendUserSetting(`setContent${index}`, value);
+    sendGlobalSetting(`setContent${index}`, value);
   };
 
   useEffect(() => {
@@ -97,7 +92,7 @@ const QuickTools = ({ isMiscSlide, baniOptions }) => {
     setBaniOrder(['gurbani', userSettings.content1, userSettings.content2, userSettings.content3]);
   }, [userSettings.content1, userSettings.content2, userSettings.content3]);
 
-  const renderLine = (order, index) => {
+  const renderLine = (order: string, index: number) => {
     const label = dropdownLabel(order);
     const isContentLine = index > 0;
     const isVisible =
@@ -133,7 +128,7 @@ const QuickTools = ({ isMiscSlide, baniOptions }) => {
         )}
         <ToolStepper
           label={`${label} font size`}
-          value={parseInt(userSettings[settingNames(order, index, 'FontSize').state], 10)}
+          value={parseInt(String(userSettings[settingNames(order, index, 'FontSize').state]), 10)}
           min={MIN_FONT_SIZE}
           max={MAX_FONT_SIZE}
           onDecrease={() => changeFontSize(order, index, -1)}
@@ -172,11 +167,6 @@ const QuickTools = ({ isMiscSlide, baniOptions }) => {
       </Tooltip>
     </div>
   );
-};
-
-QuickTools.propTypes = {
-  isMiscSlide: PropTypes.bool,
-  baniOptions: PropTypes.array,
 };
 
 export default QuickTools;
