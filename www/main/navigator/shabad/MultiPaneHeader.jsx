@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import { classNames } from '../../common/utils';
 import { useSelector, useDispatch } from 'react-redux';
 import { PrimaryButton, SimpleSelect } from '@khalisfoundation/sikhi-ui';
+import { classNames } from '../../common/utils';
 
 import FavShabadIcon from './FavShabadIcon';
 import ArrowIcon from './ArrowIcon';
@@ -123,6 +123,7 @@ const MultiPaneHeader = ({ data, className }) => {
 };
 
 MultiPaneHeader.propTypes = {
+  className: PropTypes.string,
   data: PropTypes.any,
 };
 export default MultiPaneHeader;

@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
 import { PrimaryButton } from '@khalisfoundation/sikhi-ui';
 
@@ -105,10 +106,10 @@ export const QuickInsert = ({ className }) => {
           shortcutTray ? 'shortcut-drawer-active' : 'shortcut-drawer-inactive'
         }`}
       >
-        {trayItems.map(({ key, label, className, onClick }) => (
+        {trayItems.map(({ key, label, className: itemClassName, onClick }) => (
           <PrimaryButton
             key={key}
-            className={classNames('tray-item-icon', className)}
+            className={classNames('tray-item-icon', itemClassName)}
             variant="amber"
             size="sm"
             shape="rounded-md"
@@ -130,4 +131,8 @@ export const QuickInsert = ({ className }) => {
       </div>
     </div>
   );
+};
+
+QuickInsert.propTypes = {
+  className: PropTypes.string,
 };

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
 import { FatehTab, FatehTabList, FatehTabs, SimpleSelect } from '@khalisfoundation/sikhi-ui';
 
@@ -73,4 +74,8 @@ export const MiscHeader = ({ className }) => {
       </div>
     </div>
   );
+};
+
+MiscHeader.propTypes = {
+  className: PropTypes.string,
 };

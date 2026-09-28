@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { PrimaryButton } from '@khalisfoundation/sikhi-ui';
 
@@ -39,6 +40,10 @@ const ShabadHeader = ({ className }) => {
       <ArrowIcon paneId={defaultPaneId} />
     </div>
   );
+};
+
+ShabadHeader.propTypes = {
+  className: PropTypes.string,
 };
 
 export default ShabadHeader;

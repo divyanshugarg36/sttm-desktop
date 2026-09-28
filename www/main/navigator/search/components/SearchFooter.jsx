@@ -1,7 +1,8 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
-import { classNames } from '../../../common/utils';
 import { PrimaryButton } from '@khalisfoundation/sikhi-ui';
+import { classNames } from '../../../common/utils';
 import { setDefaultPaneId } from '../../../common/store/redux/userSettingsSlice';
 
 const remote = require('@electron/remote');
@@ -67,6 +68,10 @@ const SearchFooter = ({ className }) => {
       )}
     </div>
   );
+};
+
+SearchFooter.propTypes = {
+  className: PropTypes.string,
 };
 
 export default SearchFooter;

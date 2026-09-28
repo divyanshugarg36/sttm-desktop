@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
 import { ipcRenderer } from 'electron';
 import { Virtuoso } from 'react-virtuoso';
@@ -674,6 +675,10 @@ const SearchContent = ({ className }) => {
       </div>
     </div>
   );
+};
+
+SearchContent.propTypes = {
+  className: PropTypes.string,
 };
 
 export default SearchContent;

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { PrimaryButton } from '@khalisfoundation/sikhi-ui';
 
@@ -32,4 +33,8 @@ export const MiscFooter = ({ className }) => {
       </div>
     </div>
   );
+};
+
+MiscFooter.propTypes = {
+  className: PropTypes.string,
 };

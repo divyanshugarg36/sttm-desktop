@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { classNames } from '../../common/utils';
 import { SimpleSelect } from '@khalisfoundation/sikhi-ui';
+import { classNames } from '../../common/utils';
 import ShabadHeader from '../shabad/ShabadHeader';
 import {
   setMinimizedBySingleDisplay,

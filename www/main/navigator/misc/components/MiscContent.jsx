@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { FavoritePane } from './favoritePane';
 import { HistoryPane } from './HistoryPane';
@@ -16,4 +17,8 @@ export const MiscContent = ({ className }) => {
       <FavoritePane className={currentMiscPanel === 'Favorite' ? '' : 'd-none'} />
     </div>
   );
+};
+
+MiscContent.propTypes = {
+  className: PropTypes.string,
 };

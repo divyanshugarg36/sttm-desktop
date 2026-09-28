@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
-import { classNames } from '../../common/utils';
+import PropTypes from 'prop-types';
 import { ipcRenderer } from 'electron';
+import { classNames } from '../../common/utils';
 
 const ViewerContent = ({ className }) => {
   const webviewRef = useRef(null);
@@ -39,6 +40,10 @@ const ViewerContent = ({ className }) => {
       />
     </div>
   );
+};
+
+ViewerContent.propTypes = {
+  className: PropTypes.string,
 };
 
 export default ViewerContent;
