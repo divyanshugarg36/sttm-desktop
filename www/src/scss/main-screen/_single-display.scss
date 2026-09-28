@@ -38,6 +38,11 @@
   .pane .pane-content > div {
     padding: 0;
   }
+
+  // Docked to the screen edge: no rounded corners on the search bar.
+  .search-pane .library-search-bar {
+    border-radius: 0;
+  }
 }
 
 .launchpad .single-display-pane {
