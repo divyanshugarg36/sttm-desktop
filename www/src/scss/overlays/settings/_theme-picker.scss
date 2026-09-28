@@ -1,64 +1,102 @@
-// The Settings overlay's theme picker: colour, background and video themes
-// as tiles, on a gradient Box.
+// The Settings overlay's theme picker: colour, background, special and video
+// themes as a grid of sikhi-ui ButtonCard tiles, then the user's own
+// background images.
 
 .theme-picker {
   border-radius: 12px;
   margin-bottom: 12px;
   max-width: 500px;
-  padding: 12px;
+  padding: 12px 24px 24px;
 
-  &__tiles {
-    display: flex;
-    flex-wrap: wrap;
+  &__section + &__section {
+    margin-top: 12px;
+  }
+
+  &__title {
+    @include section-title;
+    padding: 6px 0 12px;
   }
 
   &__note {
     color: var(--sui-semantic-foreground-muted);
     font-size: var(--sui-typography-font-sizes-xs);
+    letter-spacing: normal;
     margin-left: 6px;
+    text-transform: none;
+    word-spacing: normal;
+  }
+
+  // Three tiles a row, from the left.
+  &__tiles {
+    display: grid;
+    gap: 12px;
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  // The theme's colours / image come inline (Tile). ButtonCard's hover resets
+  // the whole background, so keep an image's fit on hover too.
+  &__tile,
+  &__tile:hover {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+
+  &__tile {
+    font-size: var(--sui-typography-font-sizes-sm);
+    height: 80px;
+    text-shadow: 1px 1px 1px rgba(1, 1, 1, 0.5);
+    text-transform: capitalize;
+    width: 100%;
+
+    // The video fills the tile, its name over it.
+    &--video {
+      overflow: hidden;
+      padding: 0;
+      position: relative;
+    }
+  }
+
+  &__upload {
+    align-items: center;
+    display: flex;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  // A user background, with its remove button in the corner.
+  &__custom {
+    position: relative;
+  }
+
+  &__remove {
+    position: absolute;
+    right: 6px;
+    top: 6px;
   }
 }
 
-.video-thumbnail-settings {
-  position: relative;
+// A looping video with a caption over it (VideoWithOverlay).
+.video-tile {
+  inset: 0;
+  position: absolute;
 
-  // Block, so no gap under the video; as wide as its tile.
-  video {
+  &__video {
     display: block;
+    height: 100%;
+    object-fit: cover;
     width: 100%;
   }
 
-  .overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    // A dark wash so the theme's name reads over the video.
+  // A dark wash so the name reads over the video.
+  &__caption {
+    align-items: center;
     background: rgba(0, 0, 0, 0.5);
     color: white;
     display: flex;
+    inset: 0;
     justify-content: center;
-    align-items: center;
     pointer-events: none;
-  }
-}
-
-.video-theme-instance {
-  padding: 0;
-  width: 200px;
-  margin: 10px;
-  border-radius: 5px;
-  cursor: pointer;
-
-  &:hover {
-    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
-    margin-bottom: 14px;
-    margin-top: 6px;
-  }
-
-  video,
-  .overlay {
-    border-radius: 5px;
+    position: absolute;
   }
 }

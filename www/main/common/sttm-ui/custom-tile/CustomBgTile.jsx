@@ -8,26 +8,26 @@ const CustomBgTile = ({ customBg, onApply, onRemove }) => {
     backgroundImage: `url('${tile['background-image']}')`,
   });
 
+  // A user background in the theme picker, with a remove button in its corner.
   return (
-    <>
+    <div className="theme-picker__custom">
       <ButtonCard
-        key={customBg.name}
         onClick={onApply}
-        className="theme-instance"
+        className="theme-picker__tile"
         style={getCustomBgImageForTile(customBg)}
       />
       <PrimaryButton
-        key={customBg.backgroundImage}
-        className="delete-button"
+        className="theme-picker__remove"
         variant="destructive"
         mode="icon"
         size="xs"
         shape="circle"
+        aria-label="Remove background"
         onClick={onRemove}
       >
         <Icon name="trash" />
       </PrimaryButton>
-    </>
+    </div>
   );
 };
 

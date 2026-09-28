@@ -61,12 +61,7 @@
   }
 
   &__title {
-    color: var(--sui-semantic-foreground-muted);
-    font-size: var(--sui-typography-font-sizes-xs);
-    letter-spacing: 0.2em;
-    margin: 0;
+    @include section-title;
     padding: 6px 24px;
-    text-transform: uppercase;
-    word-spacing: 0.2em;
   }
 }
