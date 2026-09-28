@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
 import { PrimaryButton, SimpleSelect } from '@khalisfoundation/sikhi-ui';
+import { classNames } from '../../common/utils';
 
 import FavShabadIcon from './FavShabadIcon';
 import ArrowIcon from './ArrowIcon';
@@ -13,7 +14,7 @@ const remote = require('@electron/remote');
 
 const { i18n } = remote.require('./app');
 
-const MultiPaneHeader = ({ data }) => {
+const MultiPaneHeader = ({ data, className }) => {
   const paneId = data.multiPaneId;
   const navigatorState = useSelector((state) => state.navigator);
   const paneAttributes = navigatorState[`pane${paneId}`];
@@ -84,7 +85,7 @@ const MultiPaneHeader = ({ data }) => {
   };
 
   return (
-    <div className={`shabad-pane-header pane-${paneId}`}>
+    <div className={classNames(className, 'shabad-pane-header', `pane-${paneId}`)}>
       <div className="pane-info">
         <span className="pane-symbol">{paneId}</span>
         <PrimaryButton variant="ghost" mode="icon" size="xs" onClick={lockPane} ref={lockIcon}>
@@ -122,6 +123,7 @@ const MultiPaneHeader = ({ data }) => {
 };
 
 MultiPaneHeader.propTypes = {
+  className: PropTypes.string,
   data: PropTypes.any,
 };
 export default MultiPaneHeader;

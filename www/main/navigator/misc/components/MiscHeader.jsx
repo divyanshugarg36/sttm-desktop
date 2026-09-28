@@ -1,9 +1,11 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
 import { FatehTab, FatehTabList, FatehTabs, SimpleSelect } from '@khalisfoundation/sikhi-ui';
 
 import { setCurrentMiscPanel, setHistoryOrder } from '../../../common/store/redux/navigatorSlice';
 import { Icon } from '../../../common/sttm-ui';
+import { classNames } from '../../../common/utils';
 
 const remote = require('@electron/remote');
 
@@ -11,7 +13,7 @@ const { i18n } = remote.require('./app');
 
 const analytics = remote.getGlobal('analytics');
 
-export const MiscHeader = () => {
+export const MiscHeader = ({ className }) => {
   const { currentMiscPanel, historyOrder, verseHistory } = useSelector((state) => state.navigator);
   const dispatch = useDispatch();
 
@@ -34,7 +36,7 @@ export const MiscHeader = () => {
   };
 
   return (
-    <div className="misc-header">
+    <div className={classNames(className, 'misc-header')}>
       <FatehTabs
         className="misc-header-nav"
         index={tabs.findIndex(({ panel }) => panel === currentMiscPanel)}
@@ -72,4 +74,8 @@ export const MiscHeader = () => {
       </div>
     </div>
   );
+};
+
+MiscHeader.propTypes = {
+  className: PropTypes.string,
 };

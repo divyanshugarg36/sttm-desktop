@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
 import { PrimaryButton } from '@khalisfoundation/sikhi-ui';
 
@@ -15,7 +16,7 @@ const { i18n } = remote.require('./app');
 const analytics = remote.getGlobal('analytics');
 
 // The Quick Insert toggle and its drawer of slides (Waheguru, Mool Mantra, etc).
-export const QuickInsert = () => {
+export const QuickInsert = ({ className }) => {
   const {
     displayWaheguruSlide: waheguruSlide,
     displayMoolMantraSlide: moolMantraSlide,
@@ -85,6 +86,7 @@ export const QuickInsert = () => {
   return (
     <div
       className={classNames(
+        className,
         'quick-insert',
         shortcutTray ? 'shortcut-tray-active' : 'shortcut-tray-inactive',
       )}
@@ -104,10 +106,10 @@ export const QuickInsert = () => {
           shortcutTray ? 'shortcut-drawer-active' : 'shortcut-drawer-inactive'
         }`}
       >
-        {trayItems.map(({ key, label, className, onClick }) => (
+        {trayItems.map(({ key, label, className: itemClassName, onClick }) => (
           <PrimaryButton
             key={key}
-            className={classNames('tray-item-icon', className)}
+            className={classNames('tray-item-icon', itemClassName)}
             variant="amber"
             size="sm"
             shape="rounded-md"
@@ -129,4 +131,8 @@ export const QuickInsert = () => {
       </div>
     </div>
   );
+};
+
+QuickInsert.propTypes = {
+  className: PropTypes.string,
 };

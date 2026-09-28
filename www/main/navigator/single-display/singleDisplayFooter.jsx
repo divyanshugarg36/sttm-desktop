@@ -5,7 +5,7 @@ import { classNames } from '../../common/utils';
 import { setSingleDisplayActiveTab } from '../../common/store/redux/navigatorSlice';
 import { Icon } from '../../common/sttm-ui';
 
-export const singleDisplayFooter = () => {
+export const singleDisplayFooter = ({ className }) => {
   const { singleDisplayActiveTab } = useSelector((state) => state.navigator);
   const dispatch = useDispatch();
   const openSearchPane = () => {
@@ -36,7 +36,7 @@ export const singleDisplayFooter = () => {
   };
 
   return (
-    <div className="single-display-switches">
+    <div className={classNames(className, 'single-display-switches')}>
       <PrimaryButton
         className={classNames('tab-switch', singleDisplayActiveTab === 'search' && 'active')}
         variant={singleDisplayActiveTab === 'search' ? 'default' : 'ghost'}

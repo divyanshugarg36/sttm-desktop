@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
 import { ipcRenderer } from 'electron';
 import { Virtuoso } from 'react-virtuoso';
@@ -38,7 +39,7 @@ const remote = require('@electron/remote');
 const { i18n } = remote.require('./app');
 const analytics = remote.getGlobal('analytics');
 
-const SearchContent = () => {
+const SearchContent = ({ className }) => {
   const changeActiveShabad = useNewShabad();
 
   const {
@@ -462,7 +463,7 @@ const SearchContent = () => {
   );
 
   return (
-    <div className="search-content-container">
+    <div className={classNames(className, 'search-content-container')}>
       <LibrarySearchBar
         query={query}
         setQuery={setQuery}
@@ -674,6 +675,10 @@ const SearchContent = () => {
       </div>
     </div>
   );
+};
+
+SearchContent.propTypes = {
+  className: PropTypes.string,
 };
 
 export default SearchContent;

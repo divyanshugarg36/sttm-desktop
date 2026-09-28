@@ -1,15 +1,17 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { PrimaryButton } from '@khalisfoundation/sikhi-ui';
 
 import { setVerseHistory } from '../../../common/store/redux/navigatorSlice';
 import { Icon } from '../../../common/sttm-ui';
+import { classNames } from '../../../common/utils';
 
 const remote = require('@electron/remote');
 
 const { i18n } = remote.require('./app');
 
-export const MiscFooter = () => {
+export const MiscFooter = ({ className }) => {
   const dispatch = useDispatch();
 
   const clearHistory = () => {
@@ -17,7 +19,7 @@ export const MiscFooter = () => {
   };
 
   return (
-    <div className="misc-footer">
+    <div className={classNames(className, 'misc-footer')}>
       <div className="clear-pane">
         <PrimaryButton
           className="clear-history"
@@ -31,4 +33,8 @@ export const MiscFooter = () => {
       </div>
     </div>
   );
+};
+
+MiscFooter.propTypes = {
+  className: PropTypes.string,
 };

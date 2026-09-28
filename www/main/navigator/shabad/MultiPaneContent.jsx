@@ -13,7 +13,8 @@ const remote = require('@electron/remote');
 
 const { i18n } = remote.require('./app');
 
-const MultiPaneContent = ({ data }) => {
+// What a pane shows: its shabad, history, favourites or misc slides.
+const MultiPaneView = ({ data }) => {
   const paneId = data.multiPaneId;
   const navigatorState = useSelector((state) => state.navigator);
   const paneAttributes = navigatorState[`pane${paneId}`];
@@ -127,7 +128,19 @@ const MultiPaneContent = ({ data }) => {
   }
 };
 
+MultiPaneView.propTypes = {
+  data: PropTypes.any,
+};
+
+// One root for the view, as the pane slot (`className` is its pane-content class).
+const MultiPaneContent = ({ data, className }) => (
+  <div className={className}>
+    <MultiPaneView data={data} />
+  </div>
+);
+
 MultiPaneContent.propTypes = {
   data: PropTypes.any,
+  className: PropTypes.string,
 };
 export default MultiPaneContent;
