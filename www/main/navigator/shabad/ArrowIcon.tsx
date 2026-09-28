@@ -1,0 +1,166 @@
+import React, { useEffect } from 'react';
+import type { ActionCreatorWithPayload } from '@reduxjs/toolkit';
+import { PrimaryButton } from '@khalisfoundation/sikhi-ui';
+import * as banidb from '../../banidb';
+import {
+  setInitialVerseId,
+  setActiveVerseId,
+  setActivePaneId,
+  setActiveShabadId,
+  setPane1,
+  setPane2,
+  setPane3,
+  setShortcuts,
+  type PaneState,
+} from '../../common/store/redux/navigatorSlice';
+import { Icon } from '../../common/sttm-ui';
+import { i18n } from '../../common/main-app';
+import { useAppDispatch, useAppSelector } from '../../common/store/redux/hooks';
+
+type ArrowIconProps = {
+  paneId: number;
+};
+
+const ArrowIcon = ({ paneId }: ArrowIconProps) => {
+  const {
+    isSundarGutkaBani,
+    activeShabadId,
+    initialVerseId,
+    isCeremonyBani,
+    activeVerseId,
+    activePaneId,
+    pane1,
+    pane2,
+    pane3,
+    shortcuts,
+  } = useAppSelector((state) => state.navigator);
+
+  const { currentWorkspace } = useAppSelector((state) => state.userSettings);
+
+  const dispatch = useAppDispatch();
+
+  const paneBani: Record<number, string> = {
+    1: pane1.baniType,
+    2: pane2.baniType,
+    3: pane3.baniType,
+  };
+
+  const loadShabadAndSetVerses = (
+    shabadId: number,
+    setPane: ActionCreatorWithPayload<PaneState>,
+    currentPane: PaneState,
+    targetPaneId: number,
+  ) =>
+    banidb
+      .loadShabad(shabadId)
+      .then((verses) => {
+        if (verses && verses.length > 0) {
+          const firstVerseId = verses[0].ID;
+          if (initialVerseId !== firstVerseId) dispatch(setInitialVerseId(firstVerseId));
+          if (activeVerseId !== firstVerseId) dispatch(setActiveVerseId(firstVerseId));
+
+          if (setPane && currentPane) {
+            dispatch(
+              setPane({
+                ...currentPane,
+                content: i18n.t('MULTI_PANE.SHABAD'),
+                activeShabad: shabadId,
+                baniType: 'shabad',
+                versesRead: [firstVerseId],
+                activeVerse: firstVerseId,
+              }),
+            );
+            if (targetPaneId !== activePaneId) dispatch(setActivePaneId(targetPaneId));
+          }
+
+          return firstVerseId;
+        }
+        return null;
+      })
+      .catch((error) => {
+        console.error('Error loading shabad:', error);
+        return null;
+      });
+
+  const updatePaneShabad = (direction: 'left' | 'right') => {
+    let currentShabad: number | undefined;
+    switch (paneId) {
+      case 1:
+        currentShabad =
+          direction === 'left'
+            ? parseInt(String(pane1.activeShabad), 10) - 1
+            : parseInt(String(pane1.activeShabad), 10) + 1;
+        loadShabadAndSetVerses(currentShabad, setPane1, pane1, paneId);
+        break;
+      case 2:
+        currentShabad =
+          direction === 'left'
+            ? parseInt(String(pane2.activeShabad), 10) - 1
+            : parseInt(String(pane2.activeShabad), 10) + 1;
+        loadShabadAndSetVerses(currentShabad, setPane2, pane2, paneId);
+        break;
+      case 3:
+        currentShabad =
+          direction === 'left'
+            ? parseInt(String(pane3.activeShabad), 10) - 1
+            : parseInt(String(pane3.activeShabad), 10) + 1;
+        loadShabadAndSetVerses(currentShabad, setPane3, pane3, paneId);
+        break;
+      default:
+        break;
+    }
+    if (currentWorkspace !== i18n.t('WORKSPACES.MULTI_PANE') && activeShabadId !== currentShabad) {
+      dispatch(setActiveShabadId(currentShabad as number));
+    }
+  };
+
+  const navigateVerseLeft = () => {
+    updatePaneShabad('left');
+  };
+
+  const navigateVerseRight = () => {
+    updatePaneShabad('right');
+  };
+
+  useEffect(() => {
+    if (shortcuts.nextShabad) {
+      updatePaneShabad('right');
+      dispatch(
+        setShortcuts({
+          ...shortcuts,
+          nextShabad: false,
+        }),
+      );
+    } else if (shortcuts.prevShabad) {
+      updatePaneShabad('left');
+      dispatch(
+        setShortcuts({
+          ...shortcuts,
+          prevShabad: false,
+        }),
+      );
+    }
+  }, [shortcuts]);
+
+  const arrows = (
+    <>
+      <PrimaryButton variant="plain" mode="icon" size="xs" onClick={navigateVerseLeft}>
+        <Icon name="skip-back" />
+      </PrimaryButton>
+      <PrimaryButton variant="plain" mode="icon" size="xs" onClick={navigateVerseRight}>
+        <Icon name="skip-forward" />
+      </PrimaryButton>
+    </>
+  );
+
+  if (currentWorkspace === i18n.t('WORKSPACES.MULTI_PANE')) {
+    if (paneBani[paneId] === 'shabad') {
+      return <div className="shabad-pane__arrows">{arrows}</div>;
+    }
+  } else if (activeShabadId && !isSundarGutkaBani && !isCeremonyBani) {
+    return arrows;
+  }
+  return null;
+};
+
+export default ArrowIcon;

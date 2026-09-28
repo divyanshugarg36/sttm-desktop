@@ -38,11 +38,13 @@ export interface PaneState {
   baniType: string;
 }
 
-/** A shabad saved to the user's favourites (the SikhiToTheMax API). */
+/** A shabad saved to the user's favourites, as the SikhiToTheMax API lists it. */
 export interface FavouriteShabad {
-  id?: number;
-  shabadId: number;
-  verseId: number;
+  id: number;
+  shabad_id: number;
+  verse_id: number;
+  /** When it was saved (a date string). */
+  created_at: string;
   [field: string]: unknown;
 }
 
@@ -74,8 +76,8 @@ export interface NavigatorState {
   homeVerse: number | false | null;
   currentLanguage: string;
   currentSource: string;
-  currentRaag: string | number;
-  currentWriter: string | number;
+  currentRaag: string;
+  currentWriter: string;
   activeShabadId: number | string | null;
   activeVerseId: number | '';
   searchShabadsCount: number;

@@ -18,7 +18,7 @@ const InputBox = ({ placeholder, disabled, className, query, setQuery }: InputBo
   const { currentSearchType, searchQuery, shortcuts } = useAppSelector((state) => state.navigator);
   const dispatch = useAppDispatch();
 
-  // Launchpad (still JS) provides the search input's ref through InputContext.
+  // Launchpad provides the search input's ref through InputContext.
   const inputContextRef = useContext(InputContext) as React.RefObject<HTMLInputElement>;
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(event.target.value);

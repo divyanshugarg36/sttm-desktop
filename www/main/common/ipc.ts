@@ -15,6 +15,7 @@ export type MainChannel =
   | 'get-media-access-status'
   | 'presenter-view'
   | 'save-overlay-settings'
+  | 'show-line'
   | 'show-misc-text'
   | 'toggle-viewer-window'
   | 'update-global-setting'
