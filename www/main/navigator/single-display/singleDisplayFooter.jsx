@@ -40,7 +40,7 @@ export const singleDisplayFooter = ({ className }) => {
       <PrimaryButton
         className={classNames(
           'single-display__switch',
-          singleDisplayActiveTab === 'search' && 'active',
+          singleDisplayActiveTab === 'search' && 'single-display__switch--active',
         )}
         variant={singleDisplayActiveTab === 'search' ? 'default' : 'ghost'}
         mode="icon"
@@ -52,7 +52,7 @@ export const singleDisplayFooter = ({ className }) => {
       <PrimaryButton
         className={classNames(
           'single-display__switch',
-          singleDisplayActiveTab === 'history' && 'active',
+          singleDisplayActiveTab === 'history' && 'single-display__switch--active',
         )}
         variant={singleDisplayActiveTab === 'history' ? 'default' : 'ghost'}
         mode="icon"
@@ -64,7 +64,7 @@ export const singleDisplayFooter = ({ className }) => {
       <PrimaryButton
         className={classNames(
           'single-display__switch',
-          singleDisplayActiveTab === 'shabad' && 'active',
+          singleDisplayActiveTab === 'shabad' && 'single-display__switch--active',
         )}
         variant={singleDisplayActiveTab === 'shabad' ? 'default' : 'ghost'}
         mode="icon"
@@ -76,7 +76,7 @@ export const singleDisplayFooter = ({ className }) => {
       <PrimaryButton
         className={classNames(
           'single-display__switch',
-          singleDisplayActiveTab === 'favorite' && 'active',
+          singleDisplayActiveTab === 'favorite' && 'single-display__switch--active',
         )}
         variant={singleDisplayActiveTab === 'favorite' ? 'default' : 'ghost'}
         mode="icon"
@@ -88,7 +88,7 @@ export const singleDisplayFooter = ({ className }) => {
       <PrimaryButton
         className={classNames(
           'single-display__switch',
-          singleDisplayActiveTab === 'other' && 'active',
+          singleDisplayActiveTab === 'other' && 'single-display__switch--active',
         )}
         variant={singleDisplayActiveTab === 'other' ? 'default' : 'ghost'}
         mode="icon"

@@ -213,7 +213,7 @@ export const FavoritePane = ({ className, paneId }) => {
             </div>
             <div className="favorite-list__meta">
               <p
-                className="date"
+                className="favorite-list__date"
                 style={
                   currentWorkspace === i18n.t('WORKSPACES.MULTI_PANE') ? { display: 'none' } : {}
                 }
@@ -221,7 +221,7 @@ export const FavoritePane = ({ className, paneId }) => {
                 {date}
               </p>
               <p
-                className="time"
+                className="favorite-list__time"
                 style={
                   currentWorkspace === i18n.t('WORKSPACES.MULTI_PANE') ? { display: 'none' } : {}
                 }
