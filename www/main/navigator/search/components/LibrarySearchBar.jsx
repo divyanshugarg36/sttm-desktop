@@ -158,7 +158,7 @@ export const LibrarySearchBar = ({
   return (
     <SearchBar
       className={`library-search-bar ${isMicDenied ? 'mic-denied' : ''}`.trim()}
-      wrapperVariant="default"
+      wrapperVariant="gradient"
       placeholder={placeholder}
       values={values}
       // The search type always shows as a dropdown ('left'); source, writer

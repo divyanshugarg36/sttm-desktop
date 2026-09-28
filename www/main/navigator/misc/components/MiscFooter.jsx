@@ -23,8 +23,8 @@ export const MiscFooter = ({ className }) => {
       <div className="clear-pane">
         <PrimaryButton
           className="clear-history"
-          variant="ghost"
-          size="sm"
+          size="xs"
+          shape="rounded-md"
           leftIcon={<Icon name="clock" />}
           onClick={clearHistory}
         >

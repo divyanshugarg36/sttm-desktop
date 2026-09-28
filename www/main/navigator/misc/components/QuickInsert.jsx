@@ -6,8 +6,6 @@ import { PrimaryButton } from '@khalisfoundation/sikhi-ui';
 import { uploadImage } from '../../../settings/utils/theme-bg-uploader';
 import { classNames } from '../../../common/utils';
 import { setOverlayScreen } from '../../../common/store/redux/appSlice';
-import { setShortcutTray } from '../../../common/store/redux/userSettingsSlice';
-import { Icon } from '../../../common/sttm-ui';
 import { useSlides } from '../../../common/hooks';
 
 const remote = require('@electron/remote');
@@ -15,7 +13,8 @@ const remote = require('@electron/remote');
 const { i18n } = remote.require('./app');
 const analytics = remote.getGlobal('analytics');
 
-// The Quick Insert toggle and its drawer of slides (Waheguru, Mool Mantra, etc).
+// Quick Insert: a row of slide buttons (Waheguru, Mool Mantra, etc) that
+// scrolls sideways when it doesn't fit.
 export const QuickInsert = ({ className }) => {
   const {
     displayWaheguruSlide: waheguruSlide,
@@ -25,7 +24,6 @@ export const QuickInsert = ({ className }) => {
   } = useSlides();
   const overlayScreen = useSelector((state) => state.app.overlayScreen);
   const dispatch = useDispatch();
-  const { shortcutTray } = useSelector((state) => state.userSettings);
   const customImageInput = useRef(null);
 
   const setTab = (tabName) => {
@@ -37,15 +35,6 @@ export const QuickInsert = ({ className }) => {
       action: 'set-tab',
       label: tabName,
       value: 'openedFromShortcutTray',
-    });
-  };
-
-  const toggleTray = (toggleValue) => {
-    dispatch(setShortcutTray(toggleValue));
-    analytics.trackEvent({
-      category: 'shortcutTray',
-      action: 'toggleTray',
-      label: toggleValue ? 'openTray' : 'closeTray',
     });
   };
 
@@ -84,33 +73,13 @@ export const QuickInsert = ({ className }) => {
   ];
 
   return (
-    <div
-      className={classNames(
-        className,
-        'quick-insert',
-        shortcutTray ? 'shortcut-tray-active' : 'shortcut-tray-inactive',
-      )}
-    >
-      <PrimaryButton
-        className="quick-tray"
-        variant="ghost"
-        size="sm"
-        leftIcon={<Icon name={shortcutTray ? 'chevron-down' : 'chevron-up'} />}
-        aria-expanded={shortcutTray}
-        onClick={() => toggleTray(!shortcutTray)}
-      >
-        {i18n.t(`SHORTCUT_TRAY.QUICK_INSERT`)}
-      </PrimaryButton>
-      <div
-        className={`shortcut-drawer ${
-          shortcutTray ? 'shortcut-drawer-active' : 'shortcut-drawer-inactive'
-        }`}
-      >
+    <div className={classNames(className, 'quick-insert')}>
+      <div className="quick-insert-items">
         {trayItems.map(({ key, label, className: itemClassName, onClick }) => (
           <PrimaryButton
             key={key}
             className={classNames('tray-item-icon', itemClassName)}
-            variant="amber"
+            variant="muted"
             size="sm"
             shape="rounded-md"
             onClick={onClick}

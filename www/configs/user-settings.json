@@ -70,7 +70,7 @@
     "app-layout": {
       "title": "APP_SETTINGS",
       "type": "switch",
-      "settings": ["quick-tools", "shortcut-tray", "live-feed", "intelligent-spacebar"]
+      "settings": ["quick-tools", "live-feed", "intelligent-spacebar"]
     },
     "other-options": {
       "title": "OTHER_OPTIONS",

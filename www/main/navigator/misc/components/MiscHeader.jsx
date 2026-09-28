@@ -4,7 +4,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { FatehTab, FatehTabList, FatehTabs, SimpleSelect } from '@khalisfoundation/sikhi-ui';
 
 import { setCurrentMiscPanel, setHistoryOrder } from '../../../common/store/redux/navigatorSlice';
-import { Icon } from '../../../common/sttm-ui';
 import { classNames } from '../../../common/utils';
 
 const remote = require('@electron/remote');
@@ -19,9 +18,9 @@ export const MiscHeader = ({ className }) => {
 
   const isHistory = currentMiscPanel === 'History';
   const tabs = [
-    { panel: 'History', icon: 'clock', label: 'TOOLBAR.HISTORY' },
-    { panel: 'Favorite', icon: 'heart', label: 'TOOLBAR.FAVORITE' },
-    { panel: 'Others', icon: 'dots', label: 'TOOLBAR.OTHERS' },
+    { panel: 'History', label: 'TOOLBAR.HISTORY' },
+    { panel: 'Favorite', label: 'TOOLBAR.FAVORITE' },
+    { panel: 'Others', label: 'TOOLBAR.OTHERS' },
   ];
 
   const setTab = (tabName) => {
@@ -43,10 +42,9 @@ export const MiscHeader = ({ className }) => {
         onChange={(index) => setTab(tabs[index].panel)}
       >
         <FatehTabList variant="pilled">
-          {tabs.map(({ panel, icon, label }) => (
+          {tabs.map(({ panel, label }) => (
             <FatehTab key={panel} className="misc-button">
-              <Icon name={icon} />
-              <span className="Icon-label">{i18n.t(label)}</span>
+              {i18n.t(label)}
             </FatehTab>
           ))}
         </FatehTabList>

@@ -300,6 +300,7 @@ ul {
 
     .shabad-pane {
       background: color-mix(in srgb, var(--sui-semantic-accent-default) 4%, transparent);
+      border-radius: var(--sui-radii-lg);
 
       // The Quick Insert bar under the verses.
       .pane-footer {
