@@ -1,32 +1,28 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Switch } from '../../../common/sttm-ui';
+import { analytics } from '../../../common/main-app';
 
-const remote = require('@electron/remote');
+type ConnectionSwitchProps = {
+  isConnected: boolean;
+  syncToggle: () => void;
+};
 
-const analytics = remote.getGlobal('analytics');
-
-const ConnectionSwitch = (props) => (
+const ConnectionSwitch = ({ isConnected, syncToggle }: ConnectionSwitchProps) => (
   <div className="connection-switch-container">
     <p>Disable all the remote connections to SikhiToTheMax</p>
     <Switch
       controlId="bani-controller"
       onToggle={() => {
-        props.syncToggle();
+        syncToggle();
         analytics.trackEvent({
           category: 'controller',
           action: 'connection',
-          label: props.isConnected ? 'Enabled' : 'Disabled',
+          label: isConnected ? 'Enabled' : 'Disabled',
         });
       }}
-      value={!props.isConnected}
+      value={!isConnected}
     />
   </div>
 );
-
-ConnectionSwitch.propTypes = {
-  isConnected: PropTypes.bool,
-  syncToggle: PropTypes.func,
-};
 
 export default ConnectionSwitch;

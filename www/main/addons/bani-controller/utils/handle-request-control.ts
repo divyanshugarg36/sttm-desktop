@@ -1,21 +1,21 @@
-const remote = require('@electron/remote');
-
-const analytics = remote.getGlobal('analytics');
+import { analytics } from '../../../common/main-app';
+import type { NavigatorState } from '../../../common/store/redux/navigatorSlice';
+import type { UserSettingsState } from '../../../common/store/redux/userSettingsSlice';
+import type { ControllerFontSizes, ControllerId } from '../types';
 
 const handleRequestControl = (
-  isPinCorrect,
-  fontSizes,
-  activeShabad,
-  activeShabadId,
-  activeVerseId,
-  homeVerse,
-  ceremonyId,
-  sundarGutkaBaniId,
-  baniLength,
+  isPinCorrect: boolean,
+  fontSizes: ControllerFontSizes,
+  activeShabadId: NavigatorState['activeShabadId'],
+  activeVerseId: NavigatorState['activeVerseId'],
+  homeVerse: NavigatorState['homeVerse'],
+  ceremonyId: NavigatorState['ceremonyId'],
+  sundarGutkaBaniId: NavigatorState['sundarGutkaBaniId'],
+  baniLength: UserSettingsState['baniLength'],
   // mangalPosition,
 ) => {
   document.body.classList.toggle(`controller-on`, isPinCorrect);
-  window.socket.emit('data', {
+  window.socket!.emit('data', {
     host: 'sttm-desktop',
     type: 'response-control',
     success: isPinCorrect,
@@ -25,7 +25,11 @@ const handleRequestControl = (
   });
   // if Pin is correct and there is a shabad already in desktop, emit that shabad details.
   if (isPinCorrect) {
-    const currentShabad = {
+    const currentShabad: {
+      id: ControllerId | null;
+      type: 'shabad' | 'ceremony' | 'bani';
+      baniLength: string;
+    } = {
       id: activeShabadId,
       type: 'shabad',
       baniLength: '',
@@ -42,8 +46,8 @@ const handleRequestControl = (
       currentShabad.baniLength = baniLength;
       // currentShabad.mangalPosition = mangalPosition;
     }
-    let homeId;
-    let highlight;
+    let homeId: NavigatorState['homeVerse'] | undefined;
+    let highlight: number | '' | null | undefined;
 
     if (currentShabad.id) {
       if (currentShabad.type === 'shabad') {
@@ -55,13 +59,13 @@ const handleRequestControl = (
         highlight = sundarGutkaBaniId;
       }
 
-      window.socket.emit('data', {
+      window.socket!.emit('data', {
         type: currentShabad.type,
         host: 'sttm-desktop',
         id: currentShabad.id,
         shabadid: currentShabad.id, // @deprecated
-        highlight: parseInt(highlight, 10),
-        homeId: parseInt(homeId, 10),
+        highlight: parseInt(String(highlight), 10),
+        homeId: parseInt(String(homeId), 10),
         baniLength: currentShabad.baniLength,
         // mangalPosition: currentShabad.mangalPosition,
       });

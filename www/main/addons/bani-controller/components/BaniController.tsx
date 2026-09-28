@@ -1,10 +1,8 @@
-import { useSelector, useDispatch } from 'react-redux';
 import React, { useState, useEffect, useRef } from 'react';
 import { Box } from '@khalisfoundation/sikhi-ui';
-import PropTypes from 'prop-types';
 
 import isOnline from 'is-online';
-import { ipcRenderer } from 'electron';
+import type { IpcRendererEvent } from 'electron';
 
 import BaniControllerItem from './BaniControllerItem';
 import { Overlay } from '../../../common/sttm-ui';
@@ -37,16 +35,21 @@ import {
   setLineNumber,
 } from '../../../common/store/redux/navigatorSlice';
 
-const remote = require('@electron/remote');
+import { analytics, i18n } from '../../../common/main-app';
+import { offFromMain, onFromMain } from '../../../common/ipc';
+import { useAppDispatch, useAppSelector } from '../../../common/store/redux/hooks';
+import type { ControllerMessage, ControllerSocketData } from '../types';
 
-const analytics = remote.getGlobal('analytics');
 const { tryConnection, onEnd } = shareSync;
 
-const { i18n } = remote.require('./app');
+type BaniControllerProps = {
+  onScreenClose?: React.MouseEventHandler<HTMLElement>;
+  className?: string;
+};
 
-const BaniController = ({ onScreenClose, className }) => {
+const BaniController = ({ onScreenClose, className }: BaniControllerProps) => {
   const title = 'Mobile device sync';
-  const canvasRef = useRef(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const changeActiveShabad = useNewShabad();
   const updatePane = updateMultipane();
@@ -55,16 +58,15 @@ const BaniController = ({ onScreenClose, className }) => {
   const [codeLabel, setCodeLabel] = useState('');
   const [isFetchingCode, setFetchingCode] = useState(false);
   const [isAdminPinVisible, setAdminPinVisibility] = useState(true);
-  const [socketData, setSocketData] = useState(null);
+  const [socketData, setSocketData] = useState<ControllerSocketData | null>(null);
 
   // Store State (Redux)
-  const isListeners = useSelector((state) => state.app.isListeners);
-  const overlayScreen = useSelector((state) => state.app.overlayScreen);
-  const { adminPin, code, isConnected } = useSelector((state) => state.baniController);
-  const dispatch = useDispatch();
+  const isListeners = useAppSelector((state) => state.app.isListeners);
+  const overlayScreen = useAppSelector((state) => state.app.overlayScreen);
+  const { adminPin, code, isConnected } = useAppSelector((state) => state.baniController);
+  const dispatch = useAppDispatch();
 
   const {
-    activeShabad,
     activeShabadId,
     activeVerseId,
     homeVerse,
@@ -77,7 +79,7 @@ const BaniController = ({ onScreenClose, className }) => {
     isMiscSlideGurmukhi,
     savedCrossPlatformId,
     lineNumber,
-  } = useSelector((state) => state.navigator);
+  } = useAppSelector((state) => state.navigator);
 
   const {
     gurbaniFontSize,
@@ -86,16 +88,16 @@ const BaniController = ({ onScreenClose, className }) => {
     content3FontSize,
     baniLength,
     // mangalPosition,
-  } = useSelector((state) => state.userSettings);
+  } = useAppSelector((state) => state.userSettings);
 
   const fontSizes = {
-    gurbani: parseInt(gurbaniFontSize, 10),
-    translation: parseInt(content1FontSize, 10),
-    teeka: parseInt(content2FontSize, 10),
-    transliteration: parseInt(content3FontSize, 10),
+    gurbani: parseInt(String(gurbaniFontSize), 10),
+    translation: parseInt(String(content1FontSize), 10),
+    teeka: parseInt(String(content2FontSize), 10),
+    transliteration: parseInt(String(content3FontSize), 10),
   };
 
-  const showSyncError = (errorMessage) => {
+  const showSyncError = (errorMessage: string) => {
     setCodeLabel(errorMessage);
     if (code !== null) {
       dispatch(setCode(null));
@@ -178,7 +180,7 @@ const BaniController = ({ onScreenClose, className }) => {
   useEffect(() => {
     if (isListeners && adminPin) {
       if (window.socket !== undefined) {
-        window.socket.on('data', (data) => {
+        window.socket!.on('data', (data) => {
           setSocketData(data);
         });
       }
@@ -186,25 +188,25 @@ const BaniController = ({ onScreenClose, className }) => {
   }, [isListeners, adminPin]);
 
   useEffect(() => {
-    ipcRenderer.on('bani-controller-data', (event, data) => {
+    // posted to the main process's /api/bani-control (or sent by
+    // send-to-bani-controller): unvalidated, like the socket's messages
+    const onBaniControllerData = (event: IpcRendererEvent, data: ControllerMessage) => {
       setSocketData({
         host: 'local-ipc',
-        type: data.type,
         ...data,
       });
-    });
+    };
+    onFromMain('bani-controller-data', onBaniControllerData);
 
     return () => {
-      ipcRenderer.removeAllListeners('bani-controller-data');
+      offFromMain('bani-controller-data', onBaniControllerData);
     };
   }, []);
 
   useEffect(() => {
-    useSocketListeners(
-      socketData,
+    useSocketListeners(socketData, {
       changeActiveShabad,
       adminPin,
-      activeShabad,
       activeShabadId,
       activeVerseId,
       homeVerse,
@@ -216,21 +218,21 @@ const BaniController = ({ onScreenClose, className }) => {
       isSundarGutkaBani,
       isCeremonyBani,
       savedCrossPlatformId,
-      (v) => dispatch(setIsCeremonyBani(v)),
-      (v) => dispatch(setIsSundarGutkaBani(v)),
-      (v) => dispatch(setSundarGutkaBaniId(v)),
-      (v) => dispatch(setCeremonyId(v)),
+      setIsCeremonyBani: (v) => dispatch(setIsCeremonyBani(v)),
+      setIsSundarGutkaBani: (v) => dispatch(setIsSundarGutkaBani(v)),
+      setSundarGutkaBaniId: (v) => dispatch(setSundarGutkaBaniId(v)),
+      setCeremonyId: (v) => dispatch(setCeremonyId(v)),
       isMiscSlide,
       miscSlideText,
       isMiscSlideGurmukhi,
-      (v) => dispatch(setIsMiscSlide(v)),
-      (v) => dispatch(setMiscSlideText(v)),
-      (v) => dispatch(setIsMiscSlideGurmukhi(v)),
-      (v) => dispatch(setSavedCrossPlatformId(v)),
+      setIsMiscSlide: (v) => dispatch(setIsMiscSlide(v)),
+      setMiscSlideText: (v) => dispatch(setMiscSlideText(v)),
+      setIsMiscSlideGurmukhi: (v) => dispatch(setIsMiscSlideGurmukhi(v)),
+      setSavedCrossPlatformId: (v) => dispatch(setSavedCrossPlatformId(v)),
       lineNumber,
-      (v) => dispatch(setLineNumber(v)),
+      setLineNumber: (v) => dispatch(setLineNumber(v)),
       updatePane,
-    );
+    });
   }, [socketData]);
 
   const baniControllerItems = getBaniControllerItems({
@@ -279,11 +281,6 @@ const BaniController = ({ onScreenClose, className }) => {
       </div>
     </Overlay>
   );
-};
-
-BaniController.propTypes = {
-  onScreenClose: PropTypes.func,
-  className: PropTypes.string,
 };
 
 export default BaniController;

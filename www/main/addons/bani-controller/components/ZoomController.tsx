@@ -2,16 +2,13 @@ import React, { useState } from 'react';
 import { shell } from 'electron';
 import { Box, PrimaryButton } from '@khalisfoundation/sikhi-ui';
 import { ZOOM_LINK } from '../../../common/constants';
-
-const remote = require('@electron/remote');
-
-const { store, i18n } = remote.require('./app');
+import { i18n, store } from '../../../common/main-app';
 
 const ZoomController = () => {
   const [showSaveBtn, setShowSaveBtn] = useState(false);
   const [apiCode, setApiCode] = useState('');
 
-  const handleApiInputChange = (event) => {
+  const handleApiInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.value) {
       setShowSaveBtn(true);
       setApiCode(event.target.value);

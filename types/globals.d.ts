@@ -3,14 +3,19 @@ import type { WebviewTag } from 'electron';
 import type platformModule from '../www/main/desktop_scripts';
 import type controllerModule from '../www/main/controller';
 import type coreModule from '../www/main/index';
+import type {
+  ControllerSocketData,
+  DesktopMessage,
+} from '../www/main/addons/bani-controller/types';
 
 /**
  * The bani controller's socket.io connection. The client is the script the
  * sync server serves (window.io), so only what the app calls is declared.
  */
 interface ControllerSocket {
-  emit: (event: string, ...args: unknown[]) => void;
-  on: (event: string, listener: (...args: any[]) => void) => void; // eslint-disable-line @typescript-eslint/no-explicit-any
+  emit: (event: 'data', message: DesktopMessage) => void;
+  /** The payloads arrive unvalidated; see ControllerMessage. */
+  on: (event: 'data', listener: (data: ControllerSocketData) => void) => void;
   disconnect: () => void;
 }
 
@@ -45,8 +50,8 @@ declare global {
   interface Window {
     /** The bani controller's socket.io connection (bani-controller addon). */
     socket?: ControllerSocket | null;
-    /** The controller's socket.io namespace (the sync code). */
-    namespaceString?: string;
+    /** The controller's socket.io namespace (the sync code); null once sync ends. */
+    namespaceString?: string | null;
     /** The socket.io client script the sync server serves. */
     io?: (url: string) => ControllerSocket;
     /** Safari's prefixed AudioContext. */

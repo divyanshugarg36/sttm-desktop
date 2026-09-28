@@ -3,25 +3,27 @@ import axios from 'axios';
 import Noty from 'noty';
 
 import { API_ENDPOINT as SYNC_API_URL } from '../../../common/constants';
+import { analytics, i18n, store } from '../../../common/main-app';
+import type { ControllerSocketData, DesktopMessage } from '../types';
 
-const remote = require('@electron/remote');
-
-const { store, i18n } = remote.require('./app');
-const analytics = remote.getGlobal('analytics');
-
-function onConnect(namespaceString) {
-  window.socket = window.io(`${SYNC_API_URL}/${namespaceString}`);
+/** The sync server's reply to /sync/begin. */
+interface SyncBeginResponse {
+  data: { namespaceString: string };
 }
 
-async function getNewCode(host) {
+function onConnect(namespaceString: string) {
+  window.socket = window.io!(`${SYNC_API_URL}/${namespaceString}`);
+}
+
+async function getNewCode(host: unknown) {
   let newCode = null;
 
   try {
     const currentTimestamp = new Date().getTime();
 
-    const response = await axios.request(
-      `${SYNC_API_URL}/sync/begin/${host}?ts=${currentTimestamp}`,
-    );
+    const response = await axios.request<SyncBeginResponse>({
+      url: `${SYNC_API_URL}/sync/begin/${host}?ts=${currentTimestamp}`,
+    });
     const { data: result } = response;
     const {
       data: { namespaceString },
@@ -51,33 +53,33 @@ async function getNewCode(host) {
 }
 
 const shareSync = {
-  async tryConnection() {
+  async tryConnection(): Promise<string | null | undefined> {
     const host = store.get('userId');
-    let syncCode = null;
+    let syncCode: string | null | undefined = null;
 
     // if a succesful code already exists, use that or else get new code
     try {
       await axios.get(`${SYNC_API_URL}/sync/join/${window.namespaceString}`);
       syncCode = window.namespaceString;
-    } catch (e) {
+    } catch {
       syncCode = await getNewCode(host);
     }
 
     return syncCode;
   },
-  addEvent(event, data) {
+  addEvent(event: 'data', data: DesktopMessage) {
     if (window.socket) {
       window.socket.emit(event, data);
     }
   },
-  addListener(event, cb) {
+  addListener(event: 'data', cb: (data: ControllerSocketData) => void) {
     if (window.socket) {
       window.socket.on(event, cb);
     }
   },
-  async onEnd(namespaceString) {
-    await axios.request(`${SYNC_API_URL}/sync/end/${namespaceString}`);
-    window.socket.disconnect();
+  async onEnd(namespaceString: string | null) {
+    await axios.request({ url: `${SYNC_API_URL}/sync/end/${namespaceString}` });
+    window.socket!.disconnect();
     window.socket = null;
     window.namespaceString = null;
   },

@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { useSelector, useDispatch } from 'react-redux';
 import { PrimaryButton } from '@khalisfoundation/sikhi-ui';
 
 import {
@@ -10,11 +9,17 @@ import {
   setIsAnnouncement,
 } from '../../../common/store/redux/navigatorSlice';
 import { Icon } from '../../../common/sttm-ui';
+import { analytics, i18n } from '../../../common/main-app';
+import { useAppDispatch, useAppSelector } from '../../../common/store/redux/hooks';
+import type { BaniControllerItemProps } from '../components/BaniControllerItem';
 
-const remote = require('@electron/remote');
-
-const { i18n } = remote.require('./app');
-const analytics = remote.getGlobal('analytics');
+type BaniControllerItemsOptions = {
+  code: string | null;
+  adminPin: number | null;
+  isAdminPinVisible: boolean;
+  setAdminPinVisibility: (isVisible: boolean) => void;
+  toggleLockScreen: () => void;
+};
 
 const getBaniControllerItems = ({
   code,
@@ -22,11 +27,11 @@ const getBaniControllerItems = ({
   isAdminPinVisible,
   setAdminPinVisibility,
   toggleLockScreen,
-}) => {
-  const { isMiscSlide, isMiscSlideGurmukhi, isAnnouncement } = useSelector(
+}: BaniControllerItemsOptions): BaniControllerItemProps[] => {
+  const { isMiscSlide, isMiscSlideGurmukhi, isAnnouncement } = useAppSelector(
     (state) => state.navigator,
   );
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   return [
     {
       title: i18n.t('TOOLBAR.SYNC_CONTROLLER.SANGAT_SYNC'),

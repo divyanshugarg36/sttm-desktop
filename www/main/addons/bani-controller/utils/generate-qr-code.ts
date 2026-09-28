@@ -1,11 +1,9 @@
 import Noty from 'noty';
 import qrCode from 'qrcode';
 
-const remote = require('@electron/remote');
+import { i18n } from '../../../common/main-app';
 
-const { i18n } = remote.require('./app');
-
-const generateQrCode = (canvas, syncCode) => {
+const generateQrCode = (canvas: HTMLCanvasElement | null, syncCode: string | null) => {
   if (syncCode && canvas) {
     let url;
     if (process.env.NODE_ENV === 'development') {
