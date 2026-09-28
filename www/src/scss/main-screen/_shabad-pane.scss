@@ -1,3 +1,5 @@
+// The shabad pane: the Hide Display header and the verse list.
+
 @keyframes pulse-border {
   0% {
     box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.8);
@@ -11,14 +13,15 @@
 }
 
 @keyframes blink-btn {
-  0%, 60% {
-    opacity: 1;    
+  0%,
+  60% {
+    opacity: 1;
   }
-   75% {
-    opacity: 0.4;  
+  75% {
+    opacity: 0.4;
   }
   100% {
-    opacity: 1;    
+    opacity: 1;
   }
 }
 
@@ -38,24 +41,24 @@
   .check-icon {
     color: $grey;
   }
+}
 
-  &-header {
-    @include flex($ai-value: center, $jc-value: flex-end);
-    height: 100%;
-    width: 100%;
+.shabad-pane-header {
+  @include flex($ai-value: center, $jc-value: flex-end);
+  height: 100%;
+  width: 100%;
 
-    // sikhi-ui PrimaryButton, on the left with everything else pushed right;
-    // the red "Show Display" state keeps its pulse.
-    .toggle-viewer-btn {
-      margin-right: auto;
+  // sikhi-ui PrimaryButton, on the left with everything else pushed right;
+  // the red "Show Display" state keeps its pulse.
+  .toggle-viewer-btn {
+    margin-right: auto;
 
-      ~ .fav-btn.sui-button {
-        margin-right: 0;
-      }
+    ~ .fav-btn.sui-button {
+      margin-right: 0;
+    }
 
-      &.btn-danger {
-        animation: pulse-border 3s infinite, blink-btn 3s infinite;
-      }
+    &.btn-danger {
+      animation: pulse-border 3s infinite, blink-btn 3s infinite;
     }
   }
 }
@@ -66,45 +69,23 @@
 }
 
 // Presenter: the verse pane shares a box with the viewer.
-.launchpad {
-  .presenter-column {
-    .shabad-pane {
-      background: color-mix(in srgb, var(--sui-semantic-accent-default) 4%, transparent);
-      border-radius: var(--sui-radii-lg);
+.launchpad .presenter-column .shabad-pane {
+  background: color-mix(in srgb, var(--sui-semantic-accent-default) 4%, transparent);
+  border-radius: var(--sui-radii-lg);
 
-      // The Quick Insert bar under the verses.
-      .pane-footer {
-        background-color: var(--sui-semantic-accent-muted);
-      }
-
-      .pane-header {
-        background-color: transparent;
-        height: auto;
-        line-height: normal;
-        padding: 12px;
-
-        &.shabad-pane-header {
-          height: auto;
-        }
-      }
-    }
+  // The Quick Insert bar under the verses.
+  .pane-footer {
+    background-color: var(--sui-semantic-accent-muted);
   }
-}
 
-.controller-on .shabad-pane .controller-signal {
-  display: block;
-}
+  .pane-header {
+    background-color: transparent;
+    height: auto;
+    line-height: normal;
+    padding: 12px;
 
-.shabad-pane {
-  .controller-signal {
-    bottom: 10px;
-    display: none;
-    height: 20px;
-    position: absolute;
-    right: 10px;
-    width: 20px;
-    img {
-      width: 100%;
+    &.shabad-pane-header {
+      height: auto;
     }
   }
 }

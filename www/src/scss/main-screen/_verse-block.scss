@@ -8,125 +8,138 @@
   max-height: inherit;
   overflow-x: hidden;
   overflow-y: scroll;
+}
 
-  // A verse row: a single-verse sikhi-ui GurbaniVerseList (ShabadVerse).
-  .shabad-verse {
-    cursor: pointer;
-    padding: 6px 10px;
+// A verse row: a single-verse sikhi-ui GurbaniVerseList (ShabadVerse).
+.verse-block .shabad-verse {
+  cursor: pointer;
+  padding: 6px 10px;
 
-    // sikhi-ui shrinks the active verse to its text (fit-content), which
-    // pulls the home button in against the verse; keep it full width.
-    .sui-gurbani-active-verse {
-      box-sizing: border-box;
-      width: 100%;
+  // sikhi-ui shrinks the active verse to its text (fit-content), which
+  // pulls the home button in against the verse; keep it full width.
+  .sui-gurbani-active-verse {
+    box-sizing: border-box;
+    width: 100%;
+  }
+
+  // The tick: centred on the row, as the old list did.
+  .sui-gurbani-line-start {
+    align-items: center;
+    bottom: 0;
+
+    .check-icon {
+      color: var(--sui-semantic-foreground-muted);
+      display: inline-flex;
+      font-size: 16px;
     }
+  }
 
-    // The tick: centred on the row, as the old list did.
-    .sui-gurbani-line-start {
-      align-items: center;
-      bottom: 0;
+  // The home button shows on hover, and always on the home verse.
+  .sui-gurbani-line-actions {
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
 
-      .check-icon {
-        color: var(--sui-semantic-foreground-muted);
-        display: inline-flex;
-        font-size: 16px;
-      }
-    }
+  &:hover .sui-gurbani-line-actions {
+    opacity: 0.5;
+  }
 
-    // The home button shows on hover, and always on the home verse.
-    .sui-gurbani-line-actions {
-      opacity: 0;
-      transition: opacity 0.2s ease;
-    }
+  &.shabad-verse--home .sui-gurbani-line-actions {
+    opacity: 1;
+  }
 
-    &:hover .sui-gurbani-line-actions {
-      opacity: 0.5;
-    }
+  &:hover {
+    background-color: color-mix(in srgb, var(--sui-semantic-accent-default) 6%, transparent);
+  }
 
-    &.shabad-verse--home .sui-gurbani-line-actions {
-      opacity: 1;
-    }
+  &.flower-verse {
+    cursor: not-allowed;
 
     &:hover {
-      background-color: color-mix(in srgb, var(--sui-semantic-accent-default) 6%, transparent);
-    }
-
-    &.flower-verse {
-      cursor: not-allowed;
-
-      &:hover {
-        background-color: transparent;
-      }
+      background-color: transparent;
     }
   }
-  .search-list {
-    display: inline-flex;
-    padding: 0 5px;
-    width: 100%;
-    .sggs-color {
-      color: $cadmium-orange;
-    }
-    .sdg-color {
-      color: $picton-blue;
-    }
-    .ak-color {
-      color: $apple-green;
-    }
-    .other-color {
-      color: $dark-silver;
-    }
+}
+
+// A search result: the source's colour on its ang and on its left border.
+.verse-block .search-list {
+  display: inline-flex;
+  padding: 0 5px;
+  width: 100%;
+
+  .sggs-color {
+    color: $cadmium-orange;
   }
+
+  .sdg-color {
+    color: $picton-blue;
+  }
+
+  .ak-color {
+    color: $apple-green;
+  }
+
+  .other-color {
+    color: $dark-silver;
+  }
+}
+
+.verse-block {
   .sggs-border {
     border-left: 3px solid $cadmium-orange;
   }
+
   .sdg-border {
     border-left: 3px solid $picton-blue;
   }
+
   .ak-border {
     border-left: 3px solid $apple-green;
   }
+
   .other-border {
     border-left: 3px solid $dark-silver;
   }
-  li {
-    position: relative;
-    cursor: pointer;
-    font-size: 1.1rem;
-    transition: 0.3s all ease;
+}
 
-    &.search-li {
-      display: flex;
-      justify-content: space-between;
-      list-style: none;
-      padding: 2px 10px;
+.verse-block li {
+  position: relative;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: 0.3s all ease;
+
+  &.search-li {
+    display: flex;
+    justify-content: space-between;
+    list-style: none;
+    padding: 2px 10px;
+  }
+
+  div {
+    display: inline-flex;
+  }
+
+  div a {
+    padding: 5px;
+    font-size: 1rem;
+
+    .eng-verse {
+      color: $rust;
+      display: block;
+      margin: 4px 0;
     }
 
-    div {
-      display: inline-flex;
-      a {
-        padding: 5px;
-        font-size: 1rem;
+    &:hover {
+      background-color: transparent;
+    }
+  }
 
-        .eng-verse {
-          color: $rust;
-          display:block;
-          margin: 4px 0;
-        }
-        &:hover {
-          background-color: transparent;
-        }
-      }
-    }
-    .search-list-footer {
-      display: flex;
-      color: #929292;
-    }
+  .search-list-footer {
+    display: flex;
+    color: #929292;
   }
-  .history-pane-controls {
-    position: absolute;
-    right: 20px;
-  }
-  i {
-    z-index: 100;
-  }
+}
+
+.verse-block i {
+  z-index: 100;
 }

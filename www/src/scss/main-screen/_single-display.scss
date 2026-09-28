@@ -1,143 +1,128 @@
-// Single-Display: the viewer full screen, with a small navigator.
+// Single-Display: the viewer fills the screen and a small navigator floats
+// in the bottom-right corner, with tab switches along its bottom.
 
-.launchpad {
-  .single-display {
-    &-controller {
-      bottom: 0;
-      box-shadow: 0 10px 20px $transparent-black;
-      min-height: 390px;
-      height: 45vh;
-      position: fixed;
-      right: 0;
-      z-index: 2;
+.launchpad .single-display-controller {
+  bottom: 0;
+  box-shadow: 0 10px 20px $transparent-black;
+  min-height: 390px;
+  height: 45vh;
+  position: fixed;
+  right: 0;
+  z-index: 2;
 
-      .shabad-pane {
-        height: 100%;
+  .shabad-pane {
+    height: 100%;
 
-        .pane {
-          height: inherit;
-        }
-
-        .shabad-list {
-          height: inherit;
-        }
-      }
-
-      .pane {
-        // The single-display header is itself the pane-header.
-        .pane-header.header-controller {
-          display: flex;
-          justify-content: space-between;
-          width: 100%;
-
-          .history-order {
-            flex-grow: 1;
-            text-align: right;
-            margin-right: 24px;
-          }
-        }
-
-        .pane-content {
-          >div {
-            padding: 0;
-          }
-        }
-      }
+    .pane {
+      height: inherit;
     }
 
-    &-pane {
-      min-width: 550px;
+    .shabad-list {
+      height: inherit;
+    }
+  }
 
-      .shabad-pane-header {
-        margin-right: 24px;
-      }
+  // The single-display header is itself the pane-header.
+  .pane .pane-header.header-controller {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+
+    .history-order {
+      flex-grow: 1;
+      text-align: right;
+      margin-right: 24px;
+    }
+  }
+
+  .pane .pane-content > div {
+    padding: 0;
+  }
+}
+
+.launchpad .single-display-pane {
+  min-width: 550px;
+
+  .shabad-pane-header {
+    margin-right: 24px;
+  }
+}
+
+// The navigator collapsed to its header, or open.
+.launchpad .single-display-minimize {
+  .pane {
+    height: 40px;
+    transition: 0.3s ease all;
+  }
+
+  .pane-footer {
+    display: none;
+  }
+}
+
+.launchpad .single-display-maximize {
+  .search-pane {
+    height: 100%;
+
+    .pane {
+      height: inherit;
     }
 
-    &-minimize {
-      .pane {
-        height: 40px;
-        transition: 0.3s ease all;
-
-        &-footer {
-          display: none;
-        }
-      }
-    }
-
-    &-maximize {
-      .search-pane {
-        height: 100%;
-
-        .pane {
-          height: inherit;
-        }
-
-        .search-footer {
-          margin: 0;
-          width: 100%;
-        }
-      }
-
-      .pane {
-        height: 100%;
-        transition: 0.3s ease all;
-
-        &-footer {
-          display: block;
-        }
-      }
-    }
-
-    &-switches {
-      display: flex;
-      height: 40px;
+    .search-footer {
+      margin: 0;
       width: 100%;
     }
+  }
 
-    &-viewer {
-      height: 100%;
-      left: 0;
-      position: fixed;
-      top: 0;
+  .pane {
+    height: 100%;
+    transition: 0.3s ease all;
+  }
+
+  .pane-footer {
+    display: block;
+  }
+}
+
+.launchpad .single-display-switches {
+  display: flex;
+  height: 40px;
+  width: 100%;
+}
+
+.launchpad .single-display-viewer {
+  height: 100%;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100%;
+
+  > .viewer-pane {
+    padding: 0;
+
+    .pane {
+      height: 100vh;
       width: 100%;
-
-      &>.viewer-pane {
-        padding: 0;
-
-        & .pane {
-          height: 100vh;
-          width: 100%;
-        }
-      }
-    }
-
-    &-hide {
-      &-left {
-        left: -75px !important;
-        transition: 0.3s ease all;
-      }
-    }
-
-    &-show {
-      &-left {
-        left: 0 !important;
-        transition: 0.3s ease all;
-      }
     }
   }
+}
 
-  .single-display {
-    &-minimize {
-      min-height: auto;
-      height: 5vh;
-    }
-  }
+// The side nav sliding out of the way, and back.
+.launchpad .single-display-hide-left {
+  left: -75px !important;
+  transition: 0.3s ease all;
+}
 
-  .single-display-switches {
-    background: rgba(221, 221, 221, 1);
+.launchpad .single-display-show-left {
+  left: 0 !important;
+  transition: 0.3s ease all;
+}
 
-    .tab-switch .turban-icon {
-      height: 18px;
-    }
-  }
+.launchpad .single-display-minimize {
+  min-height: auto;
+  height: 5vh;
+}
+
+.launchpad .single-display-switches {
+  background: rgba(221, 221, 221, 1);
 }

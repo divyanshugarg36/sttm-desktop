@@ -1,91 +1,83 @@
 // History / Favorites / Others.
 
-//Heights
 $misc-header: 60px;
 $misc-footer-inactive: 40px;
 $misc-footer-active: 70px;
 
 .misc-pane {
   @include pane-containers;
+}
 
-  .misc-header {
+// The History / Favorites / Others tabs: sikhi-ui pilled FatehTabs.
+.misc-pane .misc-header {
+  display: inline-flex;
+  justify-content: space-between;
+  min-height: $misc-header;
+  width: 100%;
+
+  .misc-header-nav {
+    align-items: center;
     display: inline-flex;
-    justify-content: space-between;
-    min-height: $misc-header;
-    width: 100%;
 
-    // sikhi-ui pilled FatehTabs, one per panel (icon beside its label),
-    // compacted like the search pane's pickers to fit the 40px header.
-    .misc-header-nav {
-      align-items: center;
-      display: inline-flex;
-
-      .sui-fateh-tabs--pilled {
-        gap: 6px;
-      }
-    }
-
-    .misc-button {
-      align-items: center;
-      display: inline-flex;
-    }
-
-    .turban {
-      &-icon {
-        height: 16px;
-      }
+    .sui-fateh-tabs--pilled {
+      gap: 6px;
     }
   }
 
-  .list-of-items {
-    @include flex($fd-value: column, $jc-value: start);
-    margin: 0;
-    padding: 0;
-    height: 320px;
-    overflow: auto;
+  .misc-button {
+    align-items: center;
+    display: inline-flex;
+  }
+}
 
-    li {
-      overflow: visible;
-      text-overflow: ellipsis;
-      width: 100%;
+.misc-pane .list-of-items {
+  @include flex($fd-value: column, $jc-value: start);
+  margin: 0;
+  padding: 0;
+  height: 320px;
+  overflow: auto;
 
-      a {
-        display: block;
-        padding: 0.3rem 1rem;
-        width: 100%;
-
-        i {
-          padding: 8px;
-        }
-
-        select {
-          margin-left: 12px;
-        }
-      }
-    }
+  li {
+    overflow: visible;
+    text-overflow: ellipsis;
+    width: 100%;
   }
 
-  .misc-footer {
-    height: fit-content;
+  li a {
+    display: block;
+    padding: 0.3rem 1rem;
     width: 100%;
 
-    .clear-pane {
-      @include flex($jc-value: flex-end);
-      height: 40px;
+    i {
+      padding: 8px;
+    }
 
-      // sikhi-ui PrimaryButton, like the verse pane's Hide Display.
-      .clear-history {
-        margin-right: 12px;
-      }
+    select {
+      margin-left: 12px;
     }
   }
 }
 
+.misc-pane .misc-footer {
+  height: fit-content;
+  width: 100%;
+
+  .clear-pane {
+    @include flex($jc-value: flex-end);
+    height: 40px;
+
+    // sikhi-ui PrimaryButton, like the verse pane's Hide Display.
+    .clear-history {
+      margin-right: 12px;
+    }
+  }
+}
+
+// History rows, styled like sttm-web's controller history list
+// (.bani-list__item.history-list__item): type badge, label, delete button.
 .history-results {
   overflow-y: auto;
 
-  // History rows, styled like sttm-web's controller history list
-  // (.bani-list__item.history-list__item): type badge, label, delete button.
   &.history-list {
     list-style: none;
     margin: 0;
@@ -117,44 +109,21 @@ $misc-footer-active: 70px;
     color: var(--sui-semantic-foreground-muted);
     flex: 0 0 auto;
   }
+}
 
-  .history-item-container {
-    align-items: center;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    padding: 0px 10px;
-    transition: 0.3s all ease;
+.history-results .history-item-container {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0px 10px;
+  transition: 0.3s all ease;
 
-    .history-item-text {
-      cursor: pointer;
-      width: 100%;
-    }
-
-    .history-item {
-      cursor: pointer;
-      margin: 0;
-      padding: 16px 4px;
-      flex-grow: 1;
-    }
-
-    .history-item-options {
-      align-items: center;
-      color: $grey;
-      display: flex;
-      font-size: 12px;
-      font-style: italic;
-      margin-left: 8px;
-
-      // sikhi-ui ghost icon PrimaryButton: delete from history.
-      >.sui-button {
-        color: $grey;
-
-        &:hover {
-          color: $red;
-        }
-      }
-    }
+  .history-item {
+    cursor: pointer;
+    margin: 0;
+    padding: 16px 4px;
+    flex-grow: 1;
   }
 }
 
@@ -183,13 +152,13 @@ $misc-footer-active: 70px;
     font-size: 12px;
     font-style: italic;
 
-    >p,
-    >button {
+    > p,
+    > button {
       margin: 0px 4px;
     }
 
     // sikhi-ui ghost icon PrimaryButton: remove from favorites.
-    >.sui-button:hover {
+    > .sui-button:hover {
       color: $red;
     }
   }

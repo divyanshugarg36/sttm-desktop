@@ -4,8 +4,14 @@
 // sikhi-ui component styles first, so the app's own rules still win on ties.
 @import '@khalisfoundation/sikhi-ui/dist/styles';
 
-@import 'base/typography', 'controller', 'markdown', 'themes/themes', 'update', 'viewer', 'window', 'addon',
-  'akhandpaatt', 'overlay', 'animations', 'noty', 'icon', 'ui-library';
+@import 'base/typography';
+
+// Foundation and the older partials.
+@import 'foundation/foundation', 'animations', 'footer', 'forms', 'header', 'helpers', 'search', 'share-sync',
+  'settings', 'notifications';
+
+@import 'markdown', 'themes/themes', 'update', 'viewer', 'window', 'addon', 'akhandpaatt', 'overlay', 'animations',
+  'noty', 'icon', 'ui-library';
 
 // The main screen: its panes, and the components they share.
 @import 'main-screen/pane', 'main-screen/verse-block', 'main-screen/search-pane', 'main-screen/shabad-pane',

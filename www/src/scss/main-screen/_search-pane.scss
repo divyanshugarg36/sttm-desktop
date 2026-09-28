@@ -1,201 +1,158 @@
+// The search pane: the sikhi-ui SearchBar, the results and the source footer.
+
 .search-pane {
   @include pane-containers;
+}
 
-  // The sikhi-ui SearchBar keeps its full height when its keyboard opens.
-  .library-search-bar {
-    border-radius: var(--sui-radii-md);
-    border-bottom-left-radius: unset;
-    border-bottom-right-radius: unset;
-    box-shadow: unset;
-    flex-shrink: 0;
+// The sikhi-ui SearchBar keeps its full height when its keyboard opens.
+.search-pane .library-search-bar {
+  border-radius: var(--sui-radii-md);
+  border-bottom-left-radius: unset;
+  border-bottom-right-radius: unset;
+  box-shadow: unset;
+  flex-shrink: 0;
 
-    // Microphone access denied: dim the mic, as the old search bar did.
-    &.mic-denied .sui-search-bar__mic-btn {
-      cursor: not-allowed;
-      opacity: 0.5;
-    }
-
-    // The placeholder is English even when the query is Gurbani Akhar.
-    .sui-search-bar__input.gurmukhi::placeholder {
-      font-family: var(--sui-typography-fonts-primary);
-    }
+  // Microphone access denied: dim the mic, as the old search bar did.
+  &.mic-denied .sui-search-bar__mic-btn {
+    cursor: not-allowed;
+    opacity: 0.5;
   }
 
-  .search-result-controls {
-    @include flex;
-    align-items: baseline;
+  // The placeholder is English even when the query is Gurbani Akhar.
+  .sui-search-bar__input.gurmukhi::placeholder {
+    font-family: var(--sui-typography-fonts-primary);
+  }
+}
+
+// The old search bar's filter row.
+.search-pane .search-result-controls {
+  @include flex;
+  align-items: baseline;
+  display: flex;
+  flex-direction: column;
+  font-style: italic;
+  padding: 0 0 0 10px;
+
+  @include breakpoint(xxlarge) {
+    flex-direction: row;
+  }
+
+  span {
+    color: $mild-dark;
+  }
+
+  .filters-label {
+    margin-right: 5px;
+  }
+}
+
+.search-pane .search-result-controls .filters {
+  align-items: center;
+  color: $mild-dark;
+  display: flex;
+  justify-content: end;
+  padding-right: 12px;
+  width: 100%;
+
+  @include breakpoint(xxlarge) {
+    justify-content: flex-end;
+  }
+
+  // Writer / Raag / Source: sikhi-ui bordered SimpleSelects.
+  .select-bani-dd-group {
+    font-style: normal;
+    margin-left: 6px;
+  }
+
+  select option {
+    font-style: initial;
+  }
+}
+
+// The old search bar's input row.
+.search-pane .search-content {
+  @include flex;
+  margin: 0;
+  width: 100%;
+
+  .input-buttons {
+    height: 40px;
     display: flex;
-    flex-direction: column;
-    font-style: italic;
-    padding: 0 0 0 10px;
-
-    @include breakpoint(xxlarge) {
-      flex-direction: row;
-    }
-
-    & span {
-      color: $mild-dark;
-    }
-
-    .filters-label {
-      margin-right: 5px;
-    }
-
-    .filters {
-      align-items: center;
-      color: $mild-dark;
-      display: flex;
-      justify-content: end;
-      padding-right: 12px;
-      width: 100%;
-
-      @include breakpoint(xxlarge) {
-        justify-content: flex-end;
-      }
-
-      // Writer / Raag / Source: sikhi-ui bordered SimpleSelects.
-      .select-bani-dd-group {
-        font-style: normal;
-        margin-left: 6px;
-      }
-
-      select {
-        option {
-          font-style: initial;
-        }
-      }
-    }
+    align-items: center;
   }
 
-  .search-content {
-    @include flex;
-    margin: 0;
-    width: 100%;
-
-    .input-buttons {
-      height: 40px;
-      display: flex;
-      align-items: center;
-    }
-
-    span {
-      align-self: center;
-    }
-
-    input {
-      background: transparent;
-      border: none;
-      box-shadow: none;
-      display: inline-block;
-      flex-grow: 1;
-      height: 40px;
-      margin: 0;
-      position: relative;
-      width: max-content;
-      padding: 0 8px;
-
-      &::-webkit-input-placeholder {
-        font-family: $body-font-family;
-        font-size: 0.8em;
-        color: $black;
-      }
-    }
-
-    .voice-wave-container {
-      flex-grow: 1;
-      height: 40px;
-      display: flex;
-      flex-direction: row;
-      justify-content: flex-start;
-      align-items: center;
-      background: rgba(0, 0, 0, 0.05);
-      border-radius: 4px;
-      margin: 0 8px;
-      padding: 0 12px;
-
-      .recording-duration {
-        font-size: 14px;
-        font-weight: 500;
-        color: #e1802f;
-        margin-right: 16px;
-        min-width: 32px;
-        font-family: monospace;
-      }
-
-      .voice-wave {
-        display: flex;
-        align-items: center;
-        gap: 2px;
-        height: 20px;
-
-        .voice-bar {
-          width: 3px;
-          background: #e1802f;
-          border-radius: 2px;
-          animation: voiceWave 0.8s ease-in-out infinite;
-
-          &:nth-child(odd) {
-            height: 12px;
-          }
-
-          &:nth-child(even) {
-            height: 16px;
-          }
-        }
-      }
-    }
-
-    // Stack (the results list scrolls) rather than wrap into a second column.
-    &-container {
-      display: flex;
-      flex-direction: column;
-      flex-wrap: nowrap;
-      height: 100%;
-      overflow: hidden;
-    }
+  span {
+    align-self: center;
   }
 
-  .search-results {
+  input {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    display: inline-block;
     flex-grow: 1;
-    overflow: auto;
+    height: 40px;
+    margin: 0;
+    position: relative;
+    width: max-content;
+    padding: 0 8px;
+
+    &::-webkit-input-placeholder {
+      font-family: $body-font-family;
+      font-size: 0.8em;
+      color: $black;
+    }
+  }
+}
+
+// Stack (the results list scrolls) rather than wrap into a second column.
+.search-pane .search-content-container {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  height: 100%;
+  overflow: hidden;
+}
+
+.search-pane .search-results {
+  flex-grow: 1;
+  overflow: auto;
+}
+
+// The source key under the results, and the result count.
+.search-pane .search-footer {
+  @include flex($ai-value: center, $jc-value: initial, $width: 100%);
+  font-size: 14px;
+  padding: 10px;
+
+  span:not(:last-child) {
+    @include inline-flex($width: initial);
+    padding: 5px;
+    height: 20px;
+    border-left: 3px solid;
   }
 
-  .search-footer {
-    @include flex($ai-value: center, $jc-value: initial, $width: 100%);
-    font-size: 14px;
-    padding: 10px;
+  span:last-child {
+    margin-left: auto;
+    display: flex;
+    align-self: center;
+    font-style: italic;
+  }
 
-    span {
-      &:not(:last-child) {
-        @include inline-flex($width: initial);
-        padding: 5px;
-        height: 20px;
-        border-left: 3px solid;
-      }
+  .search-footer-span1 {
+    color: #e1802f;
+  }
 
-      &:last-child {
-        margin-left: auto;
-        display: flex;
-        align-self: center;
-        font-style: italic;
-      }
-    }
+  .search-footer-span2 {
+    color: #348ce7;
+  }
 
-    .search-footer-span1 {
-      color: #e1802f;
-    }
+  .search-footer-span3 {
+    color: #65a757;
+  }
 
-    .search-footer-span2 {
-      color: #348ce7;
-    }
-
-    .search-footer-span3 {
-      color: #65a757;
-    }
-
-    .search-footer-span4 {
-      color: #717171;
-    }
+  .search-footer-span4 {
+    color: #717171;
   }
 }
 
@@ -218,21 +175,6 @@
   transition: all $transition-time $transition-easing;
   width: 10px;
 }
-
-@keyframes voiceWave {
-
-  0%,
-  100% {
-    transform: scaleY(0.5);
-    opacity: 0.6;
-  }
-
-  50% {
-    transform: scaleY(1);
-    opacity: 1;
-  }
-}
-
 
 // The old app Gurmukhi keyboard (used by the old, commented-out search bar).
 .gurmukhi-keyboard {

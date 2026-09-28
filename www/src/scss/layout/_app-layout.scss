@@ -1,5 +1,5 @@
-// The main screen's layout: the launchpad and its workspace grids
-// (Presenter columns, Multi-Pane grid), and #navigator's placement.
+// The main screen's layout: the launchpad with its workspace grids
+// (Presenter columns, Multi-Pane grid), and where #navigator sits.
 
 .launchpad {
   display: flex;
@@ -18,63 +18,66 @@
     padding: unset;
     width: unset;
   }
+}
 
-  // Presenter: two columns, each pane taking an equal share of the height.
-  .navigator-columns {
-    display: flex;
-    height: 100%;
-    width: 100%;
-  }
+// Presenter: two columns, each pane taking an equal share of the height.
+.launchpad .navigator-columns {
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
 
-  .navigator-column {
-    display: flex;
+.launchpad .navigator-column {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  min-width: 0;
+
+  > .pane-container {
     flex: 1 1 0;
-    flex-direction: column;
-    min-width: 0;
+    max-height: none;
+    min-height: 0;
+  }
+}
 
-    >.pane-container {
-      flex: 1 1 0;
-      max-height: none;
-      min-height: 0;
-    }
+// The viewer and the shabad's verses share one box.
+.launchpad .presenter-column {
+  padding: 10px;
+
+  .presenter-box {
+    box-sizing: border-box;
+    height: 100%;
+    padding: 12px;
   }
 
-  // The viewer and the shabad's verses share one box.
-  .presenter-column {
-    padding: 10px;
-
-    .presenter-box {
-      box-sizing: border-box;
-      height: 100%;
-      padding: 12px;
-    }
-
-    .pane-container {
-      flex: 1 1 0;
-      max-height: none;
-      min-height: 0;
-      padding: 0;
-    }
-
-    .viewer-pane .pane-content {
-      border: none;
-    }
+  .pane-container {
+    flex: 1 1 0;
+    max-height: none;
+    min-height: 0;
+    padding: 0;
   }
 
-  .navigator-row {
-    height: 50%;
-    width: 100vw;
-    display: flex;
-    justify-content: space-evenly;
+  .viewer-pane .pane-content {
+    border: none;
   }
+}
 
-  .multipane-grid {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    width: 100%;
-    height: 50%;
-  }
+.launchpad .navigator-row {
+  height: 50%;
+  width: 100vw;
+  display: flex;
+  justify-content: space-evenly;
+}
 
+// Multi-Pane: three shabad panes across a six-column grid.
+.launchpad .multipane-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  width: 100%;
+  height: 50%;
+}
+
+.launchpad {
   .shabad1-container,
   .shabad2-container,
   .shabad3-container {
@@ -94,6 +97,8 @@
   }
 }
 
+// #navigator: a small fixed panel by default; minimised, the side nav slides
+// away with it.
 #navigator {
   bottom: 0;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
@@ -105,20 +110,16 @@
 
   &.minimized {
     height: 40px;
+  }
 
-    #toolbar,
-    #toolbar-nav {
-      left: -80px;
-      transition: left 1s ease;
-    }
+  &.minimized #toolbar-nav {
+    left: -80px;
+    transition: left 1s ease;
   }
 }
 
-.presenter-view #navigator.minimized {
-  #toolbar,
-  #toolbar-nav {
-    left: 0;
-  }
+.presenter-view #navigator.minimized #toolbar-nav {
+  left: 0;
 }
 
 .darwin #navigator {
@@ -129,134 +130,11 @@
   transition: none;
 }
 
-.controller.scale-viewer.presenter-view {
-  #navigator {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    position: static;
-    width: 100%;
-  }
-
-  #header {
-    .navigator-header {
-      display: none;
-    }
-  }
-
-  .preferences-open {
-    display: none;
-  }
-
-  #search-page .preferences-open {
-    display: block;
-  }
-
-  .fixed-takeover-pages {
-    position: fixed;
-
-    @include calculateDimensions();
-  }
-
-  #custom-slides-page {
-    @extend .fixed-takeover-pages;
-
-    left: $presenter-pane-gap;
-
-    @include calculateTop(1);
-  }
-
-  #menu-page,
-  #shabad-menu-page {
-    @extend .fixed-takeover-pages;
-
-    left: $presenter-pane-gap;
-
-    @include calculateTop(0);
-  }
-
-  .nav-page {
-    display: block;
-    position: fixed;
-    transition: 0.5s height ease;
-
-    @include calculateDimensions();
-
-    &:nth-child(1) {
-      left: $presenter-pane-gap + $toolbar-offset;
-
-      @include calculateTop(0);
-    }
-
-    &:nth-child(2) {
-      height: calc(50% - calc(#{$presenter-pane-gap} * 1.5) - #{$footerOffset + 20px});
-      left: auto;
-      right: $presenter-pane-gap;
-
-      @include calculateTop(1);
-    }
-
-    &:nth-child(3) {
-      left: $presenter-pane-gap + $toolbar-offset;
-
-      @include calculateTop(1);
-    }
-
-    .current-shabad-header {
-      border-bottom: 2px solid transparent;
-      transition: 0.5s border ease;
-    }
-
-    &:focus {
-      outline: 0;
-
-      .current-shabad-header {
-        border-bottom-color: #01579b;
-      }
-    }
-  }
-
-  #navigator.kb-active {
-    $height: calc(50% - calc(#{$presenter-pane-gap} * 3) - calc(#{$keyboard-height} / 2));
-
-    /* .nav-page {
-      &:nth-child(1) {
-        height: $height;
-      }
-
-      &:nth-child(1) { @include calculateTop(0,0,$keyboard-height); }
-    } */
-  }
-
-  #footer {
-    .menu-group-left {
-      display: none;
-    }
-  }
-}
-
-.controller.scale-viewer.presenter-view.shortcut-tray-true .nav-page:nth-child(2) {
-  height: calc(50% - calc(#{$presenter-pane-gap} * 1.5) - #{$totalSessionOffset + 20px});
-}
-
-.controller.scale-viewer.presenter-view.win32 {
-  .nav-page:nth-child(1),
-  #menu-page,
-  #shabad-menu-page {
-    @include calculateTop(0, 1);
-  }
-
-  #navigator.kb-active {
-    $height: calc(
-      50% - calc(#{$presenter-pane-gap * 3} + #{$title-bar-offset}) - calc(#{$keyboard-height} / 2)
-    );
-
-    /* .nav-page {
-      &:nth-child(1) {
-        height: $height;
-      }
-
-      &:nth-child(1) { @include calculateTop(0,1,$keyboard-height); }
-    } */
-  }
+// Presenter view: #navigator fills the window as a column.
+.controller.scale-viewer.presenter-view #navigator {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  position: static;
+  width: 100%;
 }
