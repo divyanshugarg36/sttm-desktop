@@ -32,7 +32,7 @@ import {
 } from '../../../common/store/redux/navigatorSlice';
 import prodConfig from '../../../../../config.prod.json';
 import { analytics, i18n } from '../../../common/main-app';
-import { onFromMain, sendToMain } from '../../../common/ipc';
+import { offFromMain, onFromMain, sendToMain } from '../../../common/ipc';
 import { useAppDispatch, useAppSelector } from '../../../common/store/redux/hooks';
 import type { LegacyVerse, RealmRow } from '../../../banidb/sqlite-search';
 import type { PaneSlotProps } from '../../../common/sttm-ui/pane/Pane';
@@ -203,11 +203,17 @@ const SearchContent = ({ className }: PaneSlotProps) => {
   }, [filteredShabads]);
 
   // desktop_scripts emits this in this window (ipcRenderer.emit), so the JSON
-  // comes first, with no event.
-  onFromMain('database-progress', (data: unknown) => {
-    const { percent } = JSON.parse(data as string);
-    setDatabaseProgress(percent);
-  });
+  // comes first, with no event. Registered once, not on every render.
+  useEffect(() => {
+    const onProgress = (data: unknown) => {
+      const { percent } = JSON.parse(data as string);
+      setDatabaseProgress(percent);
+    };
+    onFromMain('database-progress', onProgress);
+    return () => {
+      offFromMain('database-progress', onProgress);
+    };
+  }, []);
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {

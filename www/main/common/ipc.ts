@@ -57,6 +57,11 @@ export const onFromMain = (
   listener: (event: Electron.IpcRendererEvent, ...args: any[]) => void, // eslint-disable-line @typescript-eslint/no-explicit-any
 ) => ipcRenderer.on(channel, listener);
 
+export const offFromMain = (
+  channel: WindowChannel,
+  listener: (event: Electron.IpcRendererEvent, ...args: any[]) => void, // eslint-disable-line @typescript-eslint/no-explicit-any
+) => ipcRenderer.removeListener(channel, listener);
+
 /** The Redux slices a global setting can target (see store.ts). */
 export type SettingType = 'userSettings' | 'navigator' | 'viewerSettings' | 'baniOverlay';
 
