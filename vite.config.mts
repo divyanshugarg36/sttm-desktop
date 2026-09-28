@@ -46,7 +46,7 @@ const devSourceEntries: Plugin = {
   },
 };
 
-export default defineConfig({
+export default defineConfig(({ command }) => ({
   root: resolve(projectRoot, 'www'),
   base: './',
   publicDir: false,
@@ -56,7 +56,12 @@ export default defineConfig({
   define: {
     'process.env.NODE_ENV': 'process.env.NODE_ENV',
     // A local SQLite BaniDB to use in development (see banidb/sqlite-search.js).
-    'process.env.STTM_BANIDB_SQLITE': 'process.env.STTM_BANIDB_SQLITE',
+    // Builds only: the dev server re-assigns each define on the page, and
+    // writing an unset variable back into process.env turns it into the
+    // string "undefined".
+    ...(command === 'build' && {
+      'process.env.STTM_BANIDB_SQLITE': 'process.env.STTM_BANIDB_SQLITE',
+    }),
   },
   plugins: [
     // Match the Babel setup: classic runtime, every JSX file imports React.
@@ -90,4 +95,4 @@ export default defineConfig({
     port: 5173,
     strictPort: true,
   },
-});
+}));
