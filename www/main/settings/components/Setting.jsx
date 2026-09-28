@@ -32,7 +32,7 @@ const Setting = ({ settingObj, stateVar, stateFunction }) => {
     }
     analytics.trackEvent({
       category: 'setting',
-      action: userSettingsActions[stateFunction],
+      action: stateFunction,
       label: value,
     });
   };
