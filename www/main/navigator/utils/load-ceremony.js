@@ -29,9 +29,6 @@ export const loadCeremony = (ceremonyId) =>
             row = [...rowDb.VerseRange];
           }
 
-          if (rowDb.VerseIDRangeStart && rowDb.VerseIDRangeEnd) {
-            row = banidb.loadVerses(rowDb.VerseIDRangeStart, rowDb.VerseIDRangeEnd);
-          }
           row.sessionKey = `ceremony-${ceremonyId}`;
           return row;
         })
