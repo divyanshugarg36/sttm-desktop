@@ -310,7 +310,7 @@ function ShabadDeck() {
             baniOptions={filteredBaniOptions.length ? filteredBaniOptions : BASE_BANI_OPTIONS}
           />
         )}
-        {!minimizedBySingleDisplay && !akhandpatt && <PaddingTools isMiscSlide={isMiscSlide} />}
+        {!minimizedBySingleDisplay && !akhandpatt && <PaddingTools />}
         <div
           id="viewer-container-slide-wrapper"
           style={{

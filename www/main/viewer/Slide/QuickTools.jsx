@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { SimpleSelect } from '@khalisfoundation/sikhi-ui';
-import { convertToCamelCase, toGroupedSelectOptions } from '../../common/utils';
+import { PrimaryButton, SimpleSelect, Tooltip } from '@khalisfoundation/sikhi-ui';
+import { classNames, convertToCamelCase, toGroupedSelectOptions } from '../../common/utils';
 import { setQuickToolsOpen } from '../../common/store/redux/viewerSettingsSlice';
 import platform from '../../desktop_scripts';
 import Icon from '../../common/sttm-ui/icon';
+import { ToolStepper } from './ToolStepper';
 
 const remote = require('@electron/remote');
 
@@ -14,6 +15,18 @@ const { i18n } = remote.require('./app');
 
 global.platform = platform;
 
+const MIN_FONT_SIZE = 1;
+const MAX_FONT_SIZE = 20;
+
+const sendUserSetting = (actionName, payload) =>
+  global.platform.ipc.send(
+    'update-global-setting',
+    JSON.stringify({ actionName, payload, settingType: 'userSettings' }),
+  );
+
+// Quick Tools: a cog in the viewer's corner that opens a popup (as sttm-next's
+// shabad controls do) with, per line of the slide, what it shows, whether it
+// shows, and its font size.
 const QuickTools = ({ isMiscSlide, baniOptions }) => {
   const userSettings = useSelector((state) => state.userSettings);
 
@@ -35,6 +48,9 @@ const QuickTools = ({ isMiscSlide, baniOptions }) => {
     if (option.includes('gurbani')) {
       return i18n.t(`QUICK_TOOLS.BANI`);
     }
+    if (option.includes('announcements')) {
+      return i18n.t(`QUICK_TOOLS.ANNOUNCEMENTS`);
+    }
     if (option.includes('teeka')) {
       return i18n.t(`QUICK_TOOLS.TEEKA`);
     }
@@ -47,87 +63,36 @@ const QuickTools = ({ isMiscSlide, baniOptions }) => {
     return '';
   };
 
-  const quickToolsModifiers = [
-    {
-      name: 'visibility',
-      actionName: 'Visibility',
-    },
-    {
-      name: 'minus',
-      actionName: 'FontSize',
-    },
-    {
-      name: 'plus',
-      actionName: 'FontSize',
-    },
-  ];
+  // A line's settings: Bani / Announcements by name, the content lines by
+  // position (content1..3).
+  const settingNames = (order, index, setting) =>
+    index > 0
+      ? { state: `content${index}${setting}`, action: `setContent${index}${setting}` }
+      : {
+          state: `${order}${setting}`,
+          action: `set${convertToCamelCase(`${order}-${setting}`, true)}`,
+        };
 
-  const createGlobalPlatformObj = (name, toolname, index, action) => {
-    let payload;
-    let actionName;
-    let stateName;
-    const maxFontSize = 20;
-    const minFontSize = 1;
-
-    if (index > 0) {
-      stateName = `content${index}${action}`;
-      actionName = `setContent${index}${action}`;
-    } else {
-      stateName = `${toolname}${action}`;
-      actionName = `set${convertToCamelCase(`${toolname}-${action}`, true)}`;
+  const changeFontSize = (order, index, step) => {
+    const { state, action } = settingNames(order, index, 'FontSize');
+    const current = parseInt(userSettings[state], 10);
+    const next = Math.min(MAX_FONT_SIZE, Math.max(MIN_FONT_SIZE, current + step));
+    if (next !== current) {
+      sendUserSetting(action, next);
     }
-
-    const currentFontSize = parseInt(userSettings[stateName], 10);
-
-    if (name === 'visibility') {
-      payload = !userSettings[stateName];
-    } else if (name === 'minus') {
-      payload = currentFontSize > minFontSize ? currentFontSize - 1 : minFontSize;
-    } else if (name === 'plus') {
-      payload = currentFontSize < maxFontSize ? currentFontSize + 1 : maxFontSize;
-    }
-
-    // If payload does not change, return null to prevent unnecessary state updates
-    if (payload === userSettings[stateName]) {
-      return null;
-    }
-
-    return {
-      actionName,
-      payload,
-      settingType: 'userSettings',
-    };
   };
 
-  const getIconName = (name, index, action) => {
-    if (index > 0 && name === 'visibility')
-      return userSettings[`content${index}${action}`] ? 'eye' : 'eye-off';
-    if (name === 'minus') return 'minus-circle';
-    if (name === 'plus') return 'plus-circle';
-    return null;
+  const toggleVisibility = (order, index) => {
+    const { state, action } = settingNames(order, index, 'Visibility');
+    sendUserSetting(action, !userSettings[state]);
   };
 
-  const hide = (name, toolName) =>
-    name === 'visibility' && ['gurbani', 'announcements'].includes(toolName)
-      ? 'quicktool-icons-hidden'
-      : '';
-
-  const bakeIcons = (toolName, index, icons) =>
-    icons.map(({ name, actionName }) => (
-      <div key={name} className={`quicktool-icons ${hide(name, toolName)}`}>
-        {getIconName(name, index, actionName) && (
-          <Icon
-            name={getIconName(name, index, actionName)}
-            onClick={() => {
-              const globalObj = createGlobalPlatformObj(name, toolName, index, actionName);
-              if (globalObj) {
-                global.platform.ipc.send('update-global-setting', JSON.stringify(globalObj));
-              }
-            }}
-          />
-        )}
-      </div>
-    ));
+  const changeContent = (index, value) => {
+    const newOrder = [...baniOrder];
+    newOrder[index] = value;
+    setBaniOrder(newOrder);
+    sendUserSetting(`setContent${index}`, value);
+  };
 
   useEffect(() => {
     if (isMiscSlide) {
@@ -144,59 +109,79 @@ const QuickTools = ({ isMiscSlide, baniOptions }) => {
     setBaniOrder(['gurbani', userSettings.content1, userSettings.content2, userSettings.content3]);
   }, [userSettings.content1, userSettings.content2, userSettings.content3]);
 
-  const handleQuickTools = (order, index) => {
-    if (order === 'gurbani' || order === 'announcements') {
-      return <div>{dropdownLabel(order)}</div>;
-    }
+  const renderLine = (order, index) => {
+    const label = dropdownLabel(order);
+    const isContentLine = index > 0;
+    const isVisible =
+      !isContentLine || userSettings[settingNames(order, index, 'Visibility').state];
 
     return (
-      <>
-        <div>{dropdownLabel(order)}</div>
-        <SimpleSelect
-          variant="bordered"
-          selectSize="sm"
-          value={order}
-          onChange={(event) => {
-            const newOrder = [...baniOrder];
-            newOrder[index] = event.target.value;
-            setBaniOrder(newOrder);
-            global.platform.ipc.send(
-              'update-global-setting',
-              JSON.stringify({
-                actionName: `setContent${index}`,
-                payload: event.target.value,
-                settingType: 'userSettings',
-              }),
-            );
-          }}
-          options={toGroupedSelectOptions(baniOptions, {
-            groupLabel: dropdownLabel,
-            isDisabled: (id) => disabledContent.includes(id),
-          })}
+      <div key={`line-${index}`} className="viewer-tools__row">
+        <div className="viewer-tools__row-head">
+          <span className="viewer-tools__label">{label}</span>
+          {isContentLine && (
+            <PrimaryButton
+              variant="ghost"
+              mode="icon"
+              size="xs"
+              aria-label={`${isVisible ? 'Hide' : 'Show'} ${label}`}
+              onClick={() => toggleVisibility(order, index)}
+            >
+              <Icon name={isVisible ? 'eye' : 'eye-off'} />
+            </PrimaryButton>
+          )}
+        </div>
+        {isContentLine && (
+          <SimpleSelect
+            variant="bordered"
+            selectSize="sm"
+            value={order}
+            onChange={(event) => changeContent(index, event.target.value)}
+            options={toGroupedSelectOptions(baniOptions, {
+              groupLabel: dropdownLabel,
+              isDisabled: (id) => disabledContent.includes(id),
+            })}
+          />
+        )}
+        <ToolStepper
+          label={`${label} font size`}
+          value={parseInt(userSettings[settingNames(order, index, 'FontSize').state], 10)}
+          min={MIN_FONT_SIZE}
+          max={MAX_FONT_SIZE}
+          onDecrease={() => changeFontSize(order, index, -1)}
+          onIncrease={() => changeFontSize(order, index, 1)}
         />
-      </>
+      </div>
     );
   };
 
   return (
-    <div className={`slide-quicktools ${!userSettings.quickTools ? 'hide-quicktools' : ''}`.trim()}>
-      <div
-        className="quicktool-header"
-        onClick={() => dispatch(setQuickToolsOpen(!quickToolsOpen))}
+    <div className={classNames('slide-quicktools', !userSettings.quickTools && 'hide-quicktools')}>
+      <Tooltip
+        trigger="click"
+        position="bottom-start"
+        showClose={false}
+        maxWidth={320}
+        open={quickToolsOpen}
+        onOpenChange={(open) => dispatch(setQuickToolsOpen(open))}
+        content={
+          <div className="viewer-tools">
+            <div className="viewer-tools__title">{i18n.t('QUICK_TOOLS.SELF')}</div>
+            {baniOrder.map(renderLine)}
+          </div>
+        }
       >
-        Quick Tools
-        <Icon name={quickToolsOpen ? 'chevron-up' : 'chevron-down'} />
-      </div>
-      {quickToolsOpen && (
-        <div className={`quicktool-body quicktool-${isMiscSlide ? 'announcement' : 'gurbani'}`}>
-          {baniOrder.map((order, index) => (
-            <div key={`item-${index}`} className="quicktool-item">
-              {handleQuickTools(order, index)}
-              <div className="quicktool-icons">{bakeIcons(order, index, quickToolsModifiers)}</div>
-            </div>
-          ))}
-        </div>
-      )}
+        <PrimaryButton
+          className="viewer-tools-trigger"
+          variant="plain"
+          mode="icon"
+          size="sm"
+          aria-label={i18n.t('QUICK_TOOLS.SELF')}
+          title={i18n.t('QUICK_TOOLS.SELF')}
+        >
+          <Icon name="cog-four-solid" />
+        </PrimaryButton>
+      </Tooltip>
     </div>
   );
 };

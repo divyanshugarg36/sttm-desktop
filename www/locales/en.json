@@ -189,6 +189,12 @@
     "SHOW_RANDOM_SHABAD": "Show Random Shabad",
     "WHATS_NEW": "What's New"
   },
+  "PADDING_TOOLS": {
+    "BOTTOM": "Bottom",
+    "LEFT": "Left",
+    "RIGHT": "Right",
+    "TOP": "Top"
+  },
   "QUICK_TOOLS": {
     "ANNOUNCEMENTS": "Announcements",
     "BANI": "Bani",

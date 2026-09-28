@@ -106,109 +106,72 @@
   text-align: left;
 }
 
-// Quick Tools Styles
+// Quick Tools / Padding Tools: corner buttons that open a popup, like
+// sttm-next's shabad controls.
 
-.slide-quicktools, .slide-paddingtools {
-  font-size: 12px;
-  font-weight: bold;
-  height: 100%;
+.slide-quicktools,
+.slide-paddingtools {
   position: fixed;
-  width: 18%;
-  max-width: 150px;
+  top: 12px;
   z-index: 20;
 
-  .single-display-mode & {
-    height: calc(100% - 56px);
-  }
-
   &.hide-quicktools {
-    left: -18%;
+    display: none;
   }
+}
+
+.slide-quicktools {
+  left: 12px;
 }
 
 .slide-paddingtools {
-  right: 0;
-
-  &.hide-tool {
-    left: -18%;
-  }
+  right: 12px;
 }
 
-.quicktool, .paddingtool {
-  &-header {
-    background-color: #0000001a;
-    display: flex;
-    justify-content: space-around;
-    padding: 6px;
+.viewer-tools {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 216px;
+  font-family: var(--sui-typography-fonts-primary);
+
+  &__title {
+    font-weight: 600;
   }
 
-  &-body {
-    background-color: $extra-light-grey;
+  &__row {
     display: flex;
     flex-direction: column;
-    height: 95%;
-    opacity: 0.9;
-    padding: 8px;
+    gap: 6px;
+
+    &--inline {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
   }
 
-  &-gurbani {
+  &__row-head {
+    display: flex;
+    align-items: center;
     justify-content: space-between;
   }
 
-  &-announcement {
-    justify-content: center;
-  }
-
-  &-item {
-    text-align: center;
-  }
-
-  &-icons {
-    display: flex;
-    justify-content: space-around;
-    padding: 5px 0;
-
-    & i {
-      border: 1px solid rgba(0, 0, 0, 0.05);
-      border-radius: 75px;
-      font-size: 16px;
-      padding: 2px;
-      height: 22px;
-      width: 22px;
-    }
-
-    &-hidden {
-      display: none;
-    }
+  &__label {
+    font-size: 12px;
+    opacity: 0.8;
   }
 }
 
-.paddingtool {
-  margin-bottom: 16px;
+.tool-stepper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 
-  &-icons {
-    align-items: center;
-
-    i.disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-  }
-
-  &-icon-value {
-    margin: 0;
-  }
-
-  &-icon-title {
-    margin-bottom: 8px;
-  }
-
-  &-title {
+  &__value {
+    min-width: 24px;
     text-align: center;
-    margin: 0;
-    font-size: 12px;
-    font-weight: bold;
-    margin-bottom: 4px;
+    font-variant-numeric: tabular-nums;
   }
 }
 
