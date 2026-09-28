@@ -14,7 +14,7 @@ const remote = require('@electron/remote');
 
 const { i18n } = remote.require('./app');
 
-const ShabadHeader = () => {
+const ShabadHeader = ({ className }) => {
   const [showViewer, setShowViewer] = useState(true);
   const { defaultPaneId } = useSelector((state) => state.userSettings);
 
@@ -23,7 +23,7 @@ const ShabadHeader = () => {
   }, [showViewer]);
 
   return (
-    <div className="shabad-pane-header">
+    <div className={classNames(className, 'shabad-pane-header')}>
       <PrimaryButton
         className={classNames('toggle-viewer-btn', !showViewer && 'btn-danger')}
         variant={showViewer ? 'default' : 'destructive'}

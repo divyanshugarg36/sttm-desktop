@@ -54,7 +54,8 @@
   margin: 0;
   padding: 0 10px;
 
-  .shabad-pane-header {
+  // The Shabad pane's header is itself the pane-header.
+  &.shabad-pane-header {
     height: 40px;
   }
 

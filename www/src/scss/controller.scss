@@ -140,17 +140,16 @@ ul {
       }
 
       .pane {
-        .pane-header {
-          .header-controller {
-            display: flex;
-            justify-content: space-between;
-            width: 100%;
+        // The single-display header is itself the pane-header.
+        .pane-header.header-controller {
+          display: flex;
+          justify-content: space-between;
+          width: 100%;
 
-            .history-order {
-              flex-grow: 1;
-              text-align: right;
-              margin-right: 24px;
-            }
+          .history-order {
+            flex-grow: 1;
+            text-align: right;
+            margin-right: 24px;
           }
         }
 
@@ -313,7 +312,7 @@ ul {
         line-height: normal;
         padding: 12px;
 
-        .shabad-pane-header {
+        &.shabad-pane-header {
           height: auto;
         }
       }

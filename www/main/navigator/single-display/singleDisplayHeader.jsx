@@ -1,5 +1,6 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { classNames } from '../../common/utils';
 import { SimpleSelect } from '@khalisfoundation/sikhi-ui';
 import ShabadHeader from '../shabad/ShabadHeader';
 import {
@@ -8,7 +9,7 @@ import {
 } from '../../common/store/redux/navigatorSlice';
 import { Icon } from '../../common/sttm-ui';
 
-export const singleDisplayHeader = () => {
+export const singleDisplayHeader = ({ className }) => {
   const { singleDisplayActiveTab, minimizedBySingleDisplay, historyOrder, verseHistory } =
     useSelector((state) => state.navigator);
   const dispatch = useDispatch();
@@ -61,7 +62,7 @@ export const singleDisplayHeader = () => {
   };
 
   return (
-    <div className="header-controller">
+    <div className={classNames(className, 'header-controller')}>
       <span>{getActiveTab(singleDisplayActiveTab)}</span>
       {singleDisplayActiveTab === 'history' && verseHistory.length > 1 && (
         <div className="history-order">
