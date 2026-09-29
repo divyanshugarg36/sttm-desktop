@@ -5,12 +5,15 @@
 /** A shabad / bani / ceremony id as the desktop sends it (activeShabadId can be a string). */
 export type ControllerId = number | string;
 
-/** The font sizes the controller shows and adjusts, per content kind. */
+/**
+ * The font sizes the controller shows and adjusts, per content kind. A kind
+ * none of the desktop's content slots shows is null.
+ */
 export interface ControllerFontSizes {
   gurbani?: number;
-  translation?: number;
-  teeka?: number;
-  transliteration?: number;
+  translation?: number | null;
+  teeka?: number | null;
+  transliteration?: number | null;
 }
 
 /* ---------- Desktop → controller ---------- */
@@ -34,9 +37,12 @@ interface DesktopContentMessageBase extends DesktopMessageBase {
   shabadid: ControllerId | null;
   /**
    * The line to highlight: a shabad's verseId, a bani / ceremony line's
-   * crossPlatformId. NaN when the desktop has none (request-control's reply).
+   * crossPlatformId. NaN when the desktop has none (request-control's reply);
+   * undefined for a bani / ceremony line with no crossPlatformId.
    */
-  highlight: number;
+  highlight: number | undefined;
+  /** A bani / ceremony line's 1-based position, which the web resolves it by. */
+  lineCount?: number;
   /** A shabad's home verse (NaN or false when there is none). */
   homeId?: number | false;
   /** The bani length setting ('' for a shabad or ceremony). */

@@ -36,6 +36,8 @@ export interface PaneState {
   homeVerse: number | false;
   content: string;
   baniType: string;
+  /** When Sundar Gutka last opened this pane's bani, so re-opening it restarts it. */
+  baniOpenedAt?: number;
 }
 
 /** A shabad saved to the user's favourites, as the SikhiToTheMax API lists it. */

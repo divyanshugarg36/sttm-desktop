@@ -166,29 +166,38 @@ export const sendToBaniController = (
     if (!crossPlatformId) {
       baniVerse = activeShabad.find((obj) => obj.verseId === newTraversedVerse);
     }
+    const baniHighlight = crossPlatformId || baniVerse?.crossPlatformId || undefined;
+    // The verse's 1-based position. Bani and ceremony verse ids don't share
+    // a space with the web controller's (ceremony rows have no
+    // crossPlatformId), so the web finds the verse by its position, as the
+    // desktop does for the controller's lineCount.
+    const verseIndex = activeShabad.findIndex((obj) => obj.verseId === newTraversedVerse);
+    const lineCount = verseIndex >= 0 ? verseIndex + 1 : undefined;
     // A bani's verse can be missing from the list while it's still loading;
-    // skip the bani/ceremony update then rather than throw.
-    const baniHighlight = crossPlatformId || baniVerse?.crossPlatformId;
+    // skip the bani/ceremony update then.
+    if ((isSundarGutkaBani && sundarGutkaBaniId) || (isCeremonyBani && ceremonyId)) {
+      if (!baniHighlight && !lineCount) return;
+    }
     if (isSundarGutkaBani && sundarGutkaBaniId) {
-      if (!baniHighlight) return;
       window.socket.emit('data', {
         host: 'sttm-desktop',
         type: 'bani',
         id: paneAttributes.activeShabad,
         shabadid: paneAttributes.activeShabad, // @deprecated
         highlight: baniHighlight,
+        lineCount,
         baniLength,
         // mangalPosition,
         verseChange: false,
       });
     } else if (isCeremonyBani && ceremonyId) {
-      if (!baniHighlight) return;
       window.socket.emit('data', {
         host: 'sttm-desktop',
         type: 'ceremony',
         id: paneAttributes.activeShabad,
         shabadid: paneAttributes.activeShabad, // @deprecated
         highlight: baniHighlight,
+        lineCount,
         verseChange: false,
       });
     } else if (activeShabadId) {

@@ -7,6 +7,7 @@ import { BANI_OVERLAY_SYNC } from './baniOverlaySlice';
 import { savedOverlaySettings } from '../user-settings/get-saved-overlay-settings';
 import { userConfigPath } from '../user-settings/get-saved-user-settings';
 import type { RootState } from './store';
+import { getControllerFontSizes } from '../../../addons/bani-controller/utils/controller-font-sizes';
 
 // Redux middleware that runs the side effects the easy-peasy settings actions
 // used to embed inside their reducers (see the old create-user-settings-state).
@@ -140,16 +141,8 @@ const settingsSyncMiddleware: Middleware<object, RootState> = (store) => (next) 
   }
 
   // 6. Push font sizes to a connected WebController: Gurbani's, and each of
-  // translation / teeka / transliteration from whichever content line shows it
-  // (left out when none does, so the controller keeps what it had).
-  const fontSize = (key: string) => parseInt(String(savedSettings[key]), 10);
-  const fontSizes: Record<string, number> = { gurbani: fontSize('gurbani-font-size') };
-  (['translation', 'teeka', 'transliteration'] as const).forEach((kind) => {
-    const line = [1, 2, 3].find((n) => String(savedSettings[`content${n}`]).startsWith(kind));
-    if (line) {
-      fontSizes[kind] = fontSize(`content${line}-font-size`);
-    }
-  });
+  // translation / teeka / transliteration from whichever content slot shows it.
+  const fontSizes = getControllerFontSizes(store.getState().userSettings);
   if (typeof window !== 'undefined' && window.socket !== undefined && window.socket !== null) {
     window.socket.emit('data', {
       host: 'sttm-desktop',
