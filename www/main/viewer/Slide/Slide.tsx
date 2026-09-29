@@ -1,0 +1,241 @@
+import React, { useEffect, useRef, useState } from 'react';
+import { CSSTransition } from 'react-transition-group';
+
+import SlideTeeka from './SlideTeeka';
+import SlideGurbani from './SlideGurbani';
+import SlideTranslation from './SlideTranslation';
+import SlideTransliteration from './SlideTransliteration';
+import SlideAnnouncement from './SlideAnnouncement';
+import { sendToMain } from '../../common/ipc';
+import { useViewerSelector } from '../store/hooks';
+import type { NextLine, SlideLine, VerseTranslations, VishraamPlacement } from '../types';
+
+type SlideProps = {
+  /** The line to show; none on an empty slide. */
+  verseObj?: SlideLine | null;
+  nextLineObj?: NextLine | null;
+  isMiscSlide: boolean;
+  /** The empty slide's overlay colour (unused). */
+  bgColor?: string;
+  /** Registers the line's element, so Akhand Paatth can scroll to it. */
+  updateVerseRef?: (verseId: number | null, ref: HTMLDivElement | null) => void;
+  slideIndex?: number;
+};
+
+const Slide = React.memo(({ verseObj, nextLineObj, isMiscSlide, updateVerseRef }: SlideProps) => {
+  const {
+    larivaar,
+    larivaarAssist,
+    larivaarAssistType,
+    leftAlign,
+    vishraamSource,
+    vishraamType,
+    displayNextLine,
+    content1,
+    content2,
+    content3,
+    content1Visibility,
+    content2Visibility,
+    content3Visibility,
+    akhandpatt,
+    slideTransitions,
+  } = useViewerSelector((state) => state.userSettings);
+
+  const { activeVerseId } = useViewerSelector((state) => state.navigator);
+  const [showVerse, setShowVerse] = useState(true);
+  const [orderMarkup, setOrderMarkup] = useState<React.ReactNode[] | null>(null);
+
+  const activeVerseRef = useRef<HTMLHeadingElement>(null);
+
+  const visibilityStates = [content1Visibility, content2Visibility, content3Visibility];
+
+  const isOnlyGurbaniVisible = () => {
+    const hasOrderMarkup = orderMarkup && orderMarkup.some((item) => item !== null);
+    const hasEnglishTranslation = verseObj && verseObj.English;
+    const hasNextLine = displayNextLine && nextLineObj;
+
+    return !hasOrderMarkup && !hasEnglishTranslation && !hasNextLine;
+  };
+
+  const getLarivaarAssistClass = () => {
+    if (larivaarAssist) {
+      return larivaarAssistType === 'single-color'
+        ? 'larivaar-assist-single-color'
+        : 'larivaar-assist-multi-color';
+    }
+    return '';
+  };
+  const getVishraamType = () =>
+    vishraamType === 'colored-words' ? 'vishraam-colored' : 'vishraam-gradient';
+
+  const getFontSize = (verseType: number) => ({ fontSize: `${verseType}vh` });
+
+  useEffect(() => {
+    if (akhandpatt) {
+      setShowVerse(true);
+      return;
+    }
+    setShowVerse(false);
+
+    const timeoutId = setTimeout(() => {
+      setShowVerse(true);
+      sendToMain('cast-to-receiver');
+    }, 200);
+
+    // eslint-disable-next-line consistent-return
+    return () => clearTimeout(timeoutId);
+  }, [verseObj, isMiscSlide, akhandpatt]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (activeVerseRef && activeVerseRef.current?.className.includes('active-viewer-verse')) {
+        activeVerseRef.current.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center',
+        });
+      }
+    }, 100);
+  }, [verseObj, akhandpatt]);
+
+  useEffect(() => {
+    const markup = [content1, content2, content3].map((content, index) => {
+      if (visibilityStates[index]) {
+        if (content.includes('teeka')) {
+          return (
+            verseObj &&
+            verseObj.Translations && (
+              <SlideTeeka
+                getFontSize={getFontSize}
+                teekaObj={JSON.parse(verseObj.Translations) as VerseTranslations}
+                key={`line-${index}`}
+                position={index}
+              />
+            )
+          );
+        }
+        if (content.includes('translation')) {
+          return (
+            verseObj &&
+            verseObj.Translations && (
+              <SlideTranslation
+                getFontSize={getFontSize}
+                translationObj={JSON.parse(verseObj.Translations) as VerseTranslations}
+                key={`line-${index}`}
+                lang={content}
+                position={index}
+              />
+            )
+          );
+        }
+        if (content.includes('transliteration')) {
+          return (
+            verseObj &&
+            verseObj.Gurmukhi && (
+              <SlideTransliteration
+                getFontSize={getFontSize}
+                gurmukhiString={verseObj.Gurmukhi}
+                key={`line-${index}`}
+                lang={content}
+                position={index}
+              />
+            )
+          );
+        }
+      }
+      return null;
+    });
+    setOrderMarkup(markup);
+  }, [
+    content1,
+    content2,
+    content3,
+    content1Visibility,
+    content2Visibility,
+    content3Visibility,
+    verseObj,
+  ]);
+
+  return isMiscSlide ? (
+    <div className="verse-slide-wrapper">
+      {isMiscSlide && <SlideAnnouncement getFontSize={getFontSize} isMiscSlide={isMiscSlide} />}
+    </div>
+  ) : (
+    verseObj && (
+      <div
+        className={akhandpatt ? '' : 'verse-slide-wrapper'}
+        id={`verse-${verseObj.ID}`}
+        ref={(el) => {
+          updateVerseRef?.(verseObj.ID, el);
+        }}
+        data-verseid={verseObj.ID}
+      >
+        <CSSTransition
+          in={showVerse}
+          timeout={akhandpatt || !slideTransitions ? 0 : 300}
+          classNames="fade"
+          unmountOnExit={!akhandpatt}
+        >
+          <div
+            className={`verse-slide ${leftAlign ? ' slide-left-align' : ''} ${
+              isOnlyGurbaniVisible() ? ' only-gurbani' : ''
+            }`}
+          >
+            {verseObj && showVerse && (
+              <>
+                {verseObj.Gurmukhi && (
+                  <h1
+                    className={`slide-gurbani ${getLarivaarAssistClass()} ${getVishraamType()} ${
+                      activeVerseId === verseObj.ID ? 'active-viewer-verse' : ''
+                    }`}
+                    ref={activeVerseRef}
+                    style={{
+                      fontWeight: 'normal', // adding style here to reach chromecast
+                    }}
+                  >
+                    <SlideGurbani
+                      getFontSize={getFontSize}
+                      gurmukhiString={verseObj.Gurmukhi}
+                      larivaar={larivaar}
+                      vishraamPlacement={
+                        verseObj.Visraam ? (JSON.parse(verseObj.Visraam) as VishraamPlacement) : {}
+                      }
+                      vishraamSource={vishraamSource}
+                    />
+                  </h1>
+                )}
+
+                {orderMarkup !== null && orderMarkup}
+
+                {verseObj.English && (
+                  <SlideTranslation getFontSize={getFontSize} translationHTML={verseObj.English} />
+                )}
+
+                {displayNextLine && nextLineObj && (
+                  <div
+                    className={`slide-next-line slide-gurbani ${getLarivaarAssistClass()} ${getVishraamType()}`}
+                  >
+                    <SlideGurbani
+                      getFontSize={getFontSize}
+                      gurmukhiString={nextLineObj.Gurmukhi}
+                      larivaar={larivaar}
+                      vishraamPlacement={
+                        nextLineObj.Visraam
+                          ? (JSON.parse(nextLineObj.Visraam) as VishraamPlacement)
+                          : {}
+                      }
+                      vishraamSource={vishraamSource}
+                    />
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+        </CSSTransition>
+      </div>
+    )
+  );
+});
+
+Slide.displayName = 'Slide';
+
+export default Slide;

@@ -1,0 +1,103 @@
+import React, { useRef } from 'react';
+import { PrimaryButton } from '@khalisfoundation/sikhi-ui';
+
+import { addCustomBackgroundFromInput } from '../../../settings/utils/custom-backgrounds';
+import { classNames } from '../../../common/utils';
+import { setOverlayScreen } from '../../../common/store/redux/appSlice';
+import { useSlides } from '../../../common/hooks';
+import { analytics, i18n } from '../../../common/main-app';
+import { useAppDispatch, useAppSelector } from '../../../common/store/redux/hooks';
+import type { PaneSlotProps } from '../../../common/sttm-ui/pane/Pane';
+
+/** A Quick Insert button. */
+type TrayItem = {
+  key: string;
+  label: string;
+  className?: string;
+  onClick: () => void;
+};
+
+// Quick Insert: a row of slide buttons (Waheguru, Mool Mantra, etc) that
+// scrolls sideways when it doesn't fit.
+export const QuickInsert = ({ className }: PaneSlotProps) => {
+  const {
+    displayWaheguruSlide: waheguruSlide,
+    displayMoolMantraSlide: moolMantraSlide,
+    displayBlankViewer: blankSlide,
+    displayAnandSahibBhog: anandSahibBhog,
+  } = useSlides();
+  const overlayScreen = useAppSelector((state) => state.app.overlayScreen);
+  const dispatch = useAppDispatch();
+  const customImageInput = useRef<HTMLInputElement>(null);
+
+  const setTab = (tabName: string) => {
+    if (tabName !== overlayScreen) {
+      dispatch(setOverlayScreen(tabName));
+    }
+    analytics.trackEvent({
+      category: 'Misc',
+      action: 'set-tab',
+      label: tabName,
+      value: 'openedFromShortcutTray',
+    });
+  };
+
+  const trayItems: TrayItem[] = [
+    {
+      key: 'anand-sahib',
+      label: i18n.t(`SHORTCUT_TRAY.ANAND_SAHIB`),
+      onClick: () => anandSahibBhog({ openedFrom: 'shortcut-tray' }),
+    },
+    {
+      key: 'mool-mantra',
+      label: i18n.t(`SHORTCUT_TRAY.MOOL_MANTRA`),
+      onClick: () => moolMantraSlide({ openedFrom: 'shortcut-tray' }),
+    },
+    {
+      key: 'waheguru',
+      label: 'ਵਾਹਿਗੁਰੂ',
+      onClick: () => waheguruSlide({ openedFrom: 'shortcut-tray' }),
+    },
+    {
+      key: 'blank',
+      label: i18n.t(`SHORTCUT_TRAY.BLANK`),
+      onClick: () => blankSlide({ openedFrom: 'shortcut-tray' }),
+    },
+    {
+      key: 'custom-image',
+      label: i18n.t('SHORTCUT_TRAY.CUSTOM_IMAGE'),
+      onClick: () => customImageInput.current!.click(),
+    },
+    {
+      key: 'announcement',
+      label: i18n.t(`SHORTCUT_TRAY.ANNOUNCEMENT`),
+      onClick: () => setTab('announcement'),
+    },
+  ];
+
+  return (
+    <div className={classNames(className, 'quick-insert')}>
+      <div className="quick-insert__items">
+        {trayItems.map(({ key, label, className: itemClassName, onClick }) => (
+          <PrimaryButton
+            key={key}
+            className={classNames('quick-insert__item', itemClassName)}
+            variant="muted"
+            size="sm"
+            shape="rounded-md"
+            onClick={onClick}
+          >
+            {label}
+          </PrimaryButton>
+        ))}
+        <input
+          ref={customImageInput}
+          className="file-input"
+          onChange={addCustomBackgroundFromInput}
+          type="file"
+          accept="image/png, image/jpeg"
+        />
+      </div>
+    </div>
+  );
+};

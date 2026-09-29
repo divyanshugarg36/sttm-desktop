@@ -30,6 +30,9 @@
     ]
   },
   "settings": {
+    "react": {
+      "version": "detect"
+    },
     "import/core-modules": "electron",
     "import/resolver": {
       "node": {
