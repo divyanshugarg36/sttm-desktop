@@ -1,27 +1,13 @@
-// A sikhi-ui gradient Box, like the other overlays.
+// The Announcement overlay's gradient Box, laid out like a Settings category:
+// titled groups (settings-group) with setting rows.
 .addon-overlay {
   border-radius: 12px;
-  height: calc(100vh - 40px);
+  height: calc(100vh - 48px);
   left: $toolbar-offset + 12px;
   max-width: 600px;
   overflow-y: auto;
-  padding: 16px;
+  padding: 12px 0 24px;
   position: fixed;
-  top: 40px;
+  top: 24px;
   width: 100%;
-
-  header {
-    align-items: center;
-    display: flex;
-    justify-content: space-between;
-  }
-
-  .gurmukhi-switch {
-    align-items: center;
-    display: flex;
-
-    span {
-      padding: 8px;
-    }
-  }
 }

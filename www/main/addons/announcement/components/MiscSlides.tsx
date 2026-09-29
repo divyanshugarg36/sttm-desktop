@@ -25,10 +25,8 @@ const MiscSlides = () => {
   };
 
   return (
-    <>
-      <header className="sync-header">
-        <h3>{i18n.t('INSERT.ADD_SLIDES')}</h3>
-      </header>
+    <section className="settings-group">
+      <h4 className="settings-group__title">{i18n.t('INSERT.ADD_SLIDES')}</h4>
 
       <div className="misc-slides-pane">
         {
@@ -97,7 +95,7 @@ const MiscSlides = () => {
           {i18n.t(`SHORTCUT_TRAY.BLANK`)}
         </PrimaryButton>
       </div>
-    </>
+    </section>
   );
 };
 

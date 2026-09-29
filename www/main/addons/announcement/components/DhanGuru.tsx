@@ -151,10 +151,8 @@ export const DhanGuru = ({ isGurmukhi }: DhanGuruProps) => {
   }, [miscSlideText, isMiscSlide, isMiscSlideGurmukhi, isAnnouncement]);
 
   return (
-    <>
-      <header className="sync-header">
-        <h3>{i18n.t('INSERT.ADD_DHAN_GURU')}</h3>
-      </header>
+    <section className="settings-group">
+      <h4 className="settings-group__title">{i18n.t('INSERT.ADD_DHAN_GURU')}</h4>
       <div className="dhan-guru-pane">
         {gurus.map((guru, index) => (
           <div
@@ -175,6 +173,6 @@ export const DhanGuru = ({ isGurmukhi }: DhanGuruProps) => {
           </div>
         ))}
       </div>
-    </>
+    </section>
   );
 };
