@@ -1,53 +1,65 @@
-// Favourite shabads: the login prompt, then a row per shabad with its date,
-// time and a remove button.
+// Favourite shabads, as rows like the History tab's (_history-list.scss): the
+// verse, when it was saved and a remove button; or the login / offline message.
 
 .favorite-list {
+  overflow-y: auto;
+
   > .sttm-loader {
-    margin: auto;
+    margin: 24px auto;
   }
 
-  &__login {
+  &__empty {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 24px 12px;
     text-align: center;
   }
 
-  &__error {
-    margin: 14px;
+  &__message {
+    color: var(--sui-semantic-foreground-muted);
+    font-size: var(--sui-typography-font-sizes-sm);
+    margin: 0;
+  }
+
+  &__items {
+    list-style: none;
+    margin: 0;
+    padding: 12px;
   }
 
   &__item {
     align-items: center;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    padding: 0px 10px;
-    transition: 0.3s all ease;
-  }
-
-  &__text {
+    border-radius: var(--sui-radii-md);
+    color: var(--sui-semantic-accent-default);
     cursor: pointer;
-    width: 65%;
+    display: flex;
+    font-weight: var(--sui-typography-font-weights-semibold);
+    gap: 12px;
+    padding: 12px;
+
+    &:hover {
+      background-color: color-mix(in srgb, var(--sui-semantic-accent-default) 4%, transparent);
+    }
   }
 
   &__verse {
-    margin: 0;
-    padding: 16px 0;
+    flex: 1 1 auto;
+    min-width: 0;
   }
 
   &__meta {
-    align-items: center;
-    color: $grey;
-    display: flex;
-    font-size: 12px;
-    font-style: italic;
+    color: var(--sui-semantic-foreground-muted);
+    flex: 0 0 auto;
+    font-size: var(--sui-typography-font-sizes-xs);
+    font-weight: normal;
+    white-space: nowrap;
+  }
 
-    > p,
-    > button {
-      margin: 0px 4px;
-    }
-
-    // sikhi-ui ghost icon PrimaryButton: remove from favorites.
-    > .sui-button:hover {
-      color: $red;
-    }
+  // sikhi-ui ghost icon button: remove from favourites.
+  &__delete {
+    color: var(--sui-semantic-foreground-muted);
+    flex: 0 0 auto;
   }
 }

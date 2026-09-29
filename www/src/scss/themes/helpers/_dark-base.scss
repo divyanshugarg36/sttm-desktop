@@ -26,8 +26,7 @@
 
   #toolbar,
   .toolbar-nav,
-  .bani-list,
-  .favorite-list {
+  .bani-list {
     background-color: $bg-alt;
 
     .sttm-loader {
@@ -315,17 +314,6 @@
     }
   }
 
-  .favorite-list {
-    .favorite-list__item {
-      button {
-        color: $text-base;
-      }
-    }
-
-    .favorite-list__item:hover {
-      background-color: $bg-bright;
-    }
-  }
 
   .shabad-pane {
     .shabad-pane__content-select {

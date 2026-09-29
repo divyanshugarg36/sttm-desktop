@@ -191,69 +191,63 @@ export const FavoritePane = ({ className, paneId }: FavoritePaneProps) => {
     fetchData();
   }, [favShabad]);
 
+  const isMultiPane = currentWorkspace === i18n.t('WORKSPACES.MULTI_PANE');
+
+  // Rows like History's: the verse, when it was saved (not in multi-pane,
+  // where the panes are narrow), and a remove button. Without a login or a
+  // connection, a message instead.
   return (
     <div className={`favorite-list ${className}`}>
-      <div className="favorite-list__login">
-        <p className="favorite-list__error">{errorMessage}</p>
-        {!userToken && (
-          <PrimaryButton
-            size="sm"
-            onClick={() => {
-              shell.openExternal(`${SP_API}/login/sso`);
-            }}
-          >
-            Login
-          </PrimaryButton>
-        )}
-      </div>
+      {(errorMessage || !userToken) && (
+        <div className="favorite-list__empty">
+          {errorMessage && <p className="favorite-list__message">{errorMessage}</p>}
+          {!userToken && (
+            <PrimaryButton
+              size="sm"
+              leftIcon={<Icon name="login" />}
+              onClick={() => {
+                shell.openExternal(`${SP_API}/login/sso`);
+              }}
+            >
+              {i18n.t('AUTH.LOGIN_LABEL')}
+            </PrimaryButton>
+          )}
+        </div>
+      )}
       {isFetching && <div className="sttm-loader" />}
-      {parsedFav.map((element, index) => {
-        const { shabadId, verseId, date, time, verse, id } = element;
-        return (
-          <div className="favorite-list__item" key={`fav-shabad-${index}`}>
-            <div className="favorite-list__text">
-              <p
-                className="favorite-list__verse gurmukhi"
-                key={`favshabad-${index}`}
-                data-id={id}
-                onClick={() => {
-                  openShabadFromFav(shabadId, verseId);
-                }}
-              >
-                {verse}
-              </p>
-            </div>
-            <div className="favorite-list__meta">
-              <p
-                className="favorite-list__date"
-                style={
-                  currentWorkspace === i18n.t('WORKSPACES.MULTI_PANE') ? { display: 'none' } : {}
-                }
-              >
-                {date}
-              </p>
-              <p
-                className="favorite-list__time"
-                style={
-                  currentWorkspace === i18n.t('WORKSPACES.MULTI_PANE') ? { display: 'none' } : {}
-                }
-              >
-                {time}
-              </p>
+      <ul className="favorite-list__items">
+        {parsedFav.map((element) => {
+          const { shabadId, verseId, date, time, verse, id } = element;
+          return (
+            <li
+              className="favorite-list__item"
+              key={`fav-shabad-${id}`}
+              data-id={id}
+              onClick={() => openShabadFromFav(shabadId, verseId)}
+            >
+              <span className="favorite-list__verse gurmukhi">{verse}</span>
+              {!isMultiPane && (
+                <span className="favorite-list__meta">
+                  {date} · {time}
+                </span>
+              )}
               <PrimaryButton
+                className="favorite-list__delete"
                 variant="ghost"
                 mode="icon"
                 size="xs"
-                onClick={() => {
+                aria-label="Remove from favorites"
+                onClick={(event) => {
+                  event.stopPropagation();
                   deleteFromFav(element);
                 }}
               >
                 <Icon name="x" />
               </PrimaryButton>
-            </div>
-          </div>
-        );
-      })}
+            </li>
+          );
+        })}
+      </ul>
     </div>
   );
 };
