@@ -8,7 +8,17 @@ import { castToReceiver, appendMessage, requestSession, stopApp, tingle } from '
 import { i18n } from '../common/main-app';
 import { onFromMain } from '../common/ipc';
 
-const ViewerApp = () => {
+// The viewer entry calls ViewerApp as a function on every wc-webview-enabled,
+// so the cast setup is guarded: its IPC listeners are registered once, or each
+// call would add another copy and one cast-verse would cast several times.
+let castSetUp = false;
+
+const setUpCast = () => {
+  if (castSetUp) {
+    return;
+  }
+  castSetUp = true;
+
   chromecast(
     (receivers) =>
       new Promise<ChromecastReceiver>((resolve) => {
@@ -70,6 +80,10 @@ const ViewerApp = () => {
   onFromMain('cast-verse', () => {
     castToReceiver();
   });
+};
+
+const ViewerApp = () => {
+  setUpCast();
   return (
     <Provider store={viewerStore}>
       <ShabadDeck />
