@@ -1,67 +1,6 @@
 @import 'light-base';
 @import 'dark-base';
 
-@mixin vishraamStyles($visraam, $yamki) {
-  $visraam-main: $visraam;
-  $visraam-yamki: $yamki;
-
-  .vishraam-gradient {
-    span {
-      span.vishraam-y {
-        border-radius: 15px;
-        background: linear-gradient(
-          to right,
-          rgba(229, 229, 229, 0) 20%,
-          rgba($visraam-yamki, 0.7) 100%
-        );
-      }
-
-      span.vishraam-v {
-        border-radius: 15px;
-        background: linear-gradient(
-          to right,
-          rgba(229, 229, 229, 0) 20%,
-          rgba($visraam-main, 0.7) 100%
-        );
-      }
-    }
-  }
-
-  .vishraam-colored {
-    span {
-      span.vishraam-y {
-        color: $visraam-yamki;
-      }
-
-      span.vishraam-v {
-        color: $visraam-main;
-      }
-    }
-  }
-
-  .larivaar-assist-single-color {
-    .larivaar {
-      span:nth-of-type(even) {
-        opacity: 0.75 !important;
-      }
-    }
-  }
-  .larivaar-assist-single-color {
-    .larivaar {
-      span:nth-of-type(odd) {
-        position: sticky;
-      }
-    }
-  }
-  .larivaar-assist-multi-color {
-    .larivaar {
-      span:nth-of-type(even) {
-        color: $yamki !important;
-      }
-    }
-  }
-}
-
 @mixin generateTheme(
   $type,
   $background-color,
@@ -109,6 +48,4 @@
   .slide-transliteration {
     color: $transliteration;
   }
-
-  @include vishraamStyles($visraam, $yamki);
 }
