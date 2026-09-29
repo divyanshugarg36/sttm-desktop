@@ -91,7 +91,7 @@ const getBaniControllerItems = ({
       control: (
         <>
           <span className="sync-pin">
-            {i18n.t('TOOLBAR.SYNC_CONTROLLER.PIN')}:{' '}
+            {i18n.t('TOOLBAR.SYNC_CONTROLLER.PIN')}
             <strong>{isAdminPinVisible && adminPin ? adminPin : '····'}</strong>
           </span>
           <PrimaryButton

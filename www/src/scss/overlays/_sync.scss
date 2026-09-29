@@ -85,9 +85,22 @@
   }
 }
 
+// The Bani Controller's PIN: its label small, the number big like the code.
 .sync-pin {
-  font-size: var(--sui-typography-font-sizes-base);
-  font-variant-numeric: tabular-nums;
+  align-items: baseline;
+  color: var(--sui-semantic-foreground-muted);
+  display: inline-flex;
+  font-size: var(--sui-typography-font-sizes-sm);
+  gap: 6px;
+
+  strong {
+    color: var(--sui-semantic-foreground-default);
+    font-size: 28px;
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    line-height: 1.2;
+  }
 }
 
 .sync-qr__code {
