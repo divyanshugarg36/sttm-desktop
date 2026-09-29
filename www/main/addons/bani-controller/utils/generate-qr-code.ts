@@ -1,4 +1,4 @@
-import Noty from 'noty';
+import { toast } from '@khalisfoundation/sikhi-ui';
 import qrCode from 'qrcode';
 
 import { i18n } from '../../../common/main-app';
@@ -13,12 +13,7 @@ const generateQrCode = (canvas: HTMLCanvasElement | null, syncCode: string | nul
     }
     qrCode.toCanvas(canvas, url, (error) => {
       if (error) {
-        new Noty({
-          type: 'error',
-          text: `${i18n.t('TOOLBAR.QR_CODE.ERROR')} : ${error}`,
-          timeout: 5000,
-          modal: true,
-        }).show();
+        toast.error(`${i18n.t('TOOLBAR.QR_CODE.ERROR')} : ${error}`, { duration: 5000 });
       }
     });
   }

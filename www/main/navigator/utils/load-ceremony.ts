@@ -1,4 +1,4 @@
-import Noty from 'noty';
+import { toast } from '@khalisfoundation/sikhi-ui';
 import * as banidb from '../../banidb';
 import { i18n } from '../../common/main-app';
 import type { CeremonyRow, LoadedLine } from './types';
@@ -39,10 +39,7 @@ export const loadCeremony = (ceremonyId: number | string) =>
         }),
     )
     .catch((err) => {
-      new Noty({
-        type: 'error',
-        text: `${i18n.t('BANI.LOAD_ERROR', { erroneousOperation: 'Ceremony' })} : ${err}`,
-        timeout: 5000,
-        modal: true,
-      }).show();
+      toast.error(`${i18n.t('BANI.LOAD_ERROR', { erroneousOperation: 'Ceremony' })} : ${err}`, {
+        duration: 5000,
+      });
     });

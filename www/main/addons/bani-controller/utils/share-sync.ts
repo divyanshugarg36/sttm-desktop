@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import Noty from 'noty';
+import { toast } from '@khalisfoundation/sikhi-ui';
 
 import { API_ENDPOINT as SYNC_API_URL } from '../../../common/constants';
 import { analytics, i18n, store } from '../../../common/main-app';
@@ -41,12 +41,7 @@ async function getNewCode(host: unknown) {
       action: 'error',
       value: error,
     });
-    new Noty({
-      type: 'error',
-      text: i18n.t('TOOLBAR.SYNC_CONTROLLER.CODE_ERR'),
-      timeout: 3000,
-      modal: true,
-    }).show();
+    toast.error(i18n.t('TOOLBAR.SYNC_CONTROLLER.CODE_ERR'), { duration: 3000 });
     newCode = null;
   }
   return newCode;
