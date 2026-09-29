@@ -72,13 +72,15 @@
   min-width: 0;
 }
 
+// Fills the height the toolbar leaves.
 .preview {
-  aspect-ratio: 16 / 9;
   background-image: url('../../assets/img/maharaj.jpg');
   background-position: center center;
   background-size: cover;
   border: 0;
   border-radius: 12px;
+  flex: 1 1 auto;
+  min-height: 0;
   overflow: hidden;
   width: 100%;
 }
