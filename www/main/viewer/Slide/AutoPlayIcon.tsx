@@ -1,6 +1,6 @@
 import React from 'react';
 import { PrimaryButton } from '@khalisfoundation/sikhi-ui';
-import { Icon } from '../../common/sttm-ui';
+import Icon from '../../common/sttm-ui/icon';
 import { sendGlobalSetting } from '../../common/ipc';
 import { useViewerSelector } from '../store/hooks';
 
