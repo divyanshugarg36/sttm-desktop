@@ -1,19 +1,20 @@
+import { ipcRenderer } from 'electron';
+import extract from 'extract-zip';
+import fs from 'fs';
+import isOnline from 'is-online';
+import path from 'path';
+import fetch from 'node-fetch';
+import * as remote from '@electron/remote';
+import moment from 'moment';
+
 import tingle from './common/vendor/tingle';
 import { downloadFile } from './common/utils/download-file';
 import { hasSqliteDB, reopen, sqlitePath } from './banidb';
+import { i18n, mainApp, store } from './common/main-app';
+import type { NotificationsMessage } from './menu';
 
-const { ipcRenderer } = require('electron');
-const electron = require('electron');
-const extract = require('extract-zip');
-const fs = require('fs');
-const isOnline = require('is-online');
-const path = require('path');
-const fetch = require('node-fetch');
-const remote = require('@electron/remote');
-const moment = require('moment');
-
-const { i18n, isUnsupportedWindow } = remote.require('./app');
-const ipc = electron.ipcRenderer;
+const { isUnsupportedWindow } = mainApp;
+const ipc = ipcRenderer;
 const userDataPath = remote.app.getPath('userData');
 const DB_URL = 'https://banidb.blob.core.windows.net/database';
 // The SQLite BaniDB: a zip holding banidb.sqlite, and the zip's MD5.
@@ -39,13 +40,11 @@ const oldDBs = [
   'realm-schema-evergreen.json',
 ];
 
-const { store } = remote.require('./app');
-
 const POLLING_INTERVAL = 120 * 60000; // poll for new notifications every 2hrs.
 
-function windowAction(e) {
+function windowAction(e: MouseEvent) {
   const win = remote.getCurrentWindow();
-  const el = e.currentTarget;
+  const el = e.currentTarget as HTMLElement;
   switch (el.dataset.windowAction) {
     case 'minimize':
       win.minimize();
@@ -67,9 +66,11 @@ function windowAction(e) {
   }
 }
 
-function addBadgeToNotification(msg) {
-  if (msg && msg.length > 0) {
-    document.getElementById('notifications-icon').classList.add('badge');
+// Note: the response is an object ({ rows }), not a list, so `length` is
+// undefined and no badge is added. Kept as it was.
+function addBadgeToNotification(msg?: NotificationsMessage) {
+  if (msg && (msg as { length?: number }).length! > 0) {
+    document.getElementById('notifications-icon')!.classList.add('badge');
   }
 }
 
@@ -101,7 +102,7 @@ const platform = {
         return formattedDate;
       }
       return null;
-    } catch (error) {
+    } catch {
       return null;
     }
   },
@@ -131,9 +132,9 @@ const platform = {
 
   downloadLatestDB(force = false) {
     if (force) {
-      localStorage.setItem('isDbDownloaded', false);
+      localStorage.setItem('isDbDownloaded', 'false');
     } else {
-      localStorage.setItem('isDbDownloaded', true);
+      localStorage.setItem('isDbDownloaded', 'true');
     }
     isOnline().then((online) => {
       if (online) {
@@ -149,7 +150,8 @@ const platform = {
                 dbCompressed,
                 (state) => {
                   const win = remote.getCurrentWindow();
-                  win.setProgressBar(state.percent);
+                  // null when the size isn't known, passed through as before.
+                  win.setProgressBar(state.percent as number);
                   ipcRenderer.emit('database-progress', JSON.stringify(state));
                 },
               ).then(() => {
@@ -203,7 +205,7 @@ const platform = {
     if (global.platform) global.platform.ipc.send('update-settings');
   },
 
-  updateNotificationsTimestamp(time) {
+  updateNotificationsTimestamp(time: string) {
     store.setUserPref('notification-timestamp', time);
   },
 };
@@ -212,7 +214,7 @@ export default platform;
 
 const $titleButtons = document.querySelectorAll('#titlebar .controls a');
 Array.from($titleButtons).forEach((el) => {
-  el.addEventListener('click', (e) => windowAction(e));
+  el.addEventListener('click', (e) => windowAction(e as MouseEvent));
 });
 
 const $minimize = document.querySelectorAll('.navigator-header .toggle-minimize');
@@ -224,7 +226,7 @@ if ($minimize) {
       Array.prototype.forEach.call($minimizeIcons, (element) => {
         element.classList.toggle('disabled');
       });
-      document.getElementById('navigator').classList.toggle('minimized');
+      document.getElementById('navigator')!.classList.toggle('minimized');
       if (global.webview) global.webview.send('navigator-toggled');
     });
   });

@@ -13,7 +13,7 @@ export type Theme = (typeof themesJson)[number] & {
   'background-video-poster'?: string;
 };
 
-/** The preferences store (www/main/store.js), a JSON file under userData. */
+/** The preferences store (www/main/store.ts), a JSON file under userData. */
 export interface PreferencesStore {
   get(key: string): unknown;
   set(key: string, value: unknown): void;

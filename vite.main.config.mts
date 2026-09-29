@@ -27,7 +27,7 @@ export default defineConfig({
     sourcemap: true,
     rolldownOptions: {
       input: {
-        store: resolve(projectRoot, 'www/main/store.js'),
+        store: resolve(projectRoot, 'www/main/store.ts'),
         'get-saved-user-settings': resolve(
           projectRoot,
           'www/main/common/store/user-settings/get-saved-user-settings.ts',

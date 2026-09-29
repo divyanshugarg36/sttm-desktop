@@ -3,5 +3,5 @@ import { createRoot } from 'react-dom/client';
 
 import app from '../overlay/app';
 
-const root = createRoot(document.getElementById('overlay-container'));
+const root = createRoot(document.getElementById('overlay-container')!);
 root.render(app());

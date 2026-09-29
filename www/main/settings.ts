@@ -1,22 +1,38 @@
-import settings from '../configs/settings.json';
+import settingsConfig from '../configs/settings.json';
+import { store } from './common/main-app';
+import type { ControllerFontSizes } from './addons/bani-controller/types';
 
-const remote = require('@electron/remote');
+/**
+ * A setting in www/configs/settings.json. What `options` holds depends on the
+ * type: flags (checkbox / switch / radio), dropdowns with their own options,
+ * or ranges.
+ */
+interface SettingDefinition {
+  type: string;
+  options: Record<string, { min: number; max: number; step: number; options: object }>;
+}
 
-const { store } = remote.require('./app');
+const settings = settingsConfig as unknown as Record<
+  string,
+  { settings: Record<string, SettingDefinition> }
+>;
+
+/** The saved preferences, by category and setting (userPrefs in the preferences store). */
+type UserPrefs = Record<string, Record<string, Record<string, unknown>>>;
 
 const settingsPage = {
   init() {
     this.applySettings();
   },
 
-  applySettings(prefs = false) {
-    const newUserPrefs = prefs || store.getAllPrefs();
+  applySettings(prefs: UserPrefs | false = false) {
+    const newUserPrefs = prefs || (store.getAllPrefs() as UserPrefs);
     if (window.socket !== undefined && window.socket !== null) {
       window.socket.emit('data', {
         host: 'sttm-desktop',
         type: 'settings',
         settings: {
-          fontSizes: store.getUserPref('slide-layout.font-sizes'),
+          fontSizes: store.getUserPref('slide-layout.font-sizes') as ControllerFontSizes,
         },
       });
     }
@@ -39,7 +55,8 @@ const settingsPage = {
             Object.keys(setting.options).forEach((optionToRemove) => {
               document.body.classList.remove(optionToRemove);
             });
-            document.body.classList.add(newUserPrefs[catKey][settingKey]);
+            // A radio's value is the option's key (classList stringifies it).
+            document.body.classList.add(String(newUserPrefs[catKey][settingKey]));
             break;
 
           case 'dropdown':

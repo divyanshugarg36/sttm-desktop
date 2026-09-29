@@ -9,7 +9,7 @@ import controller from '../controller';
 import core from '../index';
 import { syncSikhiUiTheme } from '../common/sui-theme';
 
-const root = createRoot(document.getElementById('navigator'));
+const root = createRoot(document.getElementById('navigator')!);
 root.render(app());
 
 global.platform = platform;

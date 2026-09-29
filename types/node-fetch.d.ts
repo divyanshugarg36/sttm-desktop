@@ -6,6 +6,7 @@ declare module 'node-fetch' {
     status: number;
     headers: { get(name: string): string | null };
     body: Readable;
+    text(): Promise<string>;
   }
 
   export default function fetch(url: string): Promise<Response>;

@@ -42,7 +42,7 @@ const devSourceEntries: Plugin = {
   transformIndexHtml: {
     // Before Vite's own HTML processing, which rewrites the relative src.
     order: 'pre',
-    handler: (html) => html.replace(/\.\/dist\/(main|viewer|overlay)\.js/g, '/main/entries/$1.jsx'),
+    handler: (html) => html.replace(/\.\/dist\/(main|viewer|overlay)\.js/g, '/main/entries/$1.tsx'),
   },
 };
 
@@ -79,11 +79,11 @@ export default defineConfig(({ command }) => ({
     minify: false,
     rolldownOptions: {
       input: {
-        main: resolve(projectRoot, 'www/main/entries/main.jsx'),
-        viewer: resolve(projectRoot, 'www/main/entries/viewer.jsx'),
-        overlay: resolve(projectRoot, 'www/main/entries/overlay.jsx'),
+        main: resolve(projectRoot, 'www/main/entries/main.tsx'),
+        viewer: resolve(projectRoot, 'www/main/entries/viewer.tsx'),
+        overlay: resolve(projectRoot, 'www/main/entries/overlay.tsx'),
         // Help, legend and changelog windows.
-        markdown: resolve(projectRoot, 'www/main/markdownToHTML.js'),
+        markdown: resolve(projectRoot, 'www/main/markdownToHTML.ts'),
       },
       output: {
         entryFileNames: '[name].js',

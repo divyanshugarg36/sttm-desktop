@@ -29,11 +29,11 @@ interface DisplaySize {
 // window entry, the Redux store, the viewer / overlay stores).
 declare global {
   /* eslint-disable no-var, vars-on-top */
-  /** www/main/desktop_scripts.js: IPC, the offline database, settings sync. */
+  /** www/main/desktop_scripts.ts: IPC, the offline database, settings sync. */
   var platform: typeof platformModule;
-  /** www/main/controller.js: the app menu and window-level settings handlers. */
+  /** www/main/controller.ts: the app menu and window-level settings handlers. */
   var controller: typeof controllerModule;
-  /** www/main/index.js: the menu, the theme editor and platformMethod(). */
+  /** www/main/index.ts: the menu, the theme editor and platformMethod(). */
   var core: typeof coreModule;
   /** The embedded viewer <webview> in the main window, while it's mounted. */
   var webview: WebviewTag | null;

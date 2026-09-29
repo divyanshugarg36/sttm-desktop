@@ -161,13 +161,13 @@ const CeremonyPane = ({ token, name, id, onScreenClose }: CeremonyPaneProps) => 
     toggleOptions('rm', isRm);
   };
 
-  // getTheme is untyped JS (theme_editor.js); it returns a theme from themes.json.
+  // Themes from themes.json; the pane assumes each key (and the current theme) exists.
   const themes: Record<string, Theme> = {
-    light: getTheme('light-theme'),
-    anandkaraj: getTheme('floral'),
-    anand: getTheme('a-new-day'),
-    akbhogrm: getTheme('khalsa-gold'),
-    current: getTheme(currentTheme),
+    light: getTheme('light-theme')!,
+    anandkaraj: getTheme('floral')!,
+    anand: getTheme('a-new-day')!,
+    akbhogrm: getTheme('khalsa-gold')!,
+    current: getTheme(currentTheme)!,
   };
 
   const openCeremonyFromDropdown = (e: React.MouseEvent<HTMLDivElement>, givenPane: number) => {

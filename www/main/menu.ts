@@ -1,19 +1,27 @@
+import fetch from 'node-fetch';
+import moment from 'moment';
+import * as electron from 'electron';
+
 import settings from './settings';
 import tingle from './common/vendor/tingle';
 import { savedSettings } from './common/store/user-settings/get-saved-user-settings';
 import { applyUserSettings } from './common/store/user-settings/apply-user-settings';
 import { API_ENDPOINT } from './api-config';
-
-const fetch = require('node-fetch');
-const moment = require('moment');
-const electron = require('electron');
+import { analytics, i18n } from './common/main-app';
 
 // const isOnline = require('is-online');
 
-const remote = require('@electron/remote');
+/** A message from the desktop notifications API. */
+interface NotificationRow {
+  Created: string;
+  Title: string;
+  Content: string;
+}
 
-const { i18n } = remote.require('./app');
-const analytics = remote.getGlobal('analytics');
+/** The notifications API's response (undefined when it couldn't be read). */
+export interface NotificationsMessage {
+  rows?: NotificationRow[];
+}
 
 const modal = new tingle.Modal({
   footer: true,
@@ -28,30 +36,30 @@ modal.addFooterBtn(closeBtn, 'tingle-btn tingle-btn--pull-right tingle-btn--defa
 });
 
 // format the date default to "Month Day, Year"
-const formatDate = (dateString, format = 'LL') => moment(dateString).format(format);
+const formatDate = (dateString: string, format = 'LL') => moment(dateString).format(format);
 
-const stripScripts = (string) => {
+const stripScripts = (string: string) => {
   const div = document.createElement('div');
   div.innerHTML = string;
   const scripts = div.getElementsByTagName('script');
   let i = scripts.length;
   while (i > 0) {
     i -= 1;
-    scripts[i].parentNode.removeChild(scripts[i]);
+    scripts[i].parentNode!.removeChild(scripts[i]);
   }
   return div.innerHTML;
 };
 
 const scriptTagCheckRegEx = /<[^>]*script/i;
 
-const parseContent = (contentString) => {
+const parseContent = (contentString: string) => {
   if (scriptTagCheckRegEx.test(contentString)) {
     return stripScripts(contentString); // this might be overkill.
   }
   return contentString;
 };
 
-const createNotificationContent = (msgList) => {
+const createNotificationContent = (msgList: NotificationRow[]) => {
   let html = `<h1 class="model-title">${i18n.t('OTHERS.WHATS_NEW')}</h1> <div class="messages">`;
 
   msgList.forEach((item) => {
@@ -66,7 +74,7 @@ const createNotificationContent = (msgList) => {
   return html;
 };
 
-const showNotificationsModal = (message) => {
+const showNotificationsModal = (message?: NotificationsMessage) => {
   if (message && message.rows && message.rows.length > 0) {
     const time = moment().format('YYYY-MM-DD HH:mm:ss');
     global.core.platformMethod('updateNotificationsTimestamp', time);
@@ -78,11 +86,14 @@ const showNotificationsModal = (message) => {
   }
 };
 
-const getNotifications = (timeStamp, callback) => {
+const getNotifications = (
+  timeStamp: unknown,
+  callback: (message?: NotificationsMessage) => void,
+) => {
   fetch(`${API_ENDPOINT}/messages/desktop/${typeof timeStamp === 'string' ? timeStamp : ''}`)
     .then((response) => response.text())
     .then((body) => {
-      let message;
+      let message: NotificationsMessage | undefined;
       try {
         message = JSON.parse(body);
       } catch (e) {
@@ -93,12 +104,13 @@ const getNotifications = (timeStamp, callback) => {
     })
     // No response at all (offline, network error): no message, as before.
     .catch(() => undefined)
-    .then((message) => callback.apply(this, [message]));
+    .then((message) => callback(message));
 };
 
 // On href clicks, open the link in actual browser
 document.body.addEventListener('click', (e) => {
-  const { target } = e;
+  // Only links have an href; for anything else it's undefined.
+  const target = e.target as HTMLAnchorElement;
   const link = target.href;
   if (target.href) {
     e.preventDefault();
@@ -122,7 +134,7 @@ const menu = {
 
   showNotificationsModal,
 
-  showSettingsTab(fromMainMenu) {
+  showSettingsTab(fromMainMenu?: unknown) {
     // search.activateNavLink('settings', true);
     // search.activateNavPage('session', { id: 'settings', label: i18n.t('TOOLBAR.SETTINGS') });
 
@@ -135,7 +147,7 @@ const menu = {
       label: settingsViewType,
     });
 
-    const sessionPage = document.querySelector('#session-page');
+    const sessionPage = document.querySelector('#session-page')!;
     sessionPage.classList.add('bounce-animate');
     sessionPage.addEventListener('webkitAnimationEnd', () => {
       sessionPage.classList.remove('bounce-animate');
@@ -143,7 +155,7 @@ const menu = {
   },
 
   toggleMenu(pageSelector = '#menu-page') {
-    document.querySelector(pageSelector).classList.toggle('active');
+    document.querySelector(pageSelector)!.classList.toggle('active');
   },
 };
 

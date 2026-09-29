@@ -1,59 +1,75 @@
-const electron = require('electron');
-const fs = require('fs');
-const ldDefaultsDeep = require('lodash.defaultsdeep');
-const ldGet = require('lodash.get');
-const path = require('path');
+import * as electron from 'electron';
+import fs from 'fs';
+import ldDefaultsDeep from 'lodash.defaultsdeep';
+import ldGet from 'lodash.get';
+import path from 'path';
 
-/* eslint-disable global-require */
-let remote;
-if (electron.app) {
-  remote = require('@electron/remote/main');
-} else {
-  remote = require('@electron/remote');
+import type { PreferencesStore } from './common/main-app';
+
+// The preferences store. Built for the main process (vite.main.config.mts):
+// app.js requires dist/main/store and creates the one instance, which the
+// windows reach through @electron/remote (common/main-app).
+
+type Data = Record<string, unknown>;
+
+interface StoreOptions {
+  /** The file name under userData, without `.json`. */
+  configName: string;
+  defaults: Data;
 }
-/* eslint-enable */
 
 // Set a value at a dot-separated path such as 'userPrefs.app.theme', creating
 // objects along the way (what lodash.set did for these keys). Refuses keys that
 // would reach Object.prototype.
 const UNSAFE_KEYS = ['__proto__', 'constructor', 'prototype'];
-function setByPath(target, keyPath, value) {
+function setByPath(target: Data, keyPath: string, value: unknown) {
   const keys = String(keyPath).split('.');
   if (keys.some((key) => UNSAFE_KEYS.includes(key))) {
     return;
   }
-  const lastKey = keys.pop();
+  const lastKey = keys.pop()!;
   let node = target;
   keys.forEach((key) => {
     if (node[key] === null || typeof node[key] !== 'object') {
       node[key] = {};
     }
-    node = node[key];
+    node = node[key] as Data;
   });
   node[lastKey] = value;
 }
 
-function parseDataFile(filePath, defaults) {
+function parseDataFile(filePath: string, defaults: Data): Data {
   // We'll try/catch it in case the file doesn't exist yet,
   // which will be the case on the first application run.
   // `fs.readFileSync` will return a JSON string which we then parse into a Javascript object
   try {
-    return JSON.parse(fs.readFileSync(filePath));
-  } catch (error) {
+    return JSON.parse(fs.readFileSync(filePath, 'utf8'));
+  } catch {
     // if there was some kind of error, return the passed in defaults instead.
     return defaults;
   }
 }
 
-class Store {
-  constructor(opts) {
+class Store implements PreferencesStore {
+  path: string;
+
+  data: Data;
+
+  defaults: Data;
+
+  combined: Data;
+
+  constructor(opts: StoreOptions) {
     // Renderer process has to get `app` module via `remote`,
     // whereas the main process can get it directly
     // app.getPath('userData') will return a string of the user's app data directory path.
-    let userDataPath;
+    let userDataPath: string;
     if (electron.app) {
       userDataPath = electron.app.getPath('userData');
     } else {
+      // Only in a window: the main process can't load @electron/remote.
+      // eslint-disable-next-line @typescript-eslint/no-require-imports, global-require
+      const remote = require('@electron/remote') as typeof import('@electron/remote');
       userDataPath = remote.app.getPath('userData');
     }
 
@@ -77,12 +93,12 @@ class Store {
   }
 
   // This will just return the property on the `data` object
-  get(key) {
+  get(key: string): unknown {
     return ldGet(this.combined, key);
   }
 
   // ...and this will set it
-  set(key, val) {
+  set(key: string, val: unknown) {
     setByPath(this.data, key, val);
     this.combined = ldDefaultsDeep(this.data, this.defaults);
 
@@ -99,7 +115,7 @@ class Store {
     }
   }
 
-  delete(key) {
+  delete(key: string) {
     delete this.data[key];
     this.combined = ldDefaultsDeep(this.data, this.defaults);
 
@@ -112,17 +128,18 @@ class Store {
   }
 
   getAllPrefs() {
-    return this.get('userPrefs');
+    return this.get('userPrefs') as Data;
   }
 
-  getUserPref(key) {
+  getUserPref(key: string) {
     return this.get(`userPrefs.${key}`);
   }
 
-  setUserPref(key, val) {
+  setUserPref(key: string, val: unknown) {
     this.set(`userPrefs.${key}`, val);
   }
 }
 
-// expose the class
-module.exports = Store;
+// expose the class. It is the only export, so the CommonJS build sets
+// module.exports to it, which is what app.js requires.
+export default Store;
