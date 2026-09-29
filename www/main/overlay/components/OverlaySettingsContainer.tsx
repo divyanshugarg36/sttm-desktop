@@ -1,47 +1,40 @@
 import React from 'react';
 
 import OverlayCategories from './OverlayCategories';
-import Switch from '../../common/sttm-ui/switch';
 import { i18n } from '../../common/main-app';
 import type { GeneratedCategory } from '../../common/utils/settings-obj-generator';
 
 type OverlaySettingsContainerProps = {
   settingsObj: Record<string, GeneratedCategory>;
+  /** The bottom bar: its controls in a row, without titles. */
+  isToolbar?: boolean;
 };
 
-const OverlaySettingsContainer = ({ settingsObj }: OverlaySettingsContainerProps) => {
-  const settingsList: React.ReactElement[] = [];
-  Object.keys(settingsObj).forEach((cat, index) => {
-    const category = settingsObj[cat];
-    if (category.type === 'title') {
-      settingsList.push(
-        <div
-          id={cat}
-          className="overlay-settings-container"
-          key={`overlay-settings-container-${index}`}
-        >
-          <div className="category-header">
-            {category.title && (
-              <p className="overlay-window-text"> {i18n.t(`BANI_OVERLAY.${category.title}`)} </p>
+// Each category is a titled group of setting rows, like Settings'; in the
+// bottom bar, a group of controls.
+const OverlaySettingsContainer = ({
+  settingsObj,
+  isToolbar = false,
+}: OverlaySettingsContainerProps) => (
+  <>
+    {Object.keys(settingsObj)
+      .filter((cat) => settingsObj[cat].type === 'title')
+      .map((cat) => {
+        const category = settingsObj[cat];
+        return (
+          <section
+            id={cat}
+            key={cat}
+            className={isToolbar ? 'overlay-toolbar__group' : 'settings-group'}
+          >
+            {!isToolbar && category.title && (
+              <h4 className="settings-group__title">{i18n.t(`BANI_OVERLAY.${category.title}`)}</h4>
             )}
-
-            {category.toggle && (
-              <Switch
-                controlId={`subcat-switch`}
-                className={`control-item-switch`}
-                value={false}
-                onToggle={() => {
-                  // Add logic for switch toggle here
-                }}
-              />
-            )}
-          </div>
-          <OverlayCategories category={category} />
-        </div>,
-      );
-    }
-  });
-  return <> {settingsList} </>;
-};
+            <OverlayCategories category={category} isToolbar={isToolbar} />
+          </section>
+        );
+      })}
+  </>
+);
 
 export default OverlaySettingsContainer;

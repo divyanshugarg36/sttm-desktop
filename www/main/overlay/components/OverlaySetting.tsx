@@ -1,6 +1,6 @@
 import React from 'react';
 import type { UnknownAction } from '@reduxjs/toolkit';
-import { SimpleSelect } from '@khalisfoundation/sikhi-ui';
+import { PrimaryButton, SimpleSelect, Toggle } from '@khalisfoundation/sikhi-ui';
 import LayoutSelector from './LayoutSelector';
 import { getDefaultSettings } from '../../common/store/user-settings/get-saved-overlay-settings';
 import { convertToCamelCase } from '../../common/utils';
@@ -10,8 +10,6 @@ import {
 } from '../../common/store/redux/baniOverlaySlice';
 import type { GeneratedSetting } from '../../common/utils/settings-obj-generator';
 import Icon from '../../common/sttm-ui/icon';
-import Switch from '../../common/sttm-ui/switch';
-import { i18n } from '../../common/main-app';
 import { useOverlayDispatch, useOverlaySelector } from '../store/hooks';
 
 /** A setting in configs/overlay.json (the sidebar's or the bottom bar's). */
@@ -48,7 +46,7 @@ const OverlaySetting = ({ settingObj, stateVar, stateFunction }: OverlaySettingP
     dispatch(settersByName[stateFunction](value));
   };
 
-  const handleSizeIcon = (event: React.MouseEvent<HTMLDivElement>) => {
+  const handleSizeIcon = (event: React.MouseEvent<HTMLElement>) => {
     const { max, min, step } = settingObj;
     const { value } = event.currentTarget.dataset;
     const currentValue = baniOverlayState[stateVar] as number;
@@ -87,7 +85,7 @@ const OverlaySetting = ({ settingObj, stateVar, stateFunction }: OverlaySettingP
     }
   };
 
-  const handleLayoutChange = (event: React.MouseEvent<HTMLDivElement>) => {
+  const handleLayoutChange = (event: React.MouseEvent<HTMLElement>) => {
     const currentLayout = baniOverlayState[stateVar];
     const newLayout = event.currentTarget.dataset.layout;
     if (newLayout !== currentLayout) {
@@ -95,107 +93,109 @@ const OverlaySetting = ({ settingObj, stateVar, stateFunction }: OverlaySettingP
     }
   };
 
-  const handleFormatIcon = (event: React.MouseEvent<HTMLDivElement>) => {
+  const handleFormatIcon = (event: React.MouseEvent<HTMLElement>) => {
     const clickedEvent = event.currentTarget.dataset.value as keyof BaniOverlayState['textFormat'];
     const currentFormat = { ...(baniOverlayState[stateVar] as BaniOverlayState['textFormat']) };
     currentFormat[clickedEvent] = !currentFormat[clickedEvent];
     dispatch(settersByName[stateFunction](currentFormat));
   };
 
-  const settingDOM: React.ReactElement[] = [];
-
-  if (title) {
-    settingDOM.push(<span>{i18n.t(`BANI_OVERLAY.${title}`)}</span>);
-  }
+  // A round icon button, pressed when `isOn`.
+  const iconButton = (
+    label: string,
+    content: React.ReactNode,
+    onClick: React.MouseEventHandler<HTMLButtonElement>,
+    isOn = false,
+    data: Record<string, string> = {},
+  ) => (
+    <PrimaryButton
+      variant={isOn ? 'default' : 'outline'}
+      mode="icon"
+      size="sm"
+      shape="circle"
+      aria-label={label}
+      aria-pressed={isOn}
+      title={label}
+      onClick={onClick}
+      {...data}
+    >
+      {content}
+    </PrimaryButton>
+  );
 
   switch (type) {
     case 'dropdown':
-      settingDOM.push(
+      return (
         <SimpleSelect
           variant="bordered"
           selectSize="sm"
           value={baniOverlayState[stateVar] as string}
           onChange={handleInputChange}
           options={Object.entries(settingObj.options!).map(([value, label]) => ({ value, label }))}
-        />,
+        />
       );
-      break;
     case 'color-input':
-      settingDOM.push(
+      return (
         <input
           type="color"
-          className={`control-color-input-${title}`}
+          className="overlay-color-input"
           onChange={handleInputChange}
           value={baniOverlayState[stateVar] as string}
-        />,
+        />
       );
-      break;
     case 'size-icon':
-      settingDOM.push(
-        <span className={`size-icon-container`}>
-          <div className="size-icon icon-left" data-value="plus" onClick={handleSizeIcon}>
-            <Icon name="plus" />
-          </div>
-          <div className="size-icon icon-right" data-value="minus" onClick={handleSizeIcon}>
-            <Icon name="minus" />
-          </div>
-        </span>,
+      return (
+        <span className="overlay-control-group">
+          {iconButton('Smaller', <Icon name="minus" />, handleSizeIcon, false, {
+            'data-value': 'minus',
+          })}
+          {iconButton('Larger', <Icon name="plus" />, handleSizeIcon, false, {
+            'data-value': 'plus',
+          })}
+        </span>
       );
-      break;
     case 'text-format-icon': {
       const textFormat = baniOverlayState[stateVar] as BaniOverlayState['textFormat'];
-      settingDOM.push(
-        <span className={`text-icon-container`}>
-          <div
-            className={`text-icon icon-bold ${textFormat.bold && 'active'}`}
-            data-value="bold"
-            onClick={handleFormatIcon}
-          >
-            <Icon name="bold" />
-          </div>
-          <div
-            className={`text-icon icon-italic ${textFormat.italic && 'active'}`}
-            data-value="italic"
-            onClick={handleFormatIcon}
-          >
-            <Icon name="italic" />
-          </div>
-        </span>,
+      return (
+        <span className="overlay-control-group">
+          {iconButton('Bold', <Icon name="bold" />, handleFormatIcon, textFormat.bold, {
+            'data-value': 'bold',
+          })}
+          {iconButton('Italic', <Icon name="italic" />, handleFormatIcon, textFormat.italic, {
+            'data-value': 'italic',
+          })}
+        </span>
       );
-      break;
     }
     case 'icon-toggle':
-      settingDOM.push(
-        <div className="size-icon-container" onClick={handleToggleChange}>
-          <span
-            className="icon-toggle"
-            title={settingObj.tooltip}
-            style={{
-              backgroundImage: `url('assets/img/icons/${settingObj.icon}')`,
-            }}
-          ></span>
-        </div>,
-      );
-      break;
-    case 'switch':
-      settingDOM.push(
-        <Switch
-          controlId={`${title}-switch`}
-          className={`control-item-switch`}
-          value={baniOverlayState[stateVar] as boolean}
-          onToggle={handleToggleChange}
+      return iconButton(
+        settingObj.tooltip ?? '',
+        <span
+          className="overlay-icon-toggle"
+          style={{ backgroundImage: `url('assets/img/icons/${settingObj.icon}')` }}
         />,
+        handleToggleChange,
+        stateVar !== 'reset' && !!baniOverlayState[stateVar],
       );
-      break;
+    case 'switch':
+      return (
+        <Toggle
+          id={`${title}-switch`}
+          size="lg"
+          checked={!!baniOverlayState[stateVar]}
+          onChange={handleToggleChange}
+        />
+      );
     case 'custom':
-      if (settingObj.key === 'LayoutSelector') {
-        settingDOM.push(<LayoutSelector changeLayout={handleLayoutChange} />);
-      }
-      break;
+      return settingObj.key === 'LayoutSelector' ? (
+        <LayoutSelector
+          current={baniOverlayState[stateVar] as string}
+          changeLayout={handleLayoutChange}
+        />
+      ) : null;
     default:
       return null;
   }
-  return settingDOM;
 };
 
 export default OverlaySetting;

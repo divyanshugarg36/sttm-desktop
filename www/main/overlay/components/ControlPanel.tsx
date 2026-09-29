@@ -1,4 +1,5 @@
 import React from 'react';
+import { Box } from '@khalisfoundation/sikhi-ui';
 
 import { CopyToClipboard } from './CopyToClipboard';
 import OverlaySettings from './Options';
@@ -8,9 +9,10 @@ type ControlPanelProps = {
   url: string;
 };
 
+// The overlay's settings as titled groups of setting rows, then its live URL.
 export const ControlPanel = ({ url }: ControlPanelProps) => (
-  <section className="control-panel">
+  <Box variant="gradient" className="control-panel">
     <OverlaySettings settingsObj={settingsObj} />
     <CopyToClipboard url={url} />
-  </section>
+  </Box>
 );
