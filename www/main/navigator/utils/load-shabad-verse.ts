@@ -1,4 +1,4 @@
-import Noty from 'noty';
+import { toast } from '@khalisfoundation/sikhi-ui';
 import * as banidb from '../../banidb';
 import { i18n } from '../../common/main-app';
 
@@ -14,10 +14,7 @@ export const loadShabadVerse = (shabadID: number | string, lineID: number, nextL
       }),
     )
     .catch((err) => {
-      new Noty({
-        type: 'error',
-        text: `${i18n.t('BANI.LOAD_ERROR', { erroneousOperation: 'Shabad verse' })} : ${err}`,
-        timeout: 5000,
-        modal: true,
-      }).show();
+      toast.error(`${i18n.t('BANI.LOAD_ERROR', { erroneousOperation: 'Shabad verse' })} : ${err}`, {
+        duration: 5000,
+      });
     });

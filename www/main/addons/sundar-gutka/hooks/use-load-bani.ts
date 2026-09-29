@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import Noty from 'noty';
+import { toast } from '@khalisfoundation/sikhi-ui';
 
 import { loadBanis } from '../../../banidb';
 import convertDbProxyToArray from '../../utils/convert-db-proxy-to-array';
@@ -19,12 +19,7 @@ const useLoadBani = () => {
         cache.banis = banisArr;
         setBanis(banisArr);
       } catch (error) {
-        new Noty({
-          type: 'error',
-          text: `Was error loading bani : ${error}`,
-          timeout: 5000,
-          modal: true,
-        }).show();
+        toast.error(`Was error loading bani : ${error}`, { duration: 5000 });
       } finally {
         setLoadingBanis(false);
       }

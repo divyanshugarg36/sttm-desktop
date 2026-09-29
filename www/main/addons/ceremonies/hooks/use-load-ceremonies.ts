@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import Noty from 'noty';
+import { toast } from '@khalisfoundation/sikhi-ui';
 
 import { loadCeremonies } from '../../../banidb';
 import convertDbProxyToArray from '../../utils/convert-db-proxy-to-array';
@@ -20,12 +20,7 @@ const useLoadCeremonies = () => {
         cache.ceremonies = ceremoniesArr;
         setCeremonies(ceremoniesArr);
       } catch (error) {
-        new Noty({
-          type: 'error',
-          text: `Was error loading ceremonies : ${error}`,
-          timeout: 5000,
-          modal: true,
-        }).show();
+        toast.error(`Was error loading ceremonies : ${error}`, { duration: 5000 });
       } finally {
         setLoadingCeremonies(false);
       }
