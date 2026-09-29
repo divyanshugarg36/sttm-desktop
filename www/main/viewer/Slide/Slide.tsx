@@ -3,13 +3,13 @@ import {
   PresenterSlide,
   type PresenterLine,
   type PresenterSlideClassNames,
-  type PresenterSlideSettings,
   type PresenterTranslations,
   type PresenterVisraams,
 } from '@khalisfoundation/sikhi-ui';
 
 import { sendToMain } from '../../common/ipc';
 import { useViewerSelector } from '../store/hooks';
+import { toPresenterSettings } from './presenter-settings';
 import type { NextLine, SlideLine } from '../types';
 
 type SlideProps = {
@@ -72,38 +72,7 @@ const Slide = React.memo(({ verseObj, nextLineObj, isMiscSlide, updateVerseRef }
   );
 
   const { akhandpatt } = userSettings;
-  const settings: PresenterSlideSettings = {
-    gurbaniFontSize: userSettings.gurbaniFontSize,
-    announcementFontSize: userSettings.announcementsFontSize,
-    content: [
-      {
-        type: userSettings.content1,
-        visible: userSettings.content1Visibility,
-        fontSize: userSettings.content1FontSize,
-      },
-      {
-        type: userSettings.content2,
-        visible: userSettings.content2Visibility,
-        fontSize: userSettings.content2FontSize,
-      },
-      {
-        type: userSettings.content3,
-        visible: userSettings.content3Visibility,
-        fontSize: userSettings.content3FontSize,
-      },
-    ],
-    larivaar: userSettings.larivaar,
-    larivaarAssist: userSettings.larivaarAssist,
-    larivaarAssistType: userSettings.larivaarAssistType,
-    displayVisraams: userSettings.displayVishraams,
-    visraamSource: userSettings.vishraamSource,
-    visraamType: userSettings.vishraamType,
-    leftAlign: userSettings.leftAlign,
-    displayNextLine: userSettings.displayNextLine,
-    transitions: userSettings.slideTransitions,
-    translationEnglishSource: userSettings.translationEnglishSource,
-    teekaSource: userSettings.teekaSource,
-  };
+  const settings = toPresenterSettings(userSettings);
 
   const castToReceiver = () => sendToMain('cast-to-receiver');
 

@@ -5,7 +5,7 @@ import { Overlay } from '../../common/sttm-ui';
 import SettingsNav from './SettingsNav';
 import SettingsContainer from './SettingsContainer';
 import ThemeContainer from './ThemeContainer';
-import SettingViewer from './SettingViewer';
+import SettingSlidePreview from './SettingSlidePreview';
 import { settingsNavObj, settingsObj } from '../utils';
 
 type SettingsProps = {
@@ -22,7 +22,10 @@ const Settings = ({ onScreenClose }: SettingsProps) => (
         </div>
       </div>
       <div className="other-settings">
-        <SettingViewer />
+        <div className="settings-preview-title">
+          <span>Preview</span>
+        </div>
+        <SettingSlidePreview />
         <ThemeContainer />
       </div>
     </div>
