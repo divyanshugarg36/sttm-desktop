@@ -113,7 +113,6 @@
     "moment": "^2.31.0",
     "node-fetch": "^2.7.0",
     "node-gyp": "^9.4.0",
-    "noty": "^3.2.0-beta",
     "portfinder": "1.0.32",
     "qrcode": "^1.5.3",
     "react": "^18.2.0",
