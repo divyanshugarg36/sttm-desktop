@@ -1,6 +1,6 @@
 import React from 'react';
 import copy from 'copy-to-clipboard';
-import { Icon } from '../../common/sttm-ui';
+import Icon from '../../common/sttm-ui/icon';
 import { i18n } from '../../common/main-app';
 
 type CopyToClipboardProps = {

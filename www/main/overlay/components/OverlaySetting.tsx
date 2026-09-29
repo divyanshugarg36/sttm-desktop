@@ -9,7 +9,8 @@ import {
   type BaniOverlayState,
 } from '../../common/store/redux/baniOverlaySlice';
 import type { GeneratedSetting } from '../../common/utils/settings-obj-generator';
-import { Icon, Switch } from '../../common/sttm-ui';
+import Icon from '../../common/sttm-ui/icon';
+import Switch from '../../common/sttm-ui/switch';
 import { i18n } from '../../common/main-app';
 import { useOverlayDispatch, useOverlaySelector } from '../store/hooks';
 

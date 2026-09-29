@@ -1,7 +1,7 @@
 import React from 'react';
 
 import OverlayCategories from './OverlayCategories';
-import { Switch } from '../../common/sttm-ui';
+import Switch from '../../common/sttm-ui/switch';
 import { i18n } from '../../common/main-app';
 import type { GeneratedCategory } from '../../common/utils/settings-obj-generator';
 
