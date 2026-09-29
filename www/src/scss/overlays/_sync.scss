@@ -1,0 +1,171 @@
+// The Sync (Bani Controller + Zoom captions), Login and lock screen overlays,
+// laid out like Settings: gradient cards (sikhi-ui Box) of titled groups and
+// setting rows (_setting-row.scss).
+
+.sync-wrapper,
+.auth-wrapper {
+  align-items: flex-start;
+  display: flex;
+  gap: 12px;
+  height: 95vh;
+  left: $toolbar-offset + 12px;
+  margin-top: 24px;
+  overflow-y: auto;
+  position: fixed;
+  top: 0;
+}
+
+.sync-card {
+  border-radius: 12px;
+  flex-shrink: 0;
+  padding: 12px 0 24px;
+  width: 500px;
+
+  &__title {
+    align-items: center;
+    display: flex;
+    font-size: var(--sui-typography-font-sizes-lg);
+    font-weight: 600;
+    gap: 12px;
+    margin: 0;
+    padding: 6px 24px 12px;
+  }
+
+  // The sync code, big, under its label.
+  &__code {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 6px 24px 12px;
+  }
+
+  &__code-label {
+    color: var(--sui-semantic-foreground-muted);
+    font-size: var(--sui-typography-font-sizes-sm);
+  }
+
+  &__code-num {
+    font-size: 36px;
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    line-height: 1.2;
+  }
+
+  .sttm-loader {
+    margin: 36px auto;
+  }
+}
+
+// A row whose description sits above its controls.
+.sync-row {
+  align-items: stretch;
+  flex-direction: column;
+  gap: 12px;
+  padding-bottom: 12px;
+
+  .setting-row__note {
+    font-size: var(--sui-typography-font-sizes-sm);
+    line-height: var(--sui-typography-line-heights-base);
+  }
+
+  .setting-row__control {
+    flex-wrap: wrap;
+  }
+}
+
+.sync-pin {
+  font-size: var(--sui-typography-font-sizes-base);
+  font-variant-numeric: tabular-nums;
+}
+
+.sync-qr__code {
+  background: #fff;
+  border-radius: var(--sui-radii-md);
+  height: 96px;
+  width: 96px;
+}
+
+.sync-input {
+  background: var(--sui-semantic-background-page);
+  border: 1px solid var(--sui-semantic-border-default);
+  border-radius: var(--sui-radii-full);
+  color: inherit;
+  flex: 1 1 auto;
+  font-size: var(--sui-typography-font-sizes-sm);
+  margin: 0;
+  min-width: 0;
+  padding: 6px 12px;
+}
+
+.zoom-card {
+  &__logo {
+    height: 24px;
+  }
+
+  &__steps {
+    margin: 0;
+    padding: 6px 24px 0 48px;
+
+    li + li {
+      margin-top: 6px;
+    }
+  }
+
+  &__actions {
+    padding: 12px 24px 0;
+  }
+
+  &__play {
+    width: 18px;
+  }
+}
+
+.auth-card {
+  &__body {
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 0 24px;
+  }
+
+  &__text {
+    color: var(--sui-semantic-foreground-muted);
+    margin: 0;
+  }
+}
+
+// A card in the middle of the backdrop while a controller has the app locked.
+.lock-screen {
+  align-items: center;
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  left: $toolbar-offset;
+  position: fixed;
+  top: 0;
+  width: calc(100vw - #{$toolbar-offset});
+
+  &__card {
+    align-items: center;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 480px;
+    padding: 36px 48px;
+    text-align: center;
+  }
+
+  &__icon {
+    color: var(--sui-semantic-accent-default);
+    font-size: 36px;
+  }
+
+  &__message {
+    font-size: var(--sui-typography-font-sizes-lg);
+    font-weight: 600;
+    margin: 0;
+  }
+}

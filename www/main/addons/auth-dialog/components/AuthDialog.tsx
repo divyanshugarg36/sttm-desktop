@@ -50,77 +50,68 @@ const AuthDialog = ({ onScreenClose, className }: AuthDialogProps) => {
 
   return (
     <Overlay onScreenClose={onScreenClose} className={className}>
-      <div className="addon-wrapper sync-wrapper overlay-ui ui-sync-button auth-wrapper">
+      <div className="addon-wrapper auth-wrapper">
         {connected ? (
-          <div className="sync overlay-ui ui-sync-button">
-            <header className="sync-header">
-              {userToken ? i18n.t('AUTH.LOGOUT_LABEL') : i18n.t('AUTH.LOGIN_LABEL')}
-            </header>
-            <Box variant="gradient" className="sync-content-wrapper">
-              <div className="sync-content auth-content">
-                <h1>
-                  {userInfo
-                    ? i18n.t('AUTH.LOGGED_IN_GREETING', { firstName: userInfo.firstname })
-                    : i18n.t('AUTH.LOGIN_LABEL')}
-                </h1>
-                <p>
-                  {userInfo
-                    ? i18n.t('AUTH.LOGGED_IN_DESC', { email: userInfo.email })
-                    : i18n.t('AUTH.LOGIN_DESC')}
-                </p>
-                {userToken ? (
-                  <PrimaryButton
-                    className="auth-button logout-button"
-                    variant="outline"
-                    size="sm"
-                    leftIcon={<Icon name="logout" />}
-                    onClick={async () => {
-                      analytics.trackEvent({
-                        category: 'User Authentication',
-                        action: 'Logout',
-                        label: 'Logout',
-                        value: 'logged out',
-                      });
-                      // A local emit: the store's listener takes (event, token),
-                      // so pass a placeholder for the event.
-                      ipcRenderer.emit('userToken', {}, '');
-                      sendToMain('deleteToken');
-                      setUserInfo('');
-                      onScreenClose();
-                    }}
-                  >
-                    {i18n.t('AUTH.LOGOUT_LABEL')}
-                  </PrimaryButton>
-                ) : (
-                  <PrimaryButton
-                    className="auth-button login-button"
-                    size="sm"
-                    leftIcon={<Icon name="login" />}
-                    onClick={() => {
-                      analytics.trackEvent({
-                        category: 'User Authentication',
-                        action: 'Login',
-                        label: 'Login',
-                        value: 'logged in',
-                      });
-                      shell.openExternal(`${SP_API}/login/sso`);
-                    }}
-                  >
-                    {i18n.t('AUTH.LOGIN_LABEL')}
-                  </PrimaryButton>
-                )}
-              </div>
-            </Box>
-          </div>
+          <Box variant="gradient" className="sync-card auth-card">
+            <h3 className="sync-card__title">
+              {userInfo
+                ? i18n.t('AUTH.LOGGED_IN_GREETING', { firstName: userInfo.firstname })
+                : i18n.t('AUTH.LOGIN_LABEL')}
+            </h3>
+            <div className="auth-card__body">
+              <p className="auth-card__text">
+                {userInfo
+                  ? i18n.t('AUTH.LOGGED_IN_DESC', { email: userInfo.email })
+                  : i18n.t('AUTH.LOGIN_DESC')}
+              </p>
+              {userToken ? (
+                <PrimaryButton
+                  variant="outline"
+                  size="sm"
+                  leftIcon={<Icon name="logout" />}
+                  onClick={async () => {
+                    analytics.trackEvent({
+                      category: 'User Authentication',
+                      action: 'Logout',
+                      label: 'Logout',
+                      value: 'logged out',
+                    });
+                    // A local emit: the store's listener takes (event, token),
+                    // so pass a placeholder for the event.
+                    ipcRenderer.emit('userToken', {}, '');
+                    sendToMain('deleteToken');
+                    setUserInfo('');
+                    onScreenClose();
+                  }}
+                >
+                  {i18n.t('AUTH.LOGOUT_LABEL')}
+                </PrimaryButton>
+              ) : (
+                <PrimaryButton
+                  size="sm"
+                  leftIcon={<Icon name="login" />}
+                  onClick={() => {
+                    analytics.trackEvent({
+                      category: 'User Authentication',
+                      action: 'Login',
+                      label: 'Login',
+                      value: 'logged in',
+                    });
+                    shell.openExternal(`${SP_API}/login/sso`);
+                  }}
+                >
+                  {i18n.t('AUTH.LOGIN_LABEL')}
+                </PrimaryButton>
+              )}
+            </div>
+          </Box>
         ) : (
-          <div className="sync overlay-ui ui-sync-button">
-            <header className="sync-header">{i18n.t('AUTH.LOGIN_LABEL')}</header>
-            <Box variant="gradient" className="sync-content-wrapper">
-              <div className="sync-content auth-content">
-                <p>{i18n.t('AUTH.INTERNET_ERR')}</p>
-              </div>
-            </Box>
-          </div>
+          <Box variant="gradient" className="sync-card auth-card">
+            <h3 className="sync-card__title">{i18n.t('AUTH.LOGIN_LABEL')}</h3>
+            <div className="auth-card__body">
+              <p className="auth-card__text">{i18n.t('AUTH.INTERNET_ERR')}</p>
+            </div>
+          </Box>
         )}
       </div>
     </Overlay>

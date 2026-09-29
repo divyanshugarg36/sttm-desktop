@@ -28,15 +28,6 @@ body.win32:not(.webview) {
     margin-top: 40px;
   }
 
-  .sync-wrapper {
-    bottom: 10px;
-    height: 94vh;
-  }
-
-  .auth-wrapper {
-    bottom: 40px;
-    height: initial;
-  }
 
   .close-screen {
     top: 35px;
@@ -44,7 +35,9 @@ body.win32:not(.webview) {
 
   // Below the title bar, like Settings.
   .sundar-gutka-wrapper,
-  .ceremonies-wrapper {
+  .ceremonies-wrapper,
+  .sync-wrapper,
+  .auth-wrapper {
     height: 93vh;
     margin-top: 40px;
   }

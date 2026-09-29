@@ -43,7 +43,6 @@ const getBaniControllerItems = ({
       ),
       control: (
         <PrimaryButton
-          className="copy-code-btn"
           size="sm"
           onClick={() => {
             if (code) {
@@ -90,20 +89,30 @@ const getBaniControllerItems = ({
         </>
       ),
       control: (
-        <div>
-          <div className="large-text">
-            <span className="admin-pin">
-              {i18n.t('TOOLBAR.SYNC_CONTROLLER.PIN')}:
-              {isAdminPinVisible && adminPin ? adminPin : '...'}
-            </span>
-            <span className="hide-btn" onClick={() => setAdminPinVisibility(!isAdminPinVisible)}>
-              <Icon name={isAdminPinVisible ? 'eye' : 'eye-off'} />
-            </span>
-          </div>
-          <PrimaryButton className="lock-screen-btn" size="sm" onClick={toggleLockScreen}>
-            Lock Screen
+        <>
+          <span className="sync-pin">
+            {i18n.t('TOOLBAR.SYNC_CONTROLLER.PIN')}:{' '}
+            <strong>{isAdminPinVisible && adminPin ? adminPin : '····'}</strong>
+          </span>
+          <PrimaryButton
+            variant="outline"
+            mode="icon"
+            size="sm"
+            shape="circle"
+            aria-label={isAdminPinVisible ? 'Hide PIN' : 'Show PIN'}
+            onClick={() => setAdminPinVisibility(!isAdminPinVisible)}
+          >
+            <Icon name={isAdminPinVisible ? 'eye' : 'eye-off'} />
           </PrimaryButton>
-        </div>
+          <PrimaryButton
+            variant="outline"
+            size="sm"
+            leftIcon={<Icon name="lock" />}
+            onClick={toggleLockScreen}
+          >
+            {i18n.t('TOOLBAR.SYNC_CONTROLLER.LOCK_SCREEN')}
+          </PrimaryButton>
+        </>
       ),
     },
   ];
