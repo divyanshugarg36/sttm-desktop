@@ -33,11 +33,14 @@ body.win32:not(.webview) {
     top: 35px;
   }
 
+  // Clear of the title bar.
+  .sync-wrapper {
+    max-height: calc(100vh - 64px);
+  }
+
   // Below the title bar, like Settings.
   .sundar-gutka-wrapper,
-  .ceremonies-wrapper,
-  .sync-wrapper,
-  .auth-wrapper {
+  .ceremonies-wrapper {
     height: 93vh;
     margin-top: 40px;
   }

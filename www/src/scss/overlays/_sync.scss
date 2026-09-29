@@ -2,17 +2,26 @@
 // laid out like Settings: gradient cards (sikhi-ui Box) of titled groups and
 // setting rows (_setting-row.scss).
 
+// Both sit at the bottom left, by their toolbar icons.
 .sync-wrapper,
 .auth-wrapper {
-  align-items: flex-start;
   display: flex;
+  flex-direction: column;
   gap: 12px;
-  height: 95vh;
   left: $toolbar-offset + 12px;
-  margin-top: 24px;
-  overflow-y: auto;
   position: fixed;
-  top: 0;
+}
+
+// Zoom captions above Sync, filling up from the bottom.
+.sync-wrapper {
+  bottom: 12px;
+  justify-content: flex-end;
+  max-height: calc(100vh - 24px);
+  overflow-y: auto;
+}
+
+.auth-wrapper {
+  bottom: 36px;
 }
 
 .sync-card {
