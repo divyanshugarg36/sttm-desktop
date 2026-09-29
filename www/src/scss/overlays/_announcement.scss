@@ -3,13 +3,16 @@
 // group), its content inset like the setting rows.
 
 .announcement-text {
-  border-radius: 10px;
+  background: var(--sui-semantic-background-page);
+  border: 1px solid var(--sui-semantic-border-default);
+  border-radius: var(--sui-radii-md);
+  color: var(--sui-semantic-foreground-default);
   display: inline-block;
   height: 150px;
   min-height: 100px;
   min-width: 300px;
   outline: none;
-  padding: 10px;
+  padding: 12px;
   width: inherit;
 }
 

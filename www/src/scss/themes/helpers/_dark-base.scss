@@ -88,20 +88,11 @@
     }
   }
 
-  .pane__content {
-    background-color: $bg-alt;
-  }
-
   .viewer-pane {
     .pane__content {
       background: none !important;
       border: 1px solid $border;
     }
-  }
-
-  .announcement-text {
-    background-color: $bg-alt;
-    color: $white;
   }
 
   .slide#announcement-slide .announcements {
@@ -115,7 +106,7 @@
   .search-pane {
     .pane {
       .pane__footer {
-        background-color: $not-so-black;
+        background-color: transparent;
       }
     }
 
