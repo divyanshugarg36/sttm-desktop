@@ -194,8 +194,6 @@ const platform = {
             console.log(`Could not update the database: ${error}`);
             remote.getCurrentWindow().setProgressBar(-1);
           });
-      } else if (force) {
-        global.core.search.offline(10);
       }
     });
   },

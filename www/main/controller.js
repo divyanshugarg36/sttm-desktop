@@ -430,10 +430,6 @@ global.platform.ipc.on('update-downloaded', () => {
 global.platform.ipc.on('send-scroll', (event, arg) => {
   if (global.webview) global.webview.send('send-scroll', JSON.stringify(arg));
 });
-global.platform.ipc.on('next-ang', (event, arg) => {
-  const { PageNo, SourceID } = JSON.parse(arg);
-  global.core.search.loadAng(PageNo, SourceID);
-});
 
 global.platform.ipc.on('cast-session-active', () => {
   menuCast.items[0].visible = false;
