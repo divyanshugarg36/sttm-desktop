@@ -19,8 +19,9 @@ const control = (settingKey: string, settingObj: OverlaySettingConfig) => (
   />
 );
 
-const settingRow = (key: string, title: string, controls: React.ReactNode) => (
-  <div className="setting-row" key={key}>
+// A setting row; with several controls (`stacked`), its name goes above them.
+const settingRow = (key: string, title: string, controls: React.ReactNode, stacked = false) => (
+  <div className={stacked ? 'setting-row setting-row--stacked' : 'setting-row'} key={key}>
     <div className="setting-row__label">
       <span className="setting-row__title">{title}</span>
     </div>
@@ -64,6 +65,7 @@ const SubcategoryRows = ({ subCategory, fallbackTitle, isToolbar }: SubcategoryR
           key,
           title ? i18n.t(`BANI_OVERLAY.${title}`) : '',
           untitled.map((untitledKey) => control(untitledKey, settings[untitledKey])),
+          untitled.length > 1,
         ),
       );
     }

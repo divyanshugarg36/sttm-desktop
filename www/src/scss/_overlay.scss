@@ -35,6 +35,25 @@
   .sui-simple-select-wrapper {
     min-width: 144px;
   }
+
+  // Several controls (e.g. a colour, font and size): the name above them, and
+  // the select takes the width the others leave.
+  .setting-row--stacked {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 6px;
+    padding-bottom: 12px;
+
+    .setting-row__control {
+      gap: 12px;
+      width: 100%;
+    }
+
+    .sui-simple-select-wrapper {
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+  }
 }
 
 .theme-selector {
