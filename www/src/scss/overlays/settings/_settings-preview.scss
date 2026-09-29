@@ -1,7 +1,12 @@
 // The Settings overlay's preview of the projected slide.
 
+// The preview's title strip, on sikhi-ui's gradient (its Box classes), joined
+// to the preview under it.
 .settings-preview-title {
-  padding: 4px;
+  @include section-title;
+  border-radius: 12px 12px 0 0;
+  padding: 12px;
+  width: 500px;
 }
 
 // The viewer's slide (PresenterSlide), rendered at the window's size and
@@ -9,8 +14,9 @@
 .settings-slide-preview {
   background-position: center;
   background-size: cover;
+  border-radius: 0 0 12px 12px;
   height: 280px;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
   overflow: hidden;
   position: relative;
   width: 500px;

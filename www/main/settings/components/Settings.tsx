@@ -22,9 +22,7 @@ const Settings = ({ onScreenClose }: SettingsProps) => (
         </div>
       </div>
       <div className="other-settings">
-        <div className="settings-preview-title">
-          <span>Preview</span>
-        </div>
+        <div className="sui-box sui-box--gradient settings-preview-title">Preview</div>
         <SettingSlidePreview />
         <ThemeContainer />
       </div>
