@@ -5,11 +5,12 @@ import type { GeneratedCategory } from '../../common/utils/settings-obj-generato
 
 type OverlaySettingsProps = {
   settingsObj: Record<string, GeneratedCategory>;
+  isToolbar?: boolean;
 };
 
-const OverlaySettings = ({ settingsObj }: OverlaySettingsProps) => (
-  <div className="overlay-settings-wrapper">
-    <OverlaySettingsContainer settingsObj={settingsObj} />
+const OverlaySettings = ({ settingsObj, isToolbar = false }: OverlaySettingsProps) => (
+  <div className={isToolbar ? 'overlay-toolbar' : 'overlay-settings'}>
+    <OverlaySettingsContainer settingsObj={settingsObj} isToolbar={isToolbar} />
   </div>
 );
 

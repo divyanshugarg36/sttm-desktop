@@ -1,339 +1,211 @@
-$toolbar-width: 40px;
-
-.canvas {
-  display: flex;
-  height: 100vh;
-  justify-content: center;
-  // margin-left: 120px;
-  margin-right: 180px;
-}
-
+// The main window's overlays sit above the app.
 .backdrop {
   z-index: 1200;
 }
 
-.sundar-gutka {
-  left: $toolbar-offset + 52px;
-  max-width: calc(100% - #{$toolbar-width});
-  position: fixed;
+// The Bani Overlay window, laid out like Settings: its settings on a gradient
+// Box (titled groups of setting rows), the live preview with its toolbar, and
+// the theme presets as tiles on a second Box.
+
+.canvas {
+  background: var(--sui-semantic-background-page);
+  box-sizing: border-box;
+  color: var(--sui-semantic-foreground-default);
+  display: flex;
+  gap: 12px;
+  height: 100vh;
+  padding: 12px;
 }
 
-.preview {
-  background-image: url('../../assets/img/maharaj.jpg');
-  background-position: center center;
-  background-size: cover;
-  border: 0;
-  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
-  flex-grow: 1;
-  height: 524px;
-  margin-left: auto;
-  overflow: hidden;
-  width: 100%;
+.control-panel,
+.theme-selector {
+  border-radius: 12px;
+  flex: 0 0 auto;
+  overflow-y: auto;
+  padding: 12px 0 24px;
 }
 
 .control-panel {
-  background: #eee;
-  height: 100vh;
-  max-width: 320px;
+  width: 384px;
 
-  hr {
-    border-top: 2px solid blue;
+  .settings-group + .settings-group {
+    margin-top: 12px;
+  }
+
+  .sui-simple-select-wrapper {
+    min-width: 144px;
+  }
+}
+
+.theme-selector {
+  width: 216px;
+
+  &__title {
+    padding-bottom: 12px;
+  }
+
+  &__tiles {
+    display: grid;
+    gap: 12px;
+    padding: 0 24px;
+  }
+}
+
+// A preset tile, in its colours (inline, which ButtonCard's hover doesn't
+// override).
+.overlay-theme-swatch {
+  font-size: var(--sui-typography-font-sizes-sm);
+  height: 72px;
+  width: 100%;
+
+  &--active {
+    outline: 2px solid var(--sui-semantic-accent-default);
+    outline-offset: 2px;
   }
 }
 
 .preview-container {
-  align-items: center;
-  align-self: flex-start;
   display: flex;
+  flex: 1 1 auto;
   flex-direction: column;
-  flex-grow: 1;
-  height: 100%;
-  justify-content: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.preview {
+  aspect-ratio: 16 / 9;
+  background-image: url('../../assets/img/maharaj.jpg');
+  background-position: center center;
+  background-size: cover;
+  border: 0;
+  border-radius: 12px;
   overflow: hidden;
-  text-align: center;
-
-  .bottom-settings {
-    width: 100%;
-
-    .overlay-settings-wrapper {
-      display: flex;
-      justify-content: space-between;
-
-      .overlay-settings-container {
-        border-bottom: 0;
-      }
-    }
-  }
-}
-
-.separator-y {
-  border-right: 1px solid #ccc;
-  height: 48px;
-  margin-right: 5px;
-  width: 5px;
-}
-
-.text-controls {
-  background: #ebebeb;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  display: inline-block;
-  margin-top: 4vh;
-  padding: 12px;
-  text-align: center;
-
-  & > div {
-    display: inline-block;
-    vertical-align: middle;
-  }
-
-  & > .toggle-text {
-    margin: 8px 0;
-  }
-
-  .input-wrap {
-    margin: 0 6px;
-    width: auto;
-  }
-}
-
-.url-container {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-
-  input[type='text'] {
-    background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 32px;
-    color: #333;
-    font-size: 12px;
-    line-height: 2;
-    margin: 0;
-    padding: 10px;
-    text-align: center;
-  }
-
-  .tooltip {
-    background-color: black;
-    border-radius: 6px;
-    color: #fff;
-    font-size: 12px;
-    opacity: 0;
-    padding: 0.5em 0.7em;
-    width: max-content;
-  }
-}
-
-.toggle-text > .layout-btn,
-.toggle-text > .input-wrap {
-  display: inline-block;
-  margin: 0 5px;
-}
-
-.theme-selector {
-  background: #eee;
-  height: 100vh;
-  overflow-y: auto;
-  padding: 10px;
-  position: fixed;
-  right: 0;
-  top: 0;
-  width: 180px;
-}
-
-.overlay-theme-swatch {
-  align-items: center;
-  background: rgba(255, 255, 255, 0.5);
-  border-radius: 5px;
-  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-  cursor: pointer;
-  display: flex;
-  font-size: 12px;
-  height: 70px;
-  justify-content: center;
-  letter-spacing: 2px;
-  margin: 20px auto;
-  text-align: center;
-  text-transform: uppercase;
-  transition: 0.3s all ease;
-  width: 140px;
-
-  &:hover {
-    transform: scale(1.1);
-  }
-
-  &:active {
-    transform: scale(0.9);
-  }
-}
-
-.overlay-window-text {
-  color: #3d566a;
-  font-size: 16px;
-  font-weight: bold;
-  letter-spacing: 2px;
-  margin: 4px;
-  padding: 10px 0;
-  text-transform: uppercase;
-}
-
-.theme-selector-header {
-  text-align: center;
-}
-
-input[type='color']::-webkit-color-swatch-wrapper {
-  padding: 0;
-}
-
-input[type='color']::-webkit-color-swatch {
-  border: none;
-  border-radius: 100px;
-}
-
-input[type='color'] {
-  padding: 0;
-}
-
-.input-wrap {
-  margin-bottom: 10px;
-  text-align: center;
-  width: 100px;
-}
-
-.overlay-off {
-  .cp-icon,
-  .setting-label {
-    color: #ddd;
-    cursor: not-allowed;
-    pointer-events: none;
-  }
-
-  input,
-  .export-btn,
-  .layout-btn,
-  .overlay-theme-swatch,
-  .preview {
-    cursor: not-allowed;
-    opacity: 0.3;
-    pointer-events: none;
-  }
-
-  .cast-toggle {
-    .setting-label {
-      color: #666;
-    }
-  }
-}
-
-.cast-toggle,
-.logo-toggle,
-.announcement-toggle,
-.larivaar-assist-toggle,
-.green-screen-toggle {
-  cursor: pointer;
-  .cp-icon {
-    font-size: 34px;
-    text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.1);
-  }
-}
-
-.setting-label {
-  color: #333;
-  font-size: 10px;
-  font-weight: bold;
-  letter-spacing: 1px;
-  margin-top: 5px;
-  text-align: center;
-  text-transform: uppercase;
   width: 100%;
 }
 
-.color-input {
-  background: rgba(255, 255, 255, 0.9);
-  border: 2px solid white;
-  border-radius: 100px;
-  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+// Under the preview: the logo / green screen toggles, the layouts, reset.
+.overlay-toolbar {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+
+  &__group {
+    align-items: center;
+    display: flex;
+    gap: 12px;
+  }
+}
+
+// A few controls side by side (a size's − / +, bold / italic, the layouts).
+.overlay-control-group {
+  align-items: center;
+  display: flex;
+  gap: 6px;
+}
+
+.overlay-color-input {
+  background: transparent;
+  border: 1px solid var(--sui-semantic-border-default);
+  border-radius: 50%;
   cursor: pointer;
-  height: 30px;
-  margin-bottom: 3px;
-  text-align: center;
-  text-shadow: 1px 1px rgba(0, 0, 0, 0.2);
-  transition: 0.3s transform ease;
-  width: 30px;
+  height: 36px;
+  padding: 0;
+  width: 36px;
+
+  &::-webkit-color-swatch-wrapper {
+    padding: 0;
+  }
+
+  &::-webkit-color-swatch {
+    border: none;
+    border-radius: 50%;
+  }
+}
+
+// An icon button's image (the logo, green screen, reset).
+.overlay-icon-toggle {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  display: block;
+  height: 18px;
+  width: 18px;
+}
+
+.overlay-url {
+  margin-top: 12px;
+
+  .url-container {
+    align-items: center;
+    display: flex;
+    gap: 12px;
+    padding: 6px 24px 0;
+  }
+
+  .url-text {
+    background: var(--sui-semantic-background-page);
+    border: 1px solid var(--sui-semantic-border-default);
+    border-radius: var(--sui-radii-full);
+    color: inherit;
+    flex: 1;
+    font-size: var(--sui-typography-font-sizes-xs);
+    margin: 0;
+    min-width: 0;
+    padding: 6px 12px;
+  }
+
+  .url-status {
+    color: var(--sui-semantic-foreground-muted);
+    display: block;
+    font-size: var(--sui-typography-font-sizes-xs);
+    padding: 6px 24px 0;
+  }
+}
+
+// A layout button: bars where that layout puts the text.
+.layout-btn {
+  background: color-mix(in srgb, var(--sui-semantic-accent-default) 8%, transparent);
+  border: 1px solid transparent;
+  border-radius: var(--sui-radii-md);
+  cursor: pointer;
+  display: inline-block;
+  height: 36px;
+  overflow: hidden;
+  padding: 0;
+  position: relative;
+  width: 36px;
 
   &:hover {
-    box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.1);
-    transform: translateY(-2px);
+    background: color-mix(in srgb, var(--sui-semantic-accent-default) 16%, transparent);
   }
 
-  &:active {
-    border: 1px solid white;
+  &--active {
+    border-color: var(--sui-semantic-accent-default);
   }
-}
 
-.separator {
-  border-bottom: 1px solid #ccc;
-  height: 10px;
-  margin-bottom: 10px;
-}
-
-.layout-btn {
-  @extend .color-input;
-
-  background: #ddd;
-  border-radius: 25%;
-  display: inline-block;
-  margin: auto;
-  overflow: hidden;
+  .layout-bar,
+  .layout-vertical-bar,
+  .layout-classic-bar {
+    background: var(--sui-semantic-accent-default);
+  }
 
   .layout-bar {
-    background: rgba(44, 62, 80, 0.9);
     height: 3px;
     width: 100%;
   }
 
   .layout-vertical-bar {
-    background: rgba(44, 62, 80, 0.9);
     height: 100%;
     opacity: 0;
     width: 50%;
   }
 
   .layout-classic-bar {
-    background: rgba(44, 62, 80, 0.9);
     border-radius: 2px;
     height: 5px;
     opacity: 0;
     width: 80%;
   }
-}
-
-.cp-icon {
-  margin-top: 5px;
-}
-
-.export-btn {
-  @extend .color-input;
-
-  background: #ddd;
-  display: inline-block;
-  margin: 2px;
-
-  &:hover + .tooltip {
-    opacity: 1;
-  }
-}
-
-.resize-btn {
-  display: flex;
-}
-
-.size-btn {
-  @extend .color-input;
-
-  background: #ddd;
-  margin: auto;
 }
 
 .layout-btn.split {
@@ -419,235 +291,5 @@ input[type='color'] {
     opacity: 1;
     position: absolute;
     right: 10%;
-  }
-}
-
-.cp-title {
-  font-size: 14px;
-  letter-spacing: 2px;
-  line-height: 24px;
-  text-transform: uppercase;
-}
-
-.custom-select {
-  display: inline-block;
-  font-size: 14px;
-  position: relative;
-  text-align: left;
-  -webkit-user-select: none;
-  vertical-align: middle;
-
-  .select-value {
-    background-image: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.06));
-    border: 1px solid #ccc;
-    border-radius: 3px;
-    color: #333;
-    cursor: pointer;
-    font-size: 14px;
-    min-width: 100px;
-    padding: 6px 25px 6px 6px;
-    text-align: left;
-    white-space: nowrap;
-
-    &:hover {
-      border: 1px solid #aaa;
-    }
-
-    &::after {
-      border-left: 4px solid transparent;
-      border-right: 4px solid transparent;
-      border-top: 4px solid #555;
-      content: '';
-      height: 0;
-      position: absolute;
-      right: 10px;
-      top: 12px;
-      width: 0;
-    }
-
-    &.gurbaniFont {
-      width: 165px;
-    }
-  }
-
-  .options-container {
-    background: #fff;
-    border: 1px solid #ddd;
-    display: none;
-    position: absolute;
-    width: 100%;
-    z-index: 3;
-
-    &.visible {
-      display: block;
-    }
-
-    .option {
-      cursor: pointer;
-      padding: 8px 12px;
-      white-space: nowrap;
-
-      &:hover {
-        background: #e9e9e9;
-      }
-    }
-  }
-}
-
-.overlay-url {
-  padding: 8px;
-}
-
-.overlay-settings-container {
-  border-bottom: 1px solid #3d566a;
-  padding: 8px;
-  padding-bottom: 20px;
-
-  &.hide-category {
-    display: none;
-  }
-
-  .category-header {
-    align-items: center;
-    display: flex;
-    justify-content: space-between;
-  }
-
-  .controls-container {
-    align-items: center;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    text-align: left;
-
-    .subcategory-title {
-      margin-bottom: 8px;
-      width: 100%;
-    }
-
-    .control-item {
-      cursor: pointer;
-
-      &.control-dropdown {
-        flex-grow: 1;
-        margin: 0 10px;
-
-        .sui-simple-select-wrapper {
-          width: 100%;
-        }
-      }
-     
-      .control-item-switch {
-        display: flex;
-        align-items: center;
-        margin-top: 2px;
-
-        .switch {
-          height: 1.5em;
-          width: 2.6em;
-
-          label:after {
-            height: 1.5em;
-            width: 1.5em;
-          }
-
-          input:checked {
-            + label:after {
-              left: 1.1em;
-            }
-          }
-        }
-      }
-      &.control-size-icon {
-        text-align: center;
-      }
-
-      &:first-child,
-      &:last-child {
-        margin: 0;
-      }
-      &.control-switch {
-        margin:0 10px;
-      }
-      &#date-time-position {
-        align-items: center;
-        display: flex;
-        justify-content: space-between;
-        margin-top: 16px;
-
-        .sui-simple-select-wrapper {
-          flex-grow: 1;
-          margin: 0 10px;
-        }
-      }
-
-      input[type='color'] {
-        background: transparent;
-        border: 2px solid white;
-        border-radius: 50%;
-        height: 30px;
-        width: 30px;
-      }
-
-      .text-icon-container {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-evenly;
-
-        .text-icon {
-          background-color: #e3e3e3;
-          color: #222;
-          padding: 8px;
-          border: 1px solid #222;
-          width: 30px;
-
-          &.active {
-            background-color: #222;
-            color: #e3e3e3;
-          }
-        }
-      }
-
-      .size-icon-container {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-evenly;
-
-        .icon-toggle {
-          background-size: cover;
-          border: 2px solid white;
-          border-radius: 4px;
-          box-shadow: 1px 1px rgba(0, 0, 0, 0.2);
-          height: 30px;
-          width: 30px;
-
-          &.disabled {
-            box-shadow: none;
-            opacity: 0.7;
-          }
-        }
-      }
-
-      .size-icon {
-        i {
-          border: 2px solid white;
-          border-radius: 50%;
-          padding: 4px;
-
-          &::before {
-            background-color: #222;
-            border-radius: 50%;
-            box-shadow: 1px 1px rgba(0, 0, 0, 0.2);
-            color: #eee;
-            display: inline-block;
-            font-size: 12px;
-            height: 20px;
-            padding: 4px;
-            text-align: center;
-            width: 20px;
-          }
-        }
-      }
-    }
   }
 }

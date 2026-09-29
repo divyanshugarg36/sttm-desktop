@@ -1,4 +1,5 @@
 import React from 'react';
+import { Box } from '@khalisfoundation/sikhi-ui';
 
 import getThemeMarkup, { type OverlayPreset } from '../utils/get-theme-markup';
 import {
@@ -18,7 +19,7 @@ export const ThemeSelector = () => {
   const { overlayTheme, gurbaniTextColor, textColor, bgColor } = useOverlaySelector(
     (state) => state.baniOverlay,
   );
-  const handleThemeChange = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleThemeChange = (e: React.MouseEvent<HTMLButtonElement>) => {
     const clickedTheme = e.currentTarget.dataset.themeName!;
     const clickedThemeObj = themeObjects[clickedTheme];
     if (clickedTheme !== overlayTheme) {
@@ -42,11 +43,13 @@ export const ThemeSelector = () => {
   };
 
   return (
-    <section className="theme-selector">
-      <p className="overlay-window-text theme-selector-header">
+    <Box variant="gradient" className="theme-selector">
+      <h4 className="settings-group__title theme-selector__title">
         {i18n.t(`BANI_OVERLAY.THEME_HEADING`)}
-      </p>
-      {getThemeMarkup(themeObjects, handleThemeChange)}
-    </section>
+      </h4>
+      <div className="theme-selector__tiles">
+        {getThemeMarkup(themeObjects, handleThemeChange, overlayTheme)}
+      </div>
+    </Box>
   );
 };
