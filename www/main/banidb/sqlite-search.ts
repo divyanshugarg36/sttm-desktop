@@ -6,7 +6,6 @@
 import { DatabaseSync } from 'node:sqlite';
 import fs from 'fs';
 import path from 'path';
-import * as remote from '@electron/remote';
 import {
   createBaniDB,
   type BaniDB,
@@ -21,6 +20,7 @@ import {
   type Verse,
   type Writer,
 } from '@khalisfoundation/banidb';
+import { remote } from '../common/remote';
 
 import * as CONSTS from './constants';
 

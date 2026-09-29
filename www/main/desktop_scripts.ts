@@ -4,8 +4,8 @@ import fs from 'fs';
 import isOnline from 'is-online';
 import path from 'path';
 import fetch from 'node-fetch';
-import * as remote from '@electron/remote';
 import moment from 'moment';
+import { remote } from './common/remote';
 
 import tingle from './common/vendor/tingle';
 import { downloadFile } from './common/utils/download-file';

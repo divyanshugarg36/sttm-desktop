@@ -1,5 +1,5 @@
 import * as electron from 'electron';
-import * as remote from '@electron/remote';
+import { remote } from './common/remote';
 
 import { updateViewerScale } from './viewer/utils';
 import { changeFontSize, changeVisibility } from './quick-tools-utils';

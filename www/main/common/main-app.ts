@@ -2,8 +2,8 @@
 // @electron/remote: its i18n instance, the preferences store, the theme list
 // and a few app helpers, plus the analytics global. Import from here instead of
 // calling remote.require('./app') in every module.
-import * as remote from '@electron/remote';
 import type { i18n as I18n } from 'i18next';
+import { remote } from './remote';
 
 import type themesJson from '../../configs/themes.json';
 

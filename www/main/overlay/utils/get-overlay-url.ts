@@ -1,5 +1,5 @@
 import os from 'os';
-import * as remote from '@electron/remote';
+import { remote } from '../../common/remote';
 
 // The first non-loopback IPv4 address across the network interfaces, in the
 // order Node lists them, else 127.0.0.1 - the address ip.address() returned.

@@ -1,7 +1,6 @@
 // The user's own background images: saved as JPEGs in
 // <userData>/user_backgrounds, listed in the theme picker, and applied as the
 // slide background ({ type: 'custom', url }).
-import * as remote from '@electron/remote';
 import { webUtils } from 'electron';
 import fs from 'fs';
 import path from 'path';
@@ -9,6 +8,7 @@ import type { ChangeEvent } from 'react';
 import sharp from 'sharp';
 import readChunk from 'read-chunk';
 import imageType from 'image-type';
+import { remote } from '../../common/remote';
 
 import mainStore from '../../common/store/redux/store';
 import { setThemeBg, type ThemeBg } from '../../common/store/redux/userSettingsSlice';
