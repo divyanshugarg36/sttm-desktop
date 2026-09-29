@@ -1,22 +1,24 @@
-// The Help, Changelog and Shortcut Legend windows: a Markdown document on a
-// gradient card (sikhi-ui's Box classes), in sikhi-ui's type and colours.
+// The Help, Changelog and Shortcut Legend windows: a Markdown document on
+// sikhi-ui's gradient, in its type and colours.
 
 .markdown-page {
-  background: var(--sui-semantic-background-page);
-  box-sizing: border-box;
   color: var(--sui-semantic-foreground-default);
   font-family: var(--sui-typography-fonts-primary);
+  // The app's html / body are the window's height; this page grows with its
+  // document instead.
+  height: auto;
   min-height: 100vh;
-  padding: 24px;
 }
 
+// The gradient (sikhi-ui's Box classes) fills the window; the document is a
+// 768px column in the middle of it.
 .markdown-frame {
-  border-radius: 12px;
+  border-radius: 0;
+  box-sizing: border-box;
   font-size: var(--sui-typography-font-sizes-base);
   line-height: 1.6;
-  margin: 0 auto;
-  max-width: 768px;
-  padding: 24px 36px 36px;
+  min-height: 100vh;
+  padding: 36px max(36px, calc((100% - 768px) / 2));
 
   h1 {
     font-size: 24px;
@@ -70,7 +72,8 @@
     margin-top: 6px;
   }
 
-  a {
+  // Links; a heading's anchor (<a name>) keeps the heading's colour.
+  a[href] {
     color: var(--sui-semantic-accent-default);
     text-decoration: none;
 
