@@ -39,9 +39,11 @@ export type SocketListenerContext = {
   setIsMiscSlide: (isMiscSlide: boolean) => void;
   setMiscSlideText: (text: string) => void;
   setIsMiscSlideGurmukhi: (isGurmukhi: boolean) => void;
-  setSavedCrossPlatformId: (crossPlatformId: number) => void;
+  isAnnouncement: boolean;
+  setIsAnnouncement: (isAnnouncement: boolean) => void;
+  setSavedCrossPlatformId: (crossPlatformId: number | null) => void;
   lineNumber: NavigatorState['lineNumber'];
-  setLineNumber: (lineNumber: number) => void;
+  setLineNumber: (lineNumber: number | null) => void;
   updatePane: (baniType: string, shabadId: number) => void;
 };
 
@@ -74,6 +76,8 @@ const useSocketListeners = (
     setIsMiscSlide,
     setMiscSlideText,
     setIsMiscSlideGurmukhi,
+    isAnnouncement,
+    setIsAnnouncement,
     setSavedCrossPlatformId,
     lineNumber,
     setLineNumber,
@@ -89,8 +93,15 @@ const useSocketListeners = (
         const verseId = toInt(payload.verseId);
         const lineCount = toInt(payload.lineCount);
 
+        // A web controller can send a partial payload (e.g. no shabadId, which
+        // parses to NaN). Don't push NaN into navigator state / the banidb
+        // query — bail instead of loading a bogus shabad.
+        if (Number.isNaN(shabadId)) {
+          return;
+        }
+
         changeActiveShabad(shabadId, verseId);
-        if (lineNumber !== lineCount) setLineNumber(lineCount);
+        if (!Number.isNaN(lineCount) && lineNumber !== lineCount) setLineNumber(lineCount);
         analytics.trackEvent({
           category: 'controller',
           action: 'shabad',
@@ -108,6 +119,11 @@ const useSocketListeners = (
         if (isMiscSlideGurmukhi !== payload.isGurmukhi) {
           setIsMiscSlideGurmukhi(payload.isGurmukhi);
         }
+        // SlideAnnouncement only honours isMiscSlideGurmukhi when isAnnouncement
+        // is set; without it English text renders in the Gurmukhi font.
+        if (isAnnouncement !== !!payload.isAnnouncement) {
+          setIsAnnouncement(!!payload.isAnnouncement);
+        }
         analytics.trackEvent({
           category: 'controller',
           action: 'send text',
@@ -118,6 +134,7 @@ const useSocketListeners = (
       bani: (payload: ControllerBaniMessage) => {
         const baniId = toInt(payload.baniId);
         const verseId = toInt(payload.verseId);
+        const lineCount = toInt(payload.lineCount);
         if (isCeremonyBani) {
           setIsCeremonyBani(false);
         }
@@ -126,7 +143,8 @@ const useSocketListeners = (
           setIsSundarGutkaBani(true);
         }
 
-        if (sundarGutkaBaniId !== baniId) {
+        const isNewBani = sundarGutkaBaniId !== baniId;
+        if (isNewBani) {
           setSundarGutkaBaniId(baniId);
         }
 
@@ -134,6 +152,20 @@ const useSocketListeners = (
           if (savedCrossPlatformId !== verseId) {
             setSavedCrossPlatformId(verseId);
           }
+        } else if (isNewBani && savedCrossPlatformId != null) {
+          // New bani with no target verse — drop the previous bani's verse so
+          // its stale highlight isn't re-applied to the freshly-loaded bani.
+          setSavedCrossPlatformId(null);
+        }
+        // Record the 1-based line position so ShabadText resolves the verse by
+        // index (web + desktop share the bani's verse order; verse ids don't
+        // share a space across the two, so position is the reliable key). On a
+        // fresh bani with no target verse, reset the position so the effect
+        // can't re-apply the previous bani's stale index — it opens at the start.
+        if (!Number.isNaN(lineCount)) {
+          if (lineNumber !== lineCount) setLineNumber(lineCount);
+        } else if (isNewBani && lineNumber != null) {
+          setLineNumber(null);
         }
         updatePane('bani', baniId);
         analytics.trackEvent({
@@ -145,6 +177,8 @@ const useSocketListeners = (
       },
       ceremony: (payload: ControllerCeremonyMessage) => {
         const ceremonyPayload = toInt(payload.ceremonyId);
+        const verseId = toInt(payload.verseId);
+        const lineCount = toInt(payload.lineCount);
         if (!isCeremonyBani) {
           setIsCeremonyBani(true);
         }
@@ -153,8 +187,33 @@ const useSocketListeners = (
           setIsSundarGutkaBani(false);
         }
 
-        if (ceremonyId !== ceremonyPayload) {
+        const isNewCeremony = ceremonyId !== ceremonyPayload;
+        if (isNewCeremony) {
           setCeremonyId(ceremonyPayload);
+        }
+
+        // Apply a verse change within the ceremony. ShabadText matches the
+        // verseId against its verse list (see the savedCrossPlatformId effect).
+        // Mirrors the `bani` handler — without this the ceremony verse change
+        // was dropped entirely.
+        if (verseId && activeVerseId !== verseId) {
+          if (savedCrossPlatformId !== verseId) {
+            setSavedCrossPlatformId(verseId);
+          }
+        } else if (isNewCeremony && savedCrossPlatformId != null) {
+          // New ceremony, no target verse — drop the previous item's verse so
+          // its stale highlight isn't re-applied to the new ceremony.
+          setSavedCrossPlatformId(null);
+        }
+        // The web's verse ids don't match the desktop's ceremony rows, so record
+        // the 1-based line position (both lists share the ceremony's order) for
+        // ShabadText to resolve the verse by. On a fresh ceremony with no target
+        // verse, reset the position so the effect can't re-apply the previous
+        // item's stale index.
+        if (!Number.isNaN(lineCount)) {
+          if (lineNumber !== lineCount) setLineNumber(lineCount);
+        } else if (isNewCeremony && lineNumber != null) {
+          setLineNumber(null);
         }
         updatePane('ceremony', ceremonyPayload);
         analytics.trackEvent({
@@ -193,28 +252,34 @@ const useSocketListeners = (
       listenerActions['request-control']();
       return;
     }
-    // ignore message types the desktop doesn't handle
-    switch (socketData.type) {
-      case 'shabad':
-        listenerActions.shabad(socketData);
-        break;
-      case 'text':
-        listenerActions.text(socketData);
-        break;
-      case 'bani':
-        listenerActions.bani(socketData);
-        break;
-      case 'ceremony':
-        listenerActions.ceremony(socketData);
-        break;
-      case 'request-control':
-        listenerActions['request-control']();
-        break;
-      case 'settings':
-        listenerActions.settings(socketData);
-        break;
-      default:
-        break;
+    // Ignore message types the desktop doesn't handle, and never let a
+    // malformed payload take the desktop down.
+    try {
+      switch (socketData.type) {
+        case 'shabad':
+          listenerActions.shabad(socketData);
+          break;
+        case 'text':
+          listenerActions.text(socketData);
+          break;
+        case 'bani':
+          listenerActions.bani(socketData);
+          break;
+        case 'ceremony':
+          listenerActions.ceremony(socketData);
+          break;
+        case 'request-control':
+          listenerActions['request-control']();
+          break;
+        case 'settings':
+          listenerActions.settings(socketData);
+          break;
+        default:
+          break;
+      }
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(`controller data handler "${socketData.type}" threw:`, error);
     }
   }
 };

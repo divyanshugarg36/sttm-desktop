@@ -66,6 +66,8 @@ export const ShabadText = ({
 
   const virtuosoRef = useRef<VirtuosoHandle>(null);
   const activeVerseRef = useRef<HTMLDivElement>(null);
+  // Id of the shabad/bani whose verses are currently in filteredItems.
+  const loadedShabadIdRef = useRef<number | null>(null);
 
   const {
     activeVerseId,
@@ -159,6 +161,7 @@ export const ShabadText = ({
         initialVerseId,
       );
       const filtered = filterRequiredVerseItems(verseList!);
+      loadedShabadIdRef.current = shabadId as number;
       setFilteredItems(filtered);
       const resumeVerseId = paneAttributes?.activeVerse || filtered[0].verseId;
       if (filtered.length > 0) {
@@ -181,6 +184,21 @@ export const ShabadText = ({
       loadCeremony(shabadId as number).then(setVerseList);
     }
   }, [shabadId, baniType, baniLength]);
+
+  // Re-opening the bani that is already loaded (from Sundar Gutka) doesn't
+  // change shabadId, so nothing reloads. Restart it from the first verse here.
+  // A different bani is still loading, so setVerseList handles that case.
+  useEffect(() => {
+    if (
+      paneAttributes.baniOpenedAt &&
+      baniType === 'bani' &&
+      loadedShabadIdRef.current === shabadId &&
+      filteredItems.length
+    ) {
+      updateTraversedVerse(filteredItems[0].verseId, 0);
+      scrollToVerse(filteredItems[0].verseId, filteredItems, virtuosoRef);
+    }
+  }, [paneAttributes.baniOpenedAt]);
 
   useEffect(() => {
     if (filteredItems.length) {
@@ -205,17 +223,49 @@ export const ShabadText = ({
   }, [filteredItems]);
 
   useEffect(() => {
-    const baniVerseIndex = filteredItems.findIndex(
-      (obj) => obj.crossPlatformId === savedCrossPlatformId,
-    );
+    // Bani/ceremony verse sync from a controller. The web controller and
+    // desktop load the same bani/ceremony, so their verse lists share order
+    // and count, but the verse ids live in different spaces (ceremony rows
+    // have no crossPlatformId; banis differ too). So select by the 1-based
+    // line position the controller sends (recorded as lineNumber).
+    //
+    // Deliberately NOT gated on savedCrossPlatformId: the web's verseId can
+    // collide with the loaded verse's id across the two id spaces (e.g. Gur
+    // Mantar: activeVerseId 2 == the clicked verse's web verseId 2), which
+    // stops the handler from ever setting savedCrossPlatformId on the first
+    // change, and the display would stay stuck on the opening verse. Id
+    // matching remains the fallback for shabads and native (mobile)
+    // controllers, which send a crossPlatformId but no line position.
+    const isPosition = baniType === 'bani' || baniType === 'ceremony';
+    const positionIndex = lineNumber != null ? lineNumber - 1 : -1;
+    const hasValidPosition =
+      isPosition && positionIndex >= 0 && positionIndex < filteredItems.length;
+    let baniVerseIndex = -1;
+    if (hasValidPosition) {
+      baniVerseIndex = positionIndex;
+    } else if (savedCrossPlatformId != null) {
+      baniVerseIndex = filteredItems.findIndex(
+        (obj) =>
+          obj.crossPlatformId === savedCrossPlatformId || obj.verseId === savedCrossPlatformId,
+      );
+    }
     if (baniVerseIndex >= 0) {
+      const matched = filteredItems[baniVerseIndex];
       // Pass the verse's real verseId (not `.ID`, which is just the array
       // index) — it becomes activeVerseId and is matched by verseId downstream
       // (e.g. sendToBaniController), so an index here highlights the wrong verse
       // and crashes the desktop→controller echo.
-      updateTraversedVerse(filteredItems[baniVerseIndex].verseId, baniVerseIndex);
+      updateTraversedVerse(matched.verseId, baniVerseIndex);
+      // Highlighting alone doesn't move the virtualized list; scroll the
+      // presenter view to the matched verse so the display actually changes.
+      scrollToVerse(matched.verseId, filteredItems, virtuosoRef);
     }
-  }, [savedCrossPlatformId]);
+    // `filteredItems` is a dep so a verse that arrives after the bani finishes
+    // loading is picked up on the next render. Safe because a new bani clears
+    // savedCrossPlatformId and lineNumber, so this never re-applies a stale
+    // verse to a freshly-loaded bani. `lineNumber` is a dep so a ceremony
+    // verse change that only moves the line position still re-resolves.
+  }, [savedCrossPlatformId, filteredItems, lineNumber]);
 
   useEffect(() => {
     const overlayVerse = filterOverlayVerseItems(rawVerses, activeVerseId);

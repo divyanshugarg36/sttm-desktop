@@ -7,7 +7,12 @@ import type { IpcRendererEvent } from 'electron';
 import BaniControllerItem from './BaniControllerItem';
 import { Overlay } from '../../../common/sttm-ui';
 
-import { getBaniControllerItems, generateQrCode, shareSync } from '../utils';
+import {
+  getBaniControllerItems,
+  generateQrCode,
+  shareSync,
+  getControllerFontSizes,
+} from '../utils';
 
 import { useNewShabad } from '../../../navigator/search/hooks/use-new-shabad';
 
@@ -31,6 +36,7 @@ import {
   setIsMiscSlide,
   setMiscSlideText,
   setIsMiscSlideGurmukhi,
+  setIsAnnouncement,
   setSavedCrossPlatformId,
   setLineNumber,
 } from '../../../common/store/redux/navigatorSlice';
@@ -77,25 +83,16 @@ const BaniController = ({ onScreenClose, className }: BaniControllerProps) => {
     isMiscSlide,
     miscSlideText,
     isMiscSlideGurmukhi,
+    isAnnouncement,
     savedCrossPlatformId,
     lineNumber,
   } = useAppSelector((state) => state.navigator);
 
-  const {
-    gurbaniFontSize,
-    content1FontSize,
-    content2FontSize,
-    content3FontSize,
-    baniLength,
-    // mangalPosition,
-  } = useAppSelector((state) => state.userSettings);
+  const userSettings = useAppSelector((state) => state.userSettings);
+  const { baniLength } = userSettings;
+  // mangalPosition,
 
-  const fontSizes = {
-    gurbani: parseInt(String(gurbaniFontSize), 10),
-    translation: parseInt(String(content1FontSize), 10),
-    teeka: parseInt(String(content2FontSize), 10),
-    transliteration: parseInt(String(content3FontSize), 10),
-  };
+  const fontSizes = getControllerFontSizes(userSettings);
 
   const showSyncError = (errorMessage: string) => {
     setCodeLabel(errorMessage);
@@ -228,6 +225,8 @@ const BaniController = ({ onScreenClose, className }: BaniControllerProps) => {
       setIsMiscSlide: (v) => dispatch(setIsMiscSlide(v)),
       setMiscSlideText: (v) => dispatch(setMiscSlideText(v)),
       setIsMiscSlideGurmukhi: (v) => dispatch(setIsMiscSlideGurmukhi(v)),
+      isAnnouncement,
+      setIsAnnouncement: (v) => dispatch(setIsAnnouncement(v)),
       setSavedCrossPlatformId: (v) => dispatch(setSavedCrossPlatformId(v)),
       lineNumber,
       setLineNumber: (v) => dispatch(setLineNumber(v)),
