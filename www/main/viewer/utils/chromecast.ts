@@ -1,4 +1,4 @@
-import tingle from '../../common/vendor/tingle';
+import { showCastMessage } from '../CastDevicePicker';
 import { analytics, i18n } from '../../common/main-app';
 import { sendToMain } from '../../common/ipc';
 
@@ -18,22 +18,7 @@ export const appendMessage = (message: unknown) => {
   console.log(message);
 };
 
-const displayError = (errorMessage: string) => {
-  const modal = new tingle.Modal({
-    footer: true,
-    stickyFooter: false,
-    closeMethods: ['overlay', 'button', 'escape'],
-  });
-
-  modal.setContent(`<h2 class='tingle-heading'>${errorMessage}</h2>`);
-  // add ok button
-  modal.addFooterBtn('OK', 'tingle-btn tingle-btn--pull-right tingle-btn--default', () => {
-    modal.close();
-  });
-
-  // open modal
-  modal.open();
-};
+const displayError = (errorMessage: string) => showCastMessage(errorMessage);
 
 /**
  * initialization error callback
@@ -225,5 +210,3 @@ export const stopApp = () => {
   sendToMain('cast-session-stopped');
   session!.stop(onStopAppSuccess, onError);
 };
-
-export { tingle };

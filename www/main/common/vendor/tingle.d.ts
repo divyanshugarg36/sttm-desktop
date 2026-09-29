@@ -14,13 +14,6 @@ interface TingleModal {
     cssClass: string,
     callback: (event: MouseEvent) => void,
   ): HTMLButtonElement;
-  /** The fork's addition: a footer button carrying a `data-reciever-id`. */
-  addCastBtn(
-    label: string,
-    cssClass: string,
-    attribute: string,
-    callback: (event: MouseEvent) => void,
-  ): HTMLButtonElement;
 }
 
 interface TingleModalOptions {

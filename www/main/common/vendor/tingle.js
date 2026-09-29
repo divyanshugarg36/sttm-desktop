@@ -6,8 +6,7 @@
  * @url
  */
 // Local fork of tingle.js 0.13.2, kept as an ES module: footer buttons use
-// textContent instead of innerHTML, and it adds Modal.prototype.addCastBtn
-// (the Chromecast receiver picker). Only the UMD wrapper was replaced.
+// textContent instead of innerHTML. Only the UMD wrapper was replaced.
 const tingle = (function () {
   /* ----------------------------------------------------------- */
   /* == modal */
@@ -222,29 +221,6 @@ const tingle = (function () {
 
     // bind callback
     btn.addEventListener('click', callback);
-
-    if (typeof cssClass === 'string' && cssClass.length) {
-      // add classes to btn
-      cssClass.split(' ').forEach(function(item) {
-        btn.classList.add(item);
-      });
-    }
-
-    this.modalBoxFooter.appendChild(btn);
-
-    return btn;
-  };
-
-  Modal.prototype.addCastBtn = function(label, cssClass, attribute, callback) {
-    var btn = document.createElement('button');
-
-    // set label
-    btn.textContent = label;
-
-    // bind callback
-    btn.addEventListener('click', callback);
-
-    btn.setAttribute('data-reciever-id', attribute);
 
     if (typeof cssClass === 'string' && cssClass.length) {
       // add classes to btn

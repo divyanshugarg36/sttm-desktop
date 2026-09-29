@@ -1,0 +1,36 @@
+// The cast device picker (a sikhi-ui Dialog in the viewer window). The Dialog
+// pads its body 12px 30px; the picker sets 24px sides on the header and body so
+// the title and the tiles line up.
+.cast-picker {
+  max-width: 480px;
+  width: 100%;
+
+  .sui-dialog__header {
+    padding: 24px 24px 0;
+  }
+
+  .sui-dialog__body {
+    padding: 12px 24px 24px;
+  }
+
+  &__title {
+    @include section-title;
+  }
+
+  &__devices {
+    display: grid;
+    gap: 12px;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  &__device {
+    height: 72px;
+    width: 100%;
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 12px;
+  }
+}
