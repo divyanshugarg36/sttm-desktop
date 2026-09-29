@@ -36,8 +36,8 @@ const stripScripts = (string) => {
   const scripts = div.getElementsByTagName('script');
   let i = scripts.length;
   while (i > 0) {
-    scripts[i].parentNode.removeChild(scripts[i]);
     i -= 1;
+    scripts[i].parentNode.removeChild(scripts[i]);
   }
   return div.innerHTML;
 };
