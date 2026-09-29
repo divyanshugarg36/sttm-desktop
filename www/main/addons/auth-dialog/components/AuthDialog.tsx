@@ -81,7 +81,9 @@ const AuthDialog = ({ onScreenClose, className }: AuthDialogProps) => {
                         label: 'Logout',
                         value: 'logged out',
                       });
-                      ipcRenderer.emit('userToken', '');
+                      // A local emit: the store's listener takes (event, token),
+                      // so pass a placeholder for the event.
+                      ipcRenderer.emit('userToken', {}, '');
                       sendToMain('deleteToken');
                       setUserInfo('');
                       onScreenClose();
