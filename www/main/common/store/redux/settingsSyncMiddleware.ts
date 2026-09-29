@@ -7,7 +7,7 @@ import { BANI_OVERLAY_SYNC } from './baniOverlaySlice';
 import { savedOverlaySettings } from '../user-settings/get-saved-overlay-settings';
 import { userConfigPath } from '../user-settings/get-saved-user-settings';
 import type { RootState } from './store';
-import { getControllerFontSizes } from '../../../addons/bani-controller/utils/controller-font-sizes';
+import { getControllerSettings } from '../../../addons/bani-controller/utils/controller-display';
 
 // Redux middleware that runs the side effects the easy-peasy settings actions
 // used to embed inside their reducers (see the old create-user-settings-state).
@@ -140,14 +140,15 @@ const settingsSyncMiddleware: Middleware<object, RootState> = (store) => (next) 
     controllerCallback(payload);
   }
 
-  // 6. Push font sizes to a connected WebController: Gurbani's, and each of
-  // translation / teeka / transliteration from whichever content slot shows it.
-  const fontSizes = getControllerFontSizes(store.getState().userSettings);
+  // 6. Push the viewer's settings to a connected WebController: the font sizes
+  // (Gurbani's, and each content type's from the slot showing it) and how the
+  // slide is shown, so its preview matches.
+  const settings = getControllerSettings(store.getState().userSettings);
   if (typeof window !== 'undefined' && window.socket !== undefined && window.socket !== null) {
     window.socket.emit('data', {
       host: 'sttm-desktop',
       type: 'settings',
-      settings: { fontSizes },
+      settings,
     });
   }
 

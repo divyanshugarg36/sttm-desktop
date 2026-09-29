@@ -16,6 +16,43 @@ export interface ControllerFontSizes {
   transliteration?: number | null;
 }
 
+/** A viewer theme's colours (its background image or video stays local). */
+export interface ControllerTheme {
+  key: string;
+  backgroundColor?: string;
+  gurbaniColor?: string;
+  translationColor?: string;
+  teekaColor?: string;
+  transliterationColor?: string;
+}
+
+/**
+ * How the viewer shows a slide, so the controller can preview it the same way.
+ * Font sizes are in vh; `content` is the three rows under the Gurbani.
+ */
+export interface ControllerDisplay {
+  theme?: ControllerTheme;
+  content: { type: string; visible: boolean; fontSize: number }[];
+  gurbaniFontSize: number;
+  announcementFontSize: number;
+  larivaar: boolean;
+  larivaarAssist: boolean;
+  larivaarAssistType: string;
+  displayVisraams: boolean;
+  visraamSource: string;
+  visraamType: string;
+  leftAlign: boolean;
+  displayNextLine: boolean;
+  translationEnglishSource: string;
+  teekaSource: string;
+}
+
+/** The settings the desktop sends the controller. */
+export interface ControllerSettings {
+  fontSizes: ControllerFontSizes;
+  display: ControllerDisplay;
+}
+
 /* ---------- Desktop → controller ---------- */
 
 interface DesktopMessageBase {
@@ -26,7 +63,7 @@ interface DesktopMessageBase {
 export interface ResponseControlMessage extends DesktopMessageBase {
   type: 'response-control';
   success: boolean;
-  settings: { fontSizes: ControllerFontSizes };
+  settings: ControllerSettings;
 }
 
 /** What the desktop is showing, so the controller can follow along. */
@@ -65,7 +102,7 @@ export interface DesktopCeremonyMessage extends DesktopContentMessageBase {
 /** The desktop's font sizes changed. */
 export interface DesktopSettingsMessage extends DesktopMessageBase {
   type: 'settings';
-  settings: { fontSizes: ControllerFontSizes };
+  settings: ControllerSettings;
 }
 
 /** A message the desktop emits on the controller socket. */
