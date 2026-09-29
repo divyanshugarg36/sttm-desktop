@@ -9,7 +9,7 @@
 // Foundation and the older partials.
 @import 'foundation/foundation', 'animations', 'forms', 'header', 'helpers', 'share-sync',
   'overlays/settings/settings', 'overlays/settings/setting-row', 'overlays/settings/settings-preview',
-  'overlays/settings/theme-picker', 'notifications';
+  'overlays/settings/theme-picker', 'overlays/ceremonies', 'notifications';
 
 @import 'markdown', 'themes/themes', 'update', 'viewer', 'window', 'addon', 'akhandpaatt', 'overlay', 'animations',
   'noty', 'icon', 'ui-library';
@@ -25,11 +25,10 @@
 
 @import 'base/reset', 'layout/app-layout', 'layout/toolbar-nav';
 
-// Overlays (Sundar Gutka, Ceremonies, Sync, Login, theme tiles); to be split
-// into overlays/ next.
+// Overlays (Sundar Gutka, Sync, Login, theme tiles); to be split into
+// overlays/ next.
 
-.sundar-gutka-wrapper,
-.ceremonies-wrapper {
+.sundar-gutka-wrapper {
   align-items: flex-end;
   display: flex;
   height: 100vh;
@@ -38,10 +37,6 @@
   position: fixed;
   top: 0;
   width: calc(100% - 100px);
-}
-
-.ceremonies-wrapper {
-  flex-direction: column;
 }
 
 .sync-wrapper, .auth-wrapper {
@@ -55,12 +50,10 @@
   width: calc(100% - 100px);
 }
 
-.sundar-gutka-wrapper,
-.ceremonies-wrapper {
+.sundar-gutka-wrapper {
   align-items: flex-start;
 
-  .bani-list,
-  .ceremonies-list {
+  .bani-list {
     height: 100vh;
     margin-right: 20px;
     overflow: hidden;
@@ -131,58 +124,6 @@
       padding: 0.3rem 1rem;
     }
 
-    .ceremony-pane.active {
-      .navigator-header {
-        border-bottom: 2px solid $tag-nitnem-color;
-      }
-    }
-
-    .ceremony-pane-content {
-      display: flex;
-      justify-content: space-around;
-    }
-
-    .ceremony-pane-themes {
-      align-items: center;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      max-height: 200px;
-      padding: 10px;
-      width: 100%;
-
-      .theme-instance {
-        width: 27%;
-      }
-    }
-
-    .ceremony-pane-options {
-      align-items: center;
-      display: flex;
-      font-size: 12px;
-      justify-content: center;
-      padding: 20px 10px;
-      text-align: center;
-
-      .switch {
-        margin-top: 5px;
-      }
-    }
-
-    .ceremony-theme-header {
-      font-size: 12px;
-      text-align: center;
-      width: 100%;
-    }
-  }
-
-  .ceremonies-list {
-    min-width: 500px;
-    overflow-y: auto;
-
-    .navigator-header {
-      cursor: pointer;
-    }
   }
 
   .bani-extras {
@@ -242,26 +183,6 @@
     &.hidden {
       display: none;
     }
-  }
-}
-
-.ceremonies-wrapper {
-  margin-top: 50px;
-  .ceremonies-header {
-    background: transparent;
-    color: white;
-    font-size: 24px;
-    font-weight: bold;
-    line-height: 1.5;
-    text-transform: capitalize;
-  }
-
-  // sikhi-ui gradient Box, like the other overlays; overflow clips the header
-  // to its corners.
-  .ceremony-pane {
-    border-radius: 12px;
-    margin-bottom: 15px;
-    overflow: hidden;
   }
 }
 
