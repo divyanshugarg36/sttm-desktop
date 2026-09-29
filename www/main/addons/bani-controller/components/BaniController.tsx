@@ -238,11 +238,10 @@ const BaniController = ({ onScreenClose, className }: BaniControllerProps) => {
 
   // Laid out like Settings: the sync code, then what it's for (Sangat Sync,
   // the Bani Controller) as titled groups of setting rows; Zoom captions on a
-  // card above it.
+  // card beside it.
   return (
     <Overlay onScreenClose={onScreenClose} className={className}>
       <div className="addon-wrapper sync-wrapper">
-        <ZoomController />
         <Box variant="gradient" className="sync-card">
           <h3 className="sync-card__title">{i18n.t('TOOLBAR.MOBILE_DEVICE_SYNC')}</h3>
           {isFetchingCode ? (
@@ -266,6 +265,7 @@ const BaniController = ({ onScreenClose, className }: BaniControllerProps) => {
             <ConnectionSwitch isConnected={isConnected} syncToggle={syncToggle} />
           )}
         </Box>
+        <ZoomController />
       </div>
     </Overlay>
   );

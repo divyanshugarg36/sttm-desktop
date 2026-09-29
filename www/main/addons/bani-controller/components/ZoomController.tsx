@@ -39,7 +39,7 @@ const ZoomController = () => {
   return (
     <Box variant="gradient" className="sync-card zoom-card">
       <h3 className="sync-card__title">
-        <img className="zoom-card__logo" src="assets/img/icons/zoom.svg" alt="" />
+        <img className="zoom-card__logo" src="assets/img/icons/zoom-blue.svg" alt="" />
         {i18n.t('TOOLBAR.ZOOM_HEADING')}
       </h3>
       <div className="setting-row sync-row">
