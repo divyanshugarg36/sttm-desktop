@@ -68,12 +68,18 @@
   height: 48px;
   overflow: hidden;
 
-  // Hovered: the number turns into a play icon.
+  // Hovered: the number turns into a play icon, drawn in the number's colour
+  // (a mask of the icon), so it shows on the accent in light and dark themes.
   &:hover .dhan-guru-button-prefix {
-    background: url('../../assets/img/icons/play-button-filled.svg') no-repeat center center;
-    background-color: var(--sui-semantic-accent-default);
-    background-size: 24px;
     color: transparent;
+
+    &::after {
+      background-color: var(--sui-semantic-background-page);
+      content: '';
+      inset: 0;
+      mask: url('../../assets/img/icons/play-button-filled.svg') no-repeat center / 24px;
+      position: absolute;
+    }
   }
 
   &:hover .dhan-guru-button-text {
@@ -84,6 +90,7 @@
 .dhan-guru-button-prefix {
   @include flex($jc-value: center, $width: auto);
   background: var(--sui-semantic-accent-default);
+  position: relative;
   color: var(--sui-semantic-background-page);
   font-variant-numeric: tabular-nums;
 }
