@@ -2,6 +2,12 @@
 // the unsupported-Windows warning) and the Dhan Guru picker. The Dialog pads
 // its body 12px 30px; these set 24px sides on the header and body.
 
+// Above the app's own layers (the overlays' backdrop is 1200), not just
+// sikhi-ui's default 1000, or a dialog opens behind the panes.
+.sui-dialog-overlay {
+  z-index: 1300;
+}
+
 .app-dialog {
   max-height: 80vh;
   max-width: 560px;
