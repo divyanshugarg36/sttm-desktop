@@ -29,81 +29,12 @@
   z-index: 10;
 }
 
-.verse-slide {
-  background-size: cover;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  justify-content: space-between;
-  padding: 20px 10px;
-  text-align: center;
-  z-index: 10;
-  position: relative;
-
-  &.only-gurbani {
-    justify-content: center;
-  }
-}
-
-.slide-gurbani {
-  @extend .gurmukhi-vaak-thick;
-  font-size: 45px;
-  font-weight: normal;
-  line-height: 1.15;
-}
-
-.slide-announcement {
-  align-items: center;
-  display: flex;
-  height: 100%;
-  justify-content: center;
-  text-align: center;
-  white-space: pre-wrap;
-
-  .gurmukhi-announcement-slide {
-    @extend .gurmukhi-vaak-thick;
-    line-height: 1.15em;
-  }
-}
-
-.padchhed span {
-  display: inline-block;
-  margin: 0 0.15em;
-  white-space: nowrap;
-}
-
-.slide-translation {
-  font-weight: 600;
-  margin: 10px 0;
-
-  &.custom-english {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    height: 100%;
-    overflow-y: auto;
-    justify-content: space-evenly;
-  }
-}
-
-.slide-teeka {
-  @extend .gurmukhi-vaak;
-  font-weight: 600;
-  margin: 10px 0;
-}
-
-.slide-transliteration {
-  font-weight: 600;
-  margin: 10px 0;
-}
-
-.slide-next-line {
-  opacity: 0.5;
-  margin: 10px 0;
-}
-
-.slide-left-align {
-  text-align: left;
+// The slide itself is sikhi-ui's PresenterSlide (styles in the library). The
+// viewer projects Gurbani, teeka and Gurmukhi announcements in Gurbani Akhar;
+// the colours come from the theme (themes/helpers/_theme-generator.scss).
+.shabad-deck {
+  --sui-presenter-gurmukhi-font: 'gurbaniakharthick';
+  --sui-presenter-teeka-font: 'gurbaniakhar';
 }
 
 // Quick Tools / Padding Tools: corner buttons that open a popup, like
@@ -173,27 +104,4 @@
     text-align: center;
     font-variant-numeric: tabular-nums;
   }
-}
-
-// CSSTransition classes
-.fade-enter {
-  opacity: 0;
-}
-
-.fade-enter-active {
-  opacity: 1;
-  transition: opacity 300ms ease-in;
-}
-
-.fade-enter-done {
-  opacity: 1;
-}
-
-/* Define exit and exit-active states */
-.fade-exit {
-  opacity: 0;
-}
-
-.fade-exit-active {
-  opacity: 0;
 }

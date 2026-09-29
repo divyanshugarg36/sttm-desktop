@@ -119,7 +119,7 @@ const useSocketListeners = (
         if (isMiscSlideGurmukhi !== payload.isGurmukhi) {
           setIsMiscSlideGurmukhi(payload.isGurmukhi);
         }
-        // SlideAnnouncement only honours isMiscSlideGurmukhi when isAnnouncement
+        // The viewer only honours isMiscSlideGurmukhi when isAnnouncement
         // is set; without it English text renders in the Gurmukhi font.
         if (isAnnouncement !== !!payload.isAnnouncement) {
           setIsAnnouncement(!!payload.isAnnouncement);
