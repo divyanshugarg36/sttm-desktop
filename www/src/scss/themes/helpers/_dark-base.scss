@@ -26,7 +26,6 @@
 
   #toolbar,
   .toolbar-nav,
-  .tingle-modal-box,
   .bani-list,
   .favorite-list {
     background-color: $bg-alt;
@@ -37,8 +36,7 @@
     }
   }
 
-  .viewer-controls,
-  .tingle-modal-box__footer {
+  .viewer-controls {
     background-color: $bg-main;
   }
 

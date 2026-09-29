@@ -1,0 +1,97 @@
+// The main window's dialogs (sikhi-ui Dialog): the app dialog (What's New,
+// the unsupported-Windows warning) and the Dhan Guru picker. The Dialog pads
+// its body 12px 30px; these set 24px sides on the header and body.
+
+// Above the app's own layers (the overlays' backdrop is 1200), not just
+// sikhi-ui's default 1000, or a dialog opens behind the panes.
+.sui-dialog-overlay {
+  z-index: 1300;
+}
+
+.app-dialog {
+  max-height: 80vh;
+  max-width: 560px;
+  width: 100%;
+
+  .sui-dialog__header {
+    padding: 24px 24px 0;
+  }
+
+  .sui-dialog__body {
+    padding: 12px 24px 24px;
+  }
+
+  &__title {
+    font-size: var(--sui-typography-font-sizes-lg);
+    font-weight: 600;
+    line-height: 1.3;
+    margin: 0;
+  }
+
+  &__text {
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 24px;
+  }
+}
+
+// What's New: each message's date, title and body.
+.notifications-dialog {
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  &__item + &__item {
+    border-top: 1px solid var(--sui-semantic-border-default);
+    padding-top: 24px;
+  }
+
+  &__date {
+    color: var(--sui-semantic-foreground-muted);
+    font-size: var(--sui-typography-font-sizes-xs);
+  }
+
+  &__heading {
+    font-size: var(--sui-typography-font-sizes-base);
+    font-weight: 600;
+    margin: 6px 0;
+  }
+
+  &__content {
+    line-height: 1.6;
+
+    p {
+      margin: 0 0 12px;
+    }
+
+    a {
+      color: var(--sui-semantic-accent-default);
+    }
+
+    img {
+      border-radius: 12px;
+      max-width: 100%;
+    }
+  }
+}
+
+// The Dhan Guru picker: a tile per Guru.
+.dhan-guru-dialog {
+  &__gurus {
+    display: grid;
+    gap: 12px;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  &__guru {
+    height: 48px;
+    width: 100%;
+  }
+}

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import anvaad from 'anvaad-js';
+import { ButtonCard, CloseButton, Dialog } from '@khalisfoundation/sikhi-ui';
 import insertSlide from '../../../common/constants/slidedb';
-import tingle from '../../../common/vendor/tingle';
 import {
   setIsMiscSlide,
   setMiscSlideText,
@@ -58,55 +58,24 @@ export const DhanGuru = ({ isGurmukhi }: DhanGuruProps) => {
     }
   };
 
-  let slidePage = `<h1 class = "modalTitle">${i18n.t('INSERT.INSERT_DHAN_SLIDE')}</h1>
-  <div class="btn-group" id = "btn-group">`;
-  gurus.forEach((guru, index) => {
-    slidePage += `<button class="guru" id="guru${index}">${i18n.t(
-      `INSERT.DHAN_GURU.${guru}`,
-    )}</button>`;
-  });
-  slidePage += `</div>`;
-
-  const showDhanGuruModal = () => {
-    if (!isModalOpen) {
-      const modal = new tingle.Modal({
-        footer: true,
-        stickyFooter: false,
-        closeMethods: ['overlay', 'button', 'escape'],
-        onClose() {
-          modal.modal.classList.remove('tingle-modal--visible');
-          setIsModalOpen(false);
-          modal.destroy();
-        },
-        beforeClose() {
-          return true; // close the modal
-        },
-      });
-      if (!modal.isOpen()) {
-        setIsModalOpen(true);
-        const buttonOnClick = () => {
-          gurus.forEach((guru, index) => {
-            document.querySelector<HTMLElement>(`#guru${index}`)!.onclick = () => {
-              addDhanGuruSlide(
-                insertSlide.slideStrings.dhanguruStrings[index][
-                  isMiscSlideGurmukhi ? 'gurmukhi' : 'english'
-                ],
-              );
-              setCurrentDhanGuruIndex(index);
-              modal.close();
-              setIsModalOpen(false);
-              modal.destroy();
-            };
-          });
-        };
-
-        // sets the default page to Dhan Guru slide page
-        modal.setContent(slidePage);
-        buttonOnClick();
-        modal.open();
-      }
-    }
+  // The shortcut's picker: pick a Guru for their Dhan Guru slide, in the
+  // language of the slide showing.
+  const pickFromModal = (index: number) => {
+    addDhanGuruSlide(
+      insertSlide.slideStrings.dhanguruStrings[index][isMiscSlideGurmukhi ? 'gurmukhi' : 'english'],
+    );
+    setCurrentDhanGuruIndex(index);
+    setIsModalOpen(false);
   };
+
+  useEffect(() => {
+    if (!isModalOpen) return undefined;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setIsModalOpen(false);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [isModalOpen]);
 
   const getGuruIndex = (index: number) => {
     if (index < 9) {
@@ -130,7 +99,7 @@ export const DhanGuru = ({ isGurmukhi }: DhanGuruProps) => {
 
   useEffect(() => {
     if (shortcuts.openDhanGuruSlide) {
-      showDhanGuruModal();
+      setIsModalOpen(true);
       dispatch(
         setShortcuts({
           ...shortcuts,
@@ -152,6 +121,26 @@ export const DhanGuru = ({ isGurmukhi }: DhanGuruProps) => {
 
   return (
     <section className="settings-group">
+      <Dialog
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        variant="gradient"
+        className="app-dialog dhan-guru-dialog"
+        headerLeft={<h2 className="app-dialog__title">{i18n.t('INSERT.INSERT_DHAN_SLIDE')}</h2>}
+        headerRight={<CloseButton onClick={() => setIsModalOpen(false)} />}
+      >
+        <div className="dhan-guru-dialog__gurus">
+          {gurus.map((guru, index) => (
+            <ButtonCard
+              key={guru}
+              className="dhan-guru-dialog__guru"
+              onClick={() => pickFromModal(index)}
+            >
+              {i18n.t(`INSERT.DHAN_GURU.${guru}`)}
+            </ButtonCard>
+          ))}
+        </div>
+      </Dialog>
       <h4 className="settings-group__title">{i18n.t('INSERT.ADD_DHAN_GURU')}</h4>
       <div className="dhan-guru-pane">
         {gurus.map((guru, index) => (

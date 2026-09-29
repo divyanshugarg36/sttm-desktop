@@ -170,18 +170,13 @@
     color: $base-text;
   }
 
-  #toolbar,
-  .tingle-modal-box__footer {
+  #toolbar {
     background-color: $nav-bg;
   }
 
   // Side nav: the design system's accent colour, with white icons.
   .toolbar-nav {
     background-color: var(--sui-semantic-accent-default);
-  }
-
-  .tingle-modal-box {
-    background-color: $alt-bg;
   }
 
   // Panes take their background from sikhi-ui's Box.

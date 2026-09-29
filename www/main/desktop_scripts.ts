@@ -7,7 +7,7 @@ import fetch from 'node-fetch';
 import moment from 'moment';
 import { remote } from './common/remote';
 
-import tingle from './common/vendor/tingle';
+import { showAppDialog } from './common/sttm-ui/app-dialog';
 import { downloadFile } from './common/utils/download-file';
 import { hasSqliteDB, reopen, sqlitePath } from './banidb';
 import { i18n, mainApp, store } from './common/main-app';
@@ -120,13 +120,10 @@ const platform = {
     checkForNotifcations();
 
     if (isUnsupportedWindow) {
-      const modal = new tingle.Modal({
-        stickyFooter: false,
-        closeMethods: ['overlay', 'button', 'escape'],
+      showAppDialog({
+        title: i18n.t('UNSUPPORT_OS_TITLE'),
+        body: i18n.t('UNSUPPORT_OS'),
       });
-
-      modal.setContent(`<h1 class="model-title">${i18n.t('UNSUPPORT_OS')}</h1>`);
-      modal.open();
     }
   },
 
