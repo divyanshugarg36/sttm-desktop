@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import anvaad from 'anvaad-js';
-import { ButtonCard, Dialog } from '@khalisfoundation/sikhi-ui';
+import { ButtonCard, CloseButton, Dialog } from '@khalisfoundation/sikhi-ui';
 import insertSlide from '../../../common/constants/slidedb';
 import {
   setIsMiscSlide,
@@ -127,6 +127,7 @@ export const DhanGuru = ({ isGurmukhi }: DhanGuruProps) => {
         variant="gradient"
         className="app-dialog dhan-guru-dialog"
         headerLeft={<h2 className="app-dialog__title">{i18n.t('INSERT.INSERT_DHAN_SLIDE')}</h2>}
+        headerRight={<CloseButton onClick={() => setIsModalOpen(false)} />}
       >
         <div className="dhan-guru-dialog__gurus">
           {gurus.map((guru, index) => (

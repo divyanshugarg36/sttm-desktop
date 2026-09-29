@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ButtonCard, Dialog, PrimaryButton } from '@khalisfoundation/sikhi-ui';
+import { ButtonCard, CloseButton, Dialog, PrimaryButton } from '@khalisfoundation/sikhi-ui';
 
 import { i18n } from '../common/main-app';
 
@@ -62,6 +62,7 @@ export const CastDevicePicker = () => {
       onClose={close}
       variant="gradient"
       className="cast-picker"
+      headerRight={<CloseButton onClick={close} />}
       headerLeft={
         <h2 className="cast-picker__title">
           {request?.message ??

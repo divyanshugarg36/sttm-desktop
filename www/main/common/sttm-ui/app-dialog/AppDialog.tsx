@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Dialog, PrimaryButton } from '@khalisfoundation/sikhi-ui';
+import { CloseButton, Dialog, PrimaryButton } from '@khalisfoundation/sikhi-ui';
 
 type AppDialogOptions = {
   title: React.ReactNode;
@@ -62,6 +62,7 @@ export const AppDialogHost = () => {
       variant="gradient"
       className={`app-dialog ${options?.className ?? ''}`.trim()}
       headerLeft={<h2 className="app-dialog__title">{options?.title}</h2>}
+      headerRight={<CloseButton onClick={close} />}
     >
       {typeof options?.body === 'string' ? (
         <p className="app-dialog__text">{options.body}</p>
