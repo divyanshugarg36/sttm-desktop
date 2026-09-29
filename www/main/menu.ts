@@ -3,86 +3,24 @@ import moment from 'moment';
 import * as electron from 'electron';
 
 import settings from './settings';
-import tingle from './common/vendor/tingle';
+import { showNotificationsDialog, type NotificationRow } from './notifications-dialog';
 import { savedSettings } from './common/store/user-settings/get-saved-user-settings';
 import { applyUserSettings } from './common/store/user-settings/apply-user-settings';
 import { API_ENDPOINT } from './api-config';
-import { analytics, i18n } from './common/main-app';
+import { analytics } from './common/main-app';
 
 // const isOnline = require('is-online');
-
-/** A message from the desktop notifications API. */
-interface NotificationRow {
-  Created: string;
-  Title: string;
-  Content: string;
-}
 
 /** The notifications API's response (undefined when it couldn't be read). */
 export interface NotificationsMessage {
   rows?: NotificationRow[];
 }
 
-const modal = new tingle.Modal({
-  footer: true,
-  stickyFooter: false,
-  cssClass: ['notifications-modal'],
-  closeMethods: ['overlay', 'button', 'escape'],
-});
-
-const closeBtn = 'Close';
-modal.addFooterBtn(closeBtn, 'tingle-btn tingle-btn--pull-right tingle-btn--default', () => {
-  modal.close();
-});
-
-// format the date default to "Month Day, Year"
-const formatDate = (dateString: string, format = 'LL') => moment(dateString).format(format);
-
-const stripScripts = (string: string) => {
-  const div = document.createElement('div');
-  div.innerHTML = string;
-  const scripts = div.getElementsByTagName('script');
-  let i = scripts.length;
-  while (i > 0) {
-    i -= 1;
-    scripts[i].parentNode!.removeChild(scripts[i]);
-  }
-  return div.innerHTML;
-};
-
-const scriptTagCheckRegEx = /<[^>]*script/i;
-
-const parseContent = (contentString: string) => {
-  if (scriptTagCheckRegEx.test(contentString)) {
-    return stripScripts(contentString); // this might be overkill.
-  }
-  return contentString;
-};
-
-const createNotificationContent = (msgList: NotificationRow[]) => {
-  let html = `<h1 class="model-title">${i18n.t('OTHERS.WHATS_NEW')}</h1> <div class="messages">`;
-
-  msgList.forEach((item) => {
-    html += '<div class="row">';
-    html += `<div class="date">${formatDate(item.Created)}</div>`;
-    html += `<div class="title">${item.Title}</div>`;
-    html += `<div class="content">${parseContent(item.Content)}</div>`;
-    html += '</div>';
-  });
-  html += '</div>';
-
-  return html;
-};
-
 const showNotificationsModal = (message?: NotificationsMessage) => {
   if (message && message.rows && message.rows.length > 0) {
     const time = moment().format('YYYY-MM-DD HH:mm:ss');
     global.core.platformMethod('updateNotificationsTimestamp', time);
-    const content = createNotificationContent(message.rows);
-    // set content
-    modal.setContent(content);
-    // open modal
-    modal.open();
+    showNotificationsDialog(message.rows);
   }
 };
 
