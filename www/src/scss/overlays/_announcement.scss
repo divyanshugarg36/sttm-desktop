@@ -68,18 +68,14 @@
   height: 48px;
   overflow: hidden;
 
-  // Hovered: the number turns into a play icon, drawn in the number's colour
-  // (a mask of the icon), so it shows on the accent in light and dark themes.
-  &:hover .dhan-guru-button-prefix {
-    color: transparent;
+  // Hovered: the number turns into sikhi-ui's play icon, in the number's
+  // colour, so it shows on the accent in light and dark themes.
+  &:hover .dhan-guru-button-number {
+    display: none;
+  }
 
-    &::after {
-      background-color: var(--sui-semantic-background-page);
-      content: '';
-      inset: 0;
-      mask: url('../../assets/img/icons/play-button-filled.svg') no-repeat center / 24px;
-      position: absolute;
-    }
+  &:hover .dhan-guru-button-play {
+    display: inline-flex;
   }
 
   &:hover .dhan-guru-button-text {
@@ -87,10 +83,14 @@
   }
 }
 
+.dhan-guru-button-play {
+  display: none;
+  font-size: 24px;
+}
+
 .dhan-guru-button-prefix {
   @include flex($jc-value: center, $width: auto);
   background: var(--sui-semantic-accent-default);
-  position: relative;
   color: var(--sui-semantic-background-page);
   font-variant-numeric: tabular-nums;
 }

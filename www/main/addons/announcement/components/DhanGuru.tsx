@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import anvaad from 'anvaad-js';
 import { ButtonCard, CloseButton, Dialog } from '@khalisfoundation/sikhi-ui';
 import insertSlide from '../../../common/constants/slidedb';
+import { Icon } from '../../../common/sttm-ui';
 import {
   setIsMiscSlide,
   setMiscSlideText,
@@ -151,7 +152,10 @@ export const DhanGuru = ({ isGurmukhi }: DhanGuruProps) => {
               insertDhanGuru(index);
             }}
           >
-            <span className="dhan-guru-button-prefix">{getGuruIndex(index)}</span>
+            <span className="dhan-guru-button-prefix">
+              <span className="dhan-guru-button-number">{getGuruIndex(index)}</span>
+              <Icon name="play-solid" className="dhan-guru-button-play" />
+            </span>
             {isGurmukhi ? (
               <span className="dhan-guru-button-text">
                 {anvaad.unicode(insertSlide.slideStrings.dhanguruStrings[index].gurmukhi)}
