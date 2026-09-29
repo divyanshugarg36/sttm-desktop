@@ -30,7 +30,7 @@ const ExtraBani = ({
         <Tile
           onClick={(e) => getBani(e, id)}
           key={name}
-          className="sundar-gutka__tile"
+          className={`sundar-gutka__tile sundar-gutka__tile--${tag}`}
           isEngTransliterated={isEngTransliterated}
         >
           {isEngTransliterated ? anvaad.translit(name) : anvaad.unicode(name)}

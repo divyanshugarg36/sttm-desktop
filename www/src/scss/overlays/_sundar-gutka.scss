@@ -101,10 +101,23 @@
   }
 
   &__tile {
+    color: #fff;
     height: 72px;
     line-height: 1.5;
     text-align: center;
     width: 100%;
+
+    // In its group's marker colour. `background`, not background-color:
+    // ButtonCard's own is a gradient image, and its hover resets it.
+    &--nitnem,
+    &--nitnem:hover {
+      background: $tag-nitnem-color;
+    }
+
+    &--popular,
+    &--popular:hover {
+      background: $tag-popular-color;
+    }
 
     .eng-tile {
       text-transform: capitalize;
