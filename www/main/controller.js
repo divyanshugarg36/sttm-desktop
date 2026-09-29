@@ -153,7 +153,7 @@ if (process.env.NODE_ENV === 'development') {
         label: i18n.t('MENU.DEV.DEVELOPER_TOOLS'),
         accelerator: 'CmdOrCtrl+Alt+I',
         click: () => {
-          remote.getCurrentWindow().toggleDevTools();
+          remote.getCurrentWindow().webContents.toggleDevTools();
         },
       },
       {
@@ -348,7 +348,7 @@ const $menuButton = document.querySelector('.menu-button');
 $menuButton.addEventListener('contextmenu', (e) => {
   e.preventDefault();
   e.stopPropagation();
-  menu.popup(remote.getCurrentWindow());
+  menu.popup({ window: remote.getCurrentWindow() });
 });
 $menuButton.addEventListener('click', () => {
   const e = $menuButton.ownerDocument.createEvent('MouseEvents');
