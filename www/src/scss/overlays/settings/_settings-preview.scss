@@ -95,3 +95,32 @@
   line-height: 1.5;
   margin-top: 0.25em;
 }
+
+// The new preview: the viewer's slide (PresenterSlide), rendered at the
+// window's size and scaled into the box.
+.settings-slide-preview {
+  background-position: center;
+  background-size: cover;
+  height: 280px;
+  margin-bottom: 20px;
+  overflow: hidden;
+  position: relative;
+  width: 500px;
+  --sui-presenter-gurmukhi-font: 'gurbaniakharthick';
+  --sui-presenter-teeka-font: 'gurbaniakhar';
+
+  .video-preview {
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    width: 100%;
+  }
+
+  &__stage {
+    height: 100vh;
+    left: 0;
+    position: absolute;
+    top: 0;
+    transform-origin: top left;
+  }
+}
