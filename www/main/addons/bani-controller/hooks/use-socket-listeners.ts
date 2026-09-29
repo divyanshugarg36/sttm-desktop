@@ -7,7 +7,7 @@ import {
   isFromDesktop,
   type ControllerBaniMessage,
   type ControllerCeremonyMessage,
-  type ControllerFontSizes,
+  type ControllerSettings,
   type ControllerSettingsMessage,
   type ControllerShabadMessage,
   type ControllerSocketData,
@@ -23,7 +23,7 @@ export type SocketListenerContext = {
   homeVerse: NavigatorState['homeVerse'];
   ceremonyId: NavigatorState['ceremonyId'];
   sundarGutkaBaniId: NavigatorState['sundarGutkaBaniId'];
-  fontSizes: ControllerFontSizes;
+  controllerSettings: ControllerSettings;
   baniLength: UserSettingsState['baniLength'];
   // mangalPosition,
   isSundarGutkaBani: boolean;
@@ -60,7 +60,7 @@ const useSocketListeners = (
     homeVerse,
     ceremonyId,
     sundarGutkaBaniId,
-    fontSizes,
+    controllerSettings,
     baniLength,
     // mangalPosition,
     isSundarGutkaBani,
@@ -226,7 +226,7 @@ const useSocketListeners = (
       'request-control': () =>
         handleRequestControl(
           isPinCorrect,
-          fontSizes,
+          controllerSettings,
           activeShabadId,
           activeVerseId,
           homeVerse,

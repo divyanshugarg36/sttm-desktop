@@ -1,11 +1,11 @@
 import { analytics } from '../../../common/main-app';
 import type { NavigatorState } from '../../../common/store/redux/navigatorSlice';
 import type { UserSettingsState } from '../../../common/store/redux/userSettingsSlice';
-import type { ControllerFontSizes, ControllerId } from '../types';
+import type { ControllerId, ControllerSettings } from '../types';
 
 const handleRequestControl = (
   isPinCorrect: boolean,
-  fontSizes: ControllerFontSizes,
+  settings: ControllerSettings,
   activeShabadId: NavigatorState['activeShabadId'],
   activeVerseId: NavigatorState['activeVerseId'],
   homeVerse: NavigatorState['homeVerse'],
@@ -19,9 +19,7 @@ const handleRequestControl = (
     host: 'sttm-desktop',
     type: 'response-control',
     success: isPinCorrect,
-    settings: {
-      fontSizes,
-    },
+    settings,
   });
   // if Pin is correct and there is a shabad already in desktop, emit that shabad details.
   if (isPinCorrect) {

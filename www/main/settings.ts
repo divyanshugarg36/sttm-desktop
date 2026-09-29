@@ -1,6 +1,7 @@
 import settingsConfig from '../configs/settings.json';
 import { store } from './common/main-app';
-import type { ControllerFontSizes } from './addons/bani-controller/types';
+import reduxStore from './common/store/redux/store';
+import { getControllerSettings } from './addons/bani-controller/utils/controller-display';
 
 /**
  * A setting in www/configs/settings.json. What `options` holds depends on the
@@ -31,9 +32,8 @@ const settingsPage = {
       window.socket.emit('data', {
         host: 'sttm-desktop',
         type: 'settings',
-        settings: {
-          fontSizes: store.getUserPref('slide-layout.font-sizes') as ControllerFontSizes,
-        },
+        // The viewer's settings, as the settings sync sends them.
+        settings: getControllerSettings(reduxStore.getState().userSettings),
       });
     }
     Object.keys(settings).forEach((catKey) => {

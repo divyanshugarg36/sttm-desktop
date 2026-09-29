@@ -7,12 +7,7 @@ import type { IpcRendererEvent } from 'electron';
 import BaniControllerItem from './BaniControllerItem';
 import { Overlay } from '../../../common/sttm-ui';
 
-import {
-  getBaniControllerItems,
-  generateQrCode,
-  shareSync,
-  getControllerFontSizes,
-} from '../utils';
+import { getBaniControllerItems, generateQrCode, shareSync, getControllerSettings } from '../utils';
 
 import { useNewShabad } from '../../../navigator/search/hooks/use-new-shabad';
 
@@ -92,7 +87,7 @@ const BaniController = ({ onScreenClose, className }: BaniControllerProps) => {
   const { baniLength } = userSettings;
   // mangalPosition,
 
-  const fontSizes = getControllerFontSizes(userSettings);
+  const controllerSettings = getControllerSettings(userSettings);
 
   const showSyncError = (errorMessage: string) => {
     setCodeLabel(errorMessage);
@@ -209,7 +204,7 @@ const BaniController = ({ onScreenClose, className }: BaniControllerProps) => {
       homeVerse,
       ceremonyId,
       sundarGutkaBaniId,
-      fontSizes,
+      controllerSettings,
       baniLength,
       // mangalPosition,
       isSundarGutkaBani,
