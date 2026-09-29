@@ -1,4 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Baloo+Paaji+2:wght@400;600&family=Mulish&display=swap');
+/* The app's UI font, bundled so the splash works offline. */
+@font-face {
+  font-family: 'Baloo Paaji 2';
+  font-style: normal;
+  font-weight: 400 800;
+  src: url('../../fonts/BalooPaaji2-Variable.ttf') format('truetype');
+}
 
 html,
 body {
@@ -20,41 +26,46 @@ body {
   width: 500px;
   height: 300px;
   background-image: url('../../img/una.jpg');
-  background-size: contain;
-  border-radius: 20px;
+  background-size: cover;
+  border-radius: 12px;
+  overflow: hidden;
 }
 
 .overlay {
   width: 100%;
   height: 100%;
   animation: fadeIn 0.5s ease-in-out;
-  border-radius: 20px;
+  box-sizing: border-box;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   flex-direction: column;
-  font-family: 'Mulish', sans-serif;
+  font-family: 'Baloo Paaji 2', sans-serif;
+  padding: 36px 24px;
   color: white;
 
   background-color: rgba(0, 0, 0, 0.5);
 }
 
-.branding {
-  margin-top: 24px;
+.branding img {
+  height: 72px;
 }
 
 .overlay h1 {
-  font-weight: normal;
-  margin: 0;
+  font-size: 30px;
+  font-weight: 600;
+  margin: 12px 0 0;
+}
+
+.wrapper p {
+  font-size: 14px;
+  margin: 12px 0 0;
+  opacity: 0.9;
 }
 
 .release-name {
   color: #F99D1C;
-  font-family: 'Baloo Paaji 2', 'cursive';
+  font-family: 'Baloo Paaji 2', sans-serif;
   font-weight: 600;
-}
-
-.wrapper {
-  margin-top: 12px;
 }
 
 .loader {
