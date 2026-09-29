@@ -468,6 +468,7 @@
       "CODE_ERR": "Sorry, Failed to get a new code for you, please try again later.",
       "PIN": "Pin",
       "PRESENT_CODE": "Present Code to Sangat",
+      "LOCK_SCREEN": "Lock Screen",
       "SANGAT_SYNC": "Sangat Sync",
       "SYNC_STRING": "<p>Visit <strong>sttm.co/sync</strong> on your mobile device and enter the code below to follow along</p><h1>{{code}}</h1><span class='d-none'>{{garbageValue}}</span>",
       "UNIQUE_CODE_LABEL": "Your unique sync code is:",

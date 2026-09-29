@@ -49,7 +49,6 @@ type BaniControllerProps = {
 };
 
 const BaniController = ({ onScreenClose, className }: BaniControllerProps) => {
-  const title = 'Mobile device sync';
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const changeActiveShabad = useNewShabad();
@@ -237,41 +236,36 @@ const BaniController = ({ onScreenClose, className }: BaniControllerProps) => {
     toggleLockScreen,
   });
 
+  // Laid out like Settings: the sync code, then what it's for (Sangat Sync,
+  // the Bani Controller) as titled groups of setting rows; Zoom captions on a
+  // card beside it.
   return (
     <Overlay onScreenClose={onScreenClose} className={className}>
-      <div className="addon-wrapper sync-wrapper overlay-ui ui-sync-button">
+      <div className="addon-wrapper sync-wrapper">
+        <Box variant="gradient" className="sync-card">
+          <h3 className="sync-card__title">{i18n.t('TOOLBAR.MOBILE_DEVICE_SYNC')}</h3>
+          {isFetchingCode ? (
+            <div className="sttm-loader" />
+          ) : (
+            <>
+              <div className="sync-card__code">
+                <span className="sync-card__code-label">
+                  {codeLabel || i18n.t('TOOLBAR.SYNC_CONTROLLER.UNIQUE_CODE_LABEL')}
+                </span>
+                <span className="sync-card__code-num">{code || '...'}</span>
+              </div>
+
+              {baniControllerItems.map((item) => (
+                <BaniControllerItem key={item.title} {...item} />
+              ))}
+            </>
+          )}
+          <QrCode canvasRef={canvasRef} />
+          {!isFetchingCode && (
+            <ConnectionSwitch isConnected={isConnected} syncToggle={syncToggle} />
+          )}
+        </Box>
         <ZoomController />
-        <div className="sync overlay-ui ui-sync-button">
-          <header className="sync-header" data-key="MOBILE_DEVICE_SYNC">
-            {title}
-          </header>
-          <Box
-            variant="gradient"
-            className={`sync-content-wrapper ${isFetchingCode ? 'loading' : ''}`}
-          >
-            <div className="sync-content">
-              {isFetchingCode ? (
-                <div className="sttm-loader" />
-              ) : (
-                <>
-                  <div className="sync-code-label">
-                    {codeLabel || i18n.t('TOOLBAR.SYNC_CONTROLLER.UNIQUE_CODE_LABEL')}
-                  </div>
-
-                  <div className="sync-code-num"> {code || '...'} </div>
-
-                  {baniControllerItems.map((item) => (
-                    <BaniControllerItem key={item.title} {...item} />
-                  ))}
-
-                  <ConnectionSwitch isConnected={isConnected} syncToggle={syncToggle} />
-                </>
-              )}
-            </div>
-
-            <QrCode canvasRef={canvasRef} />
-          </Box>
-        </div>
       </div>
     </Overlay>
   );
