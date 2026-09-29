@@ -1,29 +1,40 @@
-// The Others tab: Random Shabad, Hukamnama and the like.
+// The Others tab: a random shabad and the day's Hukamnama, as rows like the
+// History tab's (_history-list.scss).
 
 .other-list {
-  @include flex($fd-value: column, $jc-value: start);
+  list-style: none;
   margin: 0;
-  padding: 0;
-  height: 320px;
-  overflow: auto;
+  overflow-y: auto;
+  padding: 12px;
 
-  li {
-    overflow: visible;
-    text-overflow: ellipsis;
+  &__item {
+    align-items: center;
+    background: none;
+    border: 0;
+    border-radius: var(--sui-radii-md);
+    color: var(--sui-semantic-accent-default);
+    cursor: pointer;
+    display: flex;
+    font: inherit;
+    font-weight: var(--sui-typography-font-weights-semibold);
+    gap: 12px;
+    padding: 12px;
+    text-align: left;
     width: 100%;
+
+    &:hover {
+      background-color: color-mix(in srgb, var(--sui-semantic-accent-default) 4%, transparent);
+    }
+
+    // The Hukamnama while it loads.
+    &:disabled {
+      cursor: progress;
+      opacity: 0.6;
+    }
   }
 
-  li a {
-    display: block;
-    padding: 0.3rem 1rem;
-    width: 100%;
-
-    i {
-      padding: 8px;
-    }
-
-    select {
-      margin-left: 12px;
-    }
+  &__icon {
+    flex: 0 0 auto;
+    font-size: 18px;
   }
 }

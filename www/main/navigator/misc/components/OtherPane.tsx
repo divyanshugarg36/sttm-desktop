@@ -111,20 +111,33 @@ export const OtherPane = ({ className }: OtherPaneProps) => {
     setIsHukamnamaLoading(true);
   };
 
+  // Rows like History's: an icon and what it opens.
+  const items = [
+    {
+      key: 'random',
+      icon: 'random',
+      label: 'OTHERS.SHOW_RANDOM_SHABAD',
+      onClick: openRandomShabad,
+    },
+    {
+      key: 'hukamnama',
+      icon: 'hukamnama',
+      label: 'OTHERS.DAILY_HUKAMNAMA',
+      onClick: openDailyHukamnana,
+      busy: isHukamnamaLoading,
+    },
+  ];
+
   return (
     <ul className={`other-list ${className}`}>
-      <li>
-        <a onClick={openRandomShabad}>
-          <Icon name="random" className="other-list__icon" />
-          {i18n.t('OTHERS.SHOW_RANDOM_SHABAD')}
-        </a>
-      </li>
-      <li>
-        <a onClick={openDailyHukamnana}>
-          <Icon name="hukamnama" className="other-list__icon" />
-          {i18n.t('OTHERS.DAILY_HUKAMNAMA')}
-        </a>
-      </li>
+      {items.map(({ key, icon, label, onClick, busy }) => (
+        <li key={key}>
+          <button type="button" className="other-list__item" onClick={onClick} disabled={busy}>
+            <Icon name={icon} className="other-list__icon" />
+            {i18n.t(label)}
+          </button>
+        </li>
+      ))}
     </ul>
   );
 };

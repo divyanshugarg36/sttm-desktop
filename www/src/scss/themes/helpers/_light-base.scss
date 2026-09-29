@@ -50,8 +50,7 @@
 
   #toolbar,
   .toolbar-nav,
-  .bani-list,
-  .favorite-list {
+  .bani-list {
     background-color: $nav-bg;
 
     .sttm-loader {
@@ -278,17 +277,6 @@
     }
   }
 
-  .favorite-list {
-    .favorite-list__item {
-      button {
-        color: $base-text;
-      }
-    }
-
-    .favorite-list__item:hover {
-      background-color: $statusbar-bg;
-    }
-  }
 
   .verse-list {
 
