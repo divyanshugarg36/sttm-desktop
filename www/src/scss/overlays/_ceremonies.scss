@@ -1,0 +1,39 @@
+// The Ceremonies overlay: a gradient Box per ceremony, laid out like a
+// Settings category: its options as setting rows (_setting-row.scss), then the
+// themes to launch it with as theme-picker tiles (_theme-picker.scss).
+
+.ceremonies-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 95vh;
+  left: $toolbar-offset + 12px;
+  margin-top: 24px;
+  overflow-y: auto;
+  position: fixed;
+  top: 0;
+  width: 500px;
+}
+
+.ceremony-card {
+  border-radius: 12px;
+  flex-shrink: 0;
+  margin-bottom: 12px;
+  padding: 12px 0 24px;
+
+  &__title {
+    font-size: var(--sui-typography-font-sizes-lg);
+    font-weight: 600;
+    margin: 0;
+    padding: 6px 24px 12px;
+  }
+
+  &__group-title {
+    @include section-title;
+    padding: 12px 24px 6px;
+  }
+
+  // The theme tiles, inset like the rows.
+  &__themes {
+    padding: 6px 24px 0;
+  }
+}

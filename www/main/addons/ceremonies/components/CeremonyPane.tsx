@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import anvaad from 'anvaad-js';
-import { Box } from '@khalisfoundation/sikhi-ui';
+import { Box, Toggle } from '@khalisfoundation/sikhi-ui';
 
-import { MultipaneDropdown, Switch, Tile } from '../../../common/sttm-ui';
+import { MultipaneDropdown, Tile, VideoWithOverlay } from '../../../common/sttm-ui';
 import { ceremoniesFilter } from '../../../common/constants';
+import { classNames } from '../../../common/utils';
 
 import { getUserPreferenceFor } from '../utils';
 import { applyTheme } from '../../../settings/utils';
@@ -53,6 +54,9 @@ const CeremonyPane = ({ token, name, id, onScreenClose }: CeremonyPaneProps) => 
 
   const paneId = token;
   const [currentCeremony, setCurrentCeremony] = useState(id);
+  // Kept here too: the stored preference doesn't re-render the pane.
+  const [isEnglish, setIsEnglish] = useState(() => !!getUserPreferenceFor('english', token));
+  const [isRm, setIsRm] = useState(() => !!getUserPreferenceFor('rm', token));
 
   useEffect(() => {
     if (currentCeremony === 5 && !getUserPreferenceFor('rm', token)) {
@@ -154,11 +158,13 @@ const CeremonyPane = ({ token, name, id, onScreenClose }: CeremonyPaneProps) => 
   };
 
   const toggleEnglishExplanations = (isEnglishExplanations: boolean) => {
+    setIsEnglish(isEnglishExplanations);
     toggleOptions('english', isEnglishExplanations);
   };
 
-  const toggleRm = (isRm: boolean) => {
-    toggleOptions('rm', isRm);
+  const toggleRm = (withRaagmala: boolean) => {
+    setIsRm(withRaagmala);
+    toggleOptions('rm', withRaagmala);
   };
 
   // Themes from themes.json; the pane assumes each key (and the current theme) exists.
@@ -175,86 +181,87 @@ const CeremonyPane = ({ token, name, id, onScreenClose }: CeremonyPaneProps) => 
     setPaneSelectorActive(false);
   };
 
-  return (
-    <Box variant="gradient" className="ceremony-pane" id={paneId}>
-      {
-        <MultipaneDropdown
-          paneSelectorActive={paneSelectorActive}
-          setPaneSelectorActive={setPaneSelectorActive}
-          paneSelector={paneSelector}
-          clickHandler={openCeremonyFromDropdown}
+  // A tile launches the ceremony in a theme; with multiple panes it first
+  // asks which pane.
+  const launch = (e: React.MouseEvent, theme: Theme) => {
+    if (currentWorkspace === i18n.t('WORKSPACES.MULTI_PANE')) {
+      openPaneMenu(e, theme);
+    } else {
+      onThemeClick(e, theme);
+    }
+  };
+
+  const themeTiles = [
+    { key: 'light', theme: themes.light, label: i18n.t(`THEMES.${themes.light.name}`) },
+    { key: 'ceremony', theme: themes[token!], label: i18n.t(`THEMES.${themes[token!].name}`) },
+    { key: 'current', theme: themes.current, label: i18n.t('THEMES.CURRENT_THEME') },
+  ];
+
+  // A setting row (as in Settings): the option's name, then its switch.
+  const optionRow = (
+    title: string,
+    controlId: string,
+    checked: boolean,
+    onToggle: (value: boolean) => void,
+  ) => (
+    <div className="setting-row">
+      <div className="setting-row__label">
+        <span className="setting-row__title">{title}</span>
+      </div>
+      <div className="setting-row__control">
+        <Toggle
+          id={controlId}
+          size="lg"
+          checked={checked}
+          onChange={(event) => onToggle(event.target.checked)}
         />
-      }
-      <header className="toolbar-nh navigator-header">
-        <span>{anvaad.unicode(name)}</span>
-      </header>
-      <div className="ceremony-pane-content">
-        <div className="ceremony-pane-options" id={`cpo-${paneId}`}>
-          {ceremoniesFilter.englishToggle.includes(id) && (
-            <Switch
-              onToggle={toggleEnglishExplanations}
-              value={getUserPreferenceFor('english', token)}
-              title={i18n.t('TOOLBAR.ENG_EXPLANATIONS')}
-              controlId={`${name}-english-exp-toggle`}
-              className={`${name}-english-exp-switch`}
-            />
-          )}
-          {ceremoniesFilter.raagmalaToggle.includes(id) && (
-            <Switch
-              onToggle={toggleRm}
-              value={getUserPreferenceFor('rm', token)}
-              title={i18n.t('TOOLBAR.RAAGMALA')}
-              controlId={`${name}-rm-toggle`}
-              className={`${name}-rm-switch`}
-            />
-          )}
+      </div>
+    </div>
+  );
 
-          <div className="ceremony-pane-themes">
-            <div className="ceremony-theme-header"> {i18n.t('TOOLBAR.CHOOSE_THEME')} </div>
+  return (
+    <Box variant="gradient" className="ceremony-card" id={paneId}>
+      <MultipaneDropdown
+        paneSelectorActive={paneSelectorActive}
+        setPaneSelectorActive={setPaneSelectorActive}
+        paneSelector={paneSelector}
+        clickHandler={openCeremonyFromDropdown}
+      />
+      <h3 className="ceremony-card__title">{anvaad.unicode(name)}</h3>
 
-            <Tile
-              onClick={(e) => {
-                if (currentWorkspace === i18n.t('WORKSPACES.MULTI_PANE')) {
-                  openPaneMenu(e, themes.light);
-                } else {
-                  onThemeClick(e, themes.light);
-                }
-              }}
-              className="theme-instance"
-              theme={themes.light}
-            >
-              LIGHT
-            </Tile>
+      {ceremoniesFilter.englishToggle.includes(id) &&
+        optionRow(
+          i18n.t('TOOLBAR.ENG_EXPLANATIONS'),
+          `${name}-english-exp-toggle`,
+          isEnglish,
+          toggleEnglishExplanations,
+        )}
+      {ceremoniesFilter.raagmalaToggle.includes(id) &&
+        optionRow(i18n.t('TOOLBAR.RAAGMALA'), `${name}-rm-toggle`, isRm, toggleRm)}
 
-            <Tile
-              onClick={(e) => {
-                if (currentWorkspace === i18n.t('WORKSPACES.MULTI_PANE')) {
-                  openPaneMenu(e, themes[token!]);
-                } else {
-                  onThemeClick(e, themes[token!]);
-                }
-              }}
-              className="theme-instance"
-              theme={themes[token!]}
-            >
-              {themes[token!].name.replace(/_/g, ' ')}
-            </Tile>
-
-            <Tile
-              onClick={(e) => {
-                if (currentWorkspace === i18n.t('WORKSPACES.MULTI_PANE')) {
-                  openPaneMenu(e, themes.current);
-                } else {
-                  onThemeClick(e, themes.current);
-                }
-              }}
-              className="theme-instance"
-              theme={themes.current}
-            >
-              <span className="current-cer-theme"> CURRENT THEME </span>
-            </Tile>
-          </div>
-        </div>
+      <h4 className="ceremony-card__group-title">{i18n.t('TOOLBAR.CHOOSE_THEME')}</h4>
+      <div className="theme-picker__tiles ceremony-card__themes">
+        {themeTiles.map(({ key, theme, label }) => (
+          <Tile
+            key={key}
+            onClick={(e) => launch(e, theme)}
+            className={classNames(
+              'theme-picker__tile',
+              theme['background-video'] && 'theme-picker__tile--video',
+            )}
+            theme={theme}
+          >
+            {theme['background-video'] ? (
+              <VideoWithOverlay
+                src={theme['background-video']}
+                poster={theme['background-video-poster']}
+                overlayContent={label}
+              />
+            ) : (
+              label
+            )}
+          </Tile>
+        ))}
       </div>
     </Box>
   );
