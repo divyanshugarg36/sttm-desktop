@@ -1,11 +1,13 @@
 import React, { useRef, useState } from 'react';
 import anvaad from 'anvaad-js';
 
-import { Switch, Overlay, MultipaneDropdown } from '../../../common/sttm-ui';
+import { Box, Toggle } from '@khalisfoundation/sikhi-ui';
+
+import { Overlay, MultipaneDropdown } from '../../../common/sttm-ui';
 import ExtraBani from './ExtraBani';
-import { convertToHyphenCase } from '../../../common/utils';
 import { nitnemBaniIds, popularBaniIds } from '../../../common/constants';
 import useLoadBani from '../hooks/use-load-bani';
+import { classNames } from '../../../common/utils';
 import {
   setIsSundarGutkaBani,
   setSundarGutkaBaniId,
@@ -26,11 +28,13 @@ import type { NamedItem } from '../../utils/convert-db-proxy-to-array';
 type TaggedBani = NamedItem & { baniTag?: string };
 
 type SundarGutkaProps = {
-  isShowTranslitSwitch?: boolean;
   onScreenClose: (event?: React.MouseEvent<HTMLElement>) => void;
 };
 
-const SundarGutka = ({ isShowTranslitSwitch = false, onScreenClose }: SundarGutkaProps) => {
+// The banis, laid out like Settings: the list on a gradient Box with the
+// language as a setting row, and the Nitnem / Popular banis as titled groups
+// of tiles beside it.
+const SundarGutka = ({ onScreenClose }: SundarGutkaProps) => {
   const {
     isSundarGutkaBani,
     sundarGutkaBaniId,
@@ -49,7 +53,6 @@ const SundarGutka = ({ isShowTranslitSwitch = false, onScreenClose }: SundarGutk
   const dispatch = useAppDispatch();
 
   const { isLoadingBanis, banis } = useLoadBani();
-  const [isTranslit, setTranslitState] = useState(false);
   const [isEngTransliterated, setEngTransliterate] = useState(false);
   const [paneSelectorActive, setPaneSelectorActive] = useState(false);
 
@@ -58,10 +61,6 @@ const SundarGutka = ({ isShowTranslitSwitch = false, onScreenClose }: SundarGutk
   const nitnemBanis: TaggedBani[] = [];
   const popularBanis: TaggedBani[] = [];
   const title = i18n.t('TOOLBAR.SUNDAR_GUTKA');
-  const hyphenedTitle = convertToHyphenCase(title.toLowerCase());
-  const overlayClassName = `ui-${hyphenedTitle}`;
-  const blockListId = `${hyphenedTitle}-banis`;
-  const blockListItemClassName = `${hyphenedTitle}-bani`;
   const taggedBanis = banis.map((bani) => {
     const b: TaggedBani = bani;
     b.baniTag = '';
@@ -168,81 +167,67 @@ const SundarGutka = ({ isShowTranslitSwitch = false, onScreenClose }: SundarGutk
     setPaneSelectorActive(false);
   };
 
+  const baniName = (name: string) =>
+    isEngTransliterated ? anvaad.translit(name) : anvaad.unicode(name);
+
   return (
     <Overlay onScreenClose={onScreenClose}>
-      <div className={`addon-wrapper ${hyphenedTitle}-wrapper`}>
-        <div className={`bani-list overlay-ui ${overlayClassName}`}>
+      <div className="addon-wrapper sundar-gutka-wrapper">
+        <Box variant="gradient" className="sundar-gutka__banis">
+          <h3 className="sundar-gutka__title">{title}</h3>
+          <div className="setting-row">
+            <div className="setting-row__label">
+              <span className="setting-row__title">{i18n.t('SETTINGS.ENGLISH_LANGUAGE')}</span>
+            </div>
+            <div className="setting-row__control">
+              <Toggle
+                id="translate-eng"
+                size="lg"
+                checked={isEngTransliterated}
+                onChange={(event) => setEngTransliterate(event.target.checked)}
+              />
+            </div>
+          </div>
+          <MultipaneDropdown
+            paneSelectorActive={paneSelectorActive}
+            setPaneSelectorActive={setPaneSelectorActive}
+            paneSelector={paneSelector}
+            clickHandler={openBaniFromDropdown}
+          />
           {isLoadingBanis ? (
             <div className="sttm-loader" />
           ) : (
-            <>
-              <header className="navigator-header">
-                {title}
-                <div className="transliterate-eng">
-                  <span>{i18n.t('SETTINGS.ENGLISH_LANGUAGE')} </span>
-                  <div className="switch xs-small">
-                    <input
-                      id="translate-eng"
-                      type="checkbox"
-                      checked={isEngTransliterated}
-                      onChange={() => {
-                        const newState = !isEngTransliterated;
-                        setEngTransliterate(newState);
-                      }}
+            <ul className="sundar-gutka__list" id="sundar-gutka-banis">
+              {taggedBanis.map((bani) => (
+                <li key={bani.name}>
+                  <button
+                    type="button"
+                    className={classNames(
+                      'sundar-gutka__bani',
+                      isEngTransliterated && 'sundar-gutka__bani--english',
+                    )}
+                    onClick={(e) => getBani(e, bani.id)}
+                  >
+                    <span
+                      className={classNames(
+                        'sundar-gutka__tag',
+                        bani.baniTag && `sundar-gutka__tag--${bani.baniTag}`,
+                      )}
                     />
-                    <label htmlFor="translate-eng" />
-                  </div>
-                </div>
-              </header>
-              {isShowTranslitSwitch && (
-                <Switch
-                  controlId="translit-switch"
-                  className="translit-switch"
-                  onToggle={setTranslitState}
-                  value={isTranslit}
-                />
-              )}
-
-              <section className="blocklist">
-                {
-                  <MultipaneDropdown
-                    paneSelectorActive={paneSelectorActive}
-                    setPaneSelectorActive={setPaneSelectorActive}
-                    paneSelector={paneSelector}
-                    clickHandler={openBaniFromDropdown}
-                  />
-                }
-                <ul id={blockListId}>
-                  {taggedBanis.map((bani) => (
-                    <li
-                      key={bani.name}
-                      className={blockListItemClassName}
-                      onClick={(e) =>
-                        currentWorkspace === i18n.t('WORKSPACES.MULTI_PANE')
-                          ? openPaneMenu(e, bani.id)
-                          : loadBani(bani.id, defaultPaneId)
-                      }
-                    >
-                      <span className={`tag tag-${bani.baniTag}`} />
-                      <span className={isEngTransliterated ? 'english-bani' : undefined}>
-                        {isEngTransliterated
-                          ? anvaad.translit(bani.name)
-                          : anvaad.unicode(bani.name)}
-                      </span>
-                      <span className="translit-bani">{anvaad.translit(bani.name)}</span>
-                    </li>
-                  ))}
-                </ul>
-              </section>
-            </>
+                    {baniName(bani.name)}
+                  </button>
+                </li>
+              ))}
+            </ul>
           )}
-        </div>
+        </Box>
 
-        {!isLoadingBanis && (
-          <div className={`bani-extras overlay-ui ${overlayClassName}`}>
+        {!isLoadingBanis && (nitnemBanis.length > 0 || popularBanis.length > 0) && (
+          <Box variant="gradient" className="sundar-gutka__extras">
             {nitnemBanis.length > 0 && (
               <ExtraBani
-                title="Nitnem Banis"
+                tag="nitnem"
+                title={i18n.t('TOOLBAR.NITNEM_BANIS')}
                 banis={nitnemBanis}
                 getBani={getBani}
                 isEngTransliterated={isEngTransliterated}
@@ -250,13 +235,14 @@ const SundarGutka = ({ isShowTranslitSwitch = false, onScreenClose }: SundarGutk
             )}
             {popularBanis.length > 0 && (
               <ExtraBani
-                title="Popular Banis"
+                tag="popular"
+                title={i18n.t('TOOLBAR.POPULAR_BANIS')}
                 banis={popularBanis}
                 getBani={getBani}
                 isEngTransliterated={isEngTransliterated}
               />
             )}
-          </div>
+          </Box>
         )}
       </div>
     </Overlay>

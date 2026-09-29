@@ -1,0 +1,126 @@
+// The Sundar Gutka overlay, laid out like Settings: the bani list on a gradient
+// Box (with the language as a setting row, _setting-row.scss), and beside it
+// the Nitnem / Popular banis as titled groups of tiles (_theme-picker.scss).
+
+.sundar-gutka-wrapper {
+  align-items: flex-start;
+  display: flex;
+  gap: 12px;
+  height: 95vh;
+  left: $toolbar-offset + 12px;
+  margin-top: 24px;
+  position: fixed;
+  top: 0;
+}
+
+.sundar-gutka {
+  &__banis {
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 12px 0;
+    width: 500px;
+  }
+
+  &__extras {
+    border-radius: 12px;
+    max-height: 100%;
+    overflow-y: auto;
+    padding: 12px 0 24px;
+    width: 500px;
+  }
+
+  &__title {
+    font-size: var(--sui-typography-font-sizes-lg);
+    font-weight: 600;
+    margin: 0;
+    padding: 6px 24px 12px;
+  }
+
+  // The banis scroll under the title and language row.
+  &__list {
+    flex: 1;
+    list-style: none;
+    margin: 12px 0 0;
+    overflow-y: auto;
+    padding: 0 0 12px;
+  }
+
+  // A bani, like a setting row: its marker, then its name.
+  &__bani {
+    align-items: center;
+    background: none;
+    border: 0;
+    border-radius: var(--sui-radii-md);
+    color: inherit;
+    cursor: pointer;
+    display: flex;
+    font: inherit;
+    gap: 12px;
+    margin: 0 12px;
+    min-height: 36px;
+    padding: 6px 12px;
+    text-align: left;
+    transition: background-color 0.2s ease;
+    width: calc(100% - 24px);
+
+    &:hover {
+      background-color: color-mix(in srgb, var(--sui-semantic-accent-default) 8%, transparent);
+    }
+
+    &--english {
+      text-transform: capitalize;
+    }
+  }
+
+  // A bani's list marker: Nitnem or Popular (none for the rest).
+  &__tag {
+    border-radius: 2px;
+    flex: 0 0 auto;
+    height: 12px;
+    width: 12px;
+
+    &--nitnem {
+      background-color: $tag-nitnem-color;
+    }
+
+    &--popular {
+      background-color: $tag-popular-color;
+    }
+  }
+
+  &__group-title {
+    align-items: center;
+    display: flex;
+    gap: 6px;
+  }
+
+  &__tiles {
+    padding: 6px 24px 0;
+  }
+
+  &__tile {
+    color: #fff;
+    height: 72px;
+    line-height: 1.5;
+    text-align: center;
+    width: 100%;
+
+    // In its group's marker colour. `background`, not background-color:
+    // ButtonCard's own is a gradient image, and its hover resets it.
+    &--nitnem,
+    &--nitnem:hover {
+      background: $tag-nitnem-color;
+    }
+
+    &--popular,
+    &--popular:hover {
+      background: $tag-popular-color;
+    }
+
+    .eng-tile {
+      text-transform: capitalize;
+    }
+  }
+}

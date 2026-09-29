@@ -42,8 +42,11 @@ body.win32:not(.webview) {
     top: 35px;
   }
 
-  .sundar-gutka-wrapper {
-    margin-top: 25px;
+  // Below the title bar, like Settings.
+  .sundar-gutka-wrapper,
+  .ceremonies-wrapper {
+    height: 93vh;
+    margin-top: 40px;
   }
 
   #titlebar {
