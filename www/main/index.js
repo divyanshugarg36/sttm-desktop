@@ -25,9 +25,6 @@ const core = {
   menu,
   platformMethod,
   themeEditor,
-  'custom-theme': () => {
-    themeEditor.init();
-  },
 };
 
 export default core;
