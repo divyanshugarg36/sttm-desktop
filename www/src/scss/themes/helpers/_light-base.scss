@@ -37,11 +37,6 @@
     color: $black;
   }
 
-  .announcement-text {
-    border: 1px solid $dark-grey;
-    color: $black;
-  }
-
   .controller.presenter-view {
     #viewer {
       border-color: $border;
@@ -84,8 +79,7 @@
 
   .pane__header,
   .navigator-header,
-  .more-tabs .nav-header-tab,
-  .settings-preview-title {
+  .more-tabs .nav-header-tab {
     background-color: $statusbar-bg;
     color: $base-text;
   }

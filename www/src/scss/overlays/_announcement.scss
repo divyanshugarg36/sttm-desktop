@@ -3,13 +3,16 @@
 // group), its content inset like the setting rows.
 
 .announcement-text {
-  border-radius: 10px;
+  background: var(--sui-semantic-background-page);
+  border: 1px solid var(--sui-semantic-border-default);
+  border-radius: var(--sui-radii-md);
+  color: var(--sui-semantic-foreground-default);
   display: inline-block;
   height: 150px;
   min-height: 100px;
   min-width: 300px;
   outline: none;
-  padding: 10px;
+  padding: 12px;
   width: inherit;
 }
 
@@ -65,17 +68,24 @@
   height: 48px;
   overflow: hidden;
 
-  // Hovered: the number turns into a play icon.
-  &:hover .dhan-guru-button-prefix {
-    background: url('../../assets/img/icons/play-button-filled.svg') no-repeat center center;
-    background-color: var(--sui-semantic-accent-default);
-    background-size: 24px;
-    color: transparent;
+  // Hovered: the number turns into sikhi-ui's play icon, in the number's
+  // colour, so it shows on the accent in light and dark themes.
+  &:hover .dhan-guru-button-number {
+    display: none;
+  }
+
+  &:hover .dhan-guru-button-play {
+    display: inline-flex;
   }
 
   &:hover .dhan-guru-button-text {
     background: color-mix(in srgb, var(--sui-semantic-accent-default) 16%, transparent);
   }
+}
+
+.dhan-guru-button-play {
+  display: none;
+  font-size: 24px;
 }
 
 .dhan-guru-button-prefix {

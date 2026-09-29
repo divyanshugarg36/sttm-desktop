@@ -53,8 +53,7 @@
   .pane__header,
   .misc .navigator-header,
   .more-tabs .nav-header-tab,
-  .misc-pane__actions,
-  .settings-preview-title {
+  .misc-pane__actions {
     background-color: $bg-main;
     color: $text-base;
   }
@@ -88,20 +87,11 @@
     }
   }
 
-  .pane__content {
-    background-color: $bg-alt;
-  }
-
   .viewer-pane {
     .pane__content {
       background: none !important;
       border: 1px solid $border;
     }
-  }
-
-  .announcement-text {
-    background-color: $bg-alt;
-    color: $white;
   }
 
   .slide#announcement-slide .announcements {
@@ -113,12 +103,6 @@
   }
 
   .search-pane {
-    .pane {
-      .pane__footer {
-        background-color: $not-so-black;
-      }
-    }
-
     .select-bani {
       option {
         color: $text-base;
