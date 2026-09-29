@@ -86,6 +86,14 @@
     @include dark-base();
   }
 
+  // The viewer's slide (sikhi-ui PresenterSlide) reads its colours from these.
+  --sui-presenter-gurbani-color: #{$gurbani};
+  --sui-presenter-translation-color: #{$translation};
+  --sui-presenter-teeka-color: #{$teeka};
+  --sui-presenter-transliteration-color: #{$transliteration};
+  --sui-presenter-visraam-color: #{$visraam};
+  --sui-presenter-yamki-color: #{$yamki};
+
   .slide-gurbani {
     color: $gurbani;
   }
