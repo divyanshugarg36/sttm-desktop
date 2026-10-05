@@ -1,6 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import { ipcRenderer } from 'electron';
 
+import { sendNavigatorStateToDisplays } from '../../common/store/GlobalState';
+
 const ViewerContent = () => {
   const webviewRef = useRef(null);
 
@@ -9,6 +11,7 @@ const ViewerContent = () => {
       ipcRenderer.send('enable-wc-webview', webviewRef.current.getWebContentsId());
       global.webview = webviewRef.current;
       global.webview.send('update-settings');
+      sendNavigatorStateToDisplays();
     };
 
     const webviewElement = webviewRef.current;

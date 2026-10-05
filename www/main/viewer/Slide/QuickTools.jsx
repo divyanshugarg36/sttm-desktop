@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useStoreActions, useStoreState } from 'easy-peasy';
 
-import { convertToCamelCase } from '../../common/utils';
+import { convertToCamelCase, MAX_FONT_SIZE, MIN_FONT_SIZE } from '../../common/utils';
 
 const remote = require('@electron/remote');
 
@@ -40,6 +40,9 @@ const QuickTools = ({ isMiscSlide, baniOptions }) => {
     if (option.includes('transliteration')) {
       return i18n.t(`QUICK_TOOLS.TRANSLITERATION`);
     }
+    if (option === 'announcements') {
+      return i18n.t(`QUICK_TOOLS.ANNOUNCEMENTS`);
+    }
     return '';
   };
 
@@ -62,8 +65,6 @@ const QuickTools = ({ isMiscSlide, baniOptions }) => {
     let payload;
     let actionName;
     let stateName;
-    const maxFontSize = 20;
-    const minFontSize = 1;
 
     if (index > 0) {
       stateName = `content${index}${action}`;
@@ -78,9 +79,9 @@ const QuickTools = ({ isMiscSlide, baniOptions }) => {
     if (name === 'visibility') {
       payload = !userSettings[stateName];
     } else if (name === 'minus') {
-      payload = currentFontSize > minFontSize ? currentFontSize - 1 : minFontSize;
+      payload = currentFontSize > MIN_FONT_SIZE ? currentFontSize - 1 : MIN_FONT_SIZE;
     } else if (name === 'plus') {
-      payload = currentFontSize < maxFontSize ? currentFontSize + 1 : maxFontSize;
+      payload = currentFontSize < MAX_FONT_SIZE ? currentFontSize + 1 : MAX_FONT_SIZE;
     }
 
     // If payload does not change, return null to prevent unnecessary state updates

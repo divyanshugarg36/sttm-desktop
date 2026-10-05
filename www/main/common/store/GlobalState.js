@@ -24,15 +24,12 @@ const GlobalState = createStore({
     userToken: '',
     setOverlayScreen: action((state, payload) => {
       state.overlayScreen = payload;
-      return state;
     }),
     setListeners: action((state, listenersState) => {
       state.isListeners = listenersState;
-      return state;
     }),
     setUserToken: action((state, payload) => {
       state.userToken = payload;
-      return state;
     }),
   },
   baniController: {
@@ -41,15 +38,12 @@ const GlobalState = createStore({
     isConnected: false,
     setAdminPin: action((state, adminPin) => {
       state.adminPin = adminPin;
-      return state;
     }),
     setCode: action((state, code) => {
       state.code = code;
-      return state;
     }),
     setConnection: action((state, connectionState) => {
       state.isConnected = connectionState;
-      return state;
     }),
   },
   navigator: createNavigatorSettingsState(navigatorSettings),
@@ -102,6 +96,25 @@ global.platform.ipc.on('update-global-setting', (_event, setting) => {
   const { settingType, actionName, payload } = JSON.parse(setting);
   GlobalState.getActions()[settingType][actionName](payload);
 });
+
+// The displays (the preview and the projector window) only hear about changes.
+// When one (re)loads, e.g. after a crash or when a slide went up before it had
+// finished loading, send it everything that's showing now.
+export const sendNavigatorStateToDisplays = () => {
+  const { navigator } = GlobalState.getState();
+  Object.keys(navigator).forEach((stateName) => {
+    const setting = JSON.stringify({
+      stateName,
+      payload: navigator[stateName],
+      actionName: `set${stateName.charAt(0).toUpperCase()}${stateName.slice(1)}`,
+      settingType: 'navigator',
+    });
+    if (global.webview) global.webview.send('update-viewer-setting', setting);
+    global.platform.ipc.send('update-viewer-setting', setting);
+  });
+};
+
+global.platform.ipc.on('viewer-loaded', sendNavigatorStateToDisplays);
 
 global.platform.ipc.on('get-overlay-prefs', () => {
   const overlayState = GlobalState.getState().baniOverlay;

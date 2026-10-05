@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useStoreActions, useStoreState } from 'easy-peasy';
 
 import Slide from '../Slide/Slide';
+import { SlideErrorBoundary } from '../Slide/SlideErrorBoundary';
 import QuickTools from '../Slide/QuickTools';
 
 import {
@@ -321,20 +322,24 @@ function ShabadDeck() {
             padding: `${containerPadding.top}px ${containerPadding.right}px ${containerPadding.bottom}px ${containerPadding.left}px`,
           }}
         >
-          {activeVerse.length ? (
-            activeVerse.map((activeVerseObj, index) => (
-              <Slide
-                key={index}
-                verseObj={activeVerseObj}
-                nextLineObj={nextVerse}
-                isMiscSlide={isMiscSlide}
-                updateVerseRef={updateVerseRef}
-                slideIndex={index}
-              />
-            ))
-          ) : (
-            <Slide isMiscSlide={isMiscSlide} bgColor={applyOverlay()} />
-          )}
+          <SlideErrorBoundary
+            resetKey={`${activeVerse.map((verse) => verse.ID).join(',')}|${miscSlideText}`}
+          >
+            {activeVerse.length ? (
+              activeVerse.map((activeVerseObj, index) => (
+                <Slide
+                  key={index}
+                  verseObj={activeVerseObj}
+                  nextLineObj={nextVerse}
+                  isMiscSlide={isMiscSlide}
+                  updateVerseRef={updateVerseRef}
+                  slideIndex={index}
+                />
+              ))
+            ) : (
+              <Slide isMiscSlide={isMiscSlide} bgColor={applyOverlay()} />
+            )}
+          </SlideErrorBoundary>
         </div>
       </div>
       <ViewerIcon className="viewer-logo" />

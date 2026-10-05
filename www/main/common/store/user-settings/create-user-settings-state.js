@@ -1,5 +1,5 @@
 import { action } from 'easy-peasy';
-import { convertToCamelCase } from '../../utils';
+import { convertToCamelCase, clampFontSize, isFontSizeSetting } from '../../utils';
 import { getControllerFontSizes } from '../../../addons/bani-controller/utils/controller-font-sizes';
 
 // can we change them to import?
@@ -11,14 +11,24 @@ const createUserSettingsState = (settingsSchema, savedSettings, userConfigPath) 
     const stateVarName = convertToCamelCase(settingKey);
     const stateFuncName = `set${convertToCamelCase(settingKey, true)}`;
 
+    const { initialValue } = settingsSchema[settingKey];
+    const isFontSize = isFontSizeSetting(settingKey);
+
     if (typeof savedSettings[settingKey] === 'undefined') {
-      userSettingsState[stateVarName] = settingsSchema[settingKey].initialValue;
+      userSettingsState[stateVarName] = initialValue;
+    } else if (isFontSize) {
+      // A size saved out of range (older versions, a hand-edited file) would be
+      // drawn as-is on the first slide.
+      userSettingsState[stateVarName] = clampFontSize(savedSettings[settingKey], initialValue);
     } else {
       userSettingsState[stateVarName] = savedSettings[settingKey];
     }
 
-    userSettingsState[stateFuncName] = action((state, payload) => {
+    userSettingsState[stateFuncName] = action((state, rawPayload) => {
       const oldValue = state[stateVarName];
+      // Every font size change (Settings, Quick Tools, the Bani Controller's +/-)
+      // stays within range; the controller's buttons aren't capped on their own.
+      const payload = isFontSize ? clampFontSize(rawPayload, oldValue) : rawPayload;
       // eslint-disable-next-line no-param-reassign
       state[stateVarName] = payload;
       if (global.webview) {
@@ -82,8 +92,9 @@ const createUserSettingsState = (settingsSchema, savedSettings, userConfigPath) 
           },
         });
       }
-
-      return state;
+      // No `return state`: returning the draft left a revoked proxy in the store
+      // when nothing changed (the same value again), and every later setting
+      // change then threw.
     });
   });
   return userSettingsState;

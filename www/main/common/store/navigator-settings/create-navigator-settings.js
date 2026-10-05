@@ -39,8 +39,6 @@ const createNavigatorSettingsState = (settingsSchema) => {
           }),
         );
       }
-
-      return state;
     });
   });
   return navigatorSettingsState;

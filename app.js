@@ -392,6 +392,7 @@ function createViewer(ipcData) {
     viewerWindow.webContents.on('did-finish-load', () => {
       viewerWindow.webContents.insertCSS(styles);
       viewerWindow.show();
+      mainWindow.webContents.send('viewer-loaded');
       const [width, height] = viewerWindow.getSize();
       mainWindow.webContents.send(
         'external-display',
@@ -589,6 +590,38 @@ if (!singleInstanceLock) {
     }
   });
 }
+
+// A page whose process crashes (e.g. running out of memory) stays blank. Reload
+// the main window (which recreates the display preview) and the projector
+// window together: the display only hears about changes, so reloading the
+// crashed page alone would leave it out of step. Not if it keeps crashing,
+// rather than loop.
+const RELOAD_LIMIT = 3;
+const RELOAD_WINDOW_MS = 60 * 1000;
+const crashes = [];
+app.on('web-contents-created', (_event, contents) => {
+  contents.on('render-process-gone', (_goneEvent, details) => {
+    if (details.reason === 'clean-exit') {
+      return;
+    }
+    const now = Date.now();
+    while (crashes.length && now - crashes[0] > RELOAD_WINDOW_MS) {
+      crashes.shift();
+    }
+    crashes.push(now);
+    log.error(
+      `Page process gone (${details.reason}, exit code ${details.exitCode}): ${contents.getURL()}`,
+    );
+    if (crashes.length > RELOAD_LIMIT) {
+      return;
+    }
+    [mainWindow, viewerWindow].forEach((win) => {
+      if (win && !win.isDestroyed()) {
+        win.webContents.reload();
+      }
+    });
+  });
+});
 
 app.on('open-url', (event, url) => {
   handleDeeplink(url);
