@@ -47,7 +47,7 @@ jobs:
       - name: Package (unsigned, not published)
         run: >
           npx electron-builder --mac dmg zip --${{ matrix.arch }} --publish never
-          -c.mac.identity=null -c.mac.notarize=false -c.afterSign=null -c.npmRebuild=false
+          -c.mac.identity=null -c.mac.notarize=false -c.npmRebuild=false
 
       - name: Show the packaged icon
         run: ls -la "builds/mac${{ matrix.arch == 'arm64' && '-arm64' || '' }}/SikhiToTheMax.app/Contents/Resources/" | grep -i icns
