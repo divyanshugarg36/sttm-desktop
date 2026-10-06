@@ -1,0 +1,61 @@
+name: Mac test build (unsigned)
+
+# Throwaway: an unsigned macOS build of this branch for testing, uploaded as
+# workflow artifacts. Nothing is signed, notarised or published.
+on:
+  push:
+    branches:
+      - ci/mac-test-build
+  workflow_dispatch:
+
+jobs:
+  build-mac:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: arm64
+            runner: macos-14
+          - arch: x64
+            runner: macos-15-intel
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 30
+    env:
+      CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Python build tools for node-gyp
+        run: python3 -m pip install --upgrade pip setuptools wheel
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18.18.0'
+
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps
+
+      - name: Build
+        run: npm run build
+
+      # npm install already built the native modules for this Mac (postinstall runs
+      # electron-builder install-app-deps); rebuilding again stalled downloading sharp.
+      - name: Package (unsigned, not published)
+        run: >
+          npx electron-builder --mac dmg zip --${{ matrix.arch }} --publish never
+          -c.mac.identity=null -c.mac.notarize=false -c.afterSign=null -c.npmRebuild=false
+
+      - name: Show the packaged icon
+        run: ls -la "builds/mac${{ matrix.arch == 'arm64' && '-arm64' || '' }}/SikhiToTheMax.app/Contents/Resources/" | grep -i icns
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: SikhiToTheMax-mac-${{ matrix.arch }}-unsigned
+          path: |
+            builds/*.dmg
+            builds/*.zip
+          retention-days: 14
