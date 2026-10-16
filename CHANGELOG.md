@@ -1,5 +1,26 @@
 ## New Updates
 
+### 9.3.3 - ਊਨਾ Release _October 16, 2026_
+
+#### New Features
+- **Shabad info on display**: Show the shabad's source, Ang, writer and raag in a bar under the slide.
+- **Favourites everywhere**: Your favourite shabads are now saved to your Khalis account, so the same list shows up on STTM web and desktop.
+- **Wildcard search**: Use `*` in English first-letter search to stand for any letters you don't remember.
+
+#### Bug Fixes and Improvements
+- **Search results**: Search now returns the same results, in the same order, as STTM web, with Guru Granth Sahib listed first. English first-letter search ignores capital letters, and the source filter stays selected.
+- **Gurmukhi keyboard**: The keyboard stays visible when the search pane is short.
+- **Navigator**: Picking a verse from the shabad already open now moves the list straight to it, every verse you read gets its tick, and the flower line is only skipped inside Asa di Vaar.
+- **Bani Controller**: Banis and ceremonies driven from the web controller now show the right verse on the display, and requesting control works reliably.
+- **Hindi text**: Devanagari lines no longer overlap at large font sizes.
+- **Chromecast**: Fixed the slide layout on the TV.
+- **Show/hide button**: Fixed its width and a blinking effect.
+- **macOS icon**: The app icon now matches the macOS icon shape.
+- **Performance**: Slides render faster because translations are remembered instead of being fetched every time.
+
+**We would love to hear from you if there's a feature you've been waiting for. Send us your feedback at [sttm.co/feedback](https://www.sttm.co/feedback).**
+</br>
+
 ### 9.3.2 - ਊਨਾ Release _March 02, 2026_
 
 #### Bug Fixes and Improvements
