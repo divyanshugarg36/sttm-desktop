@@ -102,12 +102,12 @@ The files:
 - Model output is identical on 6 windows (4 s and 10 s at 20, 60 and 150 s), with the same checksum and the same decoded text (`autopilot-rs decode` vs `Infer.run`).
 - Search results are identical on 65 queries (60 pangti fragments, about half with matras removed, plus 5 decoded windows): the same top 10 shabads with the same scores (`autopilot-rs search` vs `TextIndex.search`).
 
-**First run**, with the Tauri production window. More runs are still in progress.
+Median of 3 runs, with the Tauri production window. The three runs read 750, 752 and 750 MB while running. With the development build of the window: idle 330, loaded 604, running 773, peak 780.
 
-| | Electron experimental-release (median) | Tauri + Node sidecar (median) | Tauri + Rust engine (run 1) |
+| | Electron experimental-release | Tauri + Node sidecar | Tauri + Rust engine |
 |---|---:|---:|---:|
-| Idle, index ready | 532 | 717 | **322** (241 window + 81 engine) |
-| Model loaded | 796 | 1,036 | **591** (241 + 350) |
+| Idle, index ready | 532 | 717 | **318** (238 window + 80 engine) |
+| Model loaded | 796 | 1,036 | **588** (238 + 350) |
 | Running, 60 s | 1,112 | 1,272 | **750** (266 + 484) |
 | Peak | 1,127 | 1,288 | **750** |
 | CPU while running | 321% | 332% | 333% |

@@ -42,6 +42,20 @@
    "procs": 5,
    "cpu": 325.5416666666667
   },
+  "t-current-rs": {
+   "runs": 3,
+   "idle": 330,
+   "idleShell": 250,
+   "idleSidecar": 80,
+   "loaded": 604,
+   "loadedSidecar": 354,
+   "running": 773,
+   "runningShell": 291,
+   "runningSidecar": 487,
+   "peak": 780,
+   "procs": 4,
+   "cpu": 331.7755102040816
+  },
   "t-prod": {
    "runs": 3,
    "idle": 717,
@@ -55,6 +69,20 @@
    "peak": 1288,
    "procs": 5,
    "cpu": 332.38775510204084
+  },
+  "t-prod-rs": {
+   "runs": 3,
+   "idle": 318,
+   "idleShell": 238,
+   "idleSidecar": 80,
+   "loaded": 588,
+   "loadedSidecar": 350,
+   "running": 750,
+   "runningShell": 266,
+   "runningSidecar": 484,
+   "peak": 750,
+   "procs": 4,
+   "cpu": 332.6938775510204
   }
  },
  "runs": {
@@ -181,6 +209,47 @@
     "cpu": 325.5416666666667
    }
   ],
+  "t-current-rs": [
+   {
+    "idle": 330,
+    "idleShell": 250,
+    "idleSidecar": 80,
+    "loaded": 604,
+    "loadedSidecar": 354,
+    "running": 763,
+    "runningShell": 291,
+    "runningSidecar": 489,
+    "peak": 780,
+    "procs": 4,
+    "cpu": 340.4791666666667
+   },
+   {
+    "idle": 331.5,
+    "idleShell": 251.5,
+    "idleSidecar": 80,
+    "loaded": 602,
+    "loadedSidecar": 350,
+    "running": 773,
+    "runningShell": 290,
+    "runningSidecar": 483,
+    "peak": 774,
+    "procs": 4,
+    "cpu": 331.7755102040816
+   },
+   {
+    "idle": 330,
+    "idleShell": 250,
+    "idleSidecar": 80,
+    "loaded": 604,
+    "loadedSidecar": 354,
+    "running": 779,
+    "runningShell": 292,
+    "runningSidecar": 487,
+    "peak": 780,
+    "procs": 4,
+    "cpu": 328.83673469387753
+   }
+  ],
   "t-prod": [
    {
     "idle": 713,
@@ -220,6 +289,47 @@
     "peak": 1296,
     "procs": 5,
     "cpu": 324.58
+   }
+  ],
+  "t-prod-rs": [
+   {
+    "idle": 321.5,
+    "idleShell": 240.5,
+    "idleSidecar": 81,
+    "loaded": 591,
+    "loadedSidecar": 350,
+    "running": 750,
+    "runningShell": 266,
+    "runningSidecar": 484,
+    "peak": 750,
+    "procs": 4,
+    "cpu": 332.83673469387753
+   },
+   {
+    "idle": 318,
+    "idleShell": 238,
+    "idleSidecar": 80,
+    "loaded": 588,
+    "loadedSidecar": 350,
+    "running": 752,
+    "runningShell": 267,
+    "runningSidecar": 485,
+    "peak": 752,
+    "procs": 4,
+    "cpu": 332.6938775510204
+   },
+   {
+    "idle": 317,
+    "idleShell": 237,
+    "idleSidecar": 80,
+    "loaded": 586,
+    "loadedSidecar": 349,
+    "running": 750,
+    "runningShell": 266,
+    "runningSidecar": 484,
+    "peak": 750,
+    "procs": 4,
+    "cpu": 328.265306122449
    }
   ]
  }
