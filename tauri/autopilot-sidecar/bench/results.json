@@ -1,0 +1,226 @@
+{
+ "summary": {
+  "e-exp": {
+   "runs": 3,
+   "idle": 532,
+   "idleShell": 532,
+   "idleSidecar": 0,
+   "loaded": 796,
+   "loadedSidecar": 0,
+   "running": 1111.5,
+   "runningShell": 1111.5,
+   "runningSidecar": 0,
+   "peak": 1127,
+   "procs": 9,
+   "cpu": 320.52
+  },
+  "e-master": {
+   "runs": 3,
+   "idle": 359,
+   "idleShell": 359,
+   "idleSidecar": 0,
+   "loaded": null,
+   "loadedSidecar": null,
+   "running": null,
+   "runningShell": null,
+   "runningSidecar": null,
+   "peak": 422,
+   "procs": 7,
+   "cpu": null
+  },
+  "t-current": {
+   "runs": 3,
+   "idle": 727,
+   "idleShell": 240,
+   "idleSidecar": 487,
+   "loaded": 1045,
+   "loadedSidecar": 805,
+   "running": 1267.5,
+   "runningShell": 261,
+   "runningSidecar": 997,
+   "peak": 1276,
+   "procs": 5,
+   "cpu": 325.5416666666667
+  },
+  "t-prod": {
+   "runs": 3,
+   "idle": 717,
+   "idleShell": 230,
+   "idleSidecar": 487,
+   "loaded": 1036,
+   "loadedSidecar": 806,
+   "running": 1272,
+   "runningShell": 258,
+   "runningSidecar": 1012,
+   "peak": 1288,
+   "procs": 5,
+   "cpu": 332.38775510204084
+  }
+ },
+ "runs": {
+  "e-exp": [
+   {
+    "idle": 535,
+    "idleShell": 535,
+    "idleSidecar": 0,
+    "loaded": 796,
+    "loadedSidecar": 0,
+    "running": 1112,
+    "runningShell": 1112,
+    "runningSidecar": 0,
+    "peak": 1127,
+    "procs": 9,
+    "cpu": 323.5686274509804
+   },
+   {
+    "idle": 531,
+    "idleShell": 531,
+    "idleSidecar": 0,
+    "loaded": 796,
+    "loadedSidecar": 0,
+    "running": 1111.5,
+    "runningShell": 1111.5,
+    "runningSidecar": 0,
+    "peak": 1186,
+    "procs": 9,
+    "cpu": 309.34
+   },
+   {
+    "idle": 532,
+    "idleShell": 532,
+    "idleSidecar": 0,
+    "loaded": 621,
+    "loadedSidecar": 0,
+    "running": 921,
+    "runningShell": 921,
+    "runningSidecar": 0,
+    "peak": 930,
+    "procs": 9,
+    "cpu": 320.52
+   }
+  ],
+  "e-master": [
+   {
+    "idle": 255.5,
+    "idleShell": 255.5,
+    "idleSidecar": 0,
+    "loaded": null,
+    "loadedSidecar": null,
+    "running": null,
+    "runningShell": null,
+    "runningSidecar": null,
+    "peak": 419,
+    "procs": 7,
+    "cpu": null
+   },
+   {
+    "idle": 359,
+    "idleShell": 359,
+    "idleSidecar": 0,
+    "loaded": null,
+    "loadedSidecar": null,
+    "running": null,
+    "runningShell": null,
+    "runningSidecar": null,
+    "peak": 422,
+    "procs": 7,
+    "cpu": null
+   },
+   {
+    "idle": 359,
+    "idleShell": 359,
+    "idleSidecar": 0,
+    "loaded": null,
+    "loadedSidecar": null,
+    "running": null,
+    "runningShell": null,
+    "runningSidecar": null,
+    "peak": 431,
+    "procs": 7,
+    "cpu": null
+   }
+  ],
+  "t-current": [
+   {
+    "idle": 727,
+    "idleShell": 240,
+    "idleSidecar": 487,
+    "loaded": 1045,
+    "loadedSidecar": 805,
+    "running": 1267.5,
+    "runningShell": 261,
+    "runningSidecar": 1006,
+    "peak": 1276,
+    "procs": 5,
+    "cpu": 330.21276595744683
+   },
+   {
+    "idle": 727,
+    "idleShell": 240,
+    "idleSidecar": 487,
+    "loaded": 1046,
+    "loadedSidecar": 806,
+    "running": 1270,
+    "runningShell": 279,
+    "runningSidecar": 997,
+    "peak": 1277,
+    "procs": 5,
+    "cpu": 324.26
+   },
+   {
+    "idle": 735,
+    "idleShell": 249,
+    "idleSidecar": 486,
+    "loaded": 1033,
+    "loadedSidecar": 784,
+    "running": 1249,
+    "runningShell": 257,
+    "runningSidecar": 991,
+    "peak": 1265,
+    "procs": 5,
+    "cpu": 325.5416666666667
+   }
+  ],
+  "t-prod": [
+   {
+    "idle": 713,
+    "idleShell": 226,
+    "idleSidecar": 487,
+    "loaded": 1033,
+    "loadedSidecar": 806,
+    "running": 1259.5,
+    "runningShell": 254,
+    "runningSidecar": 1005.5,
+    "peak": 1277,
+    "procs": 5,
+    "cpu": 364.6041666666667
+   },
+   {
+    "idle": 717,
+    "idleShell": 230,
+    "idleSidecar": 487,
+    "loaded": 1036,
+    "loadedSidecar": 806,
+    "running": 1272,
+    "runningShell": 258,
+    "runningSidecar": 1014,
+    "peak": 1288,
+    "procs": 5,
+    "cpu": 332.38775510204084
+   },
+   {
+    "idle": 724,
+    "idleShell": 238,
+    "idleSidecar": 486,
+    "loaded": 1038,
+    "loadedSidecar": 800,
+    "running": 1279,
+    "runningShell": 267,
+    "runningSidecar": 1012,
+    "peak": 1296,
+    "procs": 5,
+    "cpu": 324.58
+   }
+  ]
+ }
+}
