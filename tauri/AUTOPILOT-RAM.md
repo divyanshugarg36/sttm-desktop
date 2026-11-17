@@ -87,3 +87,50 @@ The files:
 - **One Tauri run didn't open a shabad.** In Tauri current run 3, the window's search returned too late, so its window figure while running is a little low.
 - **Windows and macOS were not measured.** WebView2 on Windows behaves differently from WebKitGTK.
 - **Unrelated, not fixed:** on every launch the renderer logs `Uncaught (in promise) SyntaxError: Unexpected token '<', "<!DOCTYPE "... is not valid JSON`, from a fetch that gets HTML back from the staging API.
+
+## Follow-up: the engine in Rust (`ort`)
+
+`autopilot-rs/` is a headless Rust prototype of what would run inside the Tauri process instead of the Node sidecar:
+- The speech model and YAMNet run through the `ort` crate (2.0.0-rc.14, `load-dynamic`), on the same `libonnxruntime.so.1` that onnxruntime-node ships, with the same session settings: 4 intra-op threads, 1 inter-op thread, no spinning.
+- The shabad search index is `text-index.js` ported to Rust, with the same scoring. It is stored as sorted flat arrays and built from the BaniDB SQLite file (142,576 pangtis).
+- It plays the test audio on the app's fast-tier schedule:
+  - a 10 s recognizer pass every 0.5 s, decoded and searched;
+  - from 15 s, a 4 s follower pass every 0.25 s;
+  - YAMNet every 2 s.
+
+**Checked against the app's JS:**
+- Model output is identical on 6 windows (4 s and 10 s at 20, 60 and 150 s), with the same checksum and the same decoded text (`autopilot-rs decode` vs `Infer.run`).
+- Search results are identical on 65 queries (60 pangti fragments, about half with matras removed, plus 5 decoded windows): the same top 10 shabads with the same scores (`autopilot-rs search` vs `TextIndex.search`).
+
+**First run**, with the Tauri production window. More runs are still in progress.
+
+| | Electron experimental-release (median) | Tauri + Node sidecar (median) | Tauri + Rust engine (run 1) |
+|---|---:|---:|---:|
+| Idle, index ready | 532 | 717 | **322** (241 window + 81 engine) |
+| Model loaded | 796 | 1,036 | **591** (241 + 350) |
+| Running, 60 s | 1,112 | 1,272 | **750** (266 + 484) |
+| Peak | 1,127 | 1,288 | **750** |
+| CPU while running | 321% | 332% | 333% |
+| Index build | ≈7.5 s | ≈10 s | 0.8 s |
+| Model load | 1.6 s | 1.5 s | 1.1 s |
+
+That is about 33% less than Electron while running, and 40% less at idle. At idle it is below today's 9.3.3 without Autopilot (359 MB).
+
+The saving comes from two places:
+- The index drops from ≈180 MB (Electron) or ≈510 MB (Node) to under 80 MB, including ONNX Runtime's library.
+- The window is ≈260 MB against Electron's ≈400 MB.
+
+The speech model itself costs about the same in every setup.
+
+Still needed for a real build:
+- Port Autopilot's screen logic to the new desktop app. Its recognizer and follower decisions can stay in JS, calling the engine for model passes and searches.
+- Stream the microphone audio from the WebView to the engine.
+
+The image is `autopilot-rust.png`.
+
+Run it:
+
+```sh
+ORT_DYLIB_PATH=<node_modules>/onnxruntime-node/bin/napi-v6/linux/x64/libonnxruntime.so.1 \
+  autopilot-rs run <banidb.sqlite> <dir with model.int8.onnx + yamnet.onnx> <16 kHz mono WAV>
+```

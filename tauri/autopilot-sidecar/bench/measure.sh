@@ -35,7 +35,7 @@ killtree() { # TERM the whole tree, wait for it to go, KILL what is left
   echo "killtree: KILL after 10 s ($1)" >> $LOG; kill -9 $pids 2>/dev/null; sleep 1
 }
 detail() { echo "== $1"; for root in $(cat $S/shell.pid) $(cat $S/sc.pid); do for p in $(tree $root); do
-  printf '%7s kB  %s\n' "$(awk '/^Pss:/ {print $2}' /proc/$p/smaps_rollup 2>/dev/null)" "$(tr '\0' ' ' < /proc/$p/cmdline | grep -oE -- '--type=[a-z-]+|--utility-sub-type=[a-zA-Z.]+|sidecar.js|retrieval-child.js|WebKit[A-Za-z]+|tauri-[a-z]+$|^[^ ]*electron ' | tr '\n' ' ')"
+  printf '%7s kB  %s\n' "$(awk '/^Pss:/ {print $2}' /proc/$p/smaps_rollup 2>/dev/null)" "$(tr '\0' ' ' < /proc/$p/cmdline | grep -oE -- '--type=[a-z-]+|--utility-sub-type=[a-zA-Z.]+|sidecar.js|retrieval-child.js|autopilot-rs|WebKit[A-Za-z]+|tauri-[a-z]+$|^[^ ]*electron ' | tr '\n' ' ')"
 done; done; } >> $LOG
 stop_all() {
   kill $(cat $S/sampler.pid) 2>/dev/null
@@ -68,12 +68,19 @@ e-exp)
   cdp "require('$W/www/js/addons/voice-follow/engine').perfStats()" >> $LOG
   cdp "(() => ({ following: !!document.querySelector('.vf2-stop'), line: (document.querySelector('[class*=vf-ap]') || {}).innerText }))()" >> $LOG
   grep -h "vf model warm\|retrieval index ready" $S/ud-$V/voice-follow/shadow/errors.log >> $LOG ;;
-t-current|t-prod)
+t-current|t-prod|t-current-rs|t-prod-rs)
+  SHELLBIN=${V#t-}; SHELLBIN=${SHELLBIN%-rs}
   rm -rf $S/t-ud-$V; $S/bin/profile.sh $S/ud-$V 0
   (env -u WAYLAND_DISPLAY GDK_BACKEND=x11 WEBKIT_DISABLE_DMABUF_RENDERER=1 LIBGL_ALWAYS_SOFTWARE=1 NODE_ENV=development \
     STTM_BANIDB_SQLITE=$S/base/banidb.sqlite STTM_TAURI_USER_DATA=$S/t-ud-$V STTM_TAURI_EVAL_DIR=$S/eval \
-    $T/bench/tauri-${V#t-} >>$LOG 2>&1 & echo $! > $S/shell.pid)
-  (cd $W; TMPDIR=$S/sc-tmp node tauri/autopilot-sidecar/sidecar.js $S/ud-$V $WAV > $S/results/$V-$R.sidecar.log 2>&1 & echo $! > $S/sc.pid)
+    $T/bench/tauri-$SHELLBIN >>$LOG 2>&1 & echo $! > $S/shell.pid)
+  if [ "${V%-rs}" != "$V" ]; then
+    # The Rust engine (ort + the index in Rust) in place of the Node sidecar.
+    (ORT_DYLIB_PATH=$W/node_modules/onnxruntime-node/bin/napi-v6/linux/x64/libonnxruntime.so.1 \
+      $S/bin/autopilot-rs run $S/base/banidb.sqlite $S/sc-tmp/sttm/voice-follow $WAV > $S/results/$V-$R.sidecar.log 2>&1 & echo $! > $S/sc.pid)
+  else
+    (cd $W; TMPDIR=$S/sc-tmp node tauri/autopilot-sidecar/sidecar.js $S/ud-$V $WAV > $S/results/$V-$R.sidecar.log 2>&1 & echo $! > $S/sc.pid)
+  fi
   echo idle > $S/phase; sleep 100; detail idle
   kill -USR1 $(cat $S/sc.pid); echo warming > $S/phase
   for i in $(seq 60); do sleep 1; grep -q MODEL_READY $S/results/$V-$R.sidecar.log && break; done

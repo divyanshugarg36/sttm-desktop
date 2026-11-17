@@ -1,0 +1,17 @@
+[package]
+name = "autopilot-rs"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+# Headless prototype: Voice Autopilot's models (ONNX via `ort`) and its shabad search index in
+# Rust, as they would run inside the Tauri process. Measured against Electron and the Node sidecar.
+[dependencies]
+# ONNX Runtime loaded at run time (the libonnxruntime.so.1 that onnxruntime-node ships, so both
+# use the same runtime); api-30 matches its 1.30.
+ort = { version = "=2.0.0-rc.14", default-features = false, features = ["std", "load-dynamic", "api-30"] }
+rusqlite = { version = "0.43", features = ["bundled"] }
+signal-hook = "0.3"
+
+[profile.release]
+debug = false
